@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{108CCE99-ABD4-4373-B694-3B4A74F658A3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DragonFiesta.Game</RootNamespace>
+    <AssemblyName>DragonFiesta.Game</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\Account.cs" />
+    <Compile Include="Accounts\AccountCreateResponse.cs" />
+    <Compile Include="Accounts\AccountDeleteResponse.cs" />
+    <Compile Include="Attributes\GameCommandAttribute.cs" />
+    <Compile Include="Attributes\GameCommandCategory.cs" />
+    <Compile Include="Attributes\GameCommandType.cs" />
+    <Compile Include="Attributes\WorldCommandAttribute.cs" />
+    <Compile Include="Attributes\ZoneCommandAttribute.cs" />
+    <Compile Include="Characters\Data\AreaInfo.cs" />
+    <Compile Include="Characters\Data\CharacterAreaInfo.cs" />
+    <Compile Include="Characters\CharacterBase.cs" />
+    <Compile Include="Characters\CharacterCollection.cs" />
+    <Compile Include="Characters\Event\CharacterClassChangeEventArgs.cs" />
+    <Compile Include="Characters\Event\CharacterDeleteEventArgs.cs" />
+    <Compile Include="Characters\Event\CharacterEventArgs.cs" />
+    <Compile Include="Characters\Data\CharacterInfo.cs" />
+    <Compile Include="Characters\Data\CharacterErrors.cs" />
+    <Compile Include="Characters\CharacterManagerBase.cs" />
+    <Compile Include="Characters\Data\CharacterStyle.cs" />
+    <Compile Include="Characters\Data\ClientLoginInfo.cs" />
+    <Compile Include="Characters\Event\CharacterLevelChangedEventArgs.cs" />
+    <Compile Include="Characters\Event\CharacterMapEventArgs.cs" />
+    <Compile Include="Characters\Event\CharacterMapRefreshEventArgs.cs" />
+    <Compile Include="Characters\Event\CharacterNameChangedEventArgs.cs" />
+    <Compile Include="Chat\ChatColor.cs" />
+    <Compile Include="Chat\ChatInfo.cs" />
+    <Compile Include="Chat\ChatManager.cs" />
+    <Compile Include="Chat\ChatResult.cs" />
+    <Compile Include="Command\GameCommand.cs" />
+    <Compile Include="Command\GameCommandManager.cs" />
+    <Compile Include="Command\GameCommandStore.cs" />
+    <Compile Include="Command\GameRole.cs" />
+    <Compile Include="Error\ConnectionError.cs" />
+    <Compile Include="GameConnectError.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Maps\IInstanceMap.cs" />
+    <Compile Include="Maps\IMap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryDefines.cs" />
+    <Compile Include="ServerConsole\Command\CONSOLE_PACKET_HANDLER.cs" />
+    <Compile Include="ServerConsole\Command\CONSOLE_SERVER_HANDLER.cs" />
+    <Compile Include="ServerConsole\Command\CONSOLE_VERSION_HANDLER.cs" />
+    <Compile Include="ServerConsole\Server\ShutdownHandlerBase.cs" />
+    <Compile Include="Stats\iStatsChanger.cs" />
+    <Compile Include="Stats\StatsHolder.cs" />
+    <Compile Include="Stats\StatsManager.cs" />
+    <Compile Include="Stats\StatsType.cs" />
+    <Compile Include="Transfer\ServerTransferBase.cs" />
+    <Compile Include="Version\ClientRegion.cs" />
+    <Compile Include="Zone\iZone.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DragonFiesta.Providers\DragonFiesta.Providers.csproj">
+      <Project>{ffdef520-3ed2-416d-ac57-12bb20d20328}</Project>
+      <Name>DragonFiesta.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Utils\DragonFiesta.Utils.csproj">
+      <Project>{4c75a441-9386-41a2-b113-7b03a2305563}</Project>
+      <Name>DragonFiesta.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Worlds\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

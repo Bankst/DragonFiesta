@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3CBF5471-065D-4761-8A05-72DCF95336B0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DragonFiesta.Login</RootNamespace>
+    <AssemblyName>DragonFiesta.Login</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\LoginConfiguration.cs" />
+    <Compile Include="Config\LoginDatabaseSection.cs" />
+    <Compile Include="Data\WorldInfo.cs" />
+    <Compile Include="Game\Accounts\AccountManager.cs" />
+    <Compile Include="Game\Authentication\AuthLogin.cs" />
+    <Compile Include="Game\Authentication\LoginManager.cs" />
+    <Compile Include="Game\Authentication\LoginServer.cs" />
+    <Compile Include="Game\Authentication\LoginServerManager.cs" />
+    <Compile Include="Game\Transfer\LoginServerTransfer.cs" />
+    <Compile Include="Game\Transfer\LoginTransferManager.cs" />
+    <Compile Include="Game\Version\Version.cs" />
+    <Compile Include="Game\Version\VersionsManager.cs" />
+    <Compile Include="Game\Worlds\World.cs" />
+    <Compile Include="Game\Worlds\WorldConnectionInfo.cs" />
+    <Compile Include="Game\Worlds\WorldManager.cs" />
+    <Compile Include="Game\Worlds\WorldStatus.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\IP\IPBlockHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Transfer\TransferHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Response\Account\Account_Response.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\ServerTransferMethods.cs" />
+    <Compile Include="InternNetwork\InternWorldServer.cs" />
+    <Compile Include="InternNetwork\InternWorldSession.cs" />
+    <Compile Include="InternNetwork\InternWorldSessionManager.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH03Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH3Handler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Account\InternAccountHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Auth\WorldAuthHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\ServerAccountMethods.cs" />
+    <Compile Include="Network\Helpers\Enum\LoginGameErrors.cs" />
+    <Compile Include="Network\Helpers\SH03Helpers.cs" />
+    <Compile Include="Network\LoginServer.cs" />
+    <Compile Include="Network\LoginSession.cs" />
+    <Compile Include="Network\IP\IPBlockEntry.cs" />
+    <Compile Include="Network\IP\IPBlockManager.cs" />
+    <Compile Include="Network\LoginSessionManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\ServerMain.cs" />
+    <Compile Include="ServerConsole\Command\CONSOLE_ACCOUNT_HANDLER.cs" />
+    <Compile Include="ServerConsole\Command\CONSOLE_IP_HANDLER.cs" />
+    <Compile Include="ServerConsole\Command\CONSOLE_SERVER_HANDLER.cs" />
+    <Compile Include="ServerConsole\Server\LoginShutdownHandler.cs" />
+    <Compile Include="ServerConsole\Title\LoginConsoleTitle.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ServerTask\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DragonFiesta.Game\DragonFiesta.Game.csproj">
+      <Project>{108cce99-abd4-4373-b694-3b4a74f658a3}</Project>
+      <Name>DragonFiesta.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Messages\DragonFiesta.Messages.csproj">
+      <Project>{6ed5fde1-4722-4566-bfda-41c8fdc8872c}</Project>
+      <Name>DragonFiesta.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Networking\DragonFiesta.Networking.csproj">
+      <Project>{4cb4ce03-1beb-4fff-923c-ca28723288dd}</Project>
+      <Name>DragonFiesta.Networking</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Providers\DragonFiesta.Providers.csproj">
+      <Project>{ffdef520-3ed2-416d-ac57-12bb20d20328}</Project>
+      <Name>DragonFiesta.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Utils\DragonFiesta.Utils.csproj">
+      <Project>{4c75a441-9386-41a2-b113-7b03a2305563}</Project>
+      <Name>DragonFiesta.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 und x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

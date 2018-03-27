@@ -1,0 +1,49 @@
+﻿using DragonFiesta.Utils.Core;
+using DragonFiesta.Utils.ServerTask;
+using System;
+using System.Threading;
+
+namespace DragonFiesta.Game.Transfer
+{
+    public class ServerTransferBase : iExpireAble
+    {
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+
+        private DateTime ExpireTime;
+        DateTime iExpireAble.ExpireTime { get { return ExpireTime; } }
+
+        public bool IsDisposed { get { return (IsDisposedInt > 0); } }
+
+        private int IsDisposedInt;
+
+        public ServerTransferBase()
+        {
+            ExpireTime = ServerMainBase.InternalInstance.CurrentTime.Time.Add(DefaultTimeout);
+        }
+
+        ~ServerTransferBase()
+        {
+            Dispose();
+        }
+
+        public virtual void OnExpire(GameTime Now)
+        {
+        }
+
+        public virtual void Update(GameTime Now)
+        {
+        }
+
+        public void Dispose()
+        {
+            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
+            {
+                DisposeInternal();
+            }
+        }
+
+        protected virtual void DisposeInternal()
+        {
+        }
+    }
+}

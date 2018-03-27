@@ -1,0 +1,93 @@
+WorldList for NA = 1 on 1 to Client
+
+WorldList for All EU Client = ALL Offical realms in Worldlist
+
+ damage the formula is:
+damage = rand(minWc, maxWc)
+damageOutput = damage * (Level + 1) / Target.Defense)
+
+
+
+
+
+###########Commands#####################
+
+#SU = FULL Success
+#IP = IN Progress
+#UN = Unsucces Full
+#PA = in Planing
+
+###########################################
+
+
+&account Ban <accountname> 1 Perma ban or <bantime>
+&account unban <accountname>
+&account Set <accountname> Role <RoleId>
+&account Set <accountname> Email <email>
+&account Set <accountname> active 1 or 0
+&account Set <accountname> Password <newpassword>
+
+&character ban <Charactername> 1 permabaan or <bantime>
+&character unban <charactername>
+&character appear <charactername>
+&character summon <charactername>
+&character Pos 
+&character Pos <name>
+&character giveexp <expcount>
+&character changemap <name> <mapid> optional <instanceid
+
+&character Money Set <amoun>
+&character Money Give <amoun>
+
+&character get Role <Charactername>
+&character get Accountname <Charactername>
+&character get LastIp <charactername>
+&character email <charactername>
+&character active <charactername>
+
+&map Start <mapid>
+&map stop <mapid>
+
+&World Perform
+&World Shutdown <timetoshutdown> <Reason>
+
+&Note Map <message>
+&Note Server <message>
+&Note Char <Charactername> <Message>
+
+&tele add <name>
+&tele remove <name>
+&tele me <LocationName>
+&Zone Perform
+&Zone Shutdown <timetoshutdown <reason>
+
+&NPC get ID
+&NPC get Position
+&NPC get Role
+&NPC Get Menu
+&NPC Get Waypoint
+
+############Console Commands 2017 #######################
+############AllServers######
+Server Shutdown <Seconds> # shuting down server
+server Perfomance #GetPerfomance from ThreadPool in Server
+
+Version Trigger # sniffing and inserting new client version by login
+############LoginServer#####################
+
+account ban <Accountname> <BanTime> <Reason>
+account ban <accountname> 0 #unban account
+account ban <accountname> #unban account
+account ban <accountname> <BanTime> #Bann by Default Reason Console
+account ban <accountname> 1 <Reason> # Ban Account for 100 Years :D
+
+Account set active <Accountname> <0 or 1>
+Account set Password <accountname> <newPassword>
+account Set Region <accountName> <RegionId>
+account set Email <accountname> <NeEmail>
+account Set Role <accountname> <RoleID>
+
+IP Block <IPAdress> <Reason> # Blocked IP
+IP Unblock <IPAdress> #unblock IP
+
+

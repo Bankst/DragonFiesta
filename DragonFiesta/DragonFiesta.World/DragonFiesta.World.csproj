@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{02FE33AF-1E06-4F71-8549-84400F59FE91}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DragonFiesta.World</RootNamespace>
+    <AssemblyName>DragonFiesta.World</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\InternalServerInfo.cs" />
+    <Compile Include="Config\WorldConfiguration.cs" />
+    <Compile Include="Config\WorldServerInfo.cs" />
+    <Compile Include="Data\Characters\CharacterDataProvider.cs" />
+    <Compile Include="Data\Settings\GameSettingDataProvider.cs" />
+    <Compile Include="Data\Settings\KeyMapOptions.cs" />
+    <Compile Include="Game\Buffs\BuffManager.cs" />
+    <Compile Include="Game\Character\CharacterCreationError.cs" />
+    <Compile Include="Data\Characters\DefaultCharacterDataProvider.cs" />
+    <Compile Include="Data\Characters\DefaultCharacterInfo.cs" />
+    <Compile Include="Data\Characters\DefaultCharacterItem.cs" />
+    <Compile Include="Data\Characters\DefaultCharacterActiveSkillInfo.cs" />
+    <Compile Include="Data\Characters\DefaultCharacterItemOptions.cs" />
+    <Compile Include="Data\Characters\DefaultCharacterPassiveSkillInfo.cs" />
+    <Compile Include="Game\Character\CharacterCollection.cs" />
+    <Compile Include="Game\Character\Event\WorldCharacterNameChangedEventArgs.cs" />
+    <Compile Include="Game\Character\Event\ZoneTransferAddedEventArgs.cs" />
+    <Compile Include="Game\Character\WorldCharacter.cs" />
+    <Compile Include="Game\Character\WorldCharacterInfo.cs" />
+    <Compile Include="Game\Character\WorldCharacterManager.cs" />
+    <Compile Include="Game\Character\WorldCharacter_Options.cs" />
+    <Compile Include="Game\Character\WorldClientLoginInfo.cs" />
+    <Compile Include="Game\Chat\ChatBase.cs" />
+    <Compile Include="Game\Chat\GMChat.cs" />
+    <Compile Include="Game\Chat\WorldChat.cs" />
+    <Compile Include="Game\Chat\ZoneChat.cs" />
+    <Compile Include="Game\Command\ACCOUNT_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Command\CHARACTER_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Command\MAP_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Command\SERVER_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Friends\Friend.cs" />
+    <Compile Include="Game\Friends\FriendCollection.cs" />
+    <Compile Include="Game\Friends\FriendDeleteResponse.cs" />
+    <Compile Include="Game\Friends\FriendInviteResponse.cs" />
+    <Compile Include="Game\Friends\FriendManager.cs" />
+    <Compile Include="Game\Maps\InstanceMap.cs" />
+    <Compile Include="Game\Maps\KingdomMap.cs" />
+    <Compile Include="Game\Maps\MapManager.cs" />
+    <Compile Include="Game\Maps\NormalMap.cs" />
+    <Compile Include="Game\Maps\WorldServerMap.cs" />
+    <Compile Include="Game\Settings\CharacterKeyMap.cs" />
+    <Compile Include="Game\Settings\CharacterKeyMapOptions.cs" />
+    <Compile Include="Game\Settings\ClientGameSetting.cs" />
+    <Compile Include="Game\Settings\GameSettingManager.cs" />
+    <Compile Include="Game\Settings\GameSettingType.cs" />
+    <Compile Include="Game\Settings\IGameSetting.cs" />
+    <Compile Include="Game\TestEvent.cs" />
+    <Compile Include="Game\Transfer\WorldMapTransfer.cs" />
+    <Compile Include="Game\Transfer\WorldServerTransfer.cs" />
+    <Compile Include="Game\Transfer\WorldServerTransferManager.cs" />
+    <Compile Include="Game\Zone\Zone.cs" />
+    <Compile Include="Game\Zone\ZoneManager.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Account\AccountHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Auth\ZoneAuthhandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Character\CharacterHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Chat\ZoneChatHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Transfer\WorldTransferHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Transfer\ZoneTransferHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Zone\ZoneHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Maps\MapHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Response\Auth\Auth_Response.cs" />
+    <Compile Include="InternNetwork\InternHandler\Response\Map\Map_Response.cs" />
+    <Compile Include="InternNetwork\InternHandler\Response\Transfer\ZoneTransfer_Response.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Accounts\AccountMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Auth\AuthenticateMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Buffs\BuffMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Character\CharacterMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Maps\MapListMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Maps\MapMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Transfer\TransferMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Zone\ZoneMethods.cs" />
+    <Compile Include="InternNetwork\Login\InternLoginConnector.cs" />
+    <Compile Include="InternNetwork\InternWorldHandlerStore.cs" />
+    <Compile Include="InternNetwork\WorldReflector.cs" />
+    <Compile Include="InternNetwork\Zone\InternZoneServer.cs" />
+    <Compile Include="InternNetwork\Zone\InternZoneSession.cs" />
+    <Compile Include="InternNetwork\Zone\InternZoneSessionManager.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH02Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH03Handler..cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH04Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH05Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH21Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH22Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH28Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH31Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH02Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH03Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH04Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH05Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH21Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH25Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH28Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH31Handler.cs" />
+    <Compile Include="Network\Helpers\Enum\WorldGameErrors.cs" />
+    <Compile Include="Network\Helpers\SH03Helpers.cs" />
+    <Compile Include="Network\Helpers\SH04Helpers.cs" />
+    <Compile Include="Network\WorldPingManager.cs" />
+    <Compile Include="Network\WorldServer.cs" />
+    <Compile Include="Network\WorldSession.cs" />
+    <Compile Include="Network\WorldSessionManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\ServerMain.cs" />
+    <Compile Include="ServerConsole\CONSOLE_MAP_HANDLER.cs" />
+    <Compile Include="ServerConsole\CONSOLE_SERVER_HANDLER.cs" />
+    <Compile Include="ServerConsole\Server\WorldShutdownHandler.cs" />
+    <Compile Include="ServerConsole\Title\WorldConsoleTitle.cs" />
+    <Compile Include="ServerTask\Game\Account\TASK_KICK_TIMER.cs" />
+    <Compile Include="ServerTask\Game\Clock\TASK_CLOCK_GAMETIME_SYNC.cs" />
+    <Compile Include="ServerTask\Server\Intern\TASK_UPDATE_WORLD_SERVER.cs" />
+    <Compile Include="ServerTask\Server\Intern\TASK_WORLD_SERVER_RECONNECT.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DragonFiesta.Game\DragonFiesta.Game.csproj">
+      <Project>{108cce99-abd4-4373-b694-3b4a74f658a3}</Project>
+      <Name>DragonFiesta.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Messages\DragonFiesta.Messages.csproj">
+      <Project>{6ed5fde1-4722-4566-bfda-41c8fdc8872c}</Project>
+      <Name>DragonFiesta.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Networking\DragonFiesta.Networking.csproj">
+      <Project>{4cb4ce03-1beb-4fff-923c-ca28723288dd}</Project>
+      <Name>DragonFiesta.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Providers\DragonFiesta.Providers.csproj">
+      <Project>{ffdef520-3ed2-416d-ac57-12bb20d20328}</Project>
+      <Name>DragonFiesta.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Utils\DragonFiesta.Utils.csproj">
+      <Project>{4c75a441-9386-41a2-b113-7b03a2305563}</Project>
+      <Name>DragonFiesta.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ServerTask\Game\World\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,19 @@
+﻿public enum GameInitalStage
+{
+    Map,
+    Text,
+    Menu,
+    Buff,
+    Item,
+    Skill,
+    CharacterData,
+    Mob,
+    NPC,
+    Friend,
+    GameSettings,
+    ZoneLogic,
+    Logic,
+    Sync,
+    Command,
+    Network,
+}

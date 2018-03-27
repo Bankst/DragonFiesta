@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7BCF5421-0C1E-45E6-BC42-C4F59E386251}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DragonFiesta.Zone</RootNamespace>
+    <AssemblyName>DragonFiesta.Zone</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\WorldConnectInfo.cs" />
+    <Compile Include="Config\ZoneConfiguration.cs" />
+    <Compile Include="Config\ZoneServerInfo.cs" />
+    <Compile Include="Data\Buffs\AbStateInfo.cs" />
+    <Compile Include="Data\Buffs\BuffDataProvider.cs" />
+    <Compile Include="Data\Buffs\SubAbStateAction.cs" />
+    <Compile Include="Data\Buffs\SubAbStateActionType.cs" />
+    <Compile Include="Data\Buffs\SubAbStateInfo.cs" />
+    <Compile Include="Data\Characters\CharacterDataProvider.cs" />
+    <Compile Include="Data\Characters\CharacterLevelParameter.cs" />
+    <Compile Include="Data\Friends\FriendDataProvider.cs" />
+    <Compile Include="Data\Friends\FriendPointReward.cs" />
+    <Compile Include="Data\Maps\BlockInfo.cs" />
+    <Compile Include="Data\Maps\MapDataProvider.cs" />
+    <Compile Include="Data\Maps\TownPortalInfo.cs" />
+    <Compile Include="Data\Menu\MenuDataInfo.cs" />
+    <Compile Include="Data\Menu\MenuDataProvider.cs" />
+    <Compile Include="Data\Menu\MenuDataEntrys.cs" />
+    <Compile Include="Data\Mob\MobChatType.cs" />
+    <Compile Include="Data\Mob\MobChatInfo.cs" />
+    <Compile Include="Data\Mob\MobChatMessageInfo.cs" />
+    <Compile Include="Data\Mob\MobDataProvider.cs" />
+    <Compile Include="Data\Mob\MobGroupInfo.cs" />
+    <Compile Include="Data\Mob\MobGroupMemberInfo.cs" />
+    <Compile Include="Data\Mob\MobInfo.cs" />
+    <Compile Include="Data\NPC\LinkTableInfo.cs" />
+    <Compile Include="Data\NPC\NPCDataProvider.cs" />
+    <Compile Include="Data\NPC\NPCInfo.cs" />
+    <Compile Include="Data\NPC\NPCItem.cs" />
+    <Compile Include="Data\NPC\NPCRole.cs" />
+    <Compile Include="Data\Skills\ActiveSkillAbState.cs" />
+    <Compile Include="Data\Skills\ActiveSkillActionInfo.cs" />
+    <Compile Include="Data\Skills\ActiveSkillActionType.cs" />
+    <Compile Include="Data\Skills\ActiveSkillEffectType.cs" />
+    <Compile Include="Data\Skills\ActiveSkillInfo.cs" />
+    <Compile Include="Data\Skills\SkillDataProvider.cs" />
+    <Compile Include="Data\Stats\FreeStatData.cs" />
+    <Compile Include="Data\WayPoints\WayPointInfo.cs" />
+    <Compile Include="Game\Buffs\Buff.cs" />
+    <Compile Include="Game\Buffs\BuffAction.cs" />
+    <Compile Include="Game\Buffs\BuffCollection.cs" />
+    <Compile Include="Game\Character\CharacterFreeStatsInfo.cs" />
+    <Compile Include="Game\Character\CharacterState.cs" />
+    <Compile Include="Game\Character\TestEvent.cs" />
+    <Compile Include="Game\Character\ZoneCharacter.cs" />
+    <Compile Include="Game\Character\ZoneCharacterInfo.cs" />
+    <Compile Include="Game\Character\ZoneCharacterManager.cs" />
+    <Compile Include="Game\Character\ZoneClientLoginInfo.cs" />
+    <Compile Include="Game\Chat\ChatBase.cs" />
+    <Compile Include="Game\Chat\WorldChat.cs" />
+    <Compile Include="Game\Chat\ZoneChat.cs" />
+    <Compile Include="Game\Command\Character\CHARACTER_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Command\Data\TeleLocation.cs" />
+    <Compile Include="Game\Command\Note\NOTE_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Command\Character\TELE_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Command\NPC\NPC_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Command\ZONE_COMMAND_HANDLER.cs" />
+    <Compile Include="Game\Drop\DropEntry.cs" />
+    <Compile Include="Game\Maps\Event\LivingObjectHPSPChangedEventArgs.cs" />
+    <Compile Include="Game\Maps\Event\LivingObjectMovementEventArgs.cs" />
+    <Compile Include="Game\Maps\Event\UpdateCounterChangeEventArgs.cs" />
+    <Compile Include="Game\Maps\Interface\ILivingObject.cs" />
+    <Compile Include="Game\Maps\Interface\IMapObject.cs" />
+    <Compile Include="Game\Maps\Object\MapObject.cs" />
+    <Compile Include="Game\Maps\Object\MapObjectType.cs" />
+    <Compile Include="Game\Character\CharacterObjectSelection.cs" />
+    <Compile Include="Game\Maps\Object\DisplayManager.cs" />
+    <Compile Include="Game\Maps\Object\InRangeCollection.cs" />
+    <Compile Include="Game\Maps\Object\LivingObjectSelectionBase.cs" />
+    <Compile Include="Game\Maps\Types\LocalMap.cs" />
+    <Compile Include="Game\Maps\Event\MapChangedEventArgs.cs" />
+    <Compile Include="Game\Maps\Event\MapObjectEventArgs.cs" />
+    <Compile Include="Game\Maps\Event\MapSectorChangedEventArgs.cs" />
+    <Compile Include="Game\Maps\Chat\MapChat.cs" />
+    <Compile Include="Game\Maps\Chat\MapChatBase.cs" />
+    <Compile Include="Game\Maps\Chat\MapShout.cs" />
+    <Compile Include="Game\Maps\Types\KingdomMap.cs" />
+    <Compile Include="Game\Maps\Object\MapManager.cs" />
+    <Compile Include="Game\Maps\Object\MapSector.cs" />
+    <Compile Include="Game\Maps\Types\NormalMap.cs" />
+    <Compile Include="Game\NPC\GBDice.cs" />
+    <Compile Include="Game\NPC\NPCManager.cs" />
+    <Compile Include="Game\Maps\Types\RemoteInstanceMap.cs" />
+    <Compile Include="Game\Maps\Types\RemoteMap.cs" />
+    <Compile Include="Game\Maps\Types\SectorMap.cs" />
+    <Compile Include="Game\Maps\Types\InstanceMap.cs" />
+    <Compile Include="Game\Maps\Types\ZoneServerMap.cs" />
+    <Compile Include="Game\Mobs\Mob.cs" />
+    <Compile Include="Game\Mobs\MobChat.cs" />
+    <Compile Include="Game\Mobs\MobGroup.cs" />
+    <Compile Include="Game\Mobs\MobGroupManager.cs" />
+    <Compile Include="Game\Mobs\MobGroupMembers.cs" />
+    <Compile Include="Game\Mobs\MobObjectSelection.cs" />
+    <Compile Include="Game\NPC\NPCObjectSelection.cs" />
+    <Compile Include="Game\NPC\SkillNPC.cs" />
+    <Compile Include="Game\NPC\QuestNPC.cs" />
+    <Compile Include="Game\NPC\JobNPC.cs" />
+    <Compile Include="Game\NPC\ClientMenu.cs" />
+    <Compile Include="Game\NPC\ExchangeCoin.cs" />
+    <Compile Include="Game\NPC\StoreManager.cs" />
+    <Compile Include="Game\NPC\WeaponTitle.cs" />
+    <Compile Include="Game\Question\Answer.cs" />
+    <Compile Include="Game\Question\Question.cs" />
+    <Compile Include="Game\Stats\FreeStatType.cs" />
+    <Compile Include="Game\Stats\LivingStats.cs" />
+    <Compile Include="Game\Stats\MobStatsManager.cs" />
+    <Compile Include="Game\NPC\DefaultNPC.cs" />
+    <Compile Include="Game\NPC\GateNPC.cs" />
+    <Compile Include="Game\NPC\GuildNPC.cs" />
+    <Compile Include="Game\NPC\ItemNPCBase.cs" />
+    <Compile Include="Game\NPC\NPCBase.cs" />
+    <Compile Include="Game\Stats\NPCStatsManager.cs" />
+    <Compile Include="Game\NPC\SoulStoneNPC.cs" />
+    <Compile Include="Game\NPC\StuffNPC.cs" />
+    <Compile Include="Game\NPC\WeaponNPC.cs" />
+    <Compile Include="Game\Stats\CharacterStatsManager.cs" />
+    <Compile Include="Game\Stats\FreeStats.cs" />
+    <Compile Include="Game\Transfer\ZoneServerTransferManager.cs" />
+    <Compile Include="Game\Transfer\ZoneTransfer.cs" />
+    <Compile Include="Game\Zone\RemoteZone.cs" />
+    <Compile Include="Game\Zone\ZoneManager.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Character\CharacterHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Note\ZoneChatHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Transfer\ZoneTransferHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Zone\ZoneHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Client\Maps\MapHandler.cs" />
+    <Compile Include="InternNetwork\InternHandler\Response\Auth\Auth_Response.cs" />
+    <Compile Include="InternNetwork\InternHandler\Response\Character\Character_Response.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Auth\AuthenticateMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Character\CharacterMethods.cs" />
+    <Compile Include="InternNetwork\InternHandler\Server\Zone\ZoneServerMethods.cs" />
+    <Compile Include="InternNetwork\InternWorldConnector.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH02Handler..cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH03Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH04Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH06Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH08Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH09Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH15Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH20Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH21Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH02Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH04Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH06Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH07Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH08Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH15Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH17Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH09Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH18Handler..cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH20Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH21Handler.cs" />
+    <Compile Include="Network\Helpers\Enum\ZoneGameErrors.cs" />
+    <Compile Include="Network\Helpers\SH04Helpers.cs" />
+    <Compile Include="Network\Helpers\SH06Helper.cs" />
+    <Compile Include="Network\ZonePingManager.cs" />
+    <Compile Include="Network\ZoneServer.cs" />
+    <Compile Include="Network\ZoneSession.cs" />
+    <Compile Include="Network\ZoneSessionManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\ServerMain.cs" />
+    <Compile Include="ServerConsole\CONSOLE_SERVER_HANDLER.cs" />
+    <Compile Include="ServerConsole\Server\ZoneShutdownHandler.cs" />
+    <Compile Include="ServerConsole\Title\ZoneConsoleTitle.cs" />
+    <Compile Include="ServerTask\Server\Intern\TASK_UPDATE_ZONE_SERVER.cs" />
+    <Compile Include="ServerTask\Server\Intern\TASK_ZONE_SERVER_RECONNECT.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Game\Character\Event\" />
+    <Folder Include="Game\Friends\" />
+    <Folder Include="ServerTask\Game\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DragonFiesta.Game\DragonFiesta.Game.csproj">
+      <Project>{108cce99-abd4-4373-b694-3b4a74f658a3}</Project>
+      <Name>DragonFiesta.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Messages\DragonFiesta.Messages.csproj">
+      <Project>{6ed5fde1-4722-4566-bfda-41c8fdc8872c}</Project>
+      <Name>DragonFiesta.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Networking\DragonFiesta.Networking.csproj">
+      <Project>{4cb4ce03-1beb-4fff-923c-ca28723288dd}</Project>
+      <Name>DragonFiesta.Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Providers\DragonFiesta.Providers.csproj">
+      <Project>{ffdef520-3ed2-416d-ac57-12bb20d20328}</Project>
+      <Name>DragonFiesta.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Utils\DragonFiesta.Utils.csproj">
+      <Project>{4c75a441-9386-41a2-b113-7b03a2305563}</Project>
+      <Name>DragonFiesta.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 und x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

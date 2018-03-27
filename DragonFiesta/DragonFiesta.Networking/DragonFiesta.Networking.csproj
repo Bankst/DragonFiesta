@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4CB4CE03-1BEB-4FFF-923C-CA28723288DD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DragonFiesta.Networking</RootNamespace>
+    <AssemblyName>DragonFiesta.Networking</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Run\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.1.0.0\lib\net45\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\InternMessageHandlerAttribute.cs" />
+    <Compile Include="Attributes\PacketHandlerAttribute.cs" />
+    <Compile Include="Cryptography\ICryptoProvider.cs" />
+    <Compile Include="Cryptography\InterCryptoProvider.cs" />
+    <Compile Include="HandlerStores\InternHandlerStore.cs" />
+    <Compile Include="HandlerTypes\Handler01Type.cs" />
+    <Compile Include="HandlerTypes\Handler10Type.cs" />
+    <Compile Include="HandlerTypes\Handler11Type.cs" />
+    <Compile Include="HandlerTypes\Handler13Type.cs" />
+    <Compile Include="HandlerTypes\Handler17Type.cs" />
+    <Compile Include="HandlerTypes\Handler23Type.cs" />
+    <Compile Include="HandlerTypes\Handler24Type.cs" />
+    <Compile Include="HandlerTypes\Handler26Type.cs" />
+    <Compile Include="HandlerTypes\Handler27Type.cs" />
+    <Compile Include="HandlerTypes\Handler32Type.cs" />
+    <Compile Include="HandlerTypes\Handler35Type.cs" />
+    <Compile Include="HandlerTypes\Handler36Type.cs" />
+    <Compile Include="HandlerTypes\Handler40Type.cs" />
+    <Compile Include="HandlerTypes\Handler41Type.cs" />
+    <Compile Include="HandlerTypes\Handler43Type.cs" />
+    <Compile Include="HandlerTypes\Handler44Type.cs" />
+    <Compile Include="HandlerTypes\Handler45Type.cs" />
+    <Compile Include="HandlerTypes\Handler46Type.cs" />
+    <Compile Include="HandlerTypes\Handler47Type.cs" />
+    <Compile Include="HandlerTypes\Handler48Type.cs" />
+    <Compile Include="HandlerTypes\Handler49Type.cs" />
+    <Compile Include="HandlerTypes\Handler50Type.cs" />
+    <Compile Include="HandlerTypes\Handler51Type.cs" />
+    <Compile Include="HandlerTypes\Handler52Type.cs" />
+    <Compile Include="HandlerTypes\Handler53Type.cs" />
+    <Compile Include="Helpers\_SH02Helpers.cs" />
+    <Compile Include="Helpers\_SH03Helpers.cs" />
+    <Compile Include="Helpers\_SH04Helpers.cs" />
+    <Compile Include="NetworkReflector.cs" />
+    <Compile Include="Cryptography\FiestaCryptoProvider.cs" />
+    <Compile Include="Network\Data\DataParserBase.cs" />
+    <Compile Include="Network\Data\FiestaDataParser.cs" />
+    <Compile Include="Network\Data\InternDataParser.cs" />
+    <Compile Include="Network\Event\SessionEventArgs.cs" />
+    <Compile Include="Network\Managers\AccountSessionManager.cs" />
+    <Compile Include="Network\Session\AccountSession.cs" />
+    <Compile Include="Network\Session\InternConnector.cs" />
+    <Compile Include="Network\States\InternSessionStateInfo.cs" />
+    <Compile Include="HandlerStores\FiestaHandlerStore.cs" />
+    <Compile Include="HandlerTypes\Handler02Type.cs" />
+    <Compile Include="HandlerTypes\Handler03Type.cs" />
+    <Compile Include="HandlerTypes\Handler04Type.cs" />
+    <Compile Include="HandlerTypes\Handler05Type.cs" />
+    <Compile Include="HandlerTypes\Handler06Type.cs" />
+    <Compile Include="HandlerTypes\Handler07Type.cs" />
+    <Compile Include="HandlerTypes\Handler08Type.cs" />
+    <Compile Include="HandlerTypes\Handler09Type.cs" />
+    <Compile Include="HandlerTypes\Handler12Type.cs" />
+    <Compile Include="HandlerTypes\Handler14Type.cs" />
+    <Compile Include="HandlerTypes\Handler15Type.cs" />
+    <Compile Include="HandlerTypes\Handler18Type.cs" />
+    <Compile Include="HandlerTypes\Handler19Type.cs" />
+    <Compile Include="HandlerTypes\Handler20Type.cs" />
+    <Compile Include="HandlerTypes\Handler21Type.cs" />
+    <Compile Include="HandlerTypes\Handler22Type.cs" />
+    <Compile Include="HandlerTypes\Handler25Type.cs" />
+    <Compile Include="HandlerTypes\Handler28Type.cs" />
+    <Compile Include="HandlerTypes\Handler29Type.cs" />
+    <Compile Include="HandlerTypes\Handler31Type.cs" />
+    <Compile Include="HandlerTypes\Handler37Type.cs" />
+    <Compile Include="HandlerTypes\Handler38Type.cs" />
+    <Compile Include="HandlerTypes\Handler42Type.cs" />
+    <Compile Include="HandlerTypes\HandlerType.cs" />
+    <Compile Include="Packet\FiestaPacket.cs" />
+    <Compile Include="Packet\FiestaPacketReader.cs" />
+    <Compile Include="Packet\FiestaPacketWriter.cs" />
+    <Compile Include="Packet\PacketBase.cs" />
+    <Compile Include="Packet\PacketReader.cs" />
+    <Compile Include="Packet\PacketWriter.cs" />
+    <Compile Include="PingManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Network\Server\FiestaServer.cs" />
+    <Compile Include="Network\Server\InternServer.cs" />
+    <Compile Include="Network\Server\ServerBase.cs" />
+    <Compile Include="Network\Event\DataRecievedEventArgs.cs" />
+    <Compile Include="Network\Event\SocketDisconnectArgs.cs" />
+    <Compile Include="Network\Callbacks\TCPRecvCallBack.cs" />
+    <Compile Include="Network\Callbacks\TCPSendCallBack.cs" />
+    <Compile Include="Network\Event\SessionDisconnectArgs.cs" />
+    <Compile Include="Network\Session\FiestaSession.cs" />
+    <Compile Include="Network\Session\InternSession.cs" />
+    <Compile Include="Network\Managers\FiestaSessionManagerBase.cs" />
+    <Compile Include="Network\Managers\InternSessionManagerBase.cs" />
+    <Compile Include="Network\Managers\SessionBaseManager.cs" />
+    <Compile Include="Network\Session\SessionBase.cs" />
+    <Compile Include="Network\States\FiestaSessionStateInfo.cs" />
+    <Compile Include="Network\States\SessionStateInfo.cs" />
+    <Compile Include="Utils\FiestaSharkDumper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DragonFiesta.Game\DragonFiesta.Game.csproj">
+      <Project>{108cce99-abd4-4373-b694-3b4a74f658a3}</Project>
+      <Name>DragonFiesta.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Messages\DragonFiesta.Messages.csproj">
+      <Project>{6ed5fde1-4722-4566-bfda-41c8fdc8872c}</Project>
+      <Name>DragonFiesta.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Providers\DragonFiesta.Providers.csproj">
+      <Project>{ffdef520-3ed2-416d-ac57-12bb20d20328}</Project>
+      <Name>DragonFiesta.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DragonFiesta.Utils\DragonFiesta.Utils.csproj">
+      <Project>{4c75a441-9386-41a2-b113-7b03a2305563}</Project>
+      <Name>DragonFiesta.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

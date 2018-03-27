@@ -1,0 +1,19 @@
+﻿using DragonFiesta.Networking.HandlerTypes;
+
+namespace DragonFiesta.World.Network.FiestaHandler.Client
+{
+    [PacketHandlerClass(Handler31Type._Header)]
+    public class CH31Handler
+    {
+     
+        [PacketHandler(Handler31Type.CMSG_PRISON_GET_REQ)]
+        public static void CMSG_CHARACTER_QUICKBAR_STATE(WorldSession sender, FiestaPacket packet)
+        {
+            using (var pack = new FiestaPacket(28, 13))
+            {
+                pack.WriteHexAsBytes("01 D7 07 01 18 00 00 18 00 00 00 CD CC C4 3D 00 00 00 00 00 00 D2 3E 00 00 00 00 00 00 00 00 AB AA 72 3F 33 33 77 3F 55 55 55 3E 00 00 00 00 55 55 65 3F 00 00 00 00 55 55 65 3F 00 00 00 00 55 55 65 3F 00 00 00 00 55 55 65 3F 33 33 77 3F 55 55 55 3E 33 33 77 3F 55 55 55 3E 33 33 77 3F 55 55 55 3E 33 33 77 3F 55 55 55 3E 9A 99 4D 3E 00 00 74 3E 66 66 1A 3E AB AA DA 3D 9A 99 B1 3D 55 55 1D 3E 00 00 CC 3E 00 00 D4 3E 9A 99 26 3F 00 00 64 3E 00 00 00 00 AB AA 22 3E 00 00 00 00 55 55 75 3E 00 00 00 00 AB AA 2E 3E CD CC 1D 3F AB AA 3A 3D CD CC 1E 3F AB AA 2E 3E 9A 99 51 3F 00 00 00 00 9A 99 C5 3E 55 55 33 3F F2 01 00 00 73 01 00 00 EC 01 00 00 73 01 00 00 82 00 00 00 82 00 00 00 EC 01 00 00 00 03 00 00 82 00 00 00 00 00 00 00 00 05 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00");
+                sender.SendPacket(pack);
+            }
+        }
+    }
+}
