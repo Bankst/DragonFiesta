@@ -42,7 +42,7 @@ namespace DragonFiesta.World.Game.Friends
                 {
                     if(!RemoveFriendFromDatabase(args.Character,frend.MyFriend))
                     {
-                        GameLog.Write(GameLogLevel.Warning, "Character Frend Delestion fail...");
+                        GameLog.Write(GameLogLevel.Warning, "Character Friend Deletion fail...");
                         return;
                     }
 

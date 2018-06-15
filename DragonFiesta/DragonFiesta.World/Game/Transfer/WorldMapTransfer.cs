@@ -15,7 +15,7 @@ namespace DragonFiesta.World.Game.Transfer
         {
             if (WorldServerTransferManager.FinishTransfer(Character.Info.CharacterID, out WorldMapTransfer end))
             {
-                GameLog.Write(GameLogLevel.Warning, "MapTransfer is Timet out CharacterId {0}", Character.Info.CharacterID);
+                GameLog.Write(GameLogLevel.Warning, "MapTransfer timed out for CharacterId {0}", Character.Info.CharacterID);
 
                 if (end.Character.IsConnected)
                 {

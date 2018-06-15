@@ -59,7 +59,7 @@ namespace DragonFiesta.Providers.Text
                     TextData mData = new TextData(pResult, i);
                     if (!TextDataById.TryAdd(mData.TextId, mData))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Error, "Dublicate Text With {0} found!", mData.TextId);
+                        DatabaseLog.Write(DatabaseLogLevel.Error, "Duplicate Text With {0} found!", mData.TextId);
                     }
                     mBar.Step();
                 }

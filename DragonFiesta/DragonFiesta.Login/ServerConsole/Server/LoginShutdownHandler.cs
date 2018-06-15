@@ -55,7 +55,7 @@ namespace DragonFiesta.Login.ServerConsole.Server
         
         private void DisplayMessage(TimeSpan RestTime)
         {
-            EngineLog.Write(EngineLogLevel.Info, "LoginServer Shutdown in {0} Hours {1] Minutes {2} Secons", RestTime.TotalHours, RestTime.TotalMinutes, RestTime.TotalSeconds);
+            EngineLog.Write(EngineLogLevel.Info, "LoginServer Shutdown in {0} Hours {1] Minutes {2} Seconds", RestTime.TotalHours, RestTime.TotalMinutes, RestTime.TotalSeconds);
         }
         public override void ShutdownSequense_1Seconds(string Reason, TimeSpan RestTime)
         {

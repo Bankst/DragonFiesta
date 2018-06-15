@@ -87,7 +87,7 @@ namespace DragonFiesta.Game.Characters
             }
             catch (Exception ex)
             {
-                EngineLog.Write(ex, "Error loading character from database:");
+                EngineLog.Write(ex, "Error loading character from database: ");
                 return false;
             }
         }
@@ -114,7 +114,7 @@ namespace DragonFiesta.Game.Characters
             }
             catch (Exception ex)
             {
-                EngineLog.Write(ex, "Error loading character from sql :");
+                EngineLog.Write(ex, "Error loading character from database: ");
                 return false;
             }
         }
@@ -264,7 +264,7 @@ namespace DragonFiesta.Game.Characters
             catch (Exception ex)
             {
                 Result = CharacterErrors.ErrorInCharacterInfo;
-                EngineLog.Write(ex, "Error refreshing character:");
+                EngineLog.Write(ex, "Error refreshing character: ");
 
                 return false;
             }

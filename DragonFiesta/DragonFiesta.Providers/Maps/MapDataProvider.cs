@@ -76,10 +76,10 @@ namespace DragonFiesta.Providers.Maps
             }
 
             if (!GetMapInfoByID(GameConfiguration.Instance.DefaultSpawnMapId, out MapInfo DefaultMap))
-                throw new KeyNotFoundException("Cant find default spawn map " + GameConfiguration.Instance.DefaultSpawnMapId + "");
+                throw new KeyNotFoundException("Can't find default spawn map " + GameConfiguration.Instance.DefaultSpawnMapId + "");
 
             if (!GetMapInfoByID(GameConfiguration.Instance.TutorialMap, out MapInfo TutorialMap))
-                throw new KeyNotFoundException("Cant find TutorialMap  " + GameConfiguration.Instance.TutorialMap + "");
+                throw new KeyNotFoundException("Can't find TutorialMap  " + GameConfiguration.Instance.TutorialMap + "");
 
             DefaultMapInfo = DefaultMap;
             TutorialMapInfo = TutorialMap;
@@ -102,7 +102,7 @@ namespace DragonFiesta.Providers.Maps
                     //load map
                     if (!MapInfosByID.TryGetValue(MapClientID, out MapInfo map))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find map  field info. Map ID: '{0}'.", MapClientID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find map field info. Map ID: '{0}'.", MapClientID);
                         continue;
                     }
                     var info = new FieldInfo(pResult, i)

@@ -57,7 +57,7 @@ namespace DragonFiesta.Login.Network.InternHandler.Client
                 }
 
                 ServerMain.InternalInstance.Title.Update();
-                EngineLog.Write(EngineLogLevel.Info, "Assignet World {0}", MyWorld.Info.WorldID);
+                EngineLog.Write(EngineLogLevel.Info, "Assigned World {0}", MyWorld.Info.WorldID);
             }
 
             var Response = new AuthenticatetWorld_Response

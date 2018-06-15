@@ -39,7 +39,7 @@ namespace DragonFiesta.Game.CommandAccess
                         var Command = new GameCommand(pResult, i);
 
                         if (!CommandsByID.TryAdd(Command.Id, Command))
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate CommandId {0} Found!");
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate CommandId {0} Found!");
 
                         mBar.Step();
                     }
@@ -65,13 +65,13 @@ namespace DragonFiesta.Game.CommandAccess
 
                         if (!CommandsByID.TryGetValue(CommandId, out GameCommand Cmd))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can not find CommandId {0] By Role {1}");
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find CommandId {0] By Role {1}");
                             continue;
                         }
 
                         if (!RolesById.TryGetValue(Role, out GameRole GMRole))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Cant not find Role {0} with CommandId {1}", Role, CommandId);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find Role {0} with CommandId {1}", Role, CommandId);
                             continue;
                         }
 
@@ -80,13 +80,13 @@ namespace DragonFiesta.Game.CommandAccess
 
                         if (!CommandsByCategory[Cmd.CommandCategory.ToUpper()].TryAdd(Cmd.Command.ToUpper(), Cmd))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate Commands Found Category : {0} Comand {1}", Cmd.CommandCategory, Cmd.Command);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Commands Found Category : {0} Comand {1}", Cmd.CommandCategory, Cmd.Command);
                             continue;
                         }
 
                         if (!Cmd.RoleInfo.TryAdd(Role, GMRole))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublciate Role Found for Command {0}", Cmd.Id);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Role Found for Command {0}", Cmd.Id);
                             continue;
                         }
                     }
@@ -114,7 +114,7 @@ namespace DragonFiesta.Game.CommandAccess
                     var Role = new GameRole(Result, i);
 
                     if (!RolesById.TryAdd(Role.Id, Role))
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate Role Id {0} found!", Role.Id);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Role Id {0} found!", Role.Id);
 
                     mBar.Step();
                 }

@@ -25,7 +25,7 @@ namespace DragonFiesta.Login.InternNetwork
                 EngineLog.Write(EngineLogLevel.Info, "Disconnect World {0}", World.Info.WorldID);
             }
 
-            InternWorldSessionManager.Instance.RemoveSession(BaseStateInfo.SessiondId);
+            InternWorldSessionManager.Instance.RemoveSession(BaseStateInfo.SessionId);
 
             ServerMain.InternalInstance.Title.Update();
         }

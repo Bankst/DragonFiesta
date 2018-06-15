@@ -26,7 +26,7 @@ namespace DragonFiesta.Zone.Data.Menu
 
                 if (!MenusByID.TryAdd(MenuData.ID, MenuData))
                 {
-                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate Menu Found Id {0}", MenuData.ID);
+                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Menu Found Id {0}", MenuData.ID);
                     continue;
                 }
             }

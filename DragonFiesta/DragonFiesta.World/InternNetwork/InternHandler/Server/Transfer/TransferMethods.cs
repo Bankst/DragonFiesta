@@ -28,7 +28,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Server.Transfer
             SendZoneTransfer(pCharacter.Map,
                 (pCharacter.AreaInfo.IsInInstance) ? (pCharacter.Map as IInstanceMap).InstanceId : (ushort)0,
                 pCharacter.AreaInfo.Position,
-                pCharacter.Session.BaseStateInfo.SessiondId,
+                pCharacter.Session.BaseStateInfo.SessionId,
                  pCharacter.Info.CharacterID,
                  pCharacter.Session.UserAccount.RoleID);
 

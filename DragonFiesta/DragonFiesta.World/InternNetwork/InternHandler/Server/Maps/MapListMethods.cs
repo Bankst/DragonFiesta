@@ -76,7 +76,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Server.Maps
                 {
                     if (!MapManager.AvailablInstanceIds.TryDequeue(out ushort InstanceId))
                     {
-                        GameLog.Write(GameLogLevel.Warning, "Faile To Start Maplist Instanceids overlow!");
+                        GameLog.Write(GameLogLevel.Warning, "Failed To Start Maplist Instanceids overlow!");
                         continue;
                     }
                     Message.MapsList.Add(new StartMap

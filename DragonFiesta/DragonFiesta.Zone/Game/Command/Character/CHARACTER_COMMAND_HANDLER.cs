@@ -196,7 +196,7 @@ namespace DragonFiesta.Zone.Game.Command
 
             if (!uint.TryParse(Params[1], out uint Amount))
             {
-                ZoneChat.CharacterNote(Character, $"Cant not Parse Amount");
+                ZoneChat.CharacterNote(Character, $"Can't not Parse Amount");
                 return true;
             }
 

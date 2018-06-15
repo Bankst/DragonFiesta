@@ -15,7 +15,7 @@ namespace DragonFiesta.World.Game.Transfer
         {
             if (WorldServerTransferManager.FinishTransfer(Account.ID, out WorldServerTransfer end))
             {
-                GameLog.Write(GameLogLevel.Warning, "WoldTransfer is Timet out AccountId {0}", Account.ID);
+                GameLog.Write(GameLogLevel.Warning, "WorldTransfer timed out for AccountId {0}", Account.ID);
             }
         }
 

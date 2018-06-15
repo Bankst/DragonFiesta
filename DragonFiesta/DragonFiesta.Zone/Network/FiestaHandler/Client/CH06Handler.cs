@@ -85,8 +85,8 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             sender.Character.AreaInfo.Position = Transfer.SpawnPosition;
         
             //Set Authenticate
-            sender.GameStates.Authenticatet = true;
-            sender.GameStates.IsTransfering = false;
+            sender.GameStates.Authenticated = true;
+            sender.GameStates.IsTransferring = false;
 
             //send chunk
             SH04Handler.SendCharacterInfo(sender);
@@ -228,7 +228,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             }
           
             sender.GameStates.IsReady = true;
-            sender.GameStates.IsTransfering = false;
+            sender.GameStates.IsTransferring = false;
             sender.GameStates.HasPong = true;
 
 

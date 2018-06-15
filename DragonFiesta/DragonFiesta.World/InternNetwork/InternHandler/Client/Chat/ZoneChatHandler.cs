@@ -21,7 +21,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Chat
 
             if (!GameCommandManager.GetGameCommand(Respone.Category, Respone.Command, out GameCommand Command))
             {
-                CommandLog.Write(CommandLogLevel.Error, "Internal Command Error WorldCommand {0} {1} on Wolrd Not found!!", Respone.Category, Respone.Command);
+                CommandLog.Write(CommandLogLevel.Error, "Internal Command Error WorldCommand {0} {1} on World Not found!!", Respone.Category, Respone.Command);
                 return;
             }
             string CommandString = $"{Respone.Category} {Respone.Command} {string.Join(" ", Respone.Args) }";

@@ -53,7 +53,7 @@ namespace DragonFiesta.World.ServerConsole
                 {
                     if (!MapDataProvider.GetFieldInfosByMapID(MapId, out FieldInfo info))
                     {
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Can not find Map {0}", MapId);
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Can't find Map {0}", MapId);
                         return true;
                     }
 

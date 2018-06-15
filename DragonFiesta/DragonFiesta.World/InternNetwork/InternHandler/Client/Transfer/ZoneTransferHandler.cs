@@ -17,7 +17,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Transfer
             if (pChar.IsConnected)
             {
                 pChar.Session.GameStates.IsReady = false;
-                pChar.Session.GameStates.IsTransfering = true;
+                pChar.Session.GameStates.IsTransferring = true;
 
                 if(!pChar.ChangeMap(MapChangeMessage.MapId,
                     MapChangeMessage.InstanceId,

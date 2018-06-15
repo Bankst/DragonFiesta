@@ -17,7 +17,7 @@ namespace DragonFiesta.Networking.Helpers
 
             // Delete Info
             Packet.Write<byte>(0); // delete year
-            Packet.Write<byte>(0); // delete moth
+            Packet.Write<byte>(0); // delete month
             Packet.Write<byte>(0); // delete day
             Packet.Write<byte>(0); // delete hour
             Packet.Write<byte>(0); // delete min

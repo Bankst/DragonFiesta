@@ -60,7 +60,7 @@ namespace DragonFiesta.Zone.Data.NPC
                         }
                         else if (pgate.Count > 1)
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Error Found Dublicate Link for NPC '{0}'.", currentInfo.MobInfo.ID);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Error Found Duplicate Link for NPC '{0}'.", currentInfo.MobInfo.ID);
                             continue;
                         }
                         else if (pgate.Count == 0)

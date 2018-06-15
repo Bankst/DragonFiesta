@@ -6,7 +6,7 @@
         FailedToConnectToMapServer = 323,
         ThereIsNoCharacterInTheSlot = 324,
         ErrorKP = 328,//by Reversed
-        ErrorUnkown = 1228,
+        ErrorUnknown = 1228,
         ErrorInCharacterInfo = 1410,
         ErrorInAppearance = 1411,
         ErrorInOptions = 1412,

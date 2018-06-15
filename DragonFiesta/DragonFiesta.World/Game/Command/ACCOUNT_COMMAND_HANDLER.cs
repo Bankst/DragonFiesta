@@ -75,7 +75,7 @@ namespace DragonFiesta.World.Game.Command
                     }
                     else
                     {
-                        ZoneChat.CharacterNote(Character, "Account  not Found!");
+                        ZoneChat.CharacterNote(Character, "Account not Found!");
                     }
                 }
 
@@ -158,7 +158,7 @@ namespace DragonFiesta.World.Game.Command
 
                         if (!Regex.IsMatch(Params[2], pattern))
                         {
-                            ZoneChat.CharacterNote(Character, $"Invalid Email Adress {Params[2]}");
+                            ZoneChat.CharacterNote(Character, $"Invalid Email Address {Params[2]}");
                             return;
                         }
 
@@ -166,7 +166,7 @@ namespace DragonFiesta.World.Game.Command
 
                         AccountMethods.SendUpdateAccount(Response.Account, (Update) =>
                         {
-                            ZoneChat.CharacterNote(Character, $"update email to   {Params[2]} Success");
+                            ZoneChat.CharacterNote(Character, $"update email to {Params[2]} Success");
                         });
                         break;
                     case "ACTIVE" when (Params.Length == 3 && StringExtensions.ParseBool(Params[2], out bool State)):

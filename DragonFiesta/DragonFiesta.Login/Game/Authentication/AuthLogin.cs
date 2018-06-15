@@ -20,7 +20,7 @@ namespace DragonFiesta.Login.Game.Authentication
         public bool IsDisposed { get { return (IsDisposedInt > 0); } }
         private int IsDisposedInt;
 
-        private LoginGameError Error { get; set; } = LoginGameError.UNKOWN_ERROR;
+        private LoginGameError Error { get; set; } = LoginGameError.UNKNOWN_ERROR;
 
         private ushort SessionId { get; set; }
 
@@ -31,7 +31,7 @@ namespace DragonFiesta.Login.Game.Authentication
 
         public LoginGameError AuthAccount(LoginSession pClient, string username, string Password)
         {
-            Error = LoginGameError.UNKOWN_ERROR;
+            Error = LoginGameError.UNKNOWN_ERROR;
 
             if (!AccountManager.GetAccountByName(username, out Account account))
             {
@@ -44,7 +44,7 @@ namespace DragonFiesta.Login.Game.Authentication
             }
             else if (account.IsOnline)
             {
-                ServerAccountMethods.SendDublicateLogin(account.ID);
+                ServerAccountMethods.SendDuplicateLogin(account.ID);
                 return LoginGameError.LOGIN_FAILED;
             }
 
@@ -62,7 +62,7 @@ namespace DragonFiesta.Login.Game.Authentication
             {
                 return LoginGameError.BLOCKED;
             }
-            else if (!account.IsBanned && account.BanTime >= 0)//ban is expiret also unblock full
+            else if (!account.IsBanned && account.BanTime >= 0)//ban is expired also unblock full
             {
                 account.BanTime = 0;
                 account.BanDate = DateTime.Now;

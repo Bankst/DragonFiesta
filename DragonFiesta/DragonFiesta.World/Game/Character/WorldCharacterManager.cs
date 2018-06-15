@@ -346,7 +346,7 @@ namespace DragonFiesta.World.Game.Character
                 Character.LoginInfo.LastLogin = DateTime.Now;
                 UpdateCharacterState(Character.Info.CharacterID, true, Character.LoginInfo.LastLogin);
 
-                //tels all zone...
+                //tells all zone...
                 CharacterMethods.BroadcastOnlineCharacter(Character);
             }
             base.FinalizeLogCharacterIn(Character);
@@ -367,7 +367,7 @@ namespace DragonFiesta.World.Game.Character
                     Character.LoginInfo.IsOnline = false;
                     UpdateCharacterState(Character.Info.CharacterID, Character.LoginInfo.IsOnline, Character.LoginInfo.LastLogin);
 
-                    //tels all zone...
+                    //tells all zone...
                     CharacterMethods.BroadCastOfflineCharacter(Character);
                 }
             }
@@ -376,7 +376,7 @@ namespace DragonFiesta.World.Game.Character
 
         protected override void FinalizeCharacterLevelChanged(WorldCharacter Character, byte NewLevel, ushort MobId = ushort.MaxValue)
         {
-            //Tels zone level changed...
+            //Tells zone level changed...
             CharacterMethods.BroadcastLevelChanged(Character.Info.CharacterID, NewLevel, MobId);
             base.FinalizeCharacterLevelChanged(Character, NewLevel, MobId);
         }

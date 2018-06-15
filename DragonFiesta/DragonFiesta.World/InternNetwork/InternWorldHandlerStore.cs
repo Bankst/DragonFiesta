@@ -50,12 +50,12 @@ namespace DragonFiesta.World.InternNetwork
         {
             if (!ZoneManager.GetZoneByID(Message.DestZone, out ZoneServer mZone))
             {
-                GameLog.Write(GameLogLevel.Warning, $"Can not Send {Message.GetType()} Zone {Message.DestZone } is not Exis..");
+                GameLog.Write(GameLogLevel.Warning, $"Can't Send {Message.GetType()} Zone {Message.DestZone } is not Exis..");
                 return;
             }
             else if (!mZone.IsConnected)
             {
-                GameLog.Write(GameLogLevel.Warning, $"Can not Send {Message.GetType() } Zone {Message.DestZone } is not Connectet");
+                GameLog.Write(GameLogLevel.Warning, $"Can't Send {Message.GetType() } Zone {Message.DestZone } is not Connectet");
                 return;
             }
 

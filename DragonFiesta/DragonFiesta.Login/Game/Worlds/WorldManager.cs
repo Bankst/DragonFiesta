@@ -32,7 +32,7 @@ namespace DragonFiesta.Login.Game.Worlds
             }
             catch (Exception ex)
             {
-                EngineLog.Write(EngineLogLevel.Exception, "Failed Start WorldManager", ex);
+                EngineLog.Write(EngineLogLevel.Exception, "Failed to Start WorldManager", ex);
                 return false;
             }
         }
@@ -99,7 +99,7 @@ namespace DragonFiesta.Login.Game.Worlds
                         if (!WorldByIDs.TryAdd(pWorld.Info.WorldID, pWorld)
                             || !WorldList.Add(pWorld))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate World {0} Found  ", pWorld.Info);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate World {0} Found  ", pWorld.Info);
                         }
                         mBar.Step();
                     }
@@ -108,7 +108,7 @@ namespace DragonFiesta.Login.Game.Worlds
             }
             catch (Exception ex)
             {
-                DatabaseLog.Write(ex, "Failed Load WorldList");
+                DatabaseLog.Write(ex, "Failed to Load WorldList");
             }
         }
         #endregion

@@ -34,7 +34,7 @@ namespace DragonFiesta.Login.Game.Authentication
                     if (!VersionsByHash.TryAdd(mVersion.mHash.ToUpper(), mVersion)
                         || !VersionsByDate.TryAdd(mVersion.Date, mVersion))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate Versions Date {0} Hash {1} found!", mVersion.Date, mVersion.mHash);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Versions Date {0} Hash {1} found!", mVersion.Date, mVersion.mHash);
                     }
                     mBar.Step();
                 }

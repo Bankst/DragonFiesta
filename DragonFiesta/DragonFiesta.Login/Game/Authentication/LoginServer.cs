@@ -23,7 +23,7 @@ namespace DragonFiesta.Login.Game.Authentication
             try
             {
                 if (LoginConfiguration.Instance.GameServerInfo.MaxConnection <= 0)
-                    throw new StartupException("Invalid Max GameConnection Please Check you Config");
+                    throw new StartupException("Invalid Max GameConnection Please Check your Config");
 
                 mListener = new LoginListener(Region, ListenPorts);
 

@@ -30,9 +30,9 @@ namespace DragonFiesta.Login.Network.InternHandler.Server
             InternWorldSessionManager.Instance.Broadcast(mDeleteAccount);
         }
 
-        public static void SendDublicateLogin(int AccountId)
+        public static void SendDuplicateLogin(int AccountId)
         {
-            DublicateLoginFound Message = new DublicateLoginFound
+            DuplicateLoginFound Message = new DuplicateLoginFound
             {
                 Id = Guid.NewGuid(),
                 AccountID = AccountId,

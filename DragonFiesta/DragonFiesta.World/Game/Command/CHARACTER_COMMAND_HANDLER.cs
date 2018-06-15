@@ -102,7 +102,7 @@ namespace DragonFiesta.World.Game.Command
                      {
                          AccountMethods.SendUpdateAccount(AccountMsg.Account, (update) =>
                           {
-                              ZoneChat.CharacterNote(Character, $"Unband Character {CharacterName} Success!");
+                              ZoneChat.CharacterNote(Character, $"Unbanned Character {CharacterName} Success!");
                           });
                      }
                      else
@@ -147,7 +147,7 @@ namespace DragonFiesta.World.Game.Command
                                  ZoneChat.CharacterNote(Character, $"Character AccountName is {Response.Account.Name}");
                                  break;
                              case "LASTIP" when (Params.Length == 2):
-                                 ZoneChat.CharacterNote(Character, $"Character LasP is {Response.Account.LastIP}");
+                                 ZoneChat.CharacterNote(Character, $"Character Last IP is {Response.Account.LastIP}");
                                  break;
                              case "EMAIL" when (Params.Length == 2):
                                  ZoneChat.CharacterNote(Character, $"Character Email is {Response.Account.EMail}");
@@ -162,7 +162,7 @@ namespace DragonFiesta.World.Game.Command
                      }
                      else
                      {
-                         ZoneChat.CharacterNote(Character, $"Account  not found");
+                         ZoneChat.CharacterNote(Character, $"Account not found");
                      }
                  }
              });

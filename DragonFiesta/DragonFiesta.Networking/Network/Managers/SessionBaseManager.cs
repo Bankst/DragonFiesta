@@ -41,7 +41,7 @@ namespace DragonFiesta.Networking.Network
             {
                 if (Sessions.TryAdd(SessionId, mSession))
                 {
-                    mSession.BaseStateInfo.SessiondId = SessionId;
+                    mSession.BaseStateInfo.SessionId = SessionId;
 
                     return true;
                 }
@@ -69,7 +69,7 @@ namespace DragonFiesta.Networking.Network
             return false;
         }
 
-        public bool RemoveSession(TSession mSession) => RemoveSession(mSession.BaseStateInfo.SessiondId);
+        public bool RemoveSession(TSession mSession) => RemoveSession(mSession.BaseStateInfo.SessionId);
 
         public bool GetSessionById(ushort Id, out TSession mSession) => Sessions.TryGetValue(Id, out mSession);
 

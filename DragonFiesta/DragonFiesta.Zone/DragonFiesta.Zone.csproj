@@ -142,7 +142,7 @@
     <Compile Include="Data\Skills\ActiveSkillInfo.cs" />
     <Compile Include="Data\Skills\SkillDataProvider.cs" />
     <Compile Include="Data\Stats\FreeStatData.cs" />
-    <Compile Include="Data\WayPoints\WayPointInfo.cs" />
+    <Compile Include="Data\Stats\WayPoints\WayPointInfo.cs" />
     <Compile Include="Game\Buffs\Buff.cs" />
     <Compile Include="Game\Buffs\BuffAction.cs" />
     <Compile Include="Game\Buffs\BuffCollection.cs" />

@@ -16,8 +16,8 @@ namespace DragonFiesta.World.Network
  
 
         public bool Ingame => (Character != null &&
-            !GameStates.IsTransfering
-            && GameStates.Authenticatet
+            !GameStates.IsTransferring
+            && GameStates.Authenticated
             && GameStates.IsReady);
 
         public WorldSession(ClientRegion mRegio, Socket mSocket) : base(mRegio, mSocket)

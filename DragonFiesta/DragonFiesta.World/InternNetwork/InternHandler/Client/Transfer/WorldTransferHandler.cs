@@ -28,7 +28,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Transfer
             else
             {
                 mWorldSession.Character = null;
-                _SH03Helpers.SendDublicateLogin(mWorldSession);
+                _SH03Helpers.SendDuplicateLogin(mWorldSession);
                 mWorldSession.Dispose();
             }
         }

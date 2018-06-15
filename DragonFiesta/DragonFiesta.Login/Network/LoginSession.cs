@@ -19,7 +19,7 @@ namespace DragonFiesta.Login.Network
             {
                 if (Session.AccountIsLoggedIn)
                 {
-                    if (!Session.GameStates.IsTransfering)
+                    if (!Session.GameStates.IsTransferring)
                     {
                         Session.UserAccount.IsOnline = false;
                         AccountManager.UpdateAccountState(Session.UserAccount);

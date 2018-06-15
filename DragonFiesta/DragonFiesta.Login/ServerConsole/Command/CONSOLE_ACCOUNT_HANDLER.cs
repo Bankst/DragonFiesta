@@ -72,7 +72,7 @@ namespace DragonFiesta.Login.ServerConsole
             {
                 if (pAccount.IsOnline)
                 {
-                    CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Account ist Online!! Mus be first Logout before Delete");
+                    CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Account is online! Account must be offline before deleting!");
                     return true;
                 }
                 ServerAccountMethods.SendAccountDelete(pAccount);
@@ -105,11 +105,11 @@ namespace DragonFiesta.Login.ServerConsole
                 switch (mResponse)
                 {
                     case AccountCreateResponse.NameTaken:
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "AccountName {0} is Alredy in Use", mAccountName);
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "AccountName {0} is already in Use", mAccountName);
                         return true;
 
                     case AccountCreateResponse.IDOverflow:
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "AccountIDs Are overflow");
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "AccountIDs are overflow");
                         return true;
 
                     case AccountCreateResponse.InternalError:
@@ -121,7 +121,7 @@ namespace DragonFiesta.Login.ServerConsole
                         return true;
 
                     case AccountCreateResponse.Success:
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Account {0} createt with password {1} Success!", mAccountName, Password);
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Account {0} created with password {1} Success!", mAccountName, Password);
                         return true;
                 }
             }
@@ -158,7 +158,7 @@ namespace DragonFiesta.Login.ServerConsole
 
                         if (!Regex.IsMatch(Params[2], pattern))
                         {
-                            CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, "Invalid Email Adress {0}", Params[2]);
+                            CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, "Invalid Email Address {0}", Params[2]);
                             return true;
                         }
 
@@ -166,7 +166,7 @@ namespace DragonFiesta.Login.ServerConsole
 
                         AccountManager.UpdateAccount(pAccount);
                         ServerAccountMethods.SendAccountUpdate(pAccount);
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Execute, "Set Account {0} EMail Adress to {1} ", AccountName, Params[2]);
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Execute, "Set Account {0} EMail Address to {1} ", AccountName, Params[2]);
 
                         return true;
 
@@ -191,7 +191,7 @@ namespace DragonFiesta.Login.ServerConsole
 
                         if (Params[2].Length > 16)
                         {
-                            CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, "Invalid Password Lenght the max Lenght is 16");
+                            CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, "Invalid Password Length the max Length is 16");
                             return true;
                         }
 

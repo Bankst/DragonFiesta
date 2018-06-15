@@ -81,7 +81,7 @@ namespace DragonFiesta.Zone.InternNetwork.InternHandler.Client.Character
 
 
                 Character.Session.GameStates.IsReady = false;
-                Character.Session.GameStates.IsTransfering = true;
+                Character.Session.GameStates.IsTransferring = true;
             }
 
             //Event...

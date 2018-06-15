@@ -20,7 +20,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Maps
 
                 pSession.Zone.IsReady = true;
 
-                GameLog.Write(GameLogLevel.Internal, $"ZoneServer ID : {pSession.Zone.ID } is out of Maintace!");
+                GameLog.Write(GameLogLevel.Internal, $"ZoneServer ID : {pSession.Zone.ID } is out of Maintenace!");
 
                 pSession.SendMessage(Respone, false);
             }

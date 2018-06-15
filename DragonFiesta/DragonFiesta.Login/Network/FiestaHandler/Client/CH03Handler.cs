@@ -91,7 +91,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
                 return;
             }
 
-            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessiondId, out AuthLogin Login))
+            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessionId, out AuthLogin Login))
             {
                 SH03Helpers.SendLoginError(pSession, LoginGameError.TIMEOUT);
                 return;
@@ -101,7 +101,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
 
             if (AuthResult == LoginGameError.None)
             {
-                pSession.GameStates.Authenticatet = true;
+                pSession.GameStates.Authenticated = true;
                 SH3Handler.SendWorldList(pSession, false);
             }
             else
@@ -122,7 +122,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
                 return;
             }
 
-            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessiondId, out AuthLogin Login))
+            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessionId, out AuthLogin Login))
             {
                 pSession.Dispose();
                 return;
@@ -132,7 +132,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
 
             if (AuthResult == LoginGameError.None)
             {
-                pSession.GameStates.Authenticatet = true;
+                pSession.GameStates.Authenticated = true;
                 SH3Handler.SendWorldList(pSession, false);
             }
             else
@@ -176,7 +176,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
                         if (transfer.Added)
                         {
                             SH3Handler.WorldServerIP(Session, MyWorld, WorldStatus.OK);
-                            Session.GameStates.IsTransfering = true;
+                            Session.GameStates.IsTransferring = true;
 
                         }
                         else
@@ -217,7 +217,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
 
             if (LoginSessionManager.Instance.AddAccount(mTransfer.pAccount.ID, pSession))
             {
-                pSession.GameStates.Authenticatet = true;
+                pSession.GameStates.Authenticated = true;
                 pSession.UserAccount = mTransfer.pAccount;
                 SH3Handler.SendWorldList(pSession, false);
             }
@@ -226,7 +226,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
         [PacketHandler(Handler03Type.CMSG_USER_WORLD_STATUS_REQ)]
         public static void World_List(LoginSession pSession, FiestaPacket packet)
         {
-            if (!pSession.GameStates.Authenticatet
+            if (!pSession.GameStates.Authenticated
                 || !pSession.AccountIsLoggedIn)
             {
                 pSession.Dispose();

@@ -93,7 +93,7 @@ public sealed class ThreadPool : IDisposable
         }
         catch (Exception ex)
         {
-            EngineLog.Write(ex, "Unhandelt AbleServer Exception");
+            EngineLog.Write(ex, "Unhandled AbleServer Exception");
         }
         finally
         {

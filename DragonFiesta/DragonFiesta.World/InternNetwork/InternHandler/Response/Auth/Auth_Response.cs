@@ -16,7 +16,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Login
                     break;
 
                 case InternWorldAuthResult.Error:
-                    EngineLog.Write(EngineLogLevel.Exception, "Unkown Error to Auth Login");
+                    EngineLog.Write(EngineLogLevel.Exception, "Unknown Error to Auth Login");
                     break;
 
                 case InternWorldAuthResult.InvalidPassword:

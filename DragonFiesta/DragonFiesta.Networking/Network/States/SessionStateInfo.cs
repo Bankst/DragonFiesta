@@ -48,6 +48,6 @@ namespace DragonFiesta.Networking.Network
         protected Dictionary<string, object> Storage;
         protected object storageLock;
 
-        public ushort SessiondId { get; set; } = 0;
+        public ushort SessionId { get; set; } = 0;
     }
 }

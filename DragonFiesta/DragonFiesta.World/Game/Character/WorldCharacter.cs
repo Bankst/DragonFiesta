@@ -56,13 +56,13 @@ namespace DragonFiesta.World.Game.Character
 
             if (!MapDataProvider.GetFieldInfosByMapID(mapId, out FieldInfo Info))
             {
-                ZoneChat.CharacterNote(this, $"FieldInfo {mapId} not found !");
+                ZoneChat.CharacterNote(this, $"FieldInfo {mapId} not found!");
                 return false;
             }
 
             if (!MapManager.GetMap(Info, InstanceId, out WorldServerMap NewMap))
             {
-                ZoneChat.CharacterNote(this, $"Map {mapId} Instance {InstanceId} not Found!");
+                ZoneChat.CharacterNote(this, $"Map {mapId} Instance {InstanceId} not found!");
                 return false;
             }
 
@@ -86,12 +86,12 @@ namespace DragonFiesta.World.Game.Character
                     InstanceId = InstanceId,
                     MapId = NewMap.MapId,
                     SpawnPosition = new Position(SpawnX, SpawnY),
-                    WorldSessionId = Session.BaseStateInfo.SessiondId,
+                    WorldSessionId = Session.BaseStateInfo.SessionId,
                     Callback = ZoneTransfer_Response.HandleZoneTransfer_Response
                 };
                 ZoneTransferCallback = () =>
                {
-                   //chang Client 
+                   //change Client 
                    if (!WorldServerTransferManager.AddTransfer(Transfer))
                    {
                        Session.Dispose();
@@ -181,7 +181,7 @@ namespace DragonFiesta.World.Game.Character
             }
             catch (Exception ex)
             {
-                DatabaseLog.Write(ex, "Failed to Save WorldCharacter");
+                DatabaseLog.Write(ex, "Failed to save WorldCharacter");
                 return false;
             }
         }

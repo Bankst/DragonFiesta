@@ -25,7 +25,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
             //Update GameTimeSync
             SH02Handler.SendGameTimeUpdatePacket(mSession, GameTime.Now().Time);
 
-            mSession.GameStates.IsTransfering = false;
+            mSession.GameStates.IsTransferring = false;
             mSession.GameStates.IsReady = true;
 
             Game.Character.WorldCharacterManager.Instance.CharacterMapRefreshed(mSession.Character);

@@ -116,7 +116,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
 
             sender.UserAccount = Transfer.Account;
 
-            sender.GameStates.Authenticatet = true;
+            sender.GameStates.Authenticated = true;
             sender.GameStates.HasPong = true;
 
             WorldPingManager.Instance.RegisterClient(sender);
