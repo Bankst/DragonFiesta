@@ -19,39 +19,6 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
         [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.NA)]
         public static void Version_NA(LoginSession sender, FiestaPacket packet)
         {
-            if (!packet.ReadString(out string version, 14) || !DateTime.TryParseExact(version, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
-            {
-                sender.Dispose();
-                return;
-            }
-
-            if (ServerMainDebug.TriggerVersion &&
-                !VersionsManager.GetVersionByDate(dt, out Version Version) &&
-                    VersionsManager.AddVersion(version, DateTime.Now))
-            {
-                GameLog.Write(GameLogLevel.Debug, "Triggered EU Version {0}", version);
-                SH3Handler.BinVersionAllowed(sender, false);
-                return;
-            }
-
-            if (!VersionsManager.GetVersionByDate(dt, out Version pVersion))
-            {
-                SH3Handler.BinVersionAllowed(sender, false);
-                return;
-            }
-
-            if (LoginManager.Instance.Add(sender))
-            {
-                SH3Handler.BinVersionAllowed(sender, true);
-            }
-        }
-
-        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.EU)]
-        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.ES)]
-        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.FR)]
-        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.DE)]
-        public static void Version_EU(LoginSession sender, FiestaPacket packet)
-        {
             if (!packet.ReadString(out string version, 32))
             {
                 sender.Dispose();
@@ -79,13 +46,44 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
             }
         }
 
+        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.EU)]
+        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.ES)]
+        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.FR)]
+        [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.DE)]
+        public static void Version_EU(LoginSession sender, FiestaPacket packet)
+        {
+            if (!packet.ReadString(out string version, 32))
+            {
+                sender.Dispose();
+                return;
+            }
+
+            if (ServerMainDebug.TriggerVersion &&
+                !VersionsManager.GetVersionByHash(version, out Version v) &&
+                VersionsManager.AddVersion(version, DateTime.Now))
+            {
+                GameLog.Write(GameLogLevel.Debug, "Triggered NA Version {0}", version);
+                SH3Handler.BinVersionAllowed(sender, false);
+                return;
+            }
+
+            if (!VersionsManager.GetVersionByHash(version, out Version pVersion))
+            {
+                SH3Handler.BinVersionAllowed(sender, false);
+                return;
+            }
+
+            if (LoginManager.Instance.Add(sender))
+            {
+                SH3Handler.BinVersionAllowed(sender, true);
+            }
+        }
+
         [PacketHandler(Handler03Type.CMSG_LOGIN_REQUEST_NA, ClientRegion.NA)]
         public static void AuthLogin_NA(LoginSession pSession, FiestaPacket packet)
         {
-            if (!packet.ReadEncodeString(out string AccountName, 256) ||
-                    !packet.SkipBytes(4) ||
-                    !packet.ReadEncodeString(out string Md5Password, 32) ||
-                    !packet.SkipBytes(4) ||
+            if (!packet.ReadEncodeString(out string AccountName, 260) ||
+                    !packet.ReadEncodeString(out string Md5Password, 36) ||
                     !packet.ReadEncodeString(out string Orginal, 20))
             {
                 return;
@@ -247,7 +245,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
             //SH3Handler.BinVersionAllowed(sender, false);
 
             //TODO
-            #warning "TODO VersionAllowed"
+#warning "TODO VersionAllowed"
             //SH3Handler.VersionAllowed(sender, false);
         }
     }
