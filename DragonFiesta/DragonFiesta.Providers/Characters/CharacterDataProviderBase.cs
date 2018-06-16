@@ -29,7 +29,7 @@ namespace DragonFiesta.Providers.Characters
                     byte level = Result.Read<byte>(i, "Level");
                     if (!ExpTable.TryAdd(level, Result.Read<ulong>(i, "NextExp")))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate Exp for Level {0} Found!!", level);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Exp for Level {0} Found!!", level);
                     }
                     mBar.Step();
                 }

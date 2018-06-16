@@ -1,6 +1,6 @@
 ﻿public enum ClientRegion : byte
 {
-    //Special DE ES FR Connecet to 1 World is Mixed Languar support
+    //Special DE ES FR Connect to 1 World is Mixed Language support
     None,
     FR,
     NA,

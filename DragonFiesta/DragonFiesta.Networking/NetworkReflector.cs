@@ -88,7 +88,7 @@ namespace DragonFiesta.Networking
                         toRet[Header][Handler.Type].Add(Handler.Region, HeaderType.Item3);
                     else
                     {
-                        EngineLog.Write(EngineLogLevel.Warning, "Dublicate Handler Found Region : {0} Header : {1} Type : {2} found !", Handler.Region, Header, Handler.Type);
+                        EngineLog.Write(EngineLogLevel.Warning, "Duplicate Handler Found Region : {0} Header : {1} Type : {2} found !", Handler.Region, Header, Handler.Type);
                         continue;
                     }
                 }

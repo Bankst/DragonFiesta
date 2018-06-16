@@ -52,7 +52,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Transfer
                         _SH04Helpers.SendCharacterError(Character.Session, CharacterErrors.ErrorInMover);
                         break;
                     default:
-                        GameLog.Write(GameLogLevel.Warning, "Unkown Zonetransfer Error");
+                        GameLog.Write(GameLogLevel.Warning, "Unknown Zonetransfer Error");
                         break;
                
                 }

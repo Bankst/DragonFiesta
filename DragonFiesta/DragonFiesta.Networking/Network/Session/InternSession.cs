@@ -9,7 +9,7 @@ namespace DragonFiesta.Networking.Network
     {
         public InternSessionStateInfo SessionStateInfo { get; set; }
 
-        public bool IsReady { get => SessionStateInfo.Authenticatet && IsConnected; }//Seit c# 7.0 möglich
+        public bool IsReady { get => SessionStateInfo.Authenticated && IsConnected; }//Seit c# 7.0 möglich
 
         protected TCPRecvCallBack<InternDataParser> RecvCallBack { get; private set; }
 

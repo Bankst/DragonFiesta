@@ -16,13 +16,13 @@ public class DB
         if (mManger.TestConnection())
         {
             DBManagerList.Add(pType, mManger);
-            DatabaseLog.Write(DatabaseLogLevel.Startup, "Test  {0} Database Connection Settings Success!", pType);
+            DatabaseLog.Write(DatabaseLogLevel.Startup, "Test {0} Database Connection Settings Success!", pType);
 
             return true;
         }
         else
         {
-            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Failed To Connect Please Check you {0} Database Settings", pType);
+            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Failed To Connect Please Check your {0} Database Settings", pType);
 
             return false;
         }
@@ -36,7 +36,7 @@ public class DB
         }
         else
         {
-            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "failed to Dispose {0} DB Monitor Unkown Manager", pType);
+            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Failed to Dispose {0} DB Monitor, Unknown Manager", pType);
         }
     }
 
@@ -58,7 +58,7 @@ public class DB
         }
         else
         {
-            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "failed to Add DB Monitor Unkown Manager {0}", pType);
+            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Failed to Add DB Monitor, Unknown Manager {0}", pType);
             return false;
         }
     }
@@ -81,7 +81,7 @@ public class DB
         }
         else
         {
-            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Unkown Manager {0}", pType);
+            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Unknown Manager {0}", pType);
         }
     }
 
@@ -93,7 +93,7 @@ public class DB
         }
         else
         {
-            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Unkown Manager {0}", pType);
+            DatabaseLog.Write(DatabaseLogLevel.DatabaseClientError, "Unknown Manager {0}", pType);
             return null;
         }
     }

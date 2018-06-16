@@ -30,7 +30,7 @@ namespace DragonFiesta.Game.Command
 
                 if (!GameCommandManager.CommandsByCategory.TryGetValue(CmdCategory, out ConcurrentDictionary<string, GameCommand> CommandList))
                 {
-                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Can not find  Category in Database : {0}", CmdCategory);
+                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find Category in Database : {0}", CmdCategory);
                     continue;
                 }
 
@@ -38,7 +38,7 @@ namespace DragonFiesta.Game.Command
                 {
                     if (!GameCommandManager.CommandsByCategory[CmdCategory].TryGetValue(cmd.Command.ToUpper(), out GameCommand Command))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can not found Command : {0} Category : {1}  Database", cmd.Command, CmdCategory);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find Command : {0} Category : {1} Database", cmd.Command, CmdCategory);
                         continue;
                     }
 

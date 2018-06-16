@@ -11,11 +11,11 @@ namespace DragonFiesta.Zone.Game.Zone
         bool IZone.IsConnected { get { return true; } }
         bool IZone.IsReady { get { return true; } }
 
-        public ServerInfo NetInfo { get; private set; }
+        public ExternServerInfo NetInfo { get; private set; }
 
         public int CurrentConnection { get; set; }
 
-        public RemoteZone(byte ID, ServerInfo NetInfo)
+        public RemoteZone(byte ID, ExternServerInfo NetInfo)
         {
             this.ID = ID;
             this.NetInfo = NetInfo;

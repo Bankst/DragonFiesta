@@ -25,7 +25,7 @@ namespace DragonFiesta.Game.Characters.Data
             ushort mapid = pRes.Read<ushort>(i, "Map");
             if (!MapDataProvider.GetMapInfoByID(mapid, out MapInfo mMapInfo))
             {
-                GameLog.Write(GameLogLevel.Warning, "Cant find mapid " + mapid + " from refeshing");
+                GameLog.Write(GameLogLevel.Warning, "Can't find mapid " + mapid + " from refeshing");
                 return false;
             }
 

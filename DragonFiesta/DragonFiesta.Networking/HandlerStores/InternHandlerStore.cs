@@ -37,7 +37,7 @@ namespace DragonFiesta.Networking.HandlerStores
                 Action<dynamic, InternSession> del = (message, client) => pair.Item2.Invoke(null, new object[] { message, client });
                 if (!Instance._handlers.TryAdd(pair.Item1.Type, del))
                 {
-                    EngineLog.Write(EngineLogLevel.Warning, "Dublicate InternHandler {0} Found!!", pair.Item1.Type.ToString());
+                    EngineLog.Write(EngineLogLevel.Warning, "Duplicate InternHandler {0} Found!!", pair.Item1.Type.ToString());
                 }
             }
 
@@ -53,7 +53,7 @@ namespace DragonFiesta.Networking.HandlerStores
             }
             else
             {
-                SocketLog.Write(SocketLogLevel.Warning, "Dublicate Callback Detect msg: {0} Id: {1}", msg.GetType(), msg.Id);
+                SocketLog.Write(SocketLogLevel.Warning, "Duplicate Callback Detect msg: {0} Id: {1}", msg.GetType(), msg.Id);
                 _callbacks.TryRemove(msg.Id, out IExpectAnAnswer val);
                 _callbacks.TryAdd(msg.Id, (IExpectAnAnswer)msg);
                 ReponseManager.RemoveObject(msg.Id);
@@ -96,7 +96,7 @@ namespace DragonFiesta.Networking.HandlerStores
             }
             else
             {
-                SocketLog.Write(SocketLogLevel.Debug, "Unkown message found of type {0} \n {1}", pMessage.GetType(), pMessage.ToString());
+                SocketLog.Write(SocketLogLevel.Debug, "Unknown message found of type {0} \n {1}", pMessage.GetType(), pMessage.ToString());
             }
         }
     }

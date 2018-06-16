@@ -1,7 +1,7 @@
 ﻿public enum LoginGameError
 {
     None = 1,
-    UNKOWN_ERROR = 66,//Ein unbekannter Fehler ist aufgetreten.
+    UNKNOWN_ERROR = 66,//Ein unbekannter Fehler ist aufgetreten.
     DATABASE_ERROR = 67,//DB error
     INVALID_CREDENTIALS = 68,//Authentifizierung fehlgeschlagen.
     INVALID_ID_OR_PW = 69,//ID und Passwort überprüfen.

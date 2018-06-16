@@ -7,7 +7,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Login
     {
         public static void HandleAuthtecicateWorld_Response(IMessage msg)
         {
-            var Response = (msg as AuthenticatetWorld_Response);
+            var Response = (msg as AuthenticatedWorld_Response);
 
             switch (Response.Result)
             {
@@ -16,7 +16,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Login
                     break;
 
                 case InternWorldAuthResult.Error:
-                    EngineLog.Write(EngineLogLevel.Exception, "Unkown Error to Auth Login");
+                    EngineLog.Write(EngineLogLevel.Exception, "Unknown Error to Auth Login");
                     break;
 
                 case InternWorldAuthResult.InvalidPassword:

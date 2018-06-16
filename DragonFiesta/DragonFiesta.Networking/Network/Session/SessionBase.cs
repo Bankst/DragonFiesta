@@ -58,19 +58,19 @@ namespace DragonFiesta.Networking.Network
 
             switch (e.Error)
             {
-                case SocketError.Success://DC By Recive
+                case SocketError.Success://DC By Receive
                 case SocketError.ConnectionReset:
 
-                    SocketLog.Write(SocketLogLevel.Debug, $"Closed connection: { MSocket.RemoteEndPoint }");
+                    SocketLog.Write(SocketLogLevel.Debug, $"Connection Closed: { MSocket.RemoteEndPoint }");
                     break;
                 case SocketError.NotConnected:
                     MSocket.Close();
                     return;
                 case SocketError.ConnectionAborted:
-                    SocketLog.Write(SocketLogLevel.Startup, $"connection Refuse: { MSocket.RemoteEndPoint }");
+                    SocketLog.Write(SocketLogLevel.Startup, $"Connection Refused: { MSocket.RemoteEndPoint }");
                     break;
                 case SocketError.TimedOut:
-                    SocketLog.Write(SocketLogLevel.Debug, $"Time outed connection: { MSocket.RemoteEndPoint }");
+                    SocketLog.Write(SocketLogLevel.Debug, $"Connection Timed Out: { MSocket.RemoteEndPoint }");
                     break;
                 default:
                     SocketLog.Write(SocketLogLevel.Warning, $"Unhandle SocketError : {e.Error} : message : {e.Message}");
@@ -78,7 +78,7 @@ namespace DragonFiesta.Networking.Network
 
                 case SocketError.SocketError:
 
-                    SocketLog.Write(SocketLogLevel.Exception, $"Unkown SocketError {e.Message}");
+                    SocketLog.Write(SocketLogLevel.Exception, $"Unknown SocketError {e.Message}");
                     break;
             }
 
@@ -119,8 +119,8 @@ namespace DragonFiesta.Networking.Network
 #endif
             {
                 // we already tried 5 time
-                EngineLog.Write(EngineLogLevel.Exception, $"Failed to connect to  after {tryCount} tries");
-                EngineLog.Write(EngineLogLevel.Exception, "Could connect to server! Shutdown...", e);
+                EngineLog.Write(EngineLogLevel.Exception, $"Failed to connect to after {tryCount} tries");
+                EngineLog.Write(EngineLogLevel.Exception, "Could not connect to server! Shutdown...", e);
             }
             catch   // if no "when"-clauses filter the exception out
             {

@@ -31,7 +31,7 @@ namespace DragonFiesta.Login.Game.Authentication
                     mBar.Step();
 
                     if (!LoginServers.TryAdd(mServer.Region, mServer))
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate RegionServer Found region {0} ", mServer.Region);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate RegionServer Found region {0} ", mServer.Region);
                 }
 
                 DatabaseLog.WriteProgressBar(">> Loaded {0} RegionServers", LoginServers.Count);

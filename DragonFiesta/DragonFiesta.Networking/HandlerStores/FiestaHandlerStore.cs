@@ -56,10 +56,10 @@ namespace DragonFiesta.Networking.HandlerStores
         {
             packetHandlers = new Dictionary<byte, Dictionary<ushort, Dictionary<ClientRegion, MethodInfo>>>();
             AvabileOpocdes = new Dictionary<byte, Dictionary<UInt16, string>>();
-            UnknownPacket += UnkownPacketHandler;
+            UnknownPacket += UnknownPacketHandler;
         }
 
-        protected void UnkownPacketHandler(FiestaPacket pPacket)
+        protected void UnknownPacketHandler(FiestaPacket pPacket)
         {
             if (!AvabileOpocdes.ContainsKey(pPacket.Header))
             {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DragonFiesta.Messages.Zone
 {
     [Serializable]
-    public class AuthenticatetZone_Response : IMessage
+    public class AuthenticatedZone_Response : IMessage
     {
         public Guid Id { get; set; }
 

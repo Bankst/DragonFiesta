@@ -5,11 +5,11 @@ namespace DragonFiesta.Networking.Network
 {
     public class FiestaSessionStateInfo
     {
-        public bool Authenticatet { get; set; }
+        public bool Authenticated { get; set; }
 
-        public bool TimeOutet { get; set; }
+        public bool TimedOut { get; set; }
 
-        public bool IsTransfering { get; set; }
+        public bool IsTransferring { get; set; }
 
         public ClientRegion Region { get; set; }
 

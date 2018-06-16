@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DragonFiesta.Messages.Message.Auth
 {
     [Serializable]
-    public class AuthenticatetWorld : ExpectAnswer
+    public class AuthenticatedWorld : ExpectAnswer
     {
         public string Password { get; set; }
 
@@ -14,11 +14,13 @@ namespace DragonFiesta.Messages.Message.Auth
 
         public string IP { get; set; }
 
+		public string ExternalIP { get; set; }
+
         public int MaxConnection { get; set; }
 
         public List<int> ActiveAccounts { get; set; }
 
-        public AuthenticatetWorld()
+        public AuthenticatedWorld()
             : base((int)ServerTaskTimes.SERVER_AUTH_WORLD)
         {
         }

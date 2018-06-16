@@ -13,7 +13,7 @@ namespace DragonFiesta.Zone.InternNetwork.InternHandler.Response.Auth
     {
         public static void HandleAuthenticatetZone_Response(IMessage msg)
         {
-            var Response = (msg as AuthenticatetZone_Response);
+            var Response = (msg as AuthenticatedZone_Response);
 
             switch (Response.Result)
             {

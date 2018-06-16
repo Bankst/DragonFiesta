@@ -12,7 +12,7 @@ namespace DragonFiesta.World.Config
         public WorldDatabaseSection WorldDatabaseSettings { get; set; } = new WorldDatabaseSection();
         public DataDatabaseSection DataDatabaseSettings { get; set; } = new DataDatabaseSection();
         public ConnectInfo ConnectToInfo { get; set; } = new ConnectInfo();
-        public ServerInfo ServerInfo { get; set; } = new ServerInfo();
+        public ExternServerInfo ServerInfo { get; set; } = new ExternServerInfo();
 
         public byte WorldID { get; set; } = 0;
 
@@ -32,6 +32,7 @@ namespace DragonFiesta.World.Config
                 if (Instance != null)
                 {
                     EngineLog.Write(EngineLogLevel.Startup, "Successfully read World config.");
+					EngineLog.Write(EngineLogLevel.Info, $"World External IP: {Instance.ServerInfo.ExternalIP}");
                     return true;
                 }
                 else

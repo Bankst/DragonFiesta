@@ -70,7 +70,7 @@ namespace DragonFiesta.Messages
             }
             catch (Exception ex)
             {
-                throw new Exception($"invalid Data Cant Convert message to byte[] type of object { Message.GetType() } : {ex} ");
+                throw new Exception($"invalid Data Can't Convert message to byte[] type of object { Message.GetType() } : {ex} ");
             }
         }
     }

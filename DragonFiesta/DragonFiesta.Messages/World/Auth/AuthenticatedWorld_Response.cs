@@ -3,7 +3,7 @@
 namespace DragonFiesta.Messages.Message.Auth
 {
     [Serializable]
-    public class AuthenticatetWorld_Response : IMessage
+    public class AuthenticatedWorld_Response : IMessage
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 

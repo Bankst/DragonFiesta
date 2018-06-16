@@ -21,13 +21,13 @@ namespace DragonFiesta.Login.Game.Authentication
             {
                 Instance = new LoginManager();
 
-                EngineLog.Write(EngineLogLevel.Startup, "LoginManager initiasize");
+                EngineLog.Write(EngineLogLevel.Startup, "LoginManager initialized");
 
                 return true;
             }
             catch (Exception ex)
             {
-                EngineLog.Write(EngineLogLevel.Exception, "Failed Start LoginManagaer", ex);
+                EngineLog.Write(EngineLogLevel.Exception, "Failed to Start LoginManager", ex);
                 return false;
             }
         }
@@ -40,8 +40,8 @@ namespace DragonFiesta.Login.Game.Authentication
 
         public bool Add(LoginSession pSession)
         {
-            AuthLogin AuthClient = new AuthLogin(pSession.BaseStateInfo.SessiondId);
-            if (LoginsBySessionId.TryAdd(pSession.BaseStateInfo.SessiondId, AuthClient))
+            AuthLogin AuthClient = new AuthLogin(pSession.BaseStateInfo.SessionId);
+            if (LoginsBySessionId.TryAdd(pSession.BaseStateInfo.SessionId, AuthClient))
             {
                 LoggedAccounts.AddObject(AuthClient);
                 return true;

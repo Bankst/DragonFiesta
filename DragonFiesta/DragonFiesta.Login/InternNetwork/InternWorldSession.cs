@@ -25,14 +25,14 @@ namespace DragonFiesta.Login.InternNetwork
                 EngineLog.Write(EngineLogLevel.Info, "Disconnect World {0}", World.Info.WorldID);
             }
 
-            InternWorldSessionManager.Instance.RemoveSession(BaseStateInfo.SessiondId);
+            InternWorldSessionManager.Instance.RemoveSession(BaseStateInfo.SessionId);
 
             ServerMain.InternalInstance.Title.Update();
         }
 
         protected override void HandleMessage(IMessage pMessage)
         {
-            if (!SessionStateInfo.Authenticatet && !(pMessage is AuthenticatetWorld))
+            if (!SessionStateInfo.Authenticated && !(pMessage is AuthenticatedWorld))
                 Dispose();
             else
                 base.HandleMessage(pMessage);

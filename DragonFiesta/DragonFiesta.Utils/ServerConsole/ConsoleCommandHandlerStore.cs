@@ -22,7 +22,7 @@ namespace DragonFiesta.Utils.ServerConsole
             }
             catch (Exception ex)
             {
-                EngineLog.Write(EngineLogLevel.Exception, "Failed to Initial Console Commands {0}", ex.ToString());
+                EngineLog.Write(EngineLogLevel.Exception, "Failed to Initialize Console Commands {0}", ex.ToString());
                 return false;
             }
             return true;

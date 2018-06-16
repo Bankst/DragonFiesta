@@ -47,7 +47,7 @@ namespace DragonFiesta.Game.Characters
             Result = CharacterErrors.LoadOK;
             return true;
         }
-        //AllDatas we can refreashes all
+        //AllDatas we can refresh all
         public virtual bool RefreshCharacter(SQLResult pRes, int i, out CharacterErrors Result)
         {
             Result = CharacterErrors.ErrorInCharacterInfo;
@@ -99,8 +99,7 @@ namespace DragonFiesta.Game.Characters
                 return false;
 
             Info.Level++;
-
-
+			
             return true;
         }
         public abstract bool Save();

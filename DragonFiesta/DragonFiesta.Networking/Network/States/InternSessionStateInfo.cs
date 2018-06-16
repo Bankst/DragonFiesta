@@ -2,6 +2,6 @@
 {
     public class InternSessionStateInfo
     {
-        public bool Authenticatet { get; set; }
+        public bool Authenticated { get; set; }
     }
 }

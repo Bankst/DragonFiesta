@@ -9,15 +9,15 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Account
 {
     public class AccountHandler
     {
-        [InternMessageHandler(typeof(DublicateLoginFound))] //For update commands World World=> Login=> World
-        public static void HandleDublicateLoginFound(DublicateLoginFound mMessage, InternLoginConnector pSession)
+        [InternMessageHandler(typeof(DuplicateLoginFound))] //For update commands World World=> Login=> World
+        public static void HandleDuplicateLoginFound(DuplicateLoginFound mMessage, InternLoginConnector pSession)
         {
             if (WorldSessionManager.Instance.GetAccount(mMessage.AccountID, out WorldSession GameSession))
             {
-                _SH03Helpers.SendDublicateLogin(GameSession);
+                _SH03Helpers.SendDuplicateLogin(GameSession);
                 GameSession.Dispose();
 
-                GameLog.Write(GameLogLevel.Warning, "Dublicate Login Found!! Can't find Session By Account {0}", mMessage.AccountID);
+                GameLog.Write(GameLogLevel.Warning, "Duplicate Login Found!! Can't find Session By Account {0}", mMessage.AccountID);
             }
         }
 
@@ -54,7 +54,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Account
 
                          }, (TimeToKick) =>
                          {
-                             ZoneChat.CharacterNote(Session.Character, $"You Are Bannes By Console Disconnect in {TimeToKick}");
+                             ZoneChat.CharacterNote(Session.Character, $"You Are Banned By Console Disconnect in {TimeToKick}");
                          }, (int)IngameServerTimes.TimeToBan));
                     }
                 }

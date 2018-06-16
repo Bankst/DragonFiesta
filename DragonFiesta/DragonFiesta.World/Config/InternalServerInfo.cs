@@ -4,7 +4,7 @@ using System;
 namespace DragonFiesta.World.Config
 {
     [Serializable]
-    public class InternalServerInfo : ServerInfo
+    public class InternalServerInfo : ExternServerInfo
     {
         public override ushort ListeningPort { get; set; } = 8820;
     }

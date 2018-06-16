@@ -38,7 +38,7 @@ namespace DragonFiesta.Zone.Data.Character
 
                     if (!CharacterFreeStatsByLevel.TryAdd(Data.Level, Data))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate FreeStatdata found Level {0}", Data.Level);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate FreeStatdata found Level {0}", Data.Level);
                     }
                     mBar.Step();
                 }
@@ -87,7 +87,7 @@ namespace DragonFiesta.Zone.Data.Character
 
                     if (!CharacterStatParameters[(ClassId)Class].TryAdd(LevelParams.Level, LevelParams))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate CharacterParameters Found!! Class {0} Level {1}", Class, LevelParams.Level);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate CharacterParameters Found!! Class {0} Level {1}", Class, LevelParams.Level);
                         continue;
                     }
                     StatsCounter++;

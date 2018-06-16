@@ -10,10 +10,11 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Server.Auth
     {
         public static void SendAuthWorld(InternLoginConnector Session)
         {
-            Session.SendMessage(new AuthenticatetWorld
+            Session.SendMessage(new AuthenticatedWorld
             {
                 Id = Guid.NewGuid(),
                 WorldId = WorldConfiguration.Instance.WorldID,
+				ExternalIP = WorldConfiguration.Instance.ServerInfo.ExternalIP,
                 Password = WorldConfiguration.Instance.InternalServerInfo.Password,
                 Port = WorldConfiguration.Instance.ServerInfo.ListeningPort,
                 MaxConnection = WorldConfiguration.Instance.ServerInfo.MaxConnection,

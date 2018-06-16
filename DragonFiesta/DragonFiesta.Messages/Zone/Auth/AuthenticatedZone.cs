@@ -4,13 +4,13 @@ using System;
 namespace DragonFiesta.Messages.Zone
 {
     [Serializable]
-    public class AuthenticatetZone : ExpectAnswer
+    public class AuthenticatedZone : ExpectAnswer
     {
         public byte ZoneId { get; set; }
 
-        public ServerInfo NetInfo { get; set; }
+        public ExternServerInfo NetInfo { get; set; }
 
-        public AuthenticatetZone() :
+        public AuthenticatedZone() :
             base((int)ServerTaskTimes.SERVER_AUTH_ZONE)
         {
         }

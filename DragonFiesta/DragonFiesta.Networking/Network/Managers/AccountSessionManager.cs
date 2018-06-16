@@ -27,7 +27,7 @@ namespace DragonFiesta.Networking.Network.Managers
             if (SessionByAccountId.TryGetValue(AccountId, out TSession OnlineSession))
             {
 
-                _SH03Helpers.SendDublicateLogin(OnlineSession);
+                _SH03Helpers.SendDuplicateLogin(OnlineSession);
                 OnlineSession.Dispose();
 
                 return SessionByAccountId.TryAdd(AccountId, Session);

@@ -12,7 +12,7 @@ namespace DragonFiesta.World.Game.Zone
     {
         public byte ID { get; private set; }
 
-        public ServerInfo NetInfo { get; set; }
+        public ExternServerInfo NetInfo { get; set; }
 
         public bool IsFull => (CurrentConnection >= NetInfo.MaxConnection);
 
@@ -32,7 +32,7 @@ namespace DragonFiesta.World.Game.Zone
 
         public int CurrentConnection { get; set; }
 
-        public ZoneServer(byte ID, ServerInfo NetInfo)
+        public ZoneServer(byte ID, ExternServerInfo NetInfo)
         {
             this.ID = ID;
             this.NetInfo = NetInfo;
@@ -69,7 +69,7 @@ namespace DragonFiesta.World.Game.Zone
         protected ZoneServer(SerializationInfo info, StreamingContext context)
         {
             ID = info.GetByte("ID");
-            NetInfo = (ServerInfo)info.GetValue("NetInfo", typeof(ServerInfo));
+            NetInfo = (ExternServerInfo)info.GetValue("NetInfo", typeof(ExternServerInfo));
             _IsReady = info.GetBoolean("IsReady");
         }
 

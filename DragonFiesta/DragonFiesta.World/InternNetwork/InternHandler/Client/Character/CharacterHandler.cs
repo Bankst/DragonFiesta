@@ -12,7 +12,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Character
         {
             if (!WorldCharacterManager.Instance.GetLoggedInCharacterByCharacterID(Message.CharacterId, out WorldCharacter Character))
             {
-                GameLog.Write(GameLogLevel.Warning, "Failed to Get Character {0} for UseFrendPoints Request ", Message.CharacterId);
+                GameLog.Write(GameLogLevel.Warning, "Failed to Get Character {0} for UseFriendPoints Request ", Message.CharacterId);
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Character
 
             if (!Character.IsConnected)
             {
-                GameLog.Write(GameLogLevel.Warning, "Character  {0} ist not online for Position request", PosMessage.CharacterId);
+                GameLog.Write(GameLogLevel.Warning, "Character {0} is not online for Position request", PosMessage.CharacterId);
                 return;
             }
 

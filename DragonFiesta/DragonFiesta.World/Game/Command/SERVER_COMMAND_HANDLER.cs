@@ -27,7 +27,7 @@ namespace DragonFiesta.World.Game.Command
 
             if(!WorldShutdownHandler.IsInitialized())
             {
-                ZoneChat.CharacterNote(Sender, "First initial Shutdown bevor use this command");
+                ZoneChat.CharacterNote(Sender, "First initialize shutdown before use this command");
                 return true;
             }
 

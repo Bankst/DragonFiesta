@@ -14,11 +14,11 @@
                     case AccountDeleteResponse.InternalError:
                     case AccountDeleteResponse.NameTaken:
                     case AccountDeleteResponse.SQLError:
-                        CommandLog.Write(CommandLogLevel.Execute, "Account {0}  deletet fail! SQL Error!!!!", mResponse.AccountName);
+                        CommandLog.Write(CommandLogLevel.Execute, "Account {0}  deleted fail! SQL Error!!!!", mResponse.AccountName);
                         break;
 
                     case AccountDeleteResponse.Success:
-                        CommandLog.Write(CommandLogLevel.Execute, "Account {0}  deletet Success!", mResponse.AccountName);
+                        CommandLog.Write(CommandLogLevel.Execute, "Account {0}  deleted Success!", mResponse.AccountName);
                         break;
                 }
             }*/

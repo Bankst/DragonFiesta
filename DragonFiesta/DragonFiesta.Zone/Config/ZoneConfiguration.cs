@@ -28,7 +28,9 @@ namespace DragonFiesta.Zone.Config
                 if (Instance != null)
                 {
                     EngineLog.Write(EngineLogLevel.Startup, "Successfully read Zone config.");
-                    return true;
+					EngineLog.Write(EngineLogLevel.Info, $"Zone NAT IP: {Instance.ZoneServerInfo.ExternalIP}");
+
+					return true;
                 }
                 else
                 {

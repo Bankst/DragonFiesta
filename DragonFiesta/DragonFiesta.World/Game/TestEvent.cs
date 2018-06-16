@@ -27,12 +27,12 @@ namespace DragonFiesta.Zone.Game.Character
 
         private static void Instance_OnCharacterLevelChanged(object sender, CharacterLevelChangedEventArgs<WorldCharacter> e)
         {
-            Console.WriteLine("Level chaged");
+            Console.WriteLine("Level changed");
         }
 
         private static void Instance_OnCharacterLogout(object sender, CharacterEventArgs<WorldCharacter> e)
         {
-            Console.WriteLine("Charavzer Logout");
+            Console.WriteLine("Character Logout");
         }
 
         private static void Instance_OnCharacterLogin(object sender, CharacterEventArgs<WorldCharacter> e)
@@ -47,7 +47,7 @@ namespace DragonFiesta.Zone.Game.Character
 
         private static void Instance_OnCharacterMapLogout(object sender, CharacterMapEventArgs<WorldCharacter, WorldServerMap> e)
         {
-            Console.WriteLine("CharacterMapLogout");
+            Console.WriteLine("Character MapLogout");
         }
 
         private static void Instance_OnCharacterMapLogin(object sender, CharacterMapEventArgs<WorldCharacter, WorldServerMap> e)

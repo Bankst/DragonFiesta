@@ -35,7 +35,7 @@
                     string BadName = pResult.Read<string>(i, "BadName");
                     if (!BadNames.Add(BadName))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate BadName found {0}", BadName);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate BadName found {0}", BadName);
                     }
                     mBar.Step();
                 }

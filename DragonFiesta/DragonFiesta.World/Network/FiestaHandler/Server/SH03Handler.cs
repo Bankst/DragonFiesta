@@ -10,7 +10,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Server
         {
             using (FiestaPacket mPacket = new FiestaPacket(Handler03Type._Header, Handler03Type.SMSG_USER_LOGINWORLD_ACK))
             {
-                mPacket.Write<ushort>(pSession.BaseStateInfo.SessiondId);
+                mPacket.Write<ushort>(pSession.BaseStateInfo.SessionId);
                 mPacket.Write<byte>((byte)pSession.CharacterList.Count);
                 for (int i = 0; i < pSession.CharacterList.Count; i++)
                 {

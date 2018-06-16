@@ -51,7 +51,7 @@ namespace DragonFiesta.World
         {
             InternalInstance = new ServerMain();
             InternalInstance.WriteConsoleLogo();
-            System.Threading.Thread.Sleep(9000);
+            System.Threading.Thread.Sleep(5000);
             if (!WorldConfiguration.Initialize())
             {
                 throw new StartupException("Invalid Load WorldConfiguration");

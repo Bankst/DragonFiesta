@@ -4,7 +4,7 @@ using System;
 namespace DragonFiesta.Zone.Config
 {
     [Serializable]
-    public class ZoneServerInfo : ServerInfo
+    public class ZoneServerInfo : ExternServerInfo
     {
     }
 }

@@ -67,7 +67,7 @@ namespace DragonFiesta.Login.Core
                 throw new StartupException("Invalid Load Server");
             }
 
-            //GameNetwork ever Last
+            //GameNetwork always Last
             if (!LoginServerManager.StartListening())
             {
                 throw new StartupException("Invalid Load Game Network");

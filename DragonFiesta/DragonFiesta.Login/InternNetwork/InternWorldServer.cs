@@ -36,7 +36,7 @@ namespace DragonFiesta.Login.InternNetwork
             try
             {
                 if (LoginConfiguration.Instance.InternServerInfo.MaxConnection == 0)
-                    throw new StartupException("Invalid Max InternConnection Please Check you Config");
+                    throw new StartupException("Invalid Max InternConnection Please Check your Config");
 
                 Instance = new InternWorldServer(
                     LoginConfiguration.Instance.InternServerInfo.ListeningPort);

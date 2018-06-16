@@ -222,7 +222,7 @@ namespace DragonFiesta.Zone.Game.Character
             {
                 using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                 {
-                    cmd.CreateStoreProzedure("dbo.Character_Update_Zone");
+                    cmd.CreateStoredProcedure("dbo.Character_Update_Zone");
                     cmd.SetParameter("@pID", Info.CharacterID);
                     cmd.SetParameter("@pName", Info.Name);
                     cmd.SetParameter("@pMap", (short)AreaInfo.MapInfo.ID);

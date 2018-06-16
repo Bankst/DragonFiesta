@@ -12,13 +12,13 @@ namespace DragonFiesta.Login.ServerConsole
         {
             if (Params.Length <= 0)
             {
-                CommandLog.Write(CommandLogLevel.InvalidParameters, "Invalid Command use IP Block <IPAdress>");
+                CommandLog.Write(CommandLogLevel.InvalidParameters, "Invalid Command use IP Block <IPAddress>");
                 return true;
             }
 
             if (!IPAddress.TryParse(Params[0], out IPAddress IP))
             {
-                CommandLog.Write(CommandLogLevel.InvalidParameters, "Is Not Valid IP Adress");
+                CommandLog.Write(CommandLogLevel.InvalidParameters, "Is Not Valid IP Address");
                 return true;
             }
 
@@ -42,13 +42,13 @@ namespace DragonFiesta.Login.ServerConsole
         {
             if (Params.Length <= 0)
             {
-                CommandLog.Write(CommandLogLevel.InvalidParameters, "Invalid Command use IP Block <IPAdress> <Reason>");
+                CommandLog.Write(CommandLogLevel.InvalidParameters, "Invalid Command use IP Block <IPAddress> <Reason>");
                 return true;
             }
 
             if (!IPAddress.TryParse(Params[0], out IPAddress IP))
             {
-                CommandLog.Write(CommandLogLevel.InvalidParameters, "Is Not Valid IP Adress");
+                CommandLog.Write(CommandLogLevel.InvalidParameters, "Is Not Valid IP Address");
                 return true;
             }
 

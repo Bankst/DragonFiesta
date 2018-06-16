@@ -17,7 +17,7 @@ namespace DragonFiesta.Networking.Network
             var bindIP = IPAddress.None;
 
             if (PortInUse(port))
-                throw new InvalidOperationException($"Can not find on Port {port }");
+                throw new InvalidOperationException($"Can't bind on Port {port }");
 
             listener = new TcpListener(IPAddress.Any, port);
 
@@ -56,7 +56,7 @@ namespace DragonFiesta.Networking.Network
 
                     if (clientSocket != null)
                     {
-                        SocketLog.Write(SocketLogLevel.Debug, $"Openned connection from { clientSocket.RemoteEndPoint }");
+                        SocketLog.Write(SocketLogLevel.Debug, $"Opened connection from { clientSocket.RemoteEndPoint }");
                         await DoWork(clientSocket);
                     }
 

@@ -123,7 +123,7 @@ namespace DragonFiesta.Utils.Database
             return idParam;
         }
 
-        public void CreateStoreProzedure(string CommandText)
+        public void CreateStoredProcedure(string CommandText)
         {
             SqlCommand cmd = mConnection.CreateCommand();
 

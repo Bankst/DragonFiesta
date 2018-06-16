@@ -10,7 +10,7 @@ namespace DragonFiesta.Networking.Network
     public class FiestaSession<TSession> : SessionBase
         where TSession : FiestaSession<TSession>
     {
-        public bool IsTransfered() => (GameStates.Authenticatet && GameStates.IsTransfering);
+        public bool IsTransfered() => (GameStates.Authenticated && GameStates.IsTransferring);
 
         public FiestaSessionStateInfo GameStates { get; private set; }
 
@@ -29,13 +29,13 @@ namespace DragonFiesta.Networking.Network
             };
 
             if (ServerMainDebug.DumpPacket)
-                DebugPackets = new FiestaSharkDumper(BaseStateInfo.SessiondId);
+                DebugPackets = new FiestaSharkDumper(BaseStateInfo.SessionId);
 
            OnDispose += FiestaSession_OnDisconnect;
         }
 
         private void FiestaSession_OnDisconnect(object sender, SessionEventArgs e)
-            => FiestaSessionManagerBase<TSession>.Instance.RemoveSession(BaseStateInfo.SessiondId);
+            => FiestaSessionManagerBase<TSession>.Instance.RemoveSession(BaseStateInfo.SessionId);
 
         public void Start()
         {

@@ -31,7 +31,7 @@ namespace DragonFiesta.World.InternNetwork
                 ServerMain.InternalInstance.Title.Update();
             }
 
-            InternZoneSessionManager.Instance.RemoveSession(BaseStateInfo.SessiondId);
+            InternZoneSessionManager.Instance.RemoveSession(BaseStateInfo.SessionId);
             ServerMain.InternalInstance.Title.Update();
         }
 

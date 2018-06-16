@@ -86,6 +86,7 @@
     <Compile Include="Config\Section\Game\FriendSection.cs" />
     <Compile Include="Config\Section\Network\ConnectInfo.cs" />
     <Compile Include="Config\Section\Network\ServerInfo.cs" />
+    <Compile Include="Config\Section\Network\ExternServerInfo.cs" />
     <Compile Include="Core\ServerMainDebug.cs" />
     <Compile Include="Enum\GameInitalStage.cs" />
     <Compile Include="Enum\ReconnectType.cs" />

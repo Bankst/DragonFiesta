@@ -82,7 +82,7 @@ namespace DragonFiesta.Zone.Data.Mob
 
                     if (!MapDataProvider.GetMapInfoByID(Info.MapId, out MapInfo MapInfo))//Check is Sppawnned map exis...
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Cant Find MapInfo for Group {0}", Info.GroupId);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't Find MapInfo for Group {0}", Info.GroupId);
                         continue;
                     }
 
@@ -91,7 +91,7 @@ namespace DragonFiesta.Zone.Data.Mob
 
                     if (MobGroupInfosByMapId[MapInfo.ID].ContainsKey(Info.GroupId) || MobGroupInfosById.ContainsKey(Info.GroupId))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate GroupId {0} Found!!", Info.GroupId);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate GroupId {0} Found!!", Info.GroupId);
                         continue;
                     }
 
@@ -108,7 +108,7 @@ namespace DragonFiesta.Zone.Data.Mob
                         ushort MobId = Convert.ToUInt16(MemberRow.Row["MobId"]);
                         if (!GetMobInfoByID(MobId, out MobInfo MobInfo))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can not find MobId {0} for Group {1}", MobId, Info.GroupId);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find MobId {0} for Group {1}", MobId, Info.GroupId);
                             continue;
                         }
 
@@ -116,7 +116,7 @@ namespace DragonFiesta.Zone.Data.Mob
 
                         if (!Info.MemberInfo.TryAdd(MemberInfo.MobInfo.ID, MemberInfo))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate GroupMember Found!! MobId {0} ", MemberInfo.MobInfo.ID);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate GroupMember Found!! MobId {0} ", MemberInfo.MobInfo.ID);
                             continue;
                         }
                     }
@@ -143,7 +143,7 @@ namespace DragonFiesta.Zone.Data.Mob
                     {
                         if (!Point.AddPosition(pResult, i))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Dublicate Waypoint Index found ID {0}", WayPointId);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Waypoint Index found ID {0}", WayPointId);
                             continue;
                         }
                     }

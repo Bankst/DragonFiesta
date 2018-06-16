@@ -78,7 +78,7 @@ namespace DragonFiesta.World.Game.Settings
                     SettingsList.TryAdd(Type, new ClientGameSetting(Type, Enable));
                     return true;
                 default:
-                    GameLog.Write(GameLogLevel.Warning, "Unkown GameSettings...");
+                    GameLog.Write(GameLogLevel.Warning, "Unknown GameSettings...");
                     return false;
             }
         }
