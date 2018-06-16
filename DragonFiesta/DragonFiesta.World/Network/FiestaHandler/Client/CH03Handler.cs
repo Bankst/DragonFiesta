@@ -78,7 +78,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
 
             if (!VerifyWorldKey(AccountID, AccountName, sender))
             {
-                SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.ClientManipulation);
+                SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.FailedToConnectToWorldServer);
                 sender.Dispose();
             }
         }
@@ -110,7 +110,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
             if (!WorldServerTransferManager.FinishTransfer(accountID, out WorldServerTransfer Transfer)
                 || !Transfer.IP.Equals(sender.GetIP())
                 || WorldConfiguration.Instance.WorldID != Transfer.WorldId
-                || !accountName.Equals(Transfer.Account.Name)
+                || !accountName.ToLower().Equals(Transfer.Account.Name.ToLower())
                 || !WorldSessionManager.Instance.AddAccount(Transfer.Account.ID, sender)) //verify...
                 return false;
 
