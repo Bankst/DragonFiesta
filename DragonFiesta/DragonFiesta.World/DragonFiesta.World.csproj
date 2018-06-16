@@ -172,7 +172,7 @@
     <Compile Include="InternNetwork\Zone\InternZoneSession.cs" />
     <Compile Include="InternNetwork\Zone\InternZoneSessionManager.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH02Handler.cs" />
-    <Compile Include="Network\FiestaHandler\Client\CH03Handler..cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH03Handler.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH04Handler.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH05Handler.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH21Handler.cs" />

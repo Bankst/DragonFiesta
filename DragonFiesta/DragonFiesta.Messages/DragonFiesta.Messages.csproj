@@ -100,8 +100,8 @@
     <Compile Include="MessageTypes\IZoneToAll.cs" />
     <Compile Include="MessageTypes\IZoneToZoneMessage.cs" />
     <Compile Include="Utils\ExpireExpectManager.cs" />
-    <Compile Include="World\Auth\AuthenticatetWorld.cs" />
-    <Compile Include="World\Auth\AuthenticatetWorld_Response.cs" />
+    <Compile Include="World\Auth\AuthenticatedWorld.cs" />
+    <Compile Include="World\Auth\AuthenticatedWorld_Response.cs" />
     <Compile Include="World\Auth\InternWorldAuthResult.cs" />
     <Compile Include="World\Character\CharacterClassChanged.cs" />
     <Compile Include="World\Character\CharacterDeleted.cs" />
@@ -118,8 +118,8 @@
     <Compile Include="Utils\MessageExtensions.cs" />
     <Compile Include="Login\Accounts\DuplicateLoginFound.cs" />
     <Compile Include="World\ZoneToZoneRequestFailed.cs" />
-    <Compile Include="Zone\Auth\AuthenticatetZone.cs" />
-    <Compile Include="Zone\Auth\AuthenticatetZone_Response.cs" />
+    <Compile Include="Zone\Auth\AuthenticatedZone.cs" />
+    <Compile Include="Zone\Auth\AuthenticatedZone_Response.cs" />
     <Compile Include="Zone\Auth\InternZoneAuthesult.cs" />
     <Compile Include="Command\GameCommand.cs" />
     <Compile Include="Zone\Buffs\AddBuff.cs" />

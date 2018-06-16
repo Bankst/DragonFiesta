@@ -191,7 +191,7 @@ namespace DragonFiesta.World.Game.Friends
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
 
-                        cmd.CreateStoreProzedure("dbo.Friend_Insert");
+                        cmd.CreateStoredProcedure("dbo.Friend_Insert");
 
                         cmd.SetParameter("@pOwnerID", Sender.Info.CharacterID);
                         cmd.SetParameter("@pFriendID", Receiver.Info.CharacterID);
@@ -230,7 +230,7 @@ namespace DragonFiesta.World.Game.Friends
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
 
-                        cmd.CreateStoreProzedure("dbo.Friend_Remove");
+                        cmd.CreateStoredProcedure("dbo.Friend_Remove");
 
                         cmd.SetParameter("@pOwnerID", Sender.Info.CharacterID);
                         cmd.SetParameter("@pFriendID", Receiver.Info.CharacterID);

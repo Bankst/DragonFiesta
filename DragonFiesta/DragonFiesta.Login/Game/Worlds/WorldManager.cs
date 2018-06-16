@@ -23,7 +23,7 @@ namespace DragonFiesta.Login.Game.Worlds
         }
 
         [InitializerMethod]
-        public static bool Initialsize()
+        public static bool Initialize()
         {
             try
             {

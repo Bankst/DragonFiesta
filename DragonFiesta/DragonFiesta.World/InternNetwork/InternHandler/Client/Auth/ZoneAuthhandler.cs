@@ -7,10 +7,10 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Auth
 {
     public static class ZoneAuthhandler
     {
-        [InternMessageHandler(typeof(AuthenticatetZone))]
-        public static void HandleAuthenticatetZone(AuthenticatetZone mAuthMessage, InternZoneSession pSession)
+        [InternMessageHandler(typeof(AuthenticatedZone))]
+        public static void HandleAuthenticatetZone(AuthenticatedZone mAuthMessage, InternZoneSession pSession)
         {
-            AuthenticatetZone_Response mResponse = new AuthenticatetZone_Response
+            AuthenticatedZone_Response mResponse = new AuthenticatedZone_Response
             {
                 Id = mAuthMessage.Id,
                 Region = WorldConfiguration.Instance.ServerRegion,
@@ -34,7 +34,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Auth
             {
                 mResponse.Result = InternZoneAuthesult.OK;
 
-                pSession.SessionStateInfo.Authenticatet = true;
+                pSession.SessionStateInfo.Authenticated = true;
 
                 mZone.SetClient(pSession);
                 mZone.NetInfo = mAuthMessage.NetInfo;

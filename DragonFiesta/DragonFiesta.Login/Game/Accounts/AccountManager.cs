@@ -69,7 +69,7 @@ namespace DragonFiesta.Login.Game.Accounts
                     // add to database
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.Login))
                     {
-                        cmd.CreateStoreProzedure("dbo.Account_Insert");
+                        cmd.CreateStoredProcedure("dbo.Account_Insert");
                         cmd.SetParameter("@pName", Name);
                         cmd.SetParameter("@pEMail", EMail);
                         cmd.SetParameter("@pPassword", Password);
@@ -131,7 +131,7 @@ namespace DragonFiesta.Login.Game.Accounts
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.Login))
                     {
-                        cmd.CreateStoreProzedure("dbo.Account_UpdateState");
+                        cmd.CreateStoredProcedure("dbo.Account_UpdateState");
                         cmd.SetParameter("@pID", Account.ID);
                         cmd.SetParameter("@pIsOnline", Account.IsOnline);
                         cmd.SetParameter("@pLastLogin", Account.LastLogin);
@@ -154,7 +154,7 @@ namespace DragonFiesta.Login.Game.Accounts
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.Login))
                     {
-                        cmd.CreateStoreProzedure("dbo.Account_Update");
+                        cmd.CreateStoredProcedure("dbo.Account_Update");
                         cmd.SetParameter("@pID", Account.ID);
                         cmd.SetParameter("@pPassword", Account.Password);
                         cmd.SetParameter("@pEMail", Account.EMail);

@@ -7,7 +7,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Login
     {
         public static void HandleAuthtecicateWorld_Response(IMessage msg)
         {
-            var Response = (msg as AuthenticatetWorld_Response);
+            var Response = (msg as AuthenticatedWorld_Response);
 
             switch (Response.Result)
             {

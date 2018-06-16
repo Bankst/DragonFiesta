@@ -53,7 +53,7 @@ namespace DragonFiesta.World.Game.Character
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
-                        cmd.CreateStoreProzedure("dbo.Character_UpdateState");
+                        cmd.CreateStoredProcedure("dbo.Character_UpdateState");
                         cmd.SetParameter("@pID", ID);
                         cmd.SetParameter("@pIsOnline", IsOnline);
                         cmd.SetParameter("@pLastLogin", LastLogin);
@@ -96,7 +96,7 @@ namespace DragonFiesta.World.Game.Character
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
-                        cmd.CreateStoreProzedure("Character_Remove");
+                        cmd.CreateStoredProcedure("Character_Remove");
                         cmd.SetParameter("@pID", Character.Info.CharacterID);
                         int Res = (int)cmd.ExecuteScalar();
 
@@ -148,7 +148,7 @@ namespace DragonFiesta.World.Game.Character
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
-                        cmd.CreateStoreProzedure("Character_Insert");
+                        cmd.CreateStoredProcedure("Character_Insert");
 
                         cmd.SetParameter("@pAccountID", Account.ID);
                         cmd.SetParameter("@pName", Name);
@@ -290,7 +290,7 @@ namespace DragonFiesta.World.Game.Character
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
-                        cmd.CreateStoreProzedure("Character_ChangeName");
+                        cmd.CreateStoredProcedure("Character_ChangeName");
                         cmd.SetParameter("@pCharID", pCharacter.Info.CharacterID);
                         cmd.SetParameter("@pName", NewName);
                         int Res = (int)cmd.ExecuteScalar();
@@ -334,7 +334,7 @@ namespace DragonFiesta.World.Game.Character
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
-                        cmd.CreateStoreProzedure("dbo.Character_Update_FirstLogin");
+                        cmd.CreateStoredProcedure("dbo.Character_Update_FirstLogin");
                         cmd.SetParameter("@pID", Character.Info.CharacterID);
                         cmd.SetParameter("@pIsFirstLogin", false);
                         cmd.ExecuteNonQuery();

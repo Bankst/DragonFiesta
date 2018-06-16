@@ -76,9 +76,9 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
                 return;
             }
 
-            if (!VerfiryWorldKey(AccountID, AccountName, sender))
+            if (!VerifyWorldKey(AccountID, AccountName, sender))
             {
-                SH03Helpers.SendVerfiryError(sender, (ushort)ConnectionError.ClientManipulation);
+                SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.ClientManipulation);
                 sender.Dispose();
             }
         }
@@ -98,20 +98,20 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
                 return;
             }
 
-            if (!VerfiryWorldKey(AccountID, AccountName, sender))
+            if (!VerifyWorldKey(AccountID, AccountName, sender))
             {
-                SH03Helpers.SendVerfiryError(sender, (ushort)ConnectionError.ClientDataError);
+                SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.ClientDataError);
                 sender.Dispose();
             }
         }
 
-        private static bool VerfiryWorldKey(int accountID, string accountName, WorldSession sender)
+        private static bool VerifyWorldKey(int accountID, string accountName, WorldSession sender)
         {
             if (!WorldServerTransferManager.FinishTransfer(accountID, out WorldServerTransfer Transfer)
                 || !Transfer.IP.Equals(sender.GetIP())
                 || WorldConfiguration.Instance.WorldID != Transfer.WorldId
                 || !accountName.Equals(Transfer.Account.Name)
-                || !WorldSessionManager.Instance.AddAccount(Transfer.Account.ID, sender)) //verfiry...
+                || !WorldSessionManager.Instance.AddAccount(Transfer.Account.ID, sender)) //verify...
                 return false;
 
             sender.UserAccount = Transfer.Account;
@@ -123,7 +123,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
 
             if (!sender.CharacterList.Refresh())
             {
-                SH03Helpers.SendVerfiryError(sender, (ushort)ConnectionError.ClientManipulation); //TOOD Another..
+                SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.ClientManipulation); //TOOD Another..
                 return false;
             }
 

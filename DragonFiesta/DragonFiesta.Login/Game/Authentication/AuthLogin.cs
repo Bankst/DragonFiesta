@@ -40,7 +40,7 @@ namespace DragonFiesta.Login.Game.Authentication
 
             if (!LoginSessionManager.Instance.AddAccount(account.ID, pClient))
             {
-                return LoginGameError.LOGIN_FAILED;
+                //return LoginGameError.LOGIN_FAILED;
             }
             else if (account.IsOnline)
             {

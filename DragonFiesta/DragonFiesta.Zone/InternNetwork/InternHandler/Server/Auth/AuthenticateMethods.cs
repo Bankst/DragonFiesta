@@ -10,11 +10,11 @@ namespace DragonFiesta.Zone.InternNetwork.InternHandler.Server.Auth
     {
         public static void SendAuthZone(InternWorldConnector Session)
         {
-            Session.SendMessage(new AuthenticatetZone
+            Session.SendMessage(new AuthenticatedZone
             {
                 Id = Guid.NewGuid(),
                 ZoneId = ZoneConfiguration.Instance.ZoneID,
-                NetInfo = new ServerInfo
+                NetInfo = new ExternServerInfo
                 {
                     ListeningIP = ZoneConfiguration.Instance.ZoneServerInfo.ListeningIP,
                     ListeningPort = ZoneConfiguration.Instance.ZoneServerInfo.ListeningPort,

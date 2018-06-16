@@ -11,7 +11,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Server
             using (FiestaPacket mIPPacket = new FiestaPacket(Handler03Type._Header, Handler03Type.SMSG_USER_WORLDSELECT_ACK))
             {
                 mIPPacket.Write<byte>(pWorld != null && Status != WorldStatus.OK ? pWorld.Status : Status);//state?
-                mIPPacket.WriteString(pWorld != null ? pWorld.ConnectionInfo.WorldIP : "", 16);
+                mIPPacket.WriteString(pWorld != null ? pWorld.ConnectionInfo.WorldExternalIP : "", 16);
                 mIPPacket.Write<ushort>(pWorld != null ? pWorld.ConnectionInfo.WorldPort : (ushort)0);
                 mIPPacket.Write<int>(pWorld != null ? pClient.UserAccount.ID : 0);//acc id
                 mIPPacket.Fill(60, 0x00);

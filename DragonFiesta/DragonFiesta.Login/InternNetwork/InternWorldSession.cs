@@ -32,7 +32,7 @@ namespace DragonFiesta.Login.InternNetwork
 
         protected override void HandleMessage(IMessage pMessage)
         {
-            if (!SessionStateInfo.Authenticatet && !(pMessage is AuthenticatetWorld))
+            if (!SessionStateInfo.Authenticated && !(pMessage is AuthenticatedWorld))
                 Dispose();
             else
                 base.HandleMessage(pMessage);

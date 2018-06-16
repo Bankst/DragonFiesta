@@ -27,7 +27,7 @@ namespace DragonFiesta.Login.Network
             {
                 using (var cmd = DB.GetDatabaseClient(DatabaseType.Login))
                 {
-                    cmd.CreateStoreProzedure("dbo.IPBlock_Remove");
+                    cmd.CreateStoredProcedure("dbo.IPBlock_Remove");
 
                     cmd.SetParameter("@pBlockedIP", IP);
                     switch ((int)cmd.ExecuteScalar())
@@ -88,7 +88,7 @@ namespace DragonFiesta.Login.Network
                 {
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.Login))
                     {
-                        cmd.CreateStoreProzedure("dbo.IPBlock_Insert");
+                        cmd.CreateStoredProcedure("dbo.IPBlock_Insert");
 
                         cmd.SetParameter("@pBlockedIP", IP);
                         cmd.SetParameter("@pBlockDate", BlockDate.Value);

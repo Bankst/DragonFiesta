@@ -10,8 +10,8 @@ namespace DragonFiesta.Login.Network.InternHandler.Client
 {
     public class WorldAuthHandler
     {
-        [InternMessageHandler(typeof(AuthenticatetWorld))]
-        public static void HandleAuthenticatetWorld(AuthenticatetWorld Request, InternWorldSession pSession)
+        [InternMessageHandler(typeof(AuthenticatedWorld))]
+        public static void HandleAuthenticatedWorld(AuthenticatedWorld Request, InternWorldSession pSession)
         {
             var Result = InternWorldAuthResult.Error;
             var Region = ClientRegion.None;
@@ -30,7 +30,7 @@ namespace DragonFiesta.Login.Network.InternHandler.Client
             }
             else
             {
-                pSession.SessionStateInfo.Authenticatet = true;
+                pSession.SessionStateInfo.Authenticated = true;
 
                 MyWorld.Session = pSession;
                 pSession.World = MyWorld;
@@ -38,6 +38,7 @@ namespace DragonFiesta.Login.Network.InternHandler.Client
                 MyWorld.ConnectionInfo = new WorldConnectionInfo
                 {
                     WorldIP = Request.IP,
+					WorldExternalIP = Request.ExternalIP,
                     WorldPort = Request.Port,
                     MaxPlayers = Request.MaxConnection,
                 };
@@ -60,7 +61,7 @@ namespace DragonFiesta.Login.Network.InternHandler.Client
                 EngineLog.Write(EngineLogLevel.Info, "Assigned World {0}", MyWorld.Info.WorldID);
             }
 
-            var Response = new AuthenticatetWorld_Response
+            var Response = new AuthenticatedWorld_Response
             {
                 Id = Request.Id,
                 Result = Result,
@@ -77,7 +78,7 @@ namespace DragonFiesta.Login.Network.InternHandler.Client
             {
                 if (Request.WorldReady && !pSession.World.IsReady)
                 {
-                    EngineLog.Write(EngineLogLevel.Debug, "World {0} is out of Maintance", pSession.World.Info.WorldID);
+                    EngineLog.Write(EngineLogLevel.Debug, "World {0} is out of Maintenance", pSession.World.Info.WorldID);
 
                     pSession.World.IsReady = true;
                 }

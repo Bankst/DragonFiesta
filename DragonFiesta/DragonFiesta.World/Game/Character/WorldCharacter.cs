@@ -165,7 +165,7 @@ namespace DragonFiesta.World.Game.Character
             {
                 using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                 {
-                    cmd.CreateStoreProzedure("dbo.Character_Update_World");
+                    cmd.CreateStoredProcedure("dbo.Character_Update_World");
                     cmd.SetParameter("@pID", Info.CharacterID);
                     cmd.SetParameter("@pIsMale", Info.IsMale);
                     cmd.SetParameter("@pHair", Style.Hair.ID);

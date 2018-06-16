@@ -7,7 +7,7 @@ namespace DragonFiesta.Login.Config
     public class LoginConfiguration : Configuration<LoginConfiguration>
     {
         public ServerInfo InternServerInfo { get; set; } = new ServerInfo();
-        public ServerInfo GameServerInfo { get; set; } = new ServerInfo();
+        public ExternServerInfo GameServerInfo { get; set; } = new ExternServerInfo();
         public LoginDatabaseSection LoginDatabaseSettings { get; set; } = new LoginDatabaseSection();
 
         public int ThreadTaskPool { get; set; } = 4;
@@ -23,6 +23,7 @@ namespace DragonFiesta.Login.Config
                 if (Instance != null)
                 {
                     EngineLog.Write(EngineLogLevel.Startup, "Successfully read Login config.");
+					EngineLog.Write(EngineLogLevel.Info, $"Login External IP: {Instance.GameServerInfo.ExternalIP}");
                     return true;
                 }
                 else
