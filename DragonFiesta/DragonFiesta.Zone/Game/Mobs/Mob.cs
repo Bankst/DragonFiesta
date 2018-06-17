@@ -107,7 +107,7 @@ namespace DragonFiesta.Zone.Game.Mobs
             packet.Write<uint>(Position.Y);
             packet.Write<byte>(Position.Rotation);
             packet.Write<byte>(0);
-            packet.Fill(138, 00);
+            packet.Fill(139, 00);
         }
 
         public virtual void WriteSelectionUpdate(FiestaPacket Packet)

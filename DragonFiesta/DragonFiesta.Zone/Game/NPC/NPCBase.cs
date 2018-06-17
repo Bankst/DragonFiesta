@@ -59,7 +59,7 @@ namespace DragonFiesta.Zone.Game.NPC
                 case NPCRole.Gate:
                 case NPCRole.IDGate:
                     Packet.WriteString(Info.LinkTable.PortMap.Index, 12);
-                    Packet.Fill(126, 0x00);
+                    Packet.Fill(127, 0x00);
                     break;
                 case NPCRole.RandomGate:
                 case NPCRole.ClientMenu:
@@ -71,7 +71,7 @@ namespace DragonFiesta.Zone.Game.NPC
                 case NPCRole.QuestNpc:
                 case NPCRole.StoreManager:
                 default:
-                    Packet.Fill(138, 0x00);
+                    Packet.Fill(139, 0x00);
                     break;
             }
         }
