@@ -67,7 +67,7 @@ namespace DragonFiesta.Zone.Game.Mobs
 
                 if (!Members.TryAdd(Memb.MobInfo.ID, Member)) //Need To Life?? or check by Data start?
                 {
-                    EngineLog.Write(EngineLogLevel.Warning, "Duplicate MobId  {0} in Group {1} found!!", Memb.MobInfo.ID, Memb.GroupId);
+                    EngineLog.Write(EngineLogLevel.Warning, "Duplicate MobId {0} in Group {1} found!!", Memb.MobInfo.ID, Memb.GroupId);
                     continue;
                 }
 

@@ -21,14 +21,14 @@ namespace DragonFiesta.Zone.ServerTask.Intern
 
         public bool Update(GameTime Now)
         {
-            if (!InternWorldConnector.IsConnectet())
+            if (!InternWorldConnector.GetIsConnected())
             {
                 ServerMain.InternalInstance.ServerIsReady = false;
 
                 GameLog.Write(GameLogLevel.Internal, "WorldServer Connection Lose Reconnecting...");
                 if (InternWorldConnector.Connect())
                 {
-                    if (InternWorldConnector.IsConnectet())
+                    if (InternWorldConnector.GetIsConnected())
                     {
 
                         GameLog.Write(GameLogLevel.Internal, "Reconnecting to WorldServer Success!");

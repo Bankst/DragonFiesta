@@ -16,7 +16,7 @@ namespace DragonFiesta.Zone.ServerTask.Intern
 
         bool IServerTask.Update(GameTime Now)
         {
-            if (InternWorldConnector.IsConnectet() && ServerMain.InternalInstance.ServerIsReady)
+            if (InternWorldConnector.GetIsConnected() && ServerMain.InternalInstance.ServerIsReady)
             {
                 InternWorldConnector.Instance.SendMessage(new UpdateZoneServer
                 {

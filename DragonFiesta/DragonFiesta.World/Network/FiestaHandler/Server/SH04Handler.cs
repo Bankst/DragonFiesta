@@ -17,7 +17,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Server
         {
             using (var mPacket = new FiestaPacket(Handler04Type._Header, Handler04Type.SMSG_CHAR_LOGIN_ACK))
             {
-                mPacket.WriteString(Zone.NetInfo.ListeningIP, 16);
+                mPacket.WriteString(Zone.NetInfo.ExternalIP, 16);
                 mPacket.Write<ushort>(Zone.NetInfo.ListeningPort);
                 mSession.SendPacket(mPacket);
             }

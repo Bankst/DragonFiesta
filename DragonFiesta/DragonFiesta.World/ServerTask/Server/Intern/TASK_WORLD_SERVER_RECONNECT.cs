@@ -16,7 +16,7 @@
         }
         public bool Update(GameTime Now)
         {
-            if (!InternLoginConnector.IsConnectet())
+            if (!InternLoginConnector.GetIsConnected())
             {
                 ServerMain.InternalInstance.ServerIsReady = false;
 

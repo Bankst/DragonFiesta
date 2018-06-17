@@ -11,9 +11,9 @@ namespace DragonFiesta.Networking.Network.Session
 
         public static InternConnector Instance { get; set; }
 
-        public static bool IsConnectet() => (Instance != null && Instance.IsConnected);
+        public static bool GetIsConnected() => (Instance != null && Instance.IsConnected);
 
-        public static bool IsAuthentictet => (Instance != null && Instance.IsReady);
+        public static bool GetIsAuthenticated => (Instance != null && Instance.IsReady);
 
         public abstract void SendAuth();
 

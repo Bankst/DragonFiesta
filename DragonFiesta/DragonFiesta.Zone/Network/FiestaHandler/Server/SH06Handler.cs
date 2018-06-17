@@ -19,7 +19,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
 
                 if (IsZoneTransfer)
                 {
-                    Packet.WriteString(NewZone.NetInfo.ListeningIP, 16);
+                    Packet.WriteString(NewZone.NetInfo.ExternalIP, 16);
                     Packet.Write<ushort>(NewZone.NetInfo.ListeningPort);
                     Packet.Write<ushort>(Sesssion.Character.WorldSessionId);
                 }
