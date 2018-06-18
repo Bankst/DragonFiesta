@@ -44,6 +44,7 @@ namespace DragonFiesta.Zone.Game.NPC
             Selection.DeselectObject();        
             base.DisposeInternal();
         }
+
         public override void WriteDisplay(FiestaPacket Packet)
         {
             Packet.Write<ushort>(MapObjectId);
@@ -59,7 +60,7 @@ namespace DragonFiesta.Zone.Game.NPC
                 case NPCRole.Gate:
                 case NPCRole.IDGate:
                     Packet.WriteString(Info.LinkTable.PortMap.Index, 12);
-                    Packet.Fill(127, 0x00);
+                    Packet.Fill(128, 0x00); // EU -> 127
                     break;
                 case NPCRole.RandomGate:
                 case NPCRole.ClientMenu:
@@ -71,7 +72,7 @@ namespace DragonFiesta.Zone.Game.NPC
                 case NPCRole.QuestNpc:
                 case NPCRole.StoreManager:
                 default:
-                    Packet.Fill(139, 0x00);
+                    Packet.Fill(140, 0x00); // EU -> 138
                     break;
             }
         }
