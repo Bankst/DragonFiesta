@@ -11,7 +11,7 @@ namespace DragonFiesta.Providers.Characters
         private static ConcurrentDictionary<byte, HairColorInfo> HairColorInfosByID;
 
         [InitializerMethod]
-        public static bool OneStart()
+        public static bool OnStart()
         {
             LoadFaceInfos();
             LoadHairColorsInfos();

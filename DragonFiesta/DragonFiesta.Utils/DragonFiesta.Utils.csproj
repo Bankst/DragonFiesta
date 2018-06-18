@@ -108,6 +108,13 @@
     <Compile Include="ServerConsole\ConsoleTitle.cs" />
     <Compile Include="ServerTask\IUpdateAbleServer.cs" />
     <Compile Include="ServerTask\UpdateServerExpire.cs" />
+    <Compile Include="SHN\SHNColumn.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SHN\SHNDataReader.cs" />
+    <Compile Include="SHN\SHNFile.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="StringHelper.cs" />
     <Compile Include="Three.cs" />
     <Compile Include="Utils\ByteUtils.cs" />
