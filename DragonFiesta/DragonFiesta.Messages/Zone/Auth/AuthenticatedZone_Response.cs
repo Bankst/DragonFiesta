@@ -13,6 +13,6 @@ namespace DragonFiesta.Messages.Zone
 
         public List<IZone> RemoteZoneList { get; set; }
 
-        public InternZoneAuthesult Result { get; set; }
+        public InternZoneAuthResult Result { get; set; }
     }
 }

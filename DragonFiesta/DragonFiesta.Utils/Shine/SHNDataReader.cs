@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
-namespace DragonFiesta.Utils.SHN
+namespace DragonFiesta.Utils.Shine
 {
 	public class SHNDataReader : BinaryReader
 	{

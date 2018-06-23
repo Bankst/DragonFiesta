@@ -17,19 +17,19 @@ namespace DragonFiesta.Zone.InternNetwork.InternHandler.Response.Auth
 
             switch (Response.Result)
             {
-                case InternZoneAuthesult.InvalidPassword:
+                case InternZoneAuthResult.InvalidPassword:
                     GameLog.Write(GameLogLevel.Internal, "Invalid Authenticate Password Please check you Configurartion");
                     break;
 
-                case InternZoneAuthesult.IdAlredyRegister:
+                case InternZoneAuthResult.IdAlreadyRegistered:
                     GameLog.Write(GameLogLevel.Internal, "ZoneId is Already Connectet Please check you config!");
                     break;
 
-                case InternZoneAuthesult.InvalidZoneId:
+                case InternZoneAuthResult.InvalidZoneId:
                     GameLog.Write(GameLogLevel.Internal, "Invalid ZoneId Please check you WorldConfiguration!");
                     break;
 
-                case InternZoneAuthesult.OK:
+                case InternZoneAuthResult.OK:
 
                     GameLog.Write(GameLogLevel.Internal, "Authenticated OK");
 
@@ -87,7 +87,7 @@ namespace DragonFiesta.Zone.InternNetwork.InternHandler.Response.Auth
                     break;
             }
 
-            if (Response.Result != InternZoneAuthesult.OK)
+            if (Response.Result != InternZoneAuthResult.OK)
                 ServerMain.InternalInstance.Shutdown();
             else
                 ServerMain.InternalInstance.Title.Update();

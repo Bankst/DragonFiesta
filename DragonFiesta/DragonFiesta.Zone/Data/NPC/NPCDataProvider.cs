@@ -1,11 +1,14 @@
-﻿using DragonFiesta.Providers.Maps;
-using DragonFiesta.Zone.Data.Mob;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
+using DragonFiesta.Providers.Maps;
+using DragonFiesta.Utils.Shine;
+using DragonFiesta.Zone.Data.Mob;
 
 namespace DragonFiesta.Zone.Data.NPC
 {
-    [GameServerModule(ServerType.Zone, GameInitalStage.NPC)]
+	[GameServerModule(ServerType.Zone, GameInitalStage.NPC)]
     public class NPCDataProvider
     {
         private static ConcurrentDictionary<ushort, List<NPCInfo>> NPCDataByMapId;
@@ -32,7 +35,7 @@ namespace DragonFiesta.Zone.Data.NPC
                 MobInfo mobinf;
                 if (!MapDataProvider.GetMapInfoByID(MapID, out minf))
                 {
-                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Error loading  MapInfo for NPC '{0}' {1}.", MobID, MapID);
+                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Error loading MapInfo for NPC '{0}' {1}.", MobID, MapID);
                 }
                 else if (!MobDataProvider.GetMobInfoByID(MobID, out mobinf))
                 {
@@ -71,23 +74,64 @@ namespace DragonFiesta.Zone.Data.NPC
                     }
                     else if (currentInfo.Role == NPCRole.Merchant)
                     {
-                        //Later...
-                        /*
-                        int incrItemCount;
-                        if (!LoadItemList(currentInfo, ref warnings, out incrItemCount))
-                        {
-                            EngineLog.Write(EngineLogType.Warnings, "Error loading item list for NPC '{0}'.", currentInfo.MobInfo.ID);
-                            warnings++;
-                            continue;
-                        }
-                        itemCount += incrItemCount;*/
+						if (!LoadItemList(currentInfo, out int incrItemCount))
+						{
+						    DatabaseLog.Write(DatabaseLogLevel.Warning, "Error loading item list for NPC '{0}'-'{1}'.", currentInfo.MobInfo.ID, currentInfo.MobInfo.Index);
+						    continue;
+						}
+						//itemCount += incrItemCount;
                     }
-                    //         npcCount++;
                     list.Add(currentInfo);
                 }
             }
-            //   EngineLog.Write(EngineLogType.Startup, "- Loaded {0} NPC infos with {1} items in shop", npcCount, itemCount);
+			//DatabaseLog.Write(DatabaseLogLevel.Startup, "Loaded {0} NPCItemLists with {1} items in shop", 420, 69);
         }
+		 
+		private static bool LoadItemList(NPCInfo currentInfo, out int incrItemCount)
+		{
+			incrItemCount = 0;
+			List<NPCItem> itemList = new List<NPCItem>();
+
+			// open NPCItemList for currentInfo
+			var shinePath = "Shine/NPCItemList/";
+			var filePath = $"{shinePath}{currentInfo.MobInfo.Index}.txt";
+			
+			//itemListShine.
+			
+			// parse
+			try
+			{
+				ShineFile itemListShine = new ShineFile(filePath);
+				foreach (var kvp in itemListShine.TableDict)
+				{
+					//byte tabNum = Convert.ToByte(kvp.Key.Substring(3,2));
+					int slotNo = 0;
+					foreach (DataRow row in kvp.Value.Rows)
+					{
+							//byte rowNum = Convert.ToByte(row.Table.Rows[0]);
+							for (int i = 1; i < 7; i++)
+							{
+								slotNo++;
+								var itemInxName = row.ItemArray[i];
+								//var itemID = 
+							}
+							incrItemCount++;
+						
+					}					
+				}
+				foreach (NPCItem item in itemList)
+				{
+					currentInfo.Items.Add(item);
+					//incrItemCount++;
+				}
+				DatabaseLog.Write(DatabaseLogLevel.Startup, "Loaded NPC {0} with {1} items in shop", currentInfo.MobInfo.Index, currentInfo.Items.Count);
+				return true;
+			}
+			catch(Exception ex)
+			{
+				return false;
+			}
+		}
 
         public static bool GetNPCListByMapId(ushort MapId, out List<NPCInfo> NpcList) => NPCDataByMapId.TryGetValue(MapId, out NpcList);
     }

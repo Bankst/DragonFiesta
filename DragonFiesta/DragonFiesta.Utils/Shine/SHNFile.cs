@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DragonFiesta.Utils.SHN
+namespace DragonFiesta.Utils.Shine
 {
+
 	public class SHNFile : DataTable
 	{
 		public uint ColumnCount { get; private set; }

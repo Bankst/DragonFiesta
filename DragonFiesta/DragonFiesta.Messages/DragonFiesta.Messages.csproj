@@ -120,8 +120,8 @@
     <Compile Include="World\ZoneToZoneRequestFailed.cs" />
     <Compile Include="Zone\Auth\AuthenticatedZone.cs" />
     <Compile Include="Zone\Auth\AuthenticatedZone_Response.cs" />
-    <Compile Include="Zone\Auth\InternZoneAuthesult.cs" />
     <Compile Include="Command\GameCommand.cs" />
+    <Compile Include="Zone\Auth\InternZoneAuthResult.cs" />
     <Compile Include="Zone\Buffs\AddBuff.cs" />
     <Compile Include="Zone\Buffs\RemoveBuff.cs" />
     <Compile Include="Zone\Character\CharacterChangeMap.cs" />

@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Providers.Text;
+﻿using System;
+using DragonFiesta.Providers.Text;
 using DragonFiesta.Zone.Data.Menu;
 using DragonFiesta.Zone.Data.NPC;
 using DragonFiesta.Zone.Game.Character;
@@ -14,7 +15,7 @@ namespace DragonFiesta.Zone.Game.NPC
 
         public override sealed void OpenMenu(ZoneCharacter Character)
         {
-            //  throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         internal override void HandleInteraction(ZoneCharacter Character)

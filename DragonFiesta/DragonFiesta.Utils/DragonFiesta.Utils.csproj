@@ -108,11 +108,18 @@
     <Compile Include="ServerConsole\ConsoleTitle.cs" />
     <Compile Include="ServerTask\IUpdateAbleServer.cs" />
     <Compile Include="ServerTask\UpdateServerExpire.cs" />
-    <Compile Include="SHN\SHNColumn.cs">
+    <Compile Include="Shine\ShineColumn.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SHN\SHNDataReader.cs" />
-    <Compile Include="SHN\SHNFile.cs">
+    <Compile Include="Shine\ShineFile.cs" />
+    <Compile Include="Shine\ShineTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Shine\SHNColumn.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Shine\SHNDataReader.cs" />
+    <Compile Include="Shine\SHNFile.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="StringHelper.cs" />

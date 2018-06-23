@@ -1,10 +1,10 @@
 ﻿using System;
 
 [Serializable]
-public enum InternZoneAuthesult : byte
+public enum InternZoneAuthResult : byte
 {
     OK,
     InvalidPassword,
     InvalidZoneId,
-    IdAlredyRegister,
+    IdAlreadyRegistered,
 }

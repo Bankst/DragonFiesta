@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace DragonFiesta.Utils.SHN
+namespace DragonFiesta.Utils.Shine
 {
 	public class SHNColumn : DataColumn
 	{

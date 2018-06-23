@@ -15,24 +15,24 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Auth
                 Id = mAuthMessage.Id,
                 Region = WorldConfiguration.Instance.ServerRegion,
                 RemoteZoneList = ZoneManager.FindAllActiveZone(),
-                Result = InternZoneAuthesult.InvalidZoneId,
+                Result = InternZoneAuthResult.InvalidZoneId,
             };
 
             if (!WorldConfiguration.Instance.ServerInfo.Password.Equals(mAuthMessage.NetInfo.Password))
             {
-                mResponse.Result = InternZoneAuthesult.InvalidPassword;
+                mResponse.Result = InternZoneAuthResult.InvalidPassword;
             }
             else if (!ZoneManager.GetZoneByID(mAuthMessage.ZoneId, out ZoneServer mZone))
             {
-                mResponse.Result = InternZoneAuthesult.InvalidZoneId;
+                mResponse.Result = InternZoneAuthResult.InvalidZoneId;
             }
             else if (mZone.IsConnected || mZone.IsReady)
             {
-                mResponse.Result = InternZoneAuthesult.IdAlredyRegister;
+                mResponse.Result = InternZoneAuthResult.IdAlreadyRegistered;
             }
             else
             {
-                mResponse.Result = InternZoneAuthesult.OK;
+                mResponse.Result = InternZoneAuthResult.OK;
 
                 pSession.SessionStateInfo.Authenticated = true;
 
