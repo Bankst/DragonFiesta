@@ -1,23 +1,55 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items
 {
-    public class ItemDataProvider<ItemDataType>
-        where ItemDataType : ItemBaseInfo
+	[GameServerModule(ServerType.Zone, GameInitalStage.Item)]
+	//[GameServerModule(ServerType.World, GameInitalStage.Item)]
+	public class ItemDataProviderBase<ItemDataType>
+        where ItemDataType : ItemInfoSHN
     {
         public const uint ExpireTime_NeverExpire = 1992027391;
         public const ushort ItemInfo_DefaultMiniHouse_ID = 31000;
-        public static ItemBaseInfo ItemInfo_DefaultMiniHouse { get; protected set; }
+        public static ItemInfoSHN ItemInfo_DefaultMiniHouse { get; protected set; }
         protected static ConcurrentDictionary<ushort, List<ItemUpgradeInfo>> UpgradeInfosByID;
         protected static ConcurrentDictionary<ushort, ItemDataType> ItemInfosByID;
+		protected static SecureCollection<ItemDataType> ItemInfos;
+		protected static SHNFile ItemInfoFile;
+
+		[InitializerMethod]
+		public static bool Initialize()
+		{
+			LoadSHN();
+			LoadItemData();
+			return true;
+		}
+
+		public static void LoadSHN()
+		{
+			MethodInfo CryptoMethod = typeof(SHNCrypto).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(x => x.Name == "DefaultCrypto").First();
+
+			ItemInfoFile = new SHNFile(String.Format("{0}ItemInfo.shn", "Shine/"), CryptoMethod);
+
+			if (ItemInfoFile.Type == SHNType.TextData) { ItemInfoFile.SHNEncoding = Encoding.ASCII; }
+			else { ItemInfoFile.SHNEncoding = Encoding.GetEncoding("ISO-8859-1"); }
+
+			if (ItemInfoFile.Type != SHNType.QuestData) { ItemInfoFile.Read(); }
+			else { ItemInfoFile.ReadQuest(); }
+
+			ItemInfoFile.DisallowRowChanges();
+			var LeatherBootsID = ItemInfos.Where(x => x.InxName == "LeatherBoots").First().ID;
+		}
 
         public static void LoadItemData()
         {
             ItemInfosByID = new ConcurrentDictionary<ushort, ItemDataType>();
-
-            SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM ItemInfos");
+			//ItemInfoFile.Table
+			SHNResult pResult = (SHNResult)ItemInfoFile.Table;
             DatabaseLog.WriteProgressBar(">> Load Item infos");
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
@@ -31,6 +63,7 @@ namespace DragonFiesta.Providers.Items
                         DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate item id found. ID: {0}", info.ID);
                         continue;
                     }
+					ItemInfos.Add(info);
                     mBar.Step();
                 }
                 DatabaseLog.WriteProgressBar(">> Loaded {0} Item infos", ItemInfosByID.Count);
@@ -39,7 +72,7 @@ namespace DragonFiesta.Providers.Items
 
             if (!ItemInfosByID.TryGetValue(ItemInfo_DefaultMiniHouse_ID, out ItemDataType defaultMiniHouse))
                 throw new InvalidOperationException(String.Format("Can't find 'Mushroom House' item (ID: {0}).", ItemInfo_DefaultMiniHouse_ID));
-
+			
             ItemInfo_DefaultMiniHouse = defaultMiniHouse;
         }
 

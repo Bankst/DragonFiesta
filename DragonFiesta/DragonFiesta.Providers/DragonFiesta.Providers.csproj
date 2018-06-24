@@ -95,6 +95,8 @@
     <Compile Include="Items\ItemFlags.cs" />
     <Compile Include="Items\ItemGradeType.cs" />
     <Compile Include="Items\ItemBaseInfo.cs" />
+    <Compile Include="Items\ItemInfoSHN.cs" />
+    <Compile Include="Items\ItemInfoServer.cs" />
     <Compile Include="Items\ItemUpgradeFactor.cs" />
     <Compile Include="Items\ItemUpgradeInfo.cs" />
     <Compile Include="Items\ItemUseEffect.cs" />

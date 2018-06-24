@@ -40,9 +40,7 @@ namespace DragonFiesta.Providers.Items
         public bool IsAutoPickup { get; private set; }
 
         /* New Stuff
-        public bool TwoHand { get; private set; }
         public uint ItemActionGroup { get; private set; }
-        public uint UseClass { get; private set; }
         public uint BuyGToken { get; private set; }
         public uint BuyGBCoin { get; private set; }
         */

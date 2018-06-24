@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using DragonFiesta.Providers.Maps;
-using DragonFiesta.Utils.Shine;
+using DragonFiesta.Utils.IO.TXT;
 using DragonFiesta.Zone.Data.Mob;
 
 namespace DragonFiesta.Zone.Data.NPC
@@ -97,16 +97,16 @@ namespace DragonFiesta.Zone.Data.NPC
 			var filePath = $"{shinePath}{currentInfo.MobInfo.Index}.txt";
 			
 			//itemListShine.
-			
+			 
 			// parse
 			try
 			{
-				ShineFile itemListShine = new ShineFile(filePath);
-				foreach (var kvp in itemListShine.TableDict)
+				ShineTable itemListShine = new ShineTable(filePath);
+				foreach (var kvp in itemListShine.Tables)
 				{
 					//byte tabNum = Convert.ToByte(kvp.Key.Substring(3,2));
 					int slotNo = 0;
-					foreach (DataRow row in kvp.Value.Rows)
+					foreach (DataRow row in kvp.Source.Rows)
 					{
 							//byte rowNum = Convert.ToByte(row.Table.Rows[0]);
 							for (int i = 1; i < 7; i++)

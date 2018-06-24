@@ -93,6 +93,13 @@
     <Compile Include="Enum\ShutdownType.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IO\CS\CSFile.cs" />
+    <Compile Include="IO\SHN\SHNResult.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IO\TXT\Headers.cs" />
+    <Compile Include="IO\TXT\ShineTable.cs" />
+    <Compile Include="IO\TXT\Table.cs" />
     <Compile Include="Logging\ProgressBar.cs" />
     <Compile Include="ServerTask\ExpireAbleManager.cs" />
     <Compile Include="ServerTask\ExpireGuidManager.cs" />
@@ -108,20 +115,13 @@
     <Compile Include="ServerConsole\ConsoleTitle.cs" />
     <Compile Include="ServerTask\IUpdateAbleServer.cs" />
     <Compile Include="ServerTask\UpdateServerExpire.cs" />
-    <Compile Include="Shine\ShineColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Shine\ShineFile.cs" />
-    <Compile Include="Shine\ShineTable.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Shine\SHNColumn.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Shine\SHNDataReader.cs" />
-    <Compile Include="Shine\SHNFile.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="IO\SHN\SHNBinaryReader.cs" />
+    <Compile Include="IO\SHN\SHNBinaryWriter.cs" />
+    <Compile Include="IO\SHN\SHNColumn.cs" />
+    <Compile Include="IO\SHN\SHNCrypto.cs" />
+    <Compile Include="IO\SHN\SHNFile.cs" />
+    <Compile Include="IO\SHN\SHNType.cs" />
+    <Compile Include="IO\SHN\TableCreator.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Three.cs" />
     <Compile Include="Utils\ByteUtils.cs" />
