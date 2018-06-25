@@ -94,6 +94,7 @@
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IO\CS\CSFile.cs" />
+    <Compile Include="IO\SHN\SHNManager.cs" />
     <Compile Include="IO\SHN\SHNResult.cs">
       <SubType>Component</SubType>
     </Compile>

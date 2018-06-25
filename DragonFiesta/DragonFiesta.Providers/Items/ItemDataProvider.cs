@@ -8,8 +8,6 @@ using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items
 {
-	[GameServerModule(ServerType.Zone, GameInitalStage.Item)]
-	//[GameServerModule(ServerType.World, GameInitalStage.Item)]
 	public class ItemDataProviderBase<ItemDataType>
         where ItemDataType : ItemInfoSHN
     {
@@ -20,37 +18,14 @@ namespace DragonFiesta.Providers.Items
         protected static ConcurrentDictionary<ushort, ItemDataType> ItemInfosByID;
 		protected static SecureCollection<ItemDataType> ItemInfos;
 		protected static SHNFile ItemInfoFile;
-
-		[InitializerMethod]
-		public static bool Initialize()
-		{
-			LoadSHN();
-			LoadItemData();
-			return true;
-		}
-
-		public static void LoadSHN()
-		{
-			MethodInfo CryptoMethod = typeof(SHNCrypto).GetMethods(BindingFlags.Static | BindingFlags.Public).Where(x => x.Name == "DefaultCrypto").First();
-
-			ItemInfoFile = new SHNFile(String.Format("{0}ItemInfo.shn", "Shine/"), CryptoMethod);
-
-			if (ItemInfoFile.Type == SHNType.TextData) { ItemInfoFile.SHNEncoding = Encoding.ASCII; }
-			else { ItemInfoFile.SHNEncoding = Encoding.GetEncoding("ISO-8859-1"); }
-
-			if (ItemInfoFile.Type != SHNType.QuestData) { ItemInfoFile.Read(); }
-			else { ItemInfoFile.ReadQuest(); }
-
-			ItemInfoFile.DisallowRowChanges();
-			var LeatherBootsID = ItemInfos.Where(x => x.InxName == "LeatherBoots").First().ID;
-		}
-
-        public static void LoadItemData()
+		
+		public static void LoadItemInfo()
         {
+			ItemInfos = new SecureCollection<ItemDataType>();
             ItemInfosByID = new ConcurrentDictionary<ushort, ItemDataType>();
-			//ItemInfoFile.Table
-			SHNResult pResult = (SHNResult)ItemInfoFile.Table;
-            DatabaseLog.WriteProgressBar(">> Load Item infos");
+
+			SHNResult pResult = SHNManager.Load(SHNType.ItemInfo);
+            DatabaseLog.WriteProgressBar(">> Load ItemInfo SHN");
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
                 for (int i = 0; i < pResult.Count; i++)
@@ -66,14 +41,13 @@ namespace DragonFiesta.Providers.Items
 					ItemInfos.Add(info);
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} Item infos", ItemInfosByID.Count);
+                DatabaseLog.WriteProgressBar(">> Loaded {0} ItemInfo rows", ItemInfosByID.Count);
             }
             //get default minihouse
 
             if (!ItemInfosByID.TryGetValue(ItemInfo_DefaultMiniHouse_ID, out ItemDataType defaultMiniHouse))
                 throw new InvalidOperationException(String.Format("Can't find 'Mushroom House' item (ID: {0}).", ItemInfo_DefaultMiniHouse_ID));
-			
-            ItemInfo_DefaultMiniHouse = defaultMiniHouse;
+			ItemInfo_DefaultMiniHouse = defaultMiniHouse;
         }
 
         public static void LoadUpgradeInfos()

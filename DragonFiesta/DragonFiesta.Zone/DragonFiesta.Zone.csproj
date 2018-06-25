@@ -117,6 +117,7 @@
     <Compile Include="Data\Characters\CharacterLevelParameter.cs" />
     <Compile Include="Data\Friends\FriendDataProvider.cs" />
     <Compile Include="Data\Friends\FriendPointReward.cs" />
+    <Compile Include="Data\Items\ZoneItemDataProvider.cs" />
     <Compile Include="Data\Maps\BlockInfo.cs" />
     <Compile Include="Data\Maps\MapDataProvider.cs" />
     <Compile Include="Data\Maps\TownPortalInfo.cs" />
@@ -277,7 +278,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\Items\" />
     <Folder Include="Game\Character\Event\" />
     <Folder Include="Game\Friends\" />
     <Folder Include="ServerTask\Game\" />

@@ -24,7 +24,7 @@ namespace DragonFiesta.Zone.Data.Mob
         private static ConcurrentDictionary<int, WayPointInfo> WayPointsById { get; set; }
 
         [InitializerMethod]
-        public static bool InitalMobData()
+        public static bool InitialMobData()
         {
             LoadMobInfos();
             LoadWayPoints();

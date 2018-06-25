@@ -88,6 +88,7 @@
     <Compile Include="Characters\HairInfo.cs" />
     <Compile Include="Characters\WhoEquip.cs" />
     <Compile Include="Chat\ChatDataProvider.cs" />
+    <Compile Include="Items\BT_Inx.cs" />
     <Compile Include="Items\InventoryType.cs" />
     <Compile Include="Items\ItemClass.cs" />
     <Compile Include="Items\ItemDataProvider.cs" />
