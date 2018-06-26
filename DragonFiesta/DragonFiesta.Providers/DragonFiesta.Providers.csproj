@@ -95,6 +95,7 @@
     <Compile Include="Items\ItemFlags.cs" />
     <Compile Include="Items\ItemGradeType.cs" />
     <Compile Include="Items\ItemBaseInfo.cs" />
+    <Compile Include="Items\ItemType.cs" />
     <Compile Include="Items\SHN\BelongTypeInfo.cs" />
     <Compile Include="Items\SHN\ItemInfo.cs" />
     <Compile Include="Items\SHN\ItemInfoServer.cs" />

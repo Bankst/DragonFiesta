@@ -25,7 +25,7 @@ namespace DragonFiesta.Utils.IO.SHN
         {
             String ReturnString = String.Empty;
 
-            if (Bytes > 0x100) { ReturnString = ReadString((UInt32)(Bytes - 0x100)); }
+            if (Bytes > 0x100) { ReturnString = ReadString(Bytes - 0x100); }
 
             Read(Buffer, 0, (Int32)Bytes);
 

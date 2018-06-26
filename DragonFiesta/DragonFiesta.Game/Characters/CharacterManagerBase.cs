@@ -1,8 +1,6 @@
 ﻿using DragonFiesta.Game.Characters.Event;
 using System;
-using System.Linq;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using DragonFiesta.Providers.Characters;
 
@@ -367,7 +365,7 @@ namespace DragonFiesta.Game.Characters
             }
             catch (Exception ex)
             {
-                EngineLog.Write(ex, "Error logging character '{0}' (ID: {1}) out:", Character.Info.Name, Character.Info.CharacterID);
+                EngineLog.Write(ex, $"Error logging character '{Character.Info.Name}' (ID: {Character.Info.CharacterID}) out.");
             }
         }
 
@@ -427,9 +425,5 @@ namespace DragonFiesta.Game.Characters
         }
 
         #endregion Events
-
-
- 
-
     }
 }

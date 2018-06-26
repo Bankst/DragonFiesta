@@ -8,6 +8,7 @@
         Orange = 3,
         Premium = 4,
         Set = 5,
-        Legendary = 6
+        Legendary = 6,
+        Mythic = 7
     }
 }

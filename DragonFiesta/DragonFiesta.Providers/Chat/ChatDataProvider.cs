@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Providers.Chat
+﻿using DragonFiesta.Utils.IO.SHN;
+
+namespace DragonFiesta.Providers.Chat
 {
     [GameServerModule(ServerType.Zone, GameInitalStage.Text)]
     [GameServerModule(ServerType.World, GameInitalStage.Text)]
@@ -24,7 +26,7 @@
         {
             BadNames = new SecureCollection<string>();
 
-            SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM BadNameFilter");
+            SHNResult pResult = SHNManager.Load(SHNType.BadNameFilter);
 
             DatabaseLog.WriteProgressBar(">> Load BadNameFilter");
 
@@ -35,11 +37,11 @@
                     string BadName = pResult.Read<string>(i, "BadName");
                     if (!BadNames.Add(BadName))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate BadName found {0}", BadName);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate BadName found {BadName}");
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} BadNames", BadNames.Count);
+                DatabaseLog.WriteProgressBar($">> Loaded {BadNames.Count} BadNames");
             }
         }
 

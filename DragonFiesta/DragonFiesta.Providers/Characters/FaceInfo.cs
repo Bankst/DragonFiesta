@@ -1,4 +1,6 @@
-﻿public sealed class FaceInfo
+﻿using DragonFiesta.Utils.IO.SHN;
+
+public sealed class FaceInfo
 {
     public byte ID { get; private set; }
 
@@ -6,7 +8,7 @@
 
     public BodyShopGrade Grade { get; private set; }
 
-    public FaceInfo(SQLResult pResult, int i)
+    public FaceInfo(SHNResult pResult, int i)
     {
         ID = pResult.Read<byte>(i, "ID");
         Name = pResult.Read<string>(i, "FaceName");

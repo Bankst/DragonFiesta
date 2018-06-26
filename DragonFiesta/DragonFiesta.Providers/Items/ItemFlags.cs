@@ -2,11 +2,11 @@
 {
     public enum ItemFlags : byte
     {
-        GuildItem = 0x00,
-        EquippedItem = 0x20,
-        InventoryItem = 0x24,
+        GuildItem = 0,
+        EquippedItem = 32,
+        InventoryItem = 36,
         MiniHouse = 144,
         PremiumItem = 155,
-        None = 0xFF,
+        None = 255,
     }
 }

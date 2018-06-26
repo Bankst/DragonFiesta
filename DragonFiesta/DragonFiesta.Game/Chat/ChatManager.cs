@@ -27,14 +27,9 @@ namespace DragonFiesta.Game.Chat
             {
 
                 DisposeInternal();
-
                 ChatInfosByCharacterId.Clear();
                 ChatInfosByCharacterId = null;
-
-
                 Config = null;
-
-
             }
         }
 

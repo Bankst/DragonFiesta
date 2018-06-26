@@ -40,7 +40,6 @@ namespace DragonFiesta.Providers.Characters
         public static bool IsValidClass(byte ClassID) => Enum.IsDefined(typeof(ClassId), ClassID);
         
         public static bool ClassUsedLP(ClassId Class) => Class == ClassId.Sentinel || Class == ClassId.Savior;
-            
-        
+                
     }
 }

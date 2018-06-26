@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DragonFiesta.Utils.IO.SHN
 {
-	public class SHNManager
+    public class SHNManager
 	{
 		public const string DataPath = "Shine";
 		private static readonly MethodInfo CryptoMethod = typeof(SHNCrypto).GetMethods().Where(x => x.Name == "CryptoDefault").First();

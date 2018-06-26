@@ -52,7 +52,7 @@ public class ProgressBar : IDisposable
             {
                 Console.Write(empty);
             }
-            float percent = (((float)n / (float)indic_len) * 100);
+            float percent = n / (float)indic_len * 100;
 
             Console.Write("\x3D {0:D}%  \r\x3D", (int)percent);
 

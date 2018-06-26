@@ -43,7 +43,7 @@ namespace DragonFiesta.Networking.Network
 
             SendCallBack.OnSendError += HandleSocketError;
 
-            OnDispose += (e, arg) => Console.WriteLine("Dipose");
+            OnDispose += (e, arg) => Console.WriteLine("Dispose");
 
 
         }
@@ -148,8 +148,6 @@ namespace DragonFiesta.Networking.Network
                 }
 
                 DisposeInternal();
-
-
 
             }
         }

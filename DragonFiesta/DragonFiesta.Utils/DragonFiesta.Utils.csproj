@@ -122,7 +122,6 @@
     <Compile Include="IO\SHN\SHNCrypto.cs" />
     <Compile Include="IO\SHN\SHNFile.cs" />
     <Compile Include="IO\SHN\SHNType.cs" />
-    <Compile Include="IO\SHN\TableCreator.cs" />
     <Compile Include="StringHelper.cs" />
     <Compile Include="Three.cs" />
     <Compile Include="Utils\ByteUtils.cs" />

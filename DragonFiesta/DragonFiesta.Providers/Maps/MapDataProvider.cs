@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Utils.Config;
+using DragonFiesta.Utils.IO.SHN;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
@@ -50,7 +51,7 @@ namespace DragonFiesta.Providers.Maps
             MapInfos = new SecureCollection<MapInfo>();
             MapInfosByID = new ConcurrentDictionary<ushort, MapInfo>();
             MapInfosByIndex = new ConcurrentDictionary<string, MapInfo>();
-            SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM MapInfos");
+            SHNResult pResult = SHNManager.Load(SHNType.MapInfo);
             DatabaseLog.WriteProgressBar(">> Load Map Infos");
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
@@ -72,7 +73,7 @@ namespace DragonFiesta.Providers.Maps
                     MapInfos.Add(info);
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} Map Infos", MapInfos.Count);
+                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos");
             }
 
             if (!GetMapInfoByID(GameConfiguration.Instance.DefaultSpawnMapId, out MapInfo DefaultMap))

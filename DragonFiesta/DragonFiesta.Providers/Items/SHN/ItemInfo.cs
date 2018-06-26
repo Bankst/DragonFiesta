@@ -1,14 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using DragonFiesta.Providers.Characters;
-using DragonFiesta.Utils.IO.CS;
-using DragonFiesta.Utils.IO.SHN;
+﻿using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items
 {
-	public class ItemInfo
+    public class ItemInfo
 	{
 		public ushort ID { get; private set; }
 		public string InxName { get; private set; }

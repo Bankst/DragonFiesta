@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragonFiesta.Utils.IO.SHN;
+﻿using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items
 {
-	public class ItemInfoServer
+    public class ItemInfoServer
 	{
 		public ushort ID { get; private set; }
 		public string InxName { get; private set; }

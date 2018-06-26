@@ -43,7 +43,7 @@ namespace DragonFiesta.Game.CommandAccess
 
                         mBar.Step();
                     }
-                    DatabaseLog.WriteProgressBar(">> Loaded {0} GameCommands", CommandsByID.Count);
+                    DatabaseLog.WriteProgressBar($">> Loaded {CommandsByID.Count} GameCommands");
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace DragonFiesta.Game.CommandAccess
 
                         if (!RolesById.TryGetValue(Role, out GameRole GMRole))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find Role {0} with CommandId {1}", Role, CommandId);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Can't find Role {Role} with CommandId {CommandId}");
                             continue;
                         }
 
@@ -80,23 +80,23 @@ namespace DragonFiesta.Game.CommandAccess
 
                         if (!CommandsByCategory[Cmd.CommandCategory.ToUpper()].TryAdd(Cmd.Command.ToUpper(), Cmd))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Commands Found Category : {0} Comand {1}", Cmd.CommandCategory, Cmd.Command);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate Commands Found Category : {Cmd.CommandCategory} Comand {Cmd.Command}");
                             continue;
                         }
 
                         if (!Cmd.RoleInfo.TryAdd(Role, GMRole))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Role Found for Command {0}", Cmd.Id);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate Role Found for Command {Cmd.Id}");
                             continue;
                         }
                     }
 
                     foreach (var cmd in CommandsByID.Values.Where(m => m.RoleInfo.Count == 0)) // command has role now inkoknitors command allowed :D
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "No Role found for Command {0} Category {1}", cmd, cmd.CommandCategory);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"No Role found for Command {cmd} Category {cmd.CommandCategory}");
                     }
 
-                    DatabaseLog.WriteProgressBar(">> Loaded {0} CommandCategorys ", CommandsByCategory.Count);
+                    DatabaseLog.WriteProgressBar($">> Loaded {CommandsByCategory.Count} CommandCategorys ");
                 }
             }
         }
@@ -114,11 +114,11 @@ namespace DragonFiesta.Game.CommandAccess
                     var Role = new GameRole(Result, i);
 
                     if (!RolesById.TryAdd(Role.Id, Role))
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Role Id {0} found!", Role.Id);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate Role Id {Role.Id} found!");
 
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} GameCommandRoles", RolesById.Count);
+                DatabaseLog.WriteProgressBar($">> Loaded {RolesById.Count} GameCommandRoles");
             }
         }
 

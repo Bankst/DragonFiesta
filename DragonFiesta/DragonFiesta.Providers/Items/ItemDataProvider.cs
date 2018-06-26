@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using DragonFiesta.Providers.Items.SHN;
 using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items
 {
-	public class ItemDataProviderBase
+    public class ItemDataProviderBase
     {
         public const uint ExpireTime_NeverExpire = 1992027391;
         public const ushort ItemInfo_DefaultMiniHouse_ID = 31000;
@@ -28,7 +27,7 @@ namespace DragonFiesta.Providers.Items
             ItemInfoByID = new ConcurrentDictionary<ushort, ItemInfo>();
 
 			SHNResult pResult = SHNManager.Load(SHNType.ItemInfo);
-            DatabaseLog.WriteProgressBar(">> Load ItemInfo SHN");
+            DatabaseLog.WriteProgressBar(">> Load ItemInfo");
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
                 for (int i = 0; i < pResult.Count; i++)
@@ -38,19 +37,22 @@ namespace DragonFiesta.Providers.Items
 
                     if (!ItemInfoByID.TryAdd(info.ID, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate item id found. ID: {0}", info.ID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate item id found. ID: {info.ID}");
                         continue;
                     }
 					ItemInfoSC.Add(info);
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} ItemInfo rows", ItemInfoSC.Count);
+                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} ItemInfo rows");
             }
             //get default minihouse
 
             if (!ItemInfoByID.TryGetValue(ItemInfo_DefaultMiniHouse_ID, out ItemInfo defaultMiniHouse))
-                throw new InvalidOperationException(String.Format("Can't find 'Mushroom House' item (ID: {0}).", ItemInfo_DefaultMiniHouse_ID));
-			ItemInfo_DefaultMiniHouse = defaultMiniHouse;
+            {
+                throw new InvalidOperationException($"Can't find 'Mushroom House' item (ID: {ItemInfo_DefaultMiniHouse_ID}).");
+            }
+
+            ItemInfo_DefaultMiniHouse = defaultMiniHouse;
         }
 
 		public static void LoadItemInfoServer()
@@ -59,7 +61,7 @@ namespace DragonFiesta.Providers.Items
 			ItemInfoServerByID = new ConcurrentDictionary<ushort, ItemInfoServer>();
 
 			SHNResult pResult = SHNManager.Load(SHNType.ItemInfoServer);
-			DatabaseLog.WriteProgressBar(">> Load ItemInfoServer SHN");
+			DatabaseLog.WriteProgressBar(">> Load ItemInfoServer");
 			using (ProgressBar mBar = new ProgressBar(pResult.Count))
 			{
 				for (int i = 0; i < pResult.Count; i++)
@@ -69,13 +71,13 @@ namespace DragonFiesta.Providers.Items
 
 					if (!ItemInfoServerByID.TryAdd(info.ID, info))
 					{
-						DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate item id found. ID: {0}", info.ID);
+						DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate item id found. ID: {info.ID}");
 						continue;
 					}
 					ItemInfoServerSC.Add(info);
 					mBar.Step();
 				}
-				DatabaseLog.WriteProgressBar(">> Loaded {0} ItemInfoServer rows", ItemInfoServerSC.Count);
+				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} ItemInfoServer rows");
 			}
 		}
 
@@ -94,7 +96,7 @@ namespace DragonFiesta.Providers.Items
 					BelongTypeInfoSC.Add(info);
 					mBar.Step();
 				}
-				DatabaseLog.WriteProgressBar(">> Loaded {0} BelongTypeInfo rows", BelongTypeInfoSC.Count);
+				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} BelongTypeInfo rows");
 			}
 		}
 
@@ -118,7 +120,7 @@ namespace DragonFiesta.Providers.Items
 					list.Add(info);
 					mBar.Step();
 				}
-				DatabaseLog.WriteProgressBar(">> Loaded {0} UpgradeInfo rows", UpgradeInfoSC.Count);
+				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfoSC.Count} UpgradeInfo rows");
 			}
 		}
 

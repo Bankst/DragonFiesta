@@ -9,7 +9,7 @@ namespace DragonFiesta.Providers.Items
     public abstract class ItemBaseInfo
     {
         public ushort ID { get; private set; }
-        public uint Type { get; private set; }
+        public ItemType Type { get; private set; }
         public ItemClass Class { get; private set; }
         public uint MaxLot { get; private set; }
         public bool IsWeapon { get { return ((EquipSlot == ItemEquipSlot.ITEMEQUIP_LEFTHAND || EquipSlot == ItemEquipSlot.ITEMEQUIP_RIGHTHAND) && Class != ItemClass.ITEMCLASS_COSSHIELD); } }
@@ -45,14 +45,13 @@ namespace DragonFiesta.Providers.Items
 		public ItemBaseInfo(ItemInfo itemInfo, ItemInfoServer itemInfoServer, SecureCollection<BelongTypeInfo> belongTypeInfos)
 		{
 			ID = itemInfo.ID;
-			Type = itemInfo.Type;
+			Type = (ItemType)itemInfo.Type;
 			Class = (ItemClass)itemInfo.Class;
 			MaxLot = itemInfo.MaxLot;
 			EquipSlot = (ItemEquipSlot)itemInfo.Equip;
 			IsTwoHand = itemInfo.TwoHand;
 			AttackSpeed = TimeSpan.FromMilliseconds(itemInfo.AtkSpeed);
 			RequiredLevel = itemInfo.DemandLv;
-			//WhoEquip = (WhoEquip)itemInfo.UseClass;
 			BuyPrice = itemInfo.BuyPrice;
 			SellPrice = itemInfo.SellPrice;
 			BuyFame = itemInfo.BuyFame;

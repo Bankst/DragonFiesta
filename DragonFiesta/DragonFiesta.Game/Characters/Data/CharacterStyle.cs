@@ -16,21 +16,21 @@ namespace DragonFiesta.Game.Characters.Data
 
             if (!CharacterLookProvider.GetHairInfoByID(hairID, out HairInfo pHair))
             {
-                GameLog.Write(GameLogLevel.Warning, "Can't find hair with ID '{0}' for characters", hairID);
+                GameLog.Write(GameLogLevel.Warning, $"Can't find hair with ID '{hairID}' for characters");
                 return false;
             }
 
             byte hairColorID = pRes.Read<byte>(i, "HairColor");
             if (!CharacterLookProvider.GetHairColorInfoByID(hairColorID, out HairColorInfo pHairColor))
             {
-                GameLog.Write(GameLogLevel.Warning, "Can't find hair color with ID '{0}' for chracters", hairColorID);
+                GameLog.Write(GameLogLevel.Warning, $"Can't find hair color with ID '{hairColorID}' for chracters");
                 return false;
             }
 
             byte FaceID = pRes.Read<byte>(i, "Face");
             if (!CharacterLookProvider.GetFaceInfoByID(FaceID, out FaceInfo pFace))
             {
-                GameLog.Write(GameLogLevel.Warning, "Can't find face with ID '{0}' for a characters", FaceID);
+                GameLog.Write(GameLogLevel.Warning, $"Can't find face with ID '{FaceID}' for a characters");
                 return false;
             }
             Hair = pHair;

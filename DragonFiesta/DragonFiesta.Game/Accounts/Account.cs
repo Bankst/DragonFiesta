@@ -79,30 +79,6 @@ namespace DragonFiesta.Game.Accounts
 
         #region Operator
 
-        /*
-        public static bool operator !=(Account v1, Account v2)
-        {
-            return !(v1 == v2);
-        }
-        /*
-         *
-        public static bool operator ==(Account v1, Account v2)
-        {
-            if ((object)v1 == null)
-                return ((object)v2 == null);
-
-            return (v1.Name.Equals(v2.Name)
-                 && v1.ID == v2.ID
-                 && v1.RoleID == v2.RoleID
-                 && v1.Password == v2.Password
-                 && v1.EMail == v2.EMail
-                 && v1.IsActivated == v2.IsActivated
-                 && v1.IsBanned == v2.IsBanned
-                 && v1.IsOnline == v2.IsOnline
-                 && v1.BanDate == v2.BanDate
-                 && v1.BanTime == v2.BanTime);
-        }*/
-
         public override bool Equals(object obj)
         {
             return (this == (obj as Account));

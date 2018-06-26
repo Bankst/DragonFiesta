@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragonFiesta.Utils.IO.SHN;
+﻿using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items.SHN
 {
-	public class BelongTypeInfo
+    public class BelongTypeInfo
 	{
 		public byte BT_Inx { get; private set; }
 		public bool PutOnBelonged { get; private set; }

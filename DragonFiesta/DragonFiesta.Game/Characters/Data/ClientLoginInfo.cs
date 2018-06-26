@@ -25,7 +25,7 @@ namespace DragonFiesta.Game.Characters.Data
             }
             catch (Exception ex)
             {
-                GameLog.Write(ex, "Failed Load ClientLoginInfo....");
+                GameLog.Write(ex, "Failed Load ClientLoginInfo.");
                 return false;
             }
         }

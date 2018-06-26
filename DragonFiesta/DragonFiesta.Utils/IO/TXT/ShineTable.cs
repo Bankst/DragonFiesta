@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DragonFiesta.Utils.IO.TXT
 {
-	public class ShineTable
+    public class ShineTable
 	{
 		public String LoadPath;
 
@@ -40,9 +37,12 @@ namespace DragonFiesta.Utils.IO.TXT
 			{
 				if (CurrentLine.ToLower().StartsWith("#table"))
 				{
-					NewTable = new Table();
-					NewTable.Source = new DataTable();
-					NewTable.Source.TableName = CurrentLine.Split(new String[] { "\t" }, StringSplitOptions.None)[1];
+                    DataTable dataTable = new DataTable();
+                    NewTable = new Table
+                    {
+                        Source = dataTable
+                    };
+                    NewTable.Source.TableName = CurrentLine.Split(new String[] { "\t" }, StringSplitOptions.None)[1];
 
 					Tables.Add(NewTable);
 				}

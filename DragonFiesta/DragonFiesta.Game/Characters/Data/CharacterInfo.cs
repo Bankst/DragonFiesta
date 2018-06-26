@@ -5,7 +5,6 @@ namespace DragonFiesta.Game.Characters.Data
 {
     public class CharacterInfo : IDisposable
     {
-
         public int CharacterID { get; set; }
 
         public ClassId Class { get; set; }
@@ -30,6 +29,7 @@ namespace DragonFiesta.Game.Characters.Data
 
         public CharacterInfo()
         {
+
         }
         ~CharacterInfo()
         {
@@ -42,9 +42,7 @@ namespace DragonFiesta.Game.Characters.Data
             {
                 CharacterID = pRes.Read<int>(i, "ID");
                 Name = pRes.Read<string>(i, "Name");
-
                 Slot = pRes.Read<byte>(i, "Slot");
-
                 Class = (ClassId)pRes.Read<byte>(i, "Class");
                 Level = pRes.Read<byte>(i, "Level");
                 Money = pRes.Read<ulong>(i, "Money");
@@ -58,7 +56,7 @@ namespace DragonFiesta.Game.Characters.Data
             }
             catch (Exception ex)
             {
-                GameLog.Write(ex, "Failed Load CharacterInfos ID : {0}", CharacterID);
+                GameLog.Write(ex, $"Failed Load CharacterInfos ID : {CharacterID}");
                 return false;
             }
         }

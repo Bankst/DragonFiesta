@@ -15,7 +15,7 @@ namespace DragonFiesta.Utils.IO.SHN
                 byte DL = (byte)Counter;
 
                 DL = (byte)(DL & 15);
-                DL = (byte)(DL + 0x55);
+                DL = (byte)(DL + 85);
                 DL = (byte)(DL ^ ((byte)(((byte)Counter) * 11)));
                 DL = (byte)(DL ^ DataLength);
                 DL = (byte)(DL ^ 170);

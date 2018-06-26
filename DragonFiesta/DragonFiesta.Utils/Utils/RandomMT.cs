@@ -34,13 +34,13 @@ public sealed class RandomMT
         CurrentSeeds = new ulong[SeedsLength];
         //lets create an random seed counter
         var now = DateTime.Now;
-        SeedCounter = (int)(now.Millisecond |
+        SeedCounter = now.Millisecond |
                             now.Second +
                           ((now.Minute >>
                             now.Hour) &
                             now.Day) +
                             now.Month >>
-                            now.Year);
+                            now.Year;
         ReSeed();
     }
 
@@ -117,19 +117,19 @@ public sealed class RandomMT
     // generates a random number on [0,1]-real-interval
     public double genrand_real1()
     {
-        return (double)genrand_int32() * (1.0 / 4294967295.0); // divided by 2^32-1
+        return genrand_int32() * (1.0 / 4294967295.0); // divided by 2^32-1
     }
 
     // generates a random number on [0,1)-real-interval
     public double genrand_real2()
     {
-        return (double)genrand_int32() * (1.0 / 4294967296.0); // divided by 2^32
+        return genrand_int32() * (1.0 / 4294967296.0); // divided by 2^32
     }
 
     // generates a random number on (0,1)-real-interval
     public double genrand_real3()
     {
-        return (((double)genrand_int32()) + 0.5) * (1.0 / 4294967296.0); // divided by 2^32
+        return (genrand_int32() + 0.5) * (1.0 / 4294967296.0); // divided by 2^32
     }
 
     // generates a random number on [0,1) with 53-bit resolution
@@ -137,7 +137,7 @@ public sealed class RandomMT
     {
         ulong a = genrand_int32() >> 5;
         ulong b = genrand_int32() >> 6;
-        return (double)(a * 67108864.0 + b) * (1.0 / 9007199254740992.0);
+        return (a * 67108864.0 + b) * (1.0 / 9007199254740992.0);
     }
 
     // generates a random number on [0,0xffffffff]-interval

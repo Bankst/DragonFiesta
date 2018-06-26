@@ -20,7 +20,6 @@ namespace DragonFiesta.Game.CommandAccess
         {
             RoleInfo = new ConcurrentDictionary<byte, GameRole>();
             Id = Res.Read<int>(i, "ID");
-
             Command = Res.Read<string>(i, "Command").ToUpper();
             CommandCategory = Res.Read<string>(i, "CommandCategory").ToUpper();
         }
