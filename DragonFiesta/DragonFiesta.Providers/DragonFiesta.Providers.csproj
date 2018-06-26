@@ -88,7 +88,6 @@
     <Compile Include="Characters\HairInfo.cs" />
     <Compile Include="Characters\WhoEquip.cs" />
     <Compile Include="Chat\ChatDataProvider.cs" />
-    <Compile Include="Items\BT_Inx.cs" />
     <Compile Include="Items\InventoryType.cs" />
     <Compile Include="Items\ItemClass.cs" />
     <Compile Include="Items\ItemDataProvider.cs" />
@@ -96,13 +95,15 @@
     <Compile Include="Items\ItemFlags.cs" />
     <Compile Include="Items\ItemGradeType.cs" />
     <Compile Include="Items\ItemBaseInfo.cs" />
-    <Compile Include="Items\ItemInfoSHN.cs" />
-    <Compile Include="Items\ItemInfoServer.cs" />
+    <Compile Include="Items\SHN\BelongTypeInfo.cs" />
+    <Compile Include="Items\SHN\ItemInfo.cs" />
+    <Compile Include="Items\SHN\ItemInfoServer.cs" />
     <Compile Include="Items\ItemUpgradeFactor.cs" />
     <Compile Include="Items\ItemUpgradeInfo.cs" />
     <Compile Include="Items\ItemUseEffect.cs" />
     <Compile Include="Items\ItemUseEffectType.cs" />
     <Compile Include="Items\RecallCoordinate.cs" />
+    <Compile Include="Items\SHN\UpgradeInfo.cs" />
     <Compile Include="Items\UpgradeResource.cs" />
     <Compile Include="Items\WeaponType.cs" />
     <Compile Include="Maps\FieldInfo.cs" />

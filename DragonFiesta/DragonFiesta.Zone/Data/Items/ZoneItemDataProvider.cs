@@ -8,7 +8,7 @@ using DragonFiesta.Providers.Items;
 namespace DragonFiesta.Zone.Data.Items
 {
 	[GameServerModule(ServerType.Zone, GameInitalStage.Item)]
-	public class ZoneItemDataProvider : ItemDataProviderBase<ItemInfoSHN>
+	public class ZoneItemDataProvider : ItemDataProviderBase
 	{
 
 
@@ -16,6 +16,11 @@ namespace DragonFiesta.Zone.Data.Items
 		public static bool Initialize()
 		{
 			LoadItemInfo();
+			LoadItemInfoServer();
+			LoadBelongTypeInfo();
+			LoadUpgradeInfo();
+			//FillItemUpgradeInfos();
+			FillItemBaseInfos();
 			return true;
 		}
 	}

@@ -74,11 +74,13 @@ namespace DragonFiesta.Zone.Data.NPC
                     }
                     else if (currentInfo.Role == NPCRole.Merchant)
                     {
+						/*
 						if (!LoadItemList(currentInfo, out int incrItemCount))
 						{
 						    DatabaseLog.Write(DatabaseLogLevel.Warning, "Error loading item list for NPC '{0}'-'{1}'.", currentInfo.MobInfo.ID, currentInfo.MobInfo.Index);
 						    continue;
 						}
+						*/
 						//itemCount += incrItemCount;
                     }
                     list.Add(currentInfo);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DragonFiesta.Providers.Items.SHN;
 
 namespace DragonFiesta.Providers.Items
 {
@@ -9,16 +10,11 @@ namespace DragonFiesta.Providers.Items
         public ItemUpgradeFactor UpgradeFactor { get; private set; }
         public Dictionary<byte, short> UpgradeData { get; private set; }
 
-        public ItemUpgradeInfo(SQLResult pResult, int i)
+        public ItemUpgradeInfo(UpgradeInfo upInfo)
         {
-            ID = pResult.Read<ushort>(i, "ID");
-            UpgradeFactor = (ItemUpgradeFactor)pResult.Read<ushort>(i, "UpFactor");
-            UpgradeData = new Dictionary<byte, short>();
-            for (int i2 = 0; i2 < 11; i2++)
-            {
-                string colname = "State" + i2;
-                UpgradeData.Add((byte)(i2 + 1), pResult.Read<short>(i, colname));
-            }
+			ID = upInfo.ID;
+			UpgradeFactor = upInfo.UpFactor;
+			UpgradeData = upInfo.UpgradeData;
         }
     }
 }

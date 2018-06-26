@@ -10,9 +10,9 @@ namespace DragonFiesta.Utils.IO.SHN
 	public class SHNManager
 	{
 		public const string DataPath = "Shine";
+		private static readonly MethodInfo CryptoMethod = typeof(SHNCrypto).GetMethods().Where(x => x.Name == "CryptoDefault").First();
 		public static SHNResult Load(SHNType type)
-		{
-			MethodInfo CryptoMethod = typeof(SHNCrypto).GetMethods().Where(x => x.Name == "CryptoDefault").First();
+		{			
 			var fileName = $"{type.ToString()}.shn";
 			var filePath = $"Shine/{fileName}";
 			SHNFile shnFile = new SHNFile(filePath, CryptoMethod);

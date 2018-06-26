@@ -8,7 +8,7 @@ using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items
 {
-	public class ItemInfoSHN
+	public class ItemInfo
 	{
 		public ushort ID { get; private set; }
 		public string InxName { get; private set; }
@@ -68,7 +68,7 @@ namespace DragonFiesta.Providers.Items
 		public string SetItemIndex { get; private set; }
 		public byte ItemFunc { get; private set; }
 		
-		public ItemInfoSHN(SHNResult pResult, int i)
+		public ItemInfo(SHNResult pResult, int i)
 		{
 			ID = pResult.Read<ushort>(i, "ID");
 			InxName = pResult.Read<string>(i, "InxName");
