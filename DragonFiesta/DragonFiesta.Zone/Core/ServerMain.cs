@@ -53,7 +53,7 @@ namespace DragonFiesta.Zone.Core
         {
             InternalInstance = new ServerMain();
             InternalInstance.WriteConsoleLogo();
-			System.Threading.Thread.Sleep(15000);
+			System.Threading.Thread.Sleep(10000);
 			if (!ZoneConfiguration.Initialize(ZoneId))
             {
                 throw new StartupException("Invalid Load ZoneConfiguration");

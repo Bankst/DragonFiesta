@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DragonFiesta.Providers.Items
 {
-    public abstract class ItemBaseInfo
+    public class ItemBaseInfo
     {
         public ushort ID { get; private set; }
         public ItemType Type { get; private set; }
@@ -42,7 +42,7 @@ namespace DragonFiesta.Providers.Items
         public bool IsAutoPickup { get; private set; }
 
 
-		public ItemBaseInfo(ItemInfo itemInfo, ItemInfoServer itemInfoServer, SecureCollection<BelongTypeInfo> belongTypeInfos)
+		public ItemBaseInfo(ItemInfo itemInfo, SecureCollection<BelongTypeInfo> belongTypeInfos)
 		{
 			ID = itemInfo.ID;
 			Type = (ItemType)itemInfo.Type;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using DragonFiesta.Providers.Items.SHN;
 using DragonFiesta.Utils.IO.SHN;
 
@@ -15,14 +16,15 @@ namespace DragonFiesta.Providers.Items
 		protected static ConcurrentDictionary<ushort, ItemInfoServer> ItemInfoServerByID;
 		protected static ConcurrentDictionary<ushort, List<UpgradeInfo>> UpgradeInfosByID;
 		protected static ConcurrentDictionary<ushort, List<ItemUpgradeInfo>> ItemUpgradeInfosByID;
+		protected static ConcurrentDictionary<ushort, ItemBaseInfo> ItemBaseInfosByID;
 		protected static SecureCollection<ItemInfo> ItemInfoSC;
 		protected static SecureCollection<ItemInfoServer> ItemInfoServerSC;
-		protected static SecureCollection<ItemBaseInfo> ItemBaseInfoSC;
 		protected static SecureCollection<BelongTypeInfo> BelongTypeInfoSC;
 		protected static SecureCollection<List<UpgradeInfo>> UpgradeInfoSC;
 
 		public static void LoadItemInfo()
         {
+			var watch = System.Diagnostics.Stopwatch.StartNew();
 			ItemInfoSC = new SecureCollection<ItemInfo>();
             ItemInfoByID = new ConcurrentDictionary<ushort, ItemInfo>();
 
@@ -43,7 +45,8 @@ namespace DragonFiesta.Providers.Items
 					ItemInfoSC.Add(info);
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} ItemInfo rows");
+				watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} ItemInfo rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
             }
             //get default minihouse
 
@@ -57,6 +60,7 @@ namespace DragonFiesta.Providers.Items
 
 		public static void LoadItemInfoServer()
 		{
+			var watch = System.Diagnostics.Stopwatch.StartNew();
 			ItemInfoServerSC = new SecureCollection<ItemInfoServer>();
 			ItemInfoServerByID = new ConcurrentDictionary<ushort, ItemInfoServer>();
 
@@ -77,12 +81,14 @@ namespace DragonFiesta.Providers.Items
 					ItemInfoServerSC.Add(info);
 					mBar.Step();
 				}
-				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} ItemInfoServer rows");
+				watch.Stop();
+				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} ItemInfoServer rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
 			}
 		}
 
 		public static void LoadBelongTypeInfo()
 		{
+			var watch = System.Diagnostics.Stopwatch.StartNew();
 			BelongTypeInfoSC = new SecureCollection<BelongTypeInfo>();
 
 			SHNResult pResult = SHNManager.Load(SHNType.BelongTypeInfo);
@@ -96,12 +102,14 @@ namespace DragonFiesta.Providers.Items
 					BelongTypeInfoSC.Add(info);
 					mBar.Step();
 				}
-				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} BelongTypeInfo rows");
+				watch.Stop();
+				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} BelongTypeInfo rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
 			}
 		}
 
 		public static void LoadUpgradeInfo()
 		{
+			var watch = System.Diagnostics.Stopwatch.StartNew();
 			UpgradeInfoSC = new SecureCollection<List<UpgradeInfo>>();
 			UpgradeInfosByID = new ConcurrentDictionary<ushort, List<UpgradeInfo>>();
 			SHNResult pResult = SHNManager.Load(SHNType.UpgradeInfo);
@@ -120,7 +128,8 @@ namespace DragonFiesta.Providers.Items
 					list.Add(info);
 					mBar.Step();
 				}
-				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfoSC.Count} UpgradeInfo rows");
+				watch.Stop();
+				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfoSC.Count} UpgradeInfo rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
 			}
 		}
 
@@ -159,9 +168,16 @@ namespace DragonFiesta.Providers.Items
 
 		public static void FillItemBaseInfos()
 		{
+			ItemBaseInfosByID = new ConcurrentDictionary<ushort, ItemBaseInfo>();
 			for (int i = 0; i < ItemInfoSC.Count; i++)
 			{
-				var info = (ItemBaseInfo)Activator.CreateInstance(typeof(ItemBaseInfo), ItemInfoSC[i], ItemInfoServerSC[i], BelongTypeInfoSC);
+				var item = ItemInfoSC.ElementAt(i);
+				var info = (ItemBaseInfo)Activator.CreateInstance(typeof(ItemBaseInfo), item, BelongTypeInfoSC);
+				if (!ItemBaseInfosByID.TryAdd(item.ID, info))
+				{
+					// something happened yo
+					continue;
+				}
 			}
 		}
 		
