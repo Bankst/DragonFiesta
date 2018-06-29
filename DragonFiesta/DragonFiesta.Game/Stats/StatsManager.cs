@@ -21,73 +21,65 @@ namespace DragonFiesta.Game.Stats
         public StatsHolder FullStats { get; private set; }
 
         public SecureWriteCollection<iStatsChanger> StatsChangers { get; private set; }
-        public bool IsDisposed { get { return (IsDisposedInt > 0); } }
-        private int IsDisposedInt;
-        private Func<iStatsChanger, bool> StatsChangerFunc_Add;
-        private Func<iStatsChanger, bool> StatsChangerFunc_Remove;
-        private Action StatsChangerFunc_Clear;
+        public bool IsDisposed => (_isDisposedInt > 0);
+	    private int _isDisposedInt;
+        private Func<iStatsChanger, bool> _statsChangerFuncAdd;
+        private Func<iStatsChanger, bool> _statsChangerFuncRemove;
+        private Action _statsChangerFuncClear;
         protected object ThreadLocker { get; private set; }
 
         protected StatsManager()
         {
             NormalStats = new StatsHolder();
             FullStats = new StatsHolder();
-            StatsChangers = new SecureWriteCollection<iStatsChanger>(out StatsChangerFunc_Add, out StatsChangerFunc_Remove, out StatsChangerFunc_Clear);
+            StatsChangers = new SecureWriteCollection<iStatsChanger>(out _statsChangerFuncAdd, out _statsChangerFuncRemove, out _statsChangerFuncClear);
             ThreadLocker = new object();
         }
         public void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
-            {
-                DisposeInternal();
-                NormalStats = null;
-                FullStats = null;
-                StatsChangers.Dispose();
-                StatsChangers = null;
-                StatsChangerFunc_Add = null;
-                StatsChangerFunc_Remove = null;
-                StatsChangerFunc_Clear = null;
-                ThreadLocker = null;
-            }
+	        if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) != 0) return;
+	        DisposeInternal();
+	        NormalStats = null;
+	        FullStats = null;
+	        StatsChangers.Dispose();
+	        StatsChangers = null;
+	        _statsChangerFuncAdd = null;
+	        _statsChangerFuncRemove = null;
+	        _statsChangerFuncClear = null;
+	        ThreadLocker = null;
         }
         protected abstract void DisposeInternal();
-        public bool AddStatsChanger(iStatsChanger Changer, bool UpdateStats = true)
+        public bool AddStatsChanger(iStatsChanger changer, bool updateStats = true)
         {
             lock (ThreadLocker)
             {
-                if (StatsChangerFunc_Add.Invoke(Changer))
-                {
-                    if (UpdateStats)
-                    {
-                        UpdateByChanger(Changer);
-                    }
-                    return true;
-                }
-                return false;
+	            if (!_statsChangerFuncAdd.Invoke(changer)) return false;
+	            if (updateStats)
+	            {
+		            UpdateByChanger(changer);
+	            }
+	            return true;
             }
         }
-        public bool RemoveStatsChanger(iStatsChanger Changer, bool UpdateStats = true)
+        public bool RemoveStatsChanger(iStatsChanger changer, bool updateStats = true)
         {
             lock (ThreadLocker)
             {
-                if (StatsChangerFunc_Remove.Invoke(Changer))
-                {
-                    if (UpdateStats)
-                    {
-                        UpdateByChanger(Changer);
-                    }
-                    return true;
-                }
-                return false;
+	            if (!_statsChangerFuncRemove.Invoke(changer)) return false;
+	            if (updateStats)
+	            {
+		            UpdateByChanger(changer);
+	            }
+	            return true;
             }
         }
-        public double CalculateCastingTimeMS(double StartCastingTimeMS)
+        public double CalculateCastingTimeMs(double startCastingTimeMs)
         {
-            var time = StartCastingTimeMS;
+            var time = startCastingTimeMs;
 
             if (FullStats.IncreaseCastingTime > 0)
             {
-                time -= (StartCastingTimeMS / 100d * FullStats.IncreaseCastingTime);
+                time -= (startCastingTimeMs / 100d * FullStats.IncreaseCastingTime);
             }
             return time;
         }
@@ -101,57 +93,57 @@ namespace DragonFiesta.Game.Stats
             Update_Speed();
             Update_Stuff();
         }
-        public void UpdateByChanger(iStatsChanger Changer)
+        public void UpdateByChanger(iStatsChanger changer)
         {
-            if (Changer.Stats.Str != 0
-                || Changer.Stats.WeaponDamage.Min != 0
-                || Changer.Stats.WeaponDamage.Max != 0
-                || Changer.Stats.IncreaseStrPercent != 0)
+            if (changer.Stats.Str != 0
+                || changer.Stats.WeaponDamage.Min != 0
+                || changer.Stats.WeaponDamage.Max != 0
+                || changer.Stats.IncreaseStrPercent != 0d)
             {
                 Update_STR();
             }
-            if (Changer.Stats.Dex != 0
-                || Changer.Stats.Aim != 0
-                || Changer.Stats.Evasion != 0
-                || Changer.Stats.IncreaseDexPercent != 0)
+            if (changer.Stats.Dex != 0
+                || changer.Stats.Aim != 0
+                || changer.Stats.Evasion != 0
+                || changer.Stats.IncreaseDexPercent != 0d)
             {
                 Update_DEX();
             }
-            if (Changer.Stats.End != 0
-                || Changer.Stats.MaxHP != 0
-                || Changer.Stats.WeaponDefense != 0
-                || Changer.Stats.IncreaseEndPercent != 0
-                || Changer.Stats.IncreaseDefensePercent != 0
-                || Changer.Stats.IncreaseHPPercent != 0)
+            if (changer.Stats.End != 0
+                || changer.Stats.MaxHP != 0
+                || changer.Stats.WeaponDefense != 0
+                || changer.Stats.IncreaseEndPercent != 0d
+                || changer.Stats.IncreaseDefensePercent != 0d
+                || changer.Stats.IncreaseHPPercent != 0d)
             {
                 Update_END();
             }
-            if (Changer.Stats.Int != 0
-                || Changer.Stats.MagicDamage.Min != 0
-                || Changer.Stats.MagicDamage.Max != 0
-                || Changer.Stats.IncreaseIntPercent != 0)
+            if (changer.Stats.Int != 0
+                || changer.Stats.MagicDamage.Min != 0
+                || changer.Stats.MagicDamage.Max != 0
+                || changer.Stats.IncreaseIntPercent != 0d)
             {
                 Update_INT();
             }
-            if (Changer.Stats.Spr != 0
-                || Changer.Stats.MaxSP != 0
-                || Changer.Stats.MagicDefense != 0
-                || Changer.Stats.IncreaseSprPercent != 0
-                || Changer.Stats.IncreaseSPPercent != 0)
+            if (changer.Stats.Spr != 0
+                || changer.Stats.MaxSP != 0
+                || changer.Stats.MagicDefense != 0
+                || changer.Stats.IncreaseSprPercent != 0d
+                || changer.Stats.IncreaseSPPercent != 0d)
             {
                 Update_SPR();
             }
-            if (Changer.Stats.WalkSpeed != 0
-                || Changer.Stats.RunSpeed != 0
-                || Changer.Stats.IncreaseSpeedPercent != 0)
+            if (changer.Stats.WalkSpeed != 0
+                || changer.Stats.RunSpeed != 0
+                || changer.Stats.IncreaseSpeedPercent != 0d)
             {
                 Update_Speed();
             }
-            if (Changer.Stats.IncreaseCastingTime != 0)
+            if (changer.Stats.IncreaseCastingTime != 0d)
             {
                 Update_Stuff();
             }
-            if (Changer.Stats.MaxLP != 100)
+            if (changer.Stats.MaxLP != 100)
             {
                 Update_LP();
             }
@@ -208,7 +200,7 @@ namespace DragonFiesta.Game.Stats
             {
                 // Normal stats
                 NormalStats.End = BaseStats.End;
-                NormalStats.MaxHP = (int)((BaseStats.End * 5) + BaseStats.MaxHP);
+                NormalStats.MaxHP = (BaseStats.End * 5) + BaseStats.MaxHP;
                 NormalStats.WeaponDefense = (short)(BaseStats.End + BaseStats.WeaponDefense);
                 // Full stats
                 FullStats.End = NormalStats.End;
@@ -218,7 +210,7 @@ namespace DragonFiesta.Game.Stats
                 StatsChangerAction((sc) =>
                 {
                     FullStats.End += sc.Stats.End;
-                    FullStats.MaxHP += (int)((sc.Stats.End * 5) + sc.Stats.MaxHP);
+                    FullStats.MaxHP += (sc.Stats.End * 5) + sc.Stats.MaxHP;
                     FullStats.WeaponDefense += (short)(sc.Stats.End + sc.Stats.WeaponDefense);
                 });
                 //increase end by percent
@@ -270,7 +262,7 @@ namespace DragonFiesta.Game.Stats
             {
                 // Normal stats
                 NormalStats.Spr = BaseStats.Spr;
-                NormalStats.MaxSP = (int)((BaseStats.Spr * 5) + BaseStats.MaxSP);
+                NormalStats.MaxSP = (BaseStats.Spr * 5) + BaseStats.MaxSP;
                 NormalStats.MagicDefense = (short)(BaseStats.Spr + BaseStats.MagicDefense);
                 // Full stats
                 FullStats.Spr = NormalStats.Spr;
@@ -279,7 +271,7 @@ namespace DragonFiesta.Game.Stats
                 StatsChangerAction((sc) =>
                 {
                     FullStats.Spr += sc.Stats.Spr;
-                    FullStats.MaxSP += (int)((sc.Stats.Spr * 5) + sc.Stats.MaxSP);
+                    FullStats.MaxSP += (sc.Stats.Spr * 5) + sc.Stats.MaxSP;
                     FullStats.MagicDefense += (short)(sc.Stats.Spr + sc.Stats.MagicDefense);
                 });
                 //increase spr by percent
@@ -329,9 +321,9 @@ namespace DragonFiesta.Game.Stats
                 });
             }
         }
-        public virtual int GetStatByType(StatsType Type)
+        public virtual int GetStatByType(StatsType type)
         {
-            switch (Type)
+            switch (type)
             {
                 case StatsType.STR:
                     return FullStats.Str;
@@ -366,17 +358,41 @@ namespace DragonFiesta.Game.Stats
                     return FullStats.MaxHP;
                 case StatsType.MaxSP:
                     return FullStats.MaxSP;
+	            case StatsType.Bonus_Damage:
+		            break;
+	            case StatsType.Bonus_Defense:
+		            break;
+	            case StatsType.Bonus_MagicDamage:
+		            break;
+	            case StatsType.Bonus_MagicDefense:
+		            break;
+	            case StatsType.Bonus_Aim:
+		            break;
+	            case StatsType.Bonus_Evasion:
+		            break;
+	            case StatsType.CriticalRate:
+		            break;
+	            case StatsType.BlockRate:
+		            break;
+	            case StatsType.Bonus_MaxHP:
+		            break;
+	            case StatsType.Bonus_MaxSP:
+		            break;
+	            case StatsType.MaxLP:
+		            break;
+	            default:
+		            throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
 
             return 0;
         }
-        protected void StatsChangerAction(Action<iStatsChanger> Action)
+        protected void StatsChangerAction(Action<iStatsChanger> action)
         {
             lock (ThreadLocker)
             {
-                for (int i = 0; i < StatsChangers.Count; i++)
+                foreach (var stat in StatsChangers)
                 {
-                    Action.Invoke(StatsChangers[i]);
+                    action.Invoke(stat);
                 }
             }
         }

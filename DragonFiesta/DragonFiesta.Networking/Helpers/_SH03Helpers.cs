@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Networking.Network;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Networking.Helpers
 {

@@ -2,6 +2,7 @@
 using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Networking.Network;
 using System;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Networking.Helpers
 {

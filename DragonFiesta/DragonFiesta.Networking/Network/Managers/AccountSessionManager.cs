@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Networking.Network.Managers
 {

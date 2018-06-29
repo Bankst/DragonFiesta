@@ -7,10 +7,11 @@ namespace DragonFiesta.Providers.Maps
         public ushort ID { get; private set; }
         public string Index { get; private set; }
         public string Name { get; private set; }
+		public bool IsWMLink { get; }
 
-        public bool HasLevelCondition { get { return LevelCondition != null; } }
+        public bool HasLevelCondition => LevelCondition != null;
 
-        public FieldLvCondition LevelCondition { get; set; }
+	    public FieldLvCondition LevelCondition { get; set; }
 
         public Position Regen { get; private set; }
         public MapType Type { get; private set; }
@@ -23,6 +24,7 @@ namespace DragonFiesta.Providers.Maps
             ID = rResult.Read<ushort>(rIndex, "ID");
             Index = rResult.Read<string>(rIndex, "MapName");
             Name = rResult.Read<string>(rIndex, "Name");
+	        IsWMLink = rResult.Read<bool>(rIndex, "IsWMLink");
             Regen = new Position(rResult.Read<uint>(rIndex, "RegenX"), rResult.Read<uint>(rIndex, "RegenY"));
             Type = (MapType)rResult.Read<byte>(rIndex, "KingdomMap");
             IsInSide = rResult.Read<bool>(rIndex, "InSide");

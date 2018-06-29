@@ -2,6 +2,7 @@
 using DragonFiesta.Networking.Network;
 using System;
 using System.Collections.Generic;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Networking
 {

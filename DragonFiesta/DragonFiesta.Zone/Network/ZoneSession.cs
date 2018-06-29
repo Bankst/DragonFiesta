@@ -1,6 +1,7 @@
 ﻿using DragonFiesta.Networking.Network;
 using DragonFiesta.Zone.Game.Character;
 using System.Net.Sockets;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Zone.Network
 {
