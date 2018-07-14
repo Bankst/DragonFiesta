@@ -1,6 +1,7 @@
 ﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.World.Network.FiestaHandler.Server;
 using System;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Network.FiestaHandler.Client
 {

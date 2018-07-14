@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Providers.Characters;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Game.Characters.Data
 {

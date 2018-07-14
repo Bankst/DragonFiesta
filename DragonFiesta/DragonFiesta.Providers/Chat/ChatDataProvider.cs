@@ -31,18 +31,19 @@ namespace DragonFiesta.Providers.Chat
 
             DatabaseLog.WriteProgressBar(">> Load BadNameFilter SHN");
 
-            using (ProgressBar mBar = new ProgressBar(pResult.Count))
+            using (var mBar = new ProgressBar(pResult.Count))
             {
-                for (int i = 0; i < pResult.Count; i++)
+                for (var i = 0; i < pResult.Count; i++)
                 {
-                    string BadName = pResult.Read<string>(i, "BadName");
-                    if (!BadNames.Add(BadName))
+                    var badName = pResult.Read<string>(i, "BadName");
+                    if (!BadNames.Add(badName))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate BadName found {BadName}");
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate BadName found {badName}");
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar($">> Loaded {BadNames.Count} BadNames in {(double)watch.ElapsedMilliseconds/1000} sec");
+	            watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {BadNames.Count} BadNames in {(double)watch.ElapsedMilliseconds/1000}s");
             }
         }
 

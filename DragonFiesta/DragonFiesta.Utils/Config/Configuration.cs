@@ -7,20 +7,19 @@ namespace DragonFiesta.Utils.Config
     {
         public void CreateDefaultFolder()
         {
-            string folder = "Configuration";
+            var folder = "Configuration";
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
             }
         }
 
-        public void WriteXml(string ConfigName = null)
+        public void WriteXml(string configName = null)
         {
             CreateDefaultFolder();
 
             string path = Path.Combine(
-                "Configuration", string.Format("{0}.xml",
-                ConfigName == null ? typeof(T).Name : ConfigName));
+                "Configuration", $"{configName ?? typeof(T).Name}.xml");
 
 
             var writer = new XmlSerializer(GetType());
@@ -29,12 +28,11 @@ namespace DragonFiesta.Utils.Config
             file.Close();
         }
 
-        public static T ReadXml(string ConfigName = null)
+        public static T ReadXml(string configName = null)
         {
 
             string path = Path.Combine(
-                     "Configuration", string.Format("{0}.xml", 
-                     ConfigName == null ? typeof(T).Name : ConfigName));
+                     "Configuration", $"{configName ?? typeof(T).Name}.xml");
 
 
 

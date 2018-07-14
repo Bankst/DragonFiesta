@@ -62,7 +62,7 @@ namespace DragonFiesta.Utils.ServerTask
             }
         }
 
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
             if (IsDisposedInt == 1) return false;
 

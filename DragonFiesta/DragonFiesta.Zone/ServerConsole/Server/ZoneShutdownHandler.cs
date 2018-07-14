@@ -54,7 +54,7 @@ namespace DragonFiesta.Zone.ServerConsole.Server
             return true;
         }
 
-        public override void FinalyShutdown() => ServerMain.InternalInstance.Shutdown();
+        public override void FinallyShutdown() => ServerMain.InternalInstance.Shutdown();
 
         public override void ShutdownSequense_1Seconds(string Reason, TimeSpan RestTime)
             => ZoneChat.LocalZoneNote($"Zone Shutdown in {RestTime.TotalSeconds}");

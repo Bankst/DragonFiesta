@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.World.ServerTask.Intern
+﻿using DragonFiesta.Utils.Logging;
+
+namespace DragonFiesta.World.ServerTask.Intern
 {
     public class TASK_WORLD_SERVER_RECONNECT :  IServerTask
     {
@@ -14,7 +16,7 @@
         public TASK_WORLD_SERVER_RECONNECT()
         {
         }
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
             if (!InternLoginConnector.GetIsConnected())
             {

@@ -15,7 +15,7 @@ namespace DragonFiesta.Zone.Game.Transfer
         public Position SpawnPosition { get; set; }
 
 
-        public override void OnExpire(GameTime Now)
+        public override void OnExpire(GameTime gameTime)
         {
             if (ZoneServerTransferManager.FinishTransfer(WorldSessionId, out ZoneTransfer Transfer))
             {

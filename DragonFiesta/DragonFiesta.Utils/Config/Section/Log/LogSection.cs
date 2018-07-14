@@ -2,7 +2,7 @@
 {
     public class LogSection
     {
-        public byte ConsoleLogLevel = 10;
-        public byte FileLogLevel = 10;
+		public byte ConsoleLogLevel { get; set; } = 3;
+		public byte FileLogLevel { get; set; } = 10;
     }
 }

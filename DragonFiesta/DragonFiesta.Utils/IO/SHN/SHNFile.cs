@@ -9,7 +9,7 @@ namespace DragonFiesta.Utils.IO.SHN
 {
     public class SHNFile
     {
-        public String LoadPath;
+        public string LoadPath;
         public MethodInfo CryptoMethod;
         public Encoding SHNEncoding;
 
@@ -17,470 +17,394 @@ namespace DragonFiesta.Utils.IO.SHN
         public DataTable Table;
         public List<SHNColumn> SHNColumns = new List<SHNColumn>();
 
-        private Byte[] CryptoHeader;
-        private Byte[] Data;
-        private Int32 DataLength;
-        private UInt32 Header;
-        private UInt32 RowCount;
-        private UInt32 DefaultRowLength;
-        private UInt32 ColumnCount;
+        private byte[] _cryptoHeader;
+        private byte[] _data;
+        private int _dataLength;
+        private uint _header;
+        private uint _rowCount;
+        private uint _defaultRowLength;
+        private uint _columnCount;
 
-        public Int16 QuestHeader;
-
-        public SHNFile(String LP, MethodInfo CM)
+        public SHNFile(string lp, MethodInfo cm)
         {
-            LoadPath = LP;
+            LoadPath = lp;
 
-            CryptoMethod = CM;
+            CryptoMethod = cm;
 
-            try { Type = (SHNType)Enum.Parse(typeof(SHNType), Path.GetFileNameWithoutExtension(LoadPath)); }
+            try { Type = (SHNType)Enum.Parse(typeof(SHNType), Path.GetFileNameWithoutExtension(LoadPath) ?? throw new InvalidOperationException()); }
             catch { Type = SHNType.Unknown; }
         }
 
-        public Byte[] ReadData(Boolean Decrypt)
-        {
-            SHNBinaryReader SHNReader;
-
-            using (SHNReader = new SHNBinaryReader(File.OpenRead(LoadPath), SHNEncoding))
-            {
-                CryptoHeader = SHNReader.ReadBytes(32);
-                DataLength = SHNReader.ReadInt32();
-                Data = SHNReader.ReadBytes(DataLength - 36);
-            }
-
-            if (Decrypt) { CryptoMethod.Invoke(this, new Object[] { Data }); }
-
-            return Data;
-        }
-
-        public void WriteData(String WritePath, Boolean Encrypt)
-        {
-            if (File.Exists(WritePath)) { File.Move(WritePath, String.Format("C:\\SHNBackups\\{0}{1}.shn", Path.GetFileNameWithoutExtension(WritePath), DateTime.Now.ToString("dd-MM-yyyy.hh-mm-ss-fff"))); }
-
-            SHNBinaryWriter SHNWriter;
-
-            if (Encrypt) { CryptoMethod.Invoke(this, new Object[] { Data }); }
-
-            using (SHNWriter = new SHNBinaryWriter(File.Create(WritePath), SHNEncoding))
-            {
-                SHNWriter.Write(CryptoHeader);
-                SHNWriter.Write(Data.Length + 36);
-                SHNWriter.Write(Data);
-            }
-
-            LoadPath = WritePath;
-        }
-
-        private String ReadScript(BinaryReader Reader)
-        {
-            Byte[] ScriptData = new Byte[256];
-
-            Int32 Index = 0;
-            Byte ReadByte;
-
-            while ((ReadByte = Reader.ReadByte()) != 0)
-            {
-                if (ScriptData.Length == Index) { Array.Resize(ref ScriptData, ScriptData.Length * 2); }
-
-                ScriptData[Index++] = ReadByte;
-            }
-
-            return Encoding.ASCII.GetString(ScriptData, 0, Index);
-        }
-
-        private String ByteArrayToHex(Byte[] Array)
-        {
-            String Hex = BitConverter.ToString(Array);
-            return Hex.Replace("-", "");
-        }
-
-
-        private void WriteScript(String Script, BinaryWriter Writer)
-        {
-            Writer.Write(Encoding.ASCII.GetBytes(Script));
-            Writer.Write((Byte)0);
-        }
-
-        private Byte[] HexToByteArray(String Hex)
-        {
-            Int32 Chars = Hex.Length;
-
-            Byte[] Array = new Byte[Chars / 2];
-
-            for (Int32 Counter = 0; Counter < Chars; Counter += 2) { Array[Counter / 2] = Convert.ToByte(Hex.Substring(Counter, 2), 16); }
-
-            return Array;
-        }
-
-        public void Read()
+	    public void Read()
         {
             Table = new DataTable();
 
-            SHNBinaryReader SHNReader;
+            SHNBinaryReader shnReader;
 
-            using (SHNReader = new SHNBinaryReader(File.OpenRead(LoadPath), SHNEncoding))
+            using (shnReader = new SHNBinaryReader(File.OpenRead(LoadPath), SHNEncoding))
             {
-                CryptoHeader = SHNReader.ReadBytes(32);
-                DataLength = SHNReader.ReadInt32();
-                Data = SHNReader.ReadBytes(DataLength - 36);
+                _cryptoHeader = shnReader.ReadBytes(32);
+                _dataLength = shnReader.ReadInt32();
+                _data = shnReader.ReadBytes(_dataLength - 36);
             }
 
-            CryptoMethod.Invoke(this, new Object[] { Data });
+            CryptoMethod.Invoke(this, new object[] { _data });
 
-            SHNReader = new SHNBinaryReader(new MemoryStream(Data), SHNEncoding);
+            shnReader = new SHNBinaryReader(new MemoryStream(_data), SHNEncoding);
 
-            Header = SHNReader.ReadUInt32();
-            RowCount = SHNReader.ReadUInt32();
-            DefaultRowLength = SHNReader.ReadUInt32();
-            ColumnCount = SHNReader.ReadUInt32();
+            _header = shnReader.ReadUInt32();
+            _rowCount = shnReader.ReadUInt32();
+            _defaultRowLength = shnReader.ReadUInt32();
+            _columnCount = shnReader.ReadUInt32();
 
-            Int32 UnknownCount = 0;
-            Int32 IDCount = 0;
+            int unknownCount = 0;
+            int idCount = 0;
 
-            for (UInt32 Counter = 0; Counter < ColumnCount; Counter++)
+            for (uint counter = 0; counter < _columnCount; counter++)
             {
-                String Name = SHNReader.ReadString(48);
-                UInt32 Type = SHNReader.ReadUInt32();
-                Int32 Length = SHNReader.ReadInt32();
+                string name = shnReader.ReadString(48);
+                uint type = shnReader.ReadUInt32();
+                int length = shnReader.ReadInt32();
 
-                if(Name.Length == 0 || String.IsNullOrWhiteSpace(Name))
+                if(name.Length == 0 || string.IsNullOrWhiteSpace(name))
                 {
-                    Name = $"Unknown: {UnknownCount}";
+                    name = $"Unknown: {unknownCount}";
 
-                    UnknownCount++;
+                    unknownCount++;
                 }
 
-                SHNColumn NewSHNColumn = new SHNColumn()
+                SHNColumn newSHNColumn = new SHNColumn()
                 {
-                    ID = IDCount,
-                    Name = Name,
-                    Type = Type,
-                    Length = Length
+                    ID = idCount,
+                    Name = name,
+                    Type = type,
+                    Length = length
                 };
 
-                SHNColumns.Add(NewSHNColumn);
+                SHNColumns.Add(newSHNColumn);
 
-                DataColumn NewDataColumn = new DataColumn()
+                DataColumn newDataColumn = new DataColumn()
                 {
-                    ColumnName = Name,
-                    DataType = NewSHNColumn.GetType()
+                    ColumnName = name,
+                    DataType = newSHNColumn.GetType()
                 };
 
-                Table.Columns.Add(NewDataColumn);
+                Table.Columns.Add(newDataColumn);
 
-                IDCount++;
+                idCount++;
             }
 
-            Object[] Values = new Object[ColumnCount];
+            object[] values = new object[_columnCount];
 
-            for (UInt32 RowCounter = 0; RowCounter < RowCount; RowCounter++)
+            for (uint rowCounter = 0; rowCounter < _rowCount; rowCounter++)
             {
-                SHNReader.ReadUInt16();
+                shnReader.ReadUInt16();
 
-                foreach (SHNColumn Column in SHNColumns)
+                foreach (SHNColumn column in SHNColumns)
                 {
-                    switch (Column.Type)
+                    switch (column.Type)
                     {
                         case 1:
                             {
-                                Values[Column.ID] = SHNReader.ReadByte();
+                                values[column.ID] = shnReader.ReadByte();
                                 break;
                             }
                         case 2:
                             {
-                                Values[Column.ID] = SHNReader.ReadUInt16();
+                                values[column.ID] = shnReader.ReadUInt16();
                                 break;
                             }
                         case 3:
                             {
-                                Values[Column.ID] = SHNReader.ReadUInt32();
+                                values[column.ID] = shnReader.ReadUInt32();
                                 break;
                             }
                         case 5:
                             {
-                                Values[Column.ID] = SHNReader.ReadSingle();
+                                values[column.ID] = shnReader.ReadSingle();
                                 break;
                             }
                         case 9:
                             {
-                                Values[Column.ID] = SHNReader.ReadString(Column.Length);
+                                values[column.ID] = shnReader.ReadString(column.Length);
                                 break;
                             }
                         case 11:
                             {
-                                Values[Column.ID] = SHNReader.ReadUInt32();
+                                values[column.ID] = shnReader.ReadUInt32();
                                 break;
                             }
                         case 12:
                             {
-                                Values[Column.ID] = SHNReader.ReadByte();
+                                values[column.ID] = shnReader.ReadByte();
                                 break;
                             }
                         case 13:
                             {
-                                Values[Column.ID] = SHNReader.ReadInt16();
+                                values[column.ID] = shnReader.ReadInt16();
                                 break;
                             }
                         case 0x10:
                             {
-                                Values[Column.ID] = SHNReader.ReadByte();
+                                values[column.ID] = shnReader.ReadByte();
                                 break;
                             }
                         case 0x12:
                             {
-                                Values[Column.ID] = SHNReader.ReadUInt32();
+                                values[column.ID] = shnReader.ReadUInt32();
                                 break;
                             }
                         case 20:
                             {
-                                Values[Column.ID] = SHNReader.ReadSByte();
+                                values[column.ID] = shnReader.ReadSByte();
                                 break;
                             }
                         case 0x15:
                             {
-                                Values[Column.ID] = SHNReader.ReadInt16();
+                                values[column.ID] = shnReader.ReadInt16();
                                 break;
                             }
                         case 0x16:
                             {
-                                Values[Column.ID] = SHNReader.ReadInt32();
+                                values[column.ID] = shnReader.ReadInt32();
                                 break;
                             }
                         case 0x18:
                             {
-                                Values[Column.ID] = SHNReader.ReadString(Column.Length);
+                                values[column.ID] = shnReader.ReadString(column.Length);
                                 break;
                             }
                         case 0x1a:
                             {
-                                Values[Column.ID] = SHNReader.ReadString();
+                                values[column.ID] = shnReader.ReadString();
                                 break;
                             }
                         case 0x1b:
                             {
-                                Values[Column.ID] = SHNReader.ReadUInt32();
+                                values[column.ID] = shnReader.ReadUInt32();
                                 break;
                             }
                         case 0x1d:
                             {
-                                Values[Column.ID] = String.Concat(SHNReader.ReadUInt32(), ":", SHNReader.ReadUInt32());
+                                values[column.ID] = string.Concat(shnReader.ReadUInt32(), ":", shnReader.ReadUInt32());
                                 break;
                             }
                     }
                 }
 
-                Table.Rows.Add(Values);
+                Table.Rows.Add(values);
             }
         }
 
-        public void Write(String WritePath)
+        public void Write(string writePath)
         {
-            if(File.Exists(WritePath)) { File.Move(WritePath, String.Format("C:\\SHNBackups\\{0}{1}.shn", Path.GetFileNameWithoutExtension(WritePath), DateTime.Now.ToString("dd-MM-yyyy.hh-mm-ss-fff"))); }
+            if(File.Exists(writePath)) { File.Move(writePath,
+	            $"C:\\SHNBackups\\{Path.GetFileNameWithoutExtension(writePath)}{DateTime.Now.ToString("dd-MM-yyyy.hh-mm-ss-fff")}.shn"); }
 
-            MemoryStream SHNStream = new MemoryStream();
-            SHNBinaryWriter SHNWriter = new SHNBinaryWriter(SHNStream, SHNEncoding);
+            MemoryStream shnStream = new MemoryStream();
+            SHNBinaryWriter shnWriter = new SHNBinaryWriter(shnStream, SHNEncoding);
 
-            SHNWriter.Write(Header);
-            SHNWriter.Write(Table.Rows.Count);
-            SHNWriter.Write(GetColumnLengths());
-            SHNWriter.Write(Table.Columns.Count);
+            shnWriter.Write(_header);
+            shnWriter.Write(Table.Rows.Count);
+            shnWriter.Write(GetColumnLengths());
+            shnWriter.Write(Table.Columns.Count);
 
-            foreach (SHNColumn Column in SHNColumns)
+            foreach (SHNColumn column in SHNColumns)
             {
-                if (Column.Name.StartsWith("Unknown")) { SHNWriter.Write(new Byte[48]); }
-                else { SHNWriter.WriteString(Column.Name, 48); }
+                if (column.Name.StartsWith("Unknown")) { shnWriter.Write(new byte[48]); }
+                else { shnWriter.WriteString(column.Name, 48); }
 
-                SHNWriter.Write(Column.Type);
-                SHNWriter.Write(Column.Length);
+                shnWriter.Write(column.Type);
+                shnWriter.Write(column.Length);
             }
 
-            foreach (DataRow Row in Table.Rows)
+            foreach (DataRow row in Table.Rows)
             {
-                Int64 Position = SHNWriter.BaseStream.Position;
+                long position = shnWriter.BaseStream.Position;
 
-                SHNWriter.Write((UInt16)0);
+                shnWriter.Write((ushort)0);
 
-                foreach (SHNColumn Column in SHNColumns)
+                foreach (SHNColumn column in SHNColumns)
                 {
-                    Object ColumnValue = Row.ItemArray[Column.ID];
+                    object columnValue = row.ItemArray[column.ID];
 
-                    if (ColumnValue == null) { ColumnValue = "0"; }
+                    if (columnValue == null) { columnValue = "0"; }
 
-                    switch (Column.Type)
+                    switch (column.Type)
                     {
                         case 1:
                             {
-                                if (ColumnValue is String) { ColumnValue = Byte.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = byte.Parse((string)columnValue); }
 
-                                SHNWriter.Write((Byte)ColumnValue);
+                                shnWriter.Write((byte)columnValue);
 
                                 break;
                             }
                         case 2:
                             {
-                                if (ColumnValue is String) { ColumnValue = UInt16.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = ushort.Parse((string)columnValue); }
 
-                                SHNWriter.Write((UInt16)ColumnValue);
+                                shnWriter.Write((ushort)columnValue);
 
                                 break;
                             }
                         case 3:
                             {
-                                if (ColumnValue is String) { ColumnValue = UInt32.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = uint.Parse((string)columnValue); }
 
-                                SHNWriter.Write((UInt32)ColumnValue);
+                                shnWriter.Write((uint)columnValue);
 
                                 break;
                             }
                         case 5:
                             {
-                                if (ColumnValue is String) { ColumnValue = Single.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = float.Parse((string)columnValue); }
 
-                                SHNWriter.Write((Single)ColumnValue);
+                                shnWriter.Write((float)columnValue);
 
                                 break;
                             }
                         case 9:
                             {
-                                if (String.IsNullOrWhiteSpace(ColumnValue.ToString())) { SHNWriter.WriteString(ColumnValue.ToString(), Column.Length); }
-                                else { SHNWriter.WriteString((String)ColumnValue, Column.Length); }
+                                if (string.IsNullOrWhiteSpace(columnValue.ToString())) { shnWriter.WriteString(columnValue.ToString(), column.Length); }
+                                else { shnWriter.WriteString((string)columnValue, column.Length); }
 
                                 break;
                             }
                         case 11:
                             {
-                                if (ColumnValue is String) { ColumnValue = UInt32.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = uint.Parse((string)columnValue); }
 
-                                SHNWriter.Write((UInt32)ColumnValue);
+                                shnWriter.Write((uint)columnValue);
 
                                 break;
                             }
                         case 12:
                             {
-                                if (ColumnValue is String) { ColumnValue = Byte.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = byte.Parse((string)columnValue); }
 
-                                SHNWriter.Write((Byte)ColumnValue);
+                                shnWriter.Write((byte)columnValue);
 
                                 break;
                             }
                         case 13:
                             {
-                                if (ColumnValue is String) { ColumnValue = Int16.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = short.Parse((string)columnValue); }
 
-                                SHNWriter.Write((Int16)ColumnValue);
+                                shnWriter.Write((short)columnValue);
 
                                 break;
                             }
                         case 0x10:
                             {
-                                if (ColumnValue is String) { ColumnValue = Byte.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = byte.Parse((string)columnValue); }
 
-                                SHNWriter.Write((Byte)ColumnValue);
+                                shnWriter.Write((byte)columnValue);
 
                                 break;
                             }
                         case 0x12:
                             {
-                                if (ColumnValue is String) { ColumnValue = UInt32.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = uint.Parse((string)columnValue); }
 
-                                SHNWriter.Write((UInt32)ColumnValue);
+                                shnWriter.Write((uint)columnValue);
 
                                 break;
                             }
                         case 20:
                             {
-                                if (ColumnValue is String) { ColumnValue = SByte.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = sbyte.Parse((string)columnValue); }
 
-                                SHNWriter.Write((SByte)ColumnValue);
+                                shnWriter.Write((sbyte)columnValue);
 
                                 break;
                             }
                         case 0x15:
                             {
-                                if (ColumnValue is String) { ColumnValue = Int16.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = short.Parse((string)columnValue); }
 
-                                SHNWriter.Write((Int16)ColumnValue);
+                                shnWriter.Write((short)columnValue);
 
                                 break;
                             }
                         case 0x16:
                             {
-                                if (ColumnValue is String) { ColumnValue = Int32.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = int.Parse((string)columnValue); }
 
-                                SHNWriter.Write((Int32)ColumnValue);
+                                shnWriter.Write((int)columnValue);
 
                                 break;
                             }
                         case 0x18:
                             {
-                                SHNWriter.WriteString((String)ColumnValue, Column.Length);
+                                shnWriter.WriteString((string)columnValue, column.Length);
 
                                 break;
                             }
                         case 0x1a:
                             {
-                                SHNWriter.WriteString((String)ColumnValue, -1);
+                                shnWriter.WriteString((string)columnValue, -1);
 
                                 break;
                             }
                         case 0x1b:
                             {
-                                if (ColumnValue is String) { ColumnValue = UInt32.Parse((String)ColumnValue); }
+                                if (columnValue is string) { columnValue = uint.Parse((string)columnValue); }
 
-                                SHNWriter.Write((UInt32)ColumnValue);
+                                shnWriter.Write((uint)columnValue);
 
                                 break;
                             }
                         case 0x1d:
                             {
-                                if (!ColumnValue.ToString().Contains(":")) { break; }
+                                if (!columnValue.ToString().Contains(":")) { break; }
 
-                                String[] Combined = ColumnValue.ToString().Split(':');
+                                string[] combined = columnValue.ToString().Split(':');
 
-                                SHNWriter.Write(UInt32.Parse(Combined[0]));
-                                SHNWriter.Write(UInt32.Parse(Combined[1]));
+                                shnWriter.Write(uint.Parse(combined[0]));
+                                shnWriter.Write(uint.Parse(combined[1]));
 
                                 break;
                             }
                     }
 
-                    Int64 MPosition = SHNWriter.BaseStream.Position - Position;
-                    Int64 Start = SHNWriter.BaseStream.Position;
+                    long mPosition = shnWriter.BaseStream.Position - position;
+                    long start = shnWriter.BaseStream.Position;
 
-                    SHNWriter.BaseStream.Seek(Position, SeekOrigin.Begin);
-                    SHNWriter.Write((UInt16)MPosition);
-                    SHNWriter.BaseStream.Seek(Start, SeekOrigin.Begin);
+                    shnWriter.BaseStream.Seek(position, SeekOrigin.Begin);
+                    shnWriter.Write((ushort)mPosition);
+                    shnWriter.BaseStream.Seek(start, SeekOrigin.Begin);
                 }
             }
 
-            Byte[] UnecryptedData = SHNStream.GetBuffer();
-            Byte[] EncryptedData = new Byte[SHNStream.Length];
+            byte[] unecryptedData = shnStream.GetBuffer();
+            byte[] encryptedData = new byte[shnStream.Length];
 
-            Array.Copy(UnecryptedData, EncryptedData, SHNStream.Length);
+            Array.Copy(unecryptedData, encryptedData, shnStream.Length);
 
-            CryptoMethod.Invoke(this, new Object[] { EncryptedData });
+            CryptoMethod.Invoke(this, new object[] { encryptedData });
 
-            SHNWriter.Close();
-            SHNWriter = new SHNBinaryWriter(File.Create(WritePath), SHNEncoding);
-            SHNWriter.Write(CryptoHeader);
-            SHNWriter.Write(EncryptedData.Length + 36);
-            SHNWriter.Write(EncryptedData);
-            SHNWriter.Close();
+            shnWriter.Close();
+            shnWriter = new SHNBinaryWriter(File.Create(writePath), SHNEncoding);
+            shnWriter.Write(_cryptoHeader);
+            shnWriter.Write(encryptedData.Length + 36);
+            shnWriter.Write(encryptedData);
+            shnWriter.Close();
 
-            LoadPath = WritePath;
+            LoadPath = writePath;
         }
 
-        private UInt32 GetColumnLengths()
+        private uint GetColumnLengths()
         {
-            UInt32 Start = 2;
+            uint start = 2;
 
-            foreach (SHNColumn Column in SHNColumns) { Start += (UInt32)Column.Length; }
+            foreach (SHNColumn column in SHNColumns) { start += (uint)column.Length; }
 
-            return Start;
+            return start;
         }
 
         public void DisallowRowChanges() { Table.RowChanged += Table_RowChanged; }
 
-        private void Table_RowChanged(Object Sender, DataRowChangeEventArgs Args) { Table.RejectChanges(); }
+        private void Table_RowChanged(object sender, DataRowChangeEventArgs args) { Table.RejectChanges(); }
     }
 }

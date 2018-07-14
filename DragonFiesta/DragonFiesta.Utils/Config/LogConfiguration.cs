@@ -10,23 +10,23 @@ namespace DragonFiesta.Utils.Config
     {
         public static LogConfiguration Instance { get; set; }
 
-        public CommandLogSection Log_Command { get; set; } = new CommandLogSection();
+        public CommandLogSection LogCommand { get; set; } = new CommandLogSection();
 
-        public DatabaseLogSection Log_DB { get; set; } = new DatabaseLogSection();
+        public DatabaseLogSection LogDb { get; set; } = new DatabaseLogSection();
 
-        public EngineLogSection Log_Engine { get; set; } = new EngineLogSection();
+        public EngineLogSection LogEngine { get; set; } = new EngineLogSection();
 
-        public GameLogSection Log_Game { get; set; } = new GameLogSection();
+        public GameLogSection LogGame { get; set; } = new GameLogSection();
 
-        public SocketLogSection Log_Socket { get; set; } = new SocketLogSection();
+        public SocketLogSection LogSocket { get; set; } = new SocketLogSection();
 
         public void SetupConsole()
         {
-            CommandLog.SetupLevels(Log_Command.ConsoleLogLevel, Log_Command.FileLogLevel);
-            DatabaseLog.SetupLevels(Log_DB.ConsoleLogLevel, Log_DB.FileLogLevel);
-            EngineLog.SetupLevels(Log_Engine.ConsoleLogLevel, Log_Engine.FileLogLevel);
-            GameLog.SetupLevels(Log_Game.ConsoleLogLevel, Log_Game.FileLogLevel);
-            SocketLog.SetupLevels(Log_Socket.ConsoleLogLevel, Log_Socket.FileLogLevel);
+            CommandLog.SetupLevels(LogCommand.ConsoleLogLevel, LogCommand.FileLogLevel);
+            DatabaseLog.SetupLevels(LogDb.ConsoleLogLevel, LogDb.FileLogLevel);
+            EngineLog.SetupLevels(LogEngine.ConsoleLogLevel, LogEngine.FileLogLevel);
+            GameLog.SetupLevels(LogGame.ConsoleLogLevel, LogGame.FileLogLevel);
+            SocketLog.SetupLevels(LogSocket.ConsoleLogLevel, LogSocket.FileLogLevel);
         }
 
         public static bool Write(out LogConfiguration pConfig)
@@ -56,17 +56,11 @@ namespace DragonFiesta.Utils.Config
                     EngineLog.Write(EngineLogLevel.Startup, "Successfully read Log config.");
                     return true;
                 }
-                else
-                {
-                    LogConfiguration pConfig;
-                    if (Write(out pConfig))
-                    {
-                        pConfig.WriteXml();
-                        EngineLog.Write(EngineLogLevel.Startup, "Successfully created Log config.");
-                        return false;
-                    }
-                    return false;
-                }
+
+	            if (!Write(out var pConfig)) return false;
+	            pConfig.WriteXml();
+	            EngineLog.Write(EngineLogLevel.Startup, "Successfully created Log config.");
+	            return false;
             }
             catch (Exception ex)
             {

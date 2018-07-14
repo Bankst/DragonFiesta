@@ -15,7 +15,7 @@ namespace DragonFiesta.Utils.Logging
             IOLocker = new object();
         }
 
-        public void SetConsolenLevel(byte LogLevel)
+        public void SetConsoleLevel(byte LogLevel)
         {
             mConsoleLogLevel = LogLevel;
         }

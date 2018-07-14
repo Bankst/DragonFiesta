@@ -14,13 +14,12 @@ namespace DragonFiesta.Providers.Items
         public static ItemInfo ItemInfoDefaultMiniHouse { get; protected set; }
         protected static ConcurrentDictionary<ushort, ItemInfo> ItemInfoByID;
 		protected static ConcurrentDictionary<ushort, ItemInfoServer> ItemInfoServerByID;
-		protected static ConcurrentDictionary<ushort, List<UpgradeInfo>> UpgradeInfosByID;
-		protected static ConcurrentDictionary<ushort, List<ItemUpgradeInfo>> ItemUpgradeInfosByID;
+		protected static ConcurrentDictionary<ushort, List<ItemUpgradeInfo>> UpgradeInfosByID;
 		protected static ConcurrentDictionary<ushort, ItemBaseInfo> ItemBaseInfosByID;
 		protected static SecureCollection<ItemInfo> ItemInfoSC;
 		protected static SecureCollection<ItemInfoServer> ItemInfoServerSC;
 		protected static SecureCollection<BelongTypeInfo> BelongTypeInfoSC;
-		protected static SecureCollection<List<UpgradeInfo>> UpgradeInfoSC;
+	    protected static SecureCollection<GradeItemOption> GradeItemOptionSC;
 
 		public static void LoadItemInfo()
         {
@@ -35,7 +34,7 @@ namespace DragonFiesta.Providers.Items
                 for (var i = 0; i < pResult.Count; i++)
                 {
                     //using activator...
-                    var info = (ItemInfo)Activator.CreateInstance(typeof(ItemInfo), pResult, i);
+                    var info = new ItemInfo(pResult, i);
 
                     if (!ItemInfoByID.TryAdd(info.ID, info))
                     {
@@ -46,7 +45,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
 				watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} ItemInfo rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
+                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
             //get default minihouse
 
@@ -71,7 +70,7 @@ namespace DragonFiesta.Providers.Items
 				for (var i = 0; i < pResult.Count; i++)
 				{
 					//using activator...
-					var info = (ItemInfoServer)Activator.CreateInstance(typeof(ItemInfoServer), pResult, i);
+					var info = new ItemInfoServer(pResult, i);
 
 					if (!ItemInfoServerByID.TryAdd(info.ID, info))
 					{
@@ -82,7 +81,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} ItemInfoServer rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
+				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
@@ -98,89 +97,100 @@ namespace DragonFiesta.Providers.Items
 				for (var i = 0; i < pResult.Count; i++)
 				{
 					//using activator...
-					var info = (BelongTypeInfo)Activator.CreateInstance(typeof(BelongTypeInfo), pResult, i);
+					var info = new BelongTypeInfo(pResult, i);
 					BelongTypeInfoSC.Add(info);
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} BelongTypeInfo rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
+				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
 		public static void LoadUpgradeInfo()
 		{
 			var watch = Stopwatch.StartNew();
-			UpgradeInfoSC = new SecureCollection<List<UpgradeInfo>>();
-			UpgradeInfosByID = new ConcurrentDictionary<ushort, List<UpgradeInfo>>();
+			UpgradeInfosByID = new ConcurrentDictionary<ushort, List<ItemUpgradeInfo>>();
 			var pResult = SHNManager.Load(SHNType.UpgradeInfo);
-			DatabaseLog.WriteProgressBar(">> Load UpgradeInfo SHN");
+			DatabaseLog.WriteProgressBar(">> Load ItemUpgradeInfo SHN");
 			using (var mBar = new ProgressBar(pResult.Count))
 			{
 				for (var i = 0; i < pResult.Count; i++)
 				{
-					var info = new UpgradeInfo(pResult, i);
+					var info = new ItemUpgradeInfo(pResult, i);
 					if (!UpgradeInfosByID.TryGetValue(info.ID, out var list))
 					{
-						list = new List<UpgradeInfo>();
+						list = new List<ItemUpgradeInfo>();
 						UpgradeInfosByID.TryAdd(info.ID, list);
-						UpgradeInfoSC.Add(list);
 					}
 					list.Add(info);
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfoSC.Count} UpgradeInfo rows in {(double)watch.ElapsedMilliseconds / 1000} sec");
+				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfosByID.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
-		/*
+	    public static void LoadGradeItemOption()
+	    {
+		    var watch = Stopwatch.StartNew();
+			GradeItemOptionSC = new SecureCollection<GradeItemOption>();
+		    var pResult = SHNManager.Load(SHNType.GradeItemOption);
+			DatabaseLog.WriteProgressBar(">> Load GradeItemOption SHN");
+		    using (var mBar = new ProgressBar(pResult.Count))
+		    {
+			    for (var i = 0; i < pResult.Count; i++)
+			    {
+					var info = new GradeItemOption(pResult, i);
+				    GradeItemOptionSC.Add(info);
+					mBar.Step();
+			    }
+			    watch.Stop();
+				DatabaseLog.WriteProgressBar($">> Loaded {GradeItemOptionSC.Count} rows in {(double) watch.ElapsedMilliseconds / 1000}s");
+		    }
+	    }
 
-		public static void FillItemUpgradeInfos()
-		{
-			ItemUpgradeInfosByID = new ConcurrentDictionary<ushort, List<ItemUpgradeInfo>>();
-
-			foreach (var upInfo in UpgradeInfosByID)
-			{
-				try
-				{
-					var info = new ItemUpgradeInfo(upInfo);
-					if (!ItemUpgradeInfosByID.TryGetValue(info.ID, out List<ItemUpgradeInfo> list))
-					{
-						list = new List<ItemUpgradeInfo>();
-						ItemUpgradeInfosByID.TryAdd(info.ID, list);
-					}
-					list.Add(info);
-				}
-				catch (Exception ex)
-				{
-					DatabaseLog.Write(DatabaseLogLevel.Warning, $"Error parsing UpgradeInfos ID: {i}");
-				}
-			}
-
-			for (int i = 0; i <UpgradeInfoSC.Count; i++)
-			{
-				
-				
-			}
-		}
-
-		*/
-
-		public static void FillItemBaseInfos()
-		{
+	    public static void FillItemBaseInfos()
+	    {
+			var watch = Stopwatch.StartNew();
 			ItemBaseInfosByID = new ConcurrentDictionary<ushort, ItemBaseInfo>();
-			for (var i = 0; i < ItemInfoSC.Count; i++)
+			DatabaseLog.WriteProgressBar(">> Fill ItemBaseInfos from loaded SHNs");
+			using (var mBar = new ProgressBar(ItemInfoSC.Count))
 			{
-				var item = ItemInfoSC.ElementAt(i);
-				var info = (ItemBaseInfo)Activator.CreateInstance(typeof(ItemBaseInfo), item, BelongTypeInfoSC);
-				if (!ItemBaseInfosByID.TryAdd(item.ID, info))
+				for (var i = 0; i < ItemInfoSC.Count; i++)
 				{
-					// something happened yo
+					var itemInfo = ItemInfoSC.ElementAt(i);
+					if (!GetUpgradeInfosByID(itemInfo.BasicUpInx, out var upgradeInfosList))
+					{
+						DatabaseLog.Write(DatabaseLogLevel.Debug, $"Bad UpgradeInfos for item ID: {itemInfo.ID}");
+					}
+
+					var btInfo = BelongTypeInfoSC.FirstOrDefault(x => x.BT_Inx == itemInfo.BT_Inx);
+					if (btInfo == null)
+					{
+						DatabaseLog.Write(DatabaseLogLevel.Warning, $"Bad BelongTypeInfo for item ID: {itemInfo.ID}");
+						continue;
+					}
+
+					var gioInfo = GradeItemOptionSC.FirstOrDefault(x => x.ItemIndex == itemInfo.InxName);
+					if (gioInfo == null)
+					{
+						DatabaseLog.Write(DatabaseLogLevel.Debug,
+							$"Bad or No GradeItemOption for item ID: {itemInfo.ID}");
+					}
+					var info = new ItemBaseInfo(itemInfo, upgradeInfosList, btInfo, gioInfo);
+					if (!ItemBaseInfosByID.TryAdd(itemInfo.ID, info))
+					{
+						DatabaseLog.Write(DatabaseLogLevel.Warning,
+							$"Create ItemBaseInfo failed for item ID: {itemInfo.ID}");
+					}
+					mBar.Step();
 				}
+				watch.Stop();
+				DatabaseLog.WriteProgressBar($">> Filled {ItemBaseInfosByID.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 		
-        public static bool GetUpgradeInfosByID(ushort id, out List<UpgradeInfo> list)
+        public static bool GetUpgradeInfosByID(ushort id, out List<ItemUpgradeInfo> list)
         {
             return UpgradeInfosByID.TryGetValue(id, out list);
         }

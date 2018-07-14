@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Game.Stats
+﻿using DragonFiesta.Providers.Items;
+
+namespace DragonFiesta.Game.Stats
 {
     public interface iStatsChanger
     {

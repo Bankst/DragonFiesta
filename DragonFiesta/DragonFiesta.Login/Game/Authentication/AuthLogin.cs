@@ -79,7 +79,7 @@ namespace DragonFiesta.Login.Game.Authentication
             return LoginGameError.None; //Auth OK :)
         }
 
-        public void OnExpire(GameTime Now)
+        public void OnExpire(GameTime gameTime)
         {
             if (LoginManager.Instance.TryGetLogin(SessionId, out AuthLogin Login))
             {
@@ -87,7 +87,7 @@ namespace DragonFiesta.Login.Game.Authentication
             }
         }
 
-        public void Update(GameTime Now)
+        public void Update(GameTime gameTime)
         {
         }
 

@@ -5,32 +5,32 @@ public sealed class EngineLog : FileLog
 {
     protected override string LogTypeName => "EngineLog";
 
-    private EngineLog(string Directory)
-  : base(Directory)
+    private EngineLog(string directory)
+  : base(directory)
     {
     }
 
-    private static EngineLog Instance { get { return (_Instance ?? (_Instance = new EngineLog(@"Engine"))); } }
-    private static EngineLog _Instance;
+    private static EngineLog Instance => (_instance ?? (_instance = new EngineLog(@"Engine")));
+	private static EngineLog _instance;
 
     public static void SetupLevels(byte mConsolenLevel, byte mFileLogLevel)
     {
-        Instance.SetConsolenLevel(mConsolenLevel);
+        Instance.SetConsoleLevel(mConsolenLevel);
         Instance.SetFileLogLevel(mFileLogLevel);
     }
 
-    public static void WriteConsoleLine(EngineLogLevel Type, string Message, params object[] args)
+    public static void WriteConsoleLine(EngineLogLevel type, string message, params object[] args)
     {
-        Instance.ConsoleWriteLine(Instance.ToString(), Type, Message, args);
+        Instance.ConsoleWriteLine(Instance.ToString(), type, message, args);
     }
 
-    public static void Write(EngineLogLevel Type, string Message, params object[] args)
+    public static void Write(EngineLogLevel type, string message, params object[] args)
     {
-        Instance.Write(Instance.ToString(), Type, Message, args);
+        Instance.Write(Instance.ToString(), type, message, args);
     }
 
-    public static void Write(Exception Exception, string Message, params object[] args)
+    public static void Write(Exception exception, string message, params object[] args)
     {
-        Instance.WriteException(Exception, EngineLogLevel.Exception, Message, args);
+        Instance.WriteException(exception, EngineLogLevel.Exception, message, args);
     }
 }

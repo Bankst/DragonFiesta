@@ -15,7 +15,7 @@ namespace DragonFiesta.World.ServerTask.Intern
         {
         }
 
-        bool IServerTask.Update(GameTime Now)
+        bool IServerTask.Update(GameTime gameTime)
         {
             if (ServerMain.InternalInstance.ServerIsReady)
             {

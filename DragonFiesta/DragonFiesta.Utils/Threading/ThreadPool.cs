@@ -3,46 +3,47 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using DragonFiesta.Utils.Logging;
 
 public sealed class ThreadPool : IDisposable
 {
-    private static ThreadPool Instance;
+    private static ThreadPool _instance;
 
-    private readonly ConcurrentQueue<IUpdateAbleServer> _Servertasks = new ConcurrentQueue<IUpdateAbleServer>();
-    private readonly ConcurrentQueue<Action> _Calls = new ConcurrentQueue<Action>();
+    private readonly ConcurrentQueue<IUpdateAbleServer> _servertasks = new ConcurrentQueue<IUpdateAbleServer>();
+    private readonly ConcurrentQueue<Action> _calls = new ConcurrentQueue<Action>();
 
     private List<Thread> _workers;
 
     private bool _disposed;
 
-    private object SyncObject = new object();
+    private readonly object _syncObject = new object();
 
-    private int TaskPerSecond = 0;
+    private int _taskPerSecond = 0;
 
-    private DateTime LastUpdateTick = DateTime.Now;
+    private DateTime _lastUpdateTick = DateTime.Now;
 
-    public static int PerfomanceCount { get => Instance.TaskPerSecond; }
+    public static int PerfomanceCount { get => _instance._taskPerSecond; }
 
-    public static void Start(int ThreadCount)
+    public static void Start(int threadCount)
     {
-        if (ThreadCount < 1)
+        if (threadCount < 1)
             throw new InvalidOperationException("Invalid WorkCount for ThreadPool");
 
-        Instance = new ThreadPool();
+        _instance = new ThreadPool();
 
-        Instance.StartThread(ThreadCount);
+        _instance.StartThread(threadCount);
     }
 
     public static void Stop()
     {
-        Instance.Dispose();
+        _instance.Dispose();
     }
 
-    private void StartThread(int Count)
+    private void StartThread(int count)
     {
         _workers = new List<Thread>();
 
-        for (var i = 0; i < Count; ++i)
+        for (var i = 0; i < count; ++i)
         {
             var worker = new Thread(Worker) { Name = string.Concat("Worker ", i) };
             worker.Start();
@@ -52,41 +53,32 @@ public sealed class ThreadPool : IDisposable
 
     public void Dispose()
     {
+	    if (_disposed) return;
+	    _disposed = true;
+		
+	    while (_servertasks.TryDequeue(out var task))
+		    task.Dispose();
 
-        if (!_disposed)
-        {
+	    Monitor.PulseAll(_syncObject);
 
-            _disposed = true;
-
-
-
-            while (_Servertasks.TryDequeue(out IUpdateAbleServer Task))
-                Task.Dispose();
-
-            Monitor.PulseAll(SyncObject);
-
-            //Wait of all wotker endet
-          
-        }
+	    //Wait of all wotker endet
     }
 
-    private bool CallAbleServer(GameTime TimeNow)
+    private bool CallAbleServer(GameTime timeNow)
     {
        
-        if (!_Servertasks.TryDequeue(out IUpdateAbleServer Task))
+        if (!_servertasks.TryDequeue(out var task))
         {
             return false;
         }
 
         try
-
         {
-
-            if (TimeNow.Subtract(Task.LastUpdate).TotalMilliseconds >= Task.UpdateInterval.TotalMilliseconds)
+            if (timeNow.Subtract(task.LastUpdate).TotalMilliseconds >= task.UpdateInterval.TotalMilliseconds)
             {
-                if (!Task.Update(TimeNow))
+                if (!task.Update(timeNow))
                 {
-                    Task.Dispose();
+                    task.Dispose();
                     return false;
                 }
             }
@@ -98,7 +90,7 @@ public sealed class ThreadPool : IDisposable
         finally
         {
             if (!_disposed)
-                _Servertasks.Enqueue(Task);
+                _servertasks.Enqueue(task);
 
         }
         return true;
@@ -106,42 +98,39 @@ public sealed class ThreadPool : IDisposable
 
     private void Worker()
     {
-        var ServerStartUpTime = DateTime.Now;
+        var serverStartUpTime = DateTime.Now;
 
         for (;;)
         {
             if (_disposed)
                 break;
 
-            lock (SyncObject)
+            lock (_syncObject)
             {
 
-                var NowTime = DateTime.Now;
-                var elapsed = (ServerStartUpTime - NowTime);
-                GameTime NowGameTime = new GameTime(NowTime, elapsed, ServerMainBase.InternalInstance.TotalUpTime);
+                var nowTime = DateTime.Now;
+                var elapsed = (serverStartUpTime - nowTime);
+                var nowGameTime = new GameTime(nowTime, elapsed, ServerMainBase.InternalInstance.TotalUpTime);
 
                 ServerMainBase.InternalInstance.TotalUpTime += elapsed;
-                ServerMainBase.InternalInstance.CurrentTime = NowGameTime;
+                ServerMainBase.InternalInstance.CurrentTime = nowGameTime;
 
-                if (_Calls.TryDequeue(out Action Call)) //Calls
+                if (_calls.TryDequeue(out var call)) //Calls
                 {
-                    Call();
-                    TaskPerSecond++;
+                    call();
+                    _taskPerSecond++;
                 }
 
-                //Perfomanc Testing...^^
-                if (NowTime.Subtract(LastUpdateTick).TotalSeconds >= 1)
+                //Perfomance Testing...^^
+                if (nowTime.Subtract(_lastUpdateTick).TotalSeconds >= 1)
                 {
-                    LastUpdateTick = DateTime.Now;
-                    TaskPerSecond = 0;
+                    _lastUpdateTick = DateTime.Now;
+                    _taskPerSecond = 0;
                 }
 
 
-                if (CallAbleServer(NowGameTime) && _Calls.IsEmpty)
-                {
-                    Monitor.Wait(SyncObject, 1000);
-                    continue;
-                }
+	            if (!CallAbleServer(nowGameTime) || !_calls.IsEmpty) continue;
+	            Monitor.Wait(_syncObject, 1000);
             }
         }
 
@@ -149,29 +138,27 @@ public sealed class ThreadPool : IDisposable
         GameLog.Write(GameLogLevel.Internal, $"Thread {Thread.CurrentThread.Name } endet !");
     }
 
-    public static void AddCall(Action Call)
+    public static void AddCall(Action call)
     {
-        lock (Instance.SyncObject)
+        lock (_instance._syncObject)
         {
-            if (!Instance._disposed)
-            {
-                Instance._Calls.Enqueue(Call);
-                Monitor.Pulse(Instance.SyncObject);
-            }
+	        if (_instance._disposed) return;
+	        _instance._calls.Enqueue(call);
+	        Monitor.Pulse(_instance._syncObject);
         }
     }
 
     public static void AddUpdateAbleServer(IUpdateAbleServer mTask)
     {
-        lock (Instance.SyncObject)
+        lock (_instance._syncObject)
         {
-            if (Instance._disposed)
+            if (_instance._disposed)
             {
                 throw new ObjectDisposedException("This Pool instance has already been disposed");
             }
 
-            Instance._Servertasks.Enqueue(mTask);
-            Monitor.Pulse(Instance.SyncObject);
+            _instance._servertasks.Enqueue(mTask);
+            Monitor.Pulse(_instance._syncObject);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Game.Stats;
+using DragonFiesta.Providers.Items;
 using DragonFiesta.Zone.Data.Stats;
 using DragonFiesta.Zone.Game.Character;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
@@ -9,10 +10,10 @@ namespace DragonFiesta.Zone.Game.Stats
     {
         public ZoneCharacter Character { get; private set; }
 
-        public CharacterStatsManager(ZoneCharacter Character) : base()
+        public CharacterStatsManager(ZoneCharacter character) : base()
         {
-            this.Character = Character;
-            AddStatsChanger(Character.Info.FreeStats.Stats, false);
+            this.Character = character;
+            AddStatsChanger(character.Info.FreeStats.Stats, false);
         }
 
         //here get class base stats..
@@ -106,13 +107,10 @@ namespace DragonFiesta.Zone.Game.Stats
                 StatsType.CriticalRate);
         }
 
-        public override int GetStatByType(StatsType Type)
+        public override int GetStatByType(StatsType type)
         {
-            switch (Type)
+            switch (type)
             {
-
-
-
                 case StatsType.Bonus_Damage:
                     return (int)Character.Info.FreeStats.Stats.WeaponDamageP;
                 case StatsType.Bonus_Defense:
@@ -139,7 +137,7 @@ namespace DragonFiesta.Zone.Game.Stats
                     return (int)(Character.Info.FreeStats.Stats.Spr * 5);
                 //TODO LP
                 default:
-                    return base.GetStatByType(Type);
+                    return base.GetStatByType(type);
             }
         }
 

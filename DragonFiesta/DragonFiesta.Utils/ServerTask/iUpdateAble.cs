@@ -7,6 +7,6 @@ namespace DragonFiesta.Utils.ServerTask
         TimeSpan UpdateInterval { get; }
         DateTime LastUpdate { get; set; }
 
-        void OnUpdate(GameTime Now);
+        void OnUpdate(GameTime gameTime);
     }
 }

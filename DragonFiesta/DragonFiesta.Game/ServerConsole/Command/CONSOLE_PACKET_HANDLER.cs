@@ -10,10 +10,7 @@ namespace DragonFiesta.Game.ServerConsole.Command
             [ConsoleCommand("Dump")]
             public static bool CMD_Dump(string[] Params)
             {
-                if (ServerMainDebug.DumpPacket)
-                    ServerMainDebug.DumpPacket = false;
-                else
-                    ServerMainDebug.DumpPacket = true;
+                ServerMainDebug.DumpPacket = !ServerMainDebug.DumpPacket;
 
                 CommandLog.WriteConsoleLine(CommandLogLevel.Execute, "Dump Packets {0} ", ServerMainDebug.DumpPacket);
                 return true;
@@ -22,10 +19,7 @@ namespace DragonFiesta.Game.ServerConsole.Command
             [ConsoleCommand("show")]
             public static bool CMD_SHOW(string[] Params)
             {
-                if (ServerMainDebug.DebugPackets)
-                    ServerMainDebug.DebugPackets = false;
-                else
-                    ServerMainDebug.DebugPackets = true;
+                ServerMainDebug.DebugPackets = !ServerMainDebug.DebugPackets;
 
                 CommandLog.WriteConsoleLine(CommandLogLevel.Execute, "Debug Packets {0} ", ServerMainDebug.DebugPackets);
                 return true;

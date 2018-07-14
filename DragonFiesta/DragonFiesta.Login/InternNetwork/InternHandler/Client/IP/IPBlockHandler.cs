@@ -1,6 +1,7 @@
 ﻿using DragonFiesta.Login.Network;
 using DragonFiesta.Messages.Login.IPBlock;
 using System;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Login.InternNetwork.InternHandler.Client.IP
 {

@@ -79,7 +79,7 @@ namespace DragonFiesta.Providers.Maps
 		            mBar.Step();
 	            }
 	            watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos in {(double) watch.ElapsedMilliseconds / 1000} sec");
+                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos in {(double) watch.ElapsedMilliseconds / 1000}s");
             }
 
             if (!GetMapInfoByID(GameConfiguration.Instance.DefaultSpawnMapId, out var defaultMap))
@@ -136,7 +136,7 @@ namespace DragonFiesta.Providers.Maps
                 }
 
 	            watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {FieldInfos.Count} Field Infos in {(double)watch.ElapsedMilliseconds / 1000} sec");
+                DatabaseLog.WriteProgressBar($">> Loaded {FieldInfos.Count} Field Infos in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Text;
 using System.Threading;
+using DragonFiesta.Utils.Core;
 
 public class DatabaseManager : IServerTask, IDisposable
 {
@@ -109,7 +110,7 @@ public class DatabaseManager : IServerTask, IDisposable
         return new DatabaseClient(Id, Connection, this);
     }
 
-    bool IServerTask.Update(GameTime Now)
+    bool IServerTask.Update(GameTime gameTime)
     {
         if (IsDisposedInt == 1) return false;
 
@@ -183,7 +184,7 @@ public class DatabaseManager : IServerTask, IDisposable
             }
         }
 
-        DatabaseLog.Write(DatabaseLogLevel.Debug, "(Sql) Client availability: " + ClientAmount + "; modifier: " + Diff + "; reason: "
+	    if (ServerMainDebug.DebugSql) DatabaseLog.Write(DatabaseLogLevel.Debug, "(Sql) Client availability: " + ClientAmount + "; modifier: " + Diff + "; reason: "
             + LogReason + ".");
     }
 
@@ -198,7 +199,8 @@ public class DatabaseManager : IServerTask, IDisposable
                     continue;
                 }
 
-                DatabaseLog.Write(DatabaseLogLevel.Debug, "(Sql) Assigned client " + Client.Id + ".");
+
+                if (ServerMainDebug.DebugSql) DatabaseLog.Write(DatabaseLogLevel.Debug, "(Sql) Assigned client " + Client.Id + ".");
 
                 if (!Client.CheckConnection())
                 {

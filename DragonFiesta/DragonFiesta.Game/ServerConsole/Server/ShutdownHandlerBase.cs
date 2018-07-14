@@ -9,9 +9,9 @@ namespace DragonFiesta.Game.ServerConsole.Handler
       
         private DateTime ExpireTime { get; set; }
 
-        public bool IsDisposed { get { return (IsDisposedInt > 0); } }
+        public bool IsDisposed => (_isDisposedInt > 0);
 
-        private int IsDisposedInt;
+	    private int _isDisposedInt;
 
         private string Reason { get; set; }
 
@@ -19,70 +19,70 @@ namespace DragonFiesta.Game.ServerConsole.Handler
 
         GameTime IServerTask.LastUpdate { get; set; }
 
-        public ShutdownHandlerBase(int ShutdownTime, string reason)
+        public ShutdownHandlerBase(int shutdownTime, string reason)
         {
             Reason = reason;
-            ExpireTime = ServerMainBase.InternalInstance.CurrentTime.Time.Add(TimeSpan.FromSeconds(ShutdownTime));
+            ExpireTime = ServerMainBase.InternalInstance.CurrentTime.Time.Add(TimeSpan.FromSeconds(shutdownTime));
         }
 
-        public abstract void FinalyShutdown();
-        public abstract void ShutdownSequense_1Seconds(string Reason, TimeSpan RestTime);
-        public abstract void ShutdownSequense_30Seconds(string Reason, TimeSpan RestTime);
+        public abstract void FinallyShutdown();
+        public abstract void ShutdownSequense_1Seconds(string reason, TimeSpan restTime);
+        public abstract void ShutdownSequense_30Seconds(string reason, TimeSpan restTime);
 
-        public abstract void ShutdownSequense_5Minutes(string Reason, TimeSpan RestTime);
-        public abstract void ShutdownSequense_2Minutes(string Reason, TimeSpan RestTime);
+        public abstract void ShutdownSequense_5Minutes(string reason, TimeSpan restTime);
+        public abstract void ShutdownSequense_2Minutes(string reason, TimeSpan restTime);
 
-        protected void UpdateTime(int Seconds, string Reason)
+        protected void UpdateTime(int seconds, string reason)
         {
-            this.Reason = Reason;
-            ExpireTime = GameTime.Now().Time.AddSeconds(Seconds);
+            this.Reason = reason;
+            ExpireTime = GameTime.Now().Time.AddSeconds(seconds);
         }
 
-        bool IServerTask.Update(GameTime Now)
+        bool IServerTask.Update(GameTime gameTime)
         {
-            if (IsDisposedInt == 1) return false;
+            if (_isDisposedInt == 1) return false;
 
-            TimeSpan RestTime = ExpireTime.Subtract(Now.Time);
+            var restTime = ExpireTime.Subtract(gameTime.Time);
 
 
 
-            if (RestTime.TotalHours <= 1 &&
-                RestTime.TotalHours > 1 &&
-                RestTime.TotalMinutes >= 20)
+            if (restTime.TotalHours <= 1 &&
+                restTime.TotalHours > 1 &&
+                restTime.TotalMinutes >= 20)
             {
-                ShutdownSequense_5Minutes(Reason, RestTime);
+                ShutdownSequense_5Minutes(Reason, restTime);
 
                 Interval = (ServerTaskTimes)TimeSpan.FromMinutes(5).TotalMilliseconds;
 
                 return true;
             }
-            else if (RestTime.TotalMinutes <= 20 &&
-                    RestTime.TotalSeconds > 30 &&
-                    RestTime.TotalMinutes > 2)
+            else if (restTime.TotalMinutes <= 20 &&
+                    restTime.TotalSeconds > 30 &&
+                    restTime.TotalMinutes > 2)
             {
-                ShutdownSequense_2Minutes(Reason, RestTime);
+                ShutdownSequense_2Minutes(Reason, restTime);
 
                 Interval = (ServerTaskTimes)TimeSpan.FromMinutes(2).TotalMilliseconds;
                 return true;
             }
-            if (RestTime.TotalMinutes <= 2 &&
-                RestTime.TotalSeconds > 30)
+            if (restTime.TotalMinutes <= 2 &&
+                restTime.TotalSeconds > 30)
             {
-                ShutdownSequense_30Seconds(Reason, RestTime);
+                ShutdownSequense_30Seconds(Reason, restTime);
 
                 Interval = (ServerTaskTimes)TimeSpan.FromSeconds(30).TotalMilliseconds;
                 return true;
             }
-            else if (RestTime.TotalSeconds <= 30)
+            else if (restTime.TotalSeconds <= 30)
             {
                 Interval = (ServerTaskTimes)TimeSpan.FromSeconds(1).TotalMilliseconds;
 
-                if (RestTime.TotalSeconds < 1)
+                if (restTime.TotalSeconds < 1)
                 {
-                    FinalyShutdown();
+                    FinallyShutdown();
                     return false;
                 }
-                ShutdownSequense_1Seconds(Reason, RestTime);
+                ShutdownSequense_1Seconds(Reason, restTime);
 
                 return true;
             }
@@ -93,7 +93,7 @@ namespace DragonFiesta.Game.ServerConsole.Handler
 
         public void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) == 0)
             {
                 DisposeInternal();
             }
@@ -102,8 +102,5 @@ namespace DragonFiesta.Game.ServerConsole.Handler
         protected void DisposeInternal()
         {
         }
-
-
-
     }
 }

@@ -88,6 +88,7 @@
     <Compile Include="Characters\HairInfo.cs" />
     <Compile Include="Characters\WhoEquip.cs" />
     <Compile Include="Chat\ChatDataProvider.cs" />
+    <Compile Include="Items\SHN\GradeItemOption.cs" />
     <Compile Include="Items\InventoryType.cs" />
     <Compile Include="Items\ItemClass.cs" />
     <Compile Include="Items\ItemDataProvider.cs" />
@@ -100,11 +101,11 @@
     <Compile Include="Items\SHN\ItemInfo.cs" />
     <Compile Include="Items\SHN\ItemInfoServer.cs" />
     <Compile Include="Items\ItemUpgradeFactor.cs" />
-    <Compile Include="Items\ItemUpgradeInfo.cs" />
     <Compile Include="Items\ItemUseEffect.cs" />
     <Compile Include="Items\ItemUseEffectType.cs" />
     <Compile Include="Items\RecallCoordinate.cs" />
-    <Compile Include="Items\SHN\UpgradeInfo.cs" />
+    <Compile Include="Items\SHN\ItemUpgradeInfo.cs" />
+    <Compile Include="Items\StatsHolder.cs" />
     <Compile Include="Items\UpgradeResource.cs" />
     <Compile Include="Items\WeaponType.cs" />
     <Compile Include="Maps\FieldInfo.cs" />
@@ -118,6 +119,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderQuery.cs" />
     <Compile Include="Maps\MapDataProvider.cs" />
+    <Compile Include="Text\TXT\MenuStringTXT.cs" />
+    <Compile Include="Text\TXT\ScriptTXT.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DragonFiesta.Utils\DragonFiesta.Utils.csproj">

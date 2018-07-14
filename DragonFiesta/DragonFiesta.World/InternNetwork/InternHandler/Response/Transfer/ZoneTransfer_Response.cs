@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Messages.Zone.Transfer;
 using DragonFiesta.Networking.Helpers;
+using DragonFiesta.Utils.Logging;
 using DragonFiesta.World.Game.Character;
 using DragonFiesta.World.Game.Chat;
 

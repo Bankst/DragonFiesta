@@ -23,7 +23,7 @@ namespace DragonFiesta.Zone.Data.Mob
             MobCount = Convert.ToUInt16(row["MobCount"]);
             RespawnTime = Convert.ToInt32(row["RespawnTime"]);
 
-            int WayPointId = Convert.ToInt32(row["WayPoint"]);
+            var WayPointId = Convert.ToInt32(row["WayPoint"]);
             WayPointInfo WayPoint = null;
             if (WayPointId != 0 && !MobDataProvider.GetWayPointById(WayPointId, out WayPoint))
             {

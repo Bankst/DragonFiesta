@@ -20,7 +20,7 @@ namespace DragonFiesta.Login.Game.Transfer
             this.pAccount = pAccount;
         }
 
-        public override void OnExpire(GameTime Now)
+        public override void OnExpire(GameTime gameTime)
         {
             if (LoginTransferManager.FinishTransfer(Id, out LoginServerTransfer mTransfer))
             {

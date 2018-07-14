@@ -14,33 +14,33 @@ namespace DragonFiesta.Networking
 
         GameTime IServerTask.LastUpdate { get; set; }
 
-        private SecureWriteCollection<FiestaSession<TSession>> ClientList;
-        private Func<FiestaSession<TSession>, bool> ClientListFunc_Add;
-        private Func<FiestaSession<TSession>, bool> ClientListFunc_Remove;
-        private Action ClientListFunc_Clear;
+        private readonly SecureWriteCollection<FiestaSession<TSession>> _clientList;
+        private readonly Func<FiestaSession<TSession>, bool> _clientListFuncAdd;
+        private readonly Func<FiestaSession<TSession>, bool> _clientListFuncRemove;
+        private Action _clientListFuncClear;
 
-        private object ThreadLocker;
+        private readonly object _threadLocker;
 
         protected PingManager()
         {
-            ClientList = new SecureWriteCollection<FiestaSession<TSession>>(out ClientListFunc_Add, out ClientListFunc_Remove, out ClientListFunc_Clear);
+            _clientList = new SecureWriteCollection<FiestaSession<TSession>>(out _clientListFuncAdd, out _clientListFuncRemove, out _clientListFuncClear);
 
-            ThreadLocker = new object();
+            _threadLocker = new object();
         }
 
-        public bool RegisterClient(FiestaSession<TSession> Client)
+        public bool RegisterClient(FiestaSession<TSession> client)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                return ClientListFunc_Add.Invoke(Client);
+                return _clientListFuncAdd.Invoke(client);
             }
         }
 
-        public bool RevokeClient(FiestaSession<TSession> Client)
+        public bool RevokeClient(FiestaSession<TSession> client)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                return ClientListFunc_Remove.Invoke(Client);
+                return _clientListFuncRemove.Invoke(client);
             }
         }
 
@@ -53,57 +53,51 @@ namespace DragonFiesta.Networking
         {
         }
 
-        bool IServerTask.Update(GameTime Now)
+        bool IServerTask.Update(GameTime gameTime)
         {
             var now = DateTime.Now;
 
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
                 var timedOut = new List<FiestaSession<TSession>>();
 
-                for (int i = 0; i < ClientList.Count; i++)
+                foreach (var client in _clientList)
                 {
-                    var client = ClientList[i];
+	                try
+	                {
+		                //we check the clients every 30 secs
+		                if (now.Subtract(client.GameStates.LastPing).TotalSeconds < 30
+		                    || !CanCheck(client))
+			                continue;
 
-                    try
-                    {
-                        //we check the clients every 30 secs
-                        if (now.Subtract(client.GameStates.LastPing).TotalSeconds < 30
-                            || !CanCheck(client))
-                            continue;
-
-                        if (client.GameStates.HasPong)
-                        {
-                            client.GameStates.HasPong = false;
-                            client.GameStates.LastPing = now;
-                            _SH02Helpers.SendPing(client);
-                        }
-                        else
-                        {
-                            timedOut.Add(client);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        timedOut.Add(client);
-
-                        continue;
-                    }
+		                if (client.GameStates.HasPong)
+		                {
+			                client.GameStates.HasPong = false;
+			                client.GameStates.LastPing = now;
+			                _SH02Helpers.SendPing(client);
+		                }
+		                else
+		                {
+			                timedOut.Add(client);
+		                }
+	                }
+	                catch (Exception)
+	                {
+		                timedOut.Add(client);
+	                }
                 }
 
-                for (int i = 0; i < timedOut.Count; i++)
+                foreach (var client in timedOut)
                 {
-                    var client = timedOut[i];
-
-                    try
-                    {
-                        ClientListFunc_Remove.Invoke(client);
-                        client.Dispose();
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
+	                try
+	                {
+		                _clientListFuncRemove.Invoke(client);
+		                client.Dispose();
+	                }
+	                catch (Exception)
+	                {
+		                // ignored
+	                }
                 }
 
                 timedOut.Clear();

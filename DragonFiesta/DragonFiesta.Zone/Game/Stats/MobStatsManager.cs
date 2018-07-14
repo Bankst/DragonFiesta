@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Game.Stats;
+using DragonFiesta.Providers.Items;
 using DragonFiesta.Zone.Game.Mobs;
 
 namespace DragonFiesta.Zone.Game.Stats
@@ -8,9 +9,9 @@ namespace DragonFiesta.Zone.Game.Stats
         public Mob Mob { get; private set; }
         public override StatsHolder BaseStats => Mob.Info.Stats;
 
-        public MobStatsManager(Mob Mob)
+        public MobStatsManager(Mob mob)
         {
-            this.Mob = Mob;
+            this.Mob = mob;
         }
 
         protected override void DisposeInternal()

@@ -15,7 +15,7 @@ public sealed class GameLog : FileLog
 
     public static void SetupLevels(byte mConsolenLevel, byte mFileLogLevel)
     {
-        Instance.SetConsolenLevel(mConsolenLevel);
+        Instance.SetConsoleLevel(mConsolenLevel);
         Instance.SetFileLogLevel(mFileLogLevel);
     }
 

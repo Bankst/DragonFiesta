@@ -3,6 +3,7 @@ using DragonFiesta.Utils.ServerTask;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace DragonFiesta.Messages.Utils
@@ -11,21 +12,21 @@ namespace DragonFiesta.Messages.Utils
     {
         public ConcurrentDictionary<Guid, IExpectAnAnswer> MessageObjects;
 
-        private object ThreadLocker;
+        private object _threadLocker;
 
-        private int IsDisposedInt;
+        private int _isDisposedInt;
 
 
         public GameTime LastUpdate { get; private set; }
 
         public TimeSpan UpdateInterval { get; private set; }
 
-        public ExpireExpectManager(int CheckIntervalMS)
+        public ExpireExpectManager(int checkIntervalMs)
         {
-            UpdateInterval = TimeSpan.FromMilliseconds(CheckIntervalMS);
+            UpdateInterval = TimeSpan.FromMilliseconds(checkIntervalMs);
             LastUpdate = GameTime.Now();
             MessageObjects = new ConcurrentDictionary<Guid, IExpectAnAnswer>();
-            ThreadLocker = new object();
+            _threadLocker = new object();
             
         }
 
@@ -34,72 +35,65 @@ namespace DragonFiesta.Messages.Utils
             Dispose();
         }
 
-        bool IUpdateAbleServer.Update(GameTime Now)
+        bool IUpdateAbleServer.Update(GameTime gameTime)
         {
-            if (IsDisposedInt == 1) return false;
+            if (_isDisposedInt == 1) return false;
 
             var now = ServerMainBase.InternalInstance.CurrentTime;
 
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                if (MessageObjects.Count > 0)
-                {
-                    var expired = new List<IExpectAnAnswer>();
+	            if (MessageObjects.Count <= 0) return true;
+	            var expired = MessageObjects.Values.Where(obj => obj.IsDisposed || now >= obj.ExpireTime).ToList();
 
-                    foreach (var Obj in MessageObjects.Values)
-                    {
-                        if (Obj.IsDisposed
-                         || now >= Obj.ExpireTime)
-                        {
-                            expired.Add(Obj);
-                        }
-                    }
+	            foreach (var t in expired)
+	            {
+		            var obj = t;
 
-                    for (int i = 0; i < expired.Count; i++)
-                    {
-                        var obj = expired[i];
-
-                        if (!obj.IsDisposed && MessageObjects.TryRemove(obj.Id, out obj) && obj.TimeOutCallBack != null)
-                        {
-                            obj?.TimeOutCallBack(obj);
-                        }
-                    }
-                    expired.Clear();
-                    expired = null;
-                    LastUpdate = now;
-                }
+		            if (!obj.IsDisposed && MessageObjects.TryRemove(obj.Id, out obj) && obj.TimeOutCallBack != null)
+		            {
+			            obj?.TimeOutCallBack(obj);
+		            }
+	            }
+	            expired.Clear();
+	            expired = null;
+	            LastUpdate = now;
             }
             return true;
         }
 
         public void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
-            {
-                MessageObjects.Clear();
-                MessageObjects = null;
-                ThreadLocker = null;
-            }
+	        if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) != 0) return;
+	        lock (_threadLocker)
+	        {
+		        MessageObjects.Clear();
+	        }
+	        lock (_threadLocker)
+	        {
+		        MessageObjects = null;
+	        }
+	        _threadLocker = null;
         }
 
         public bool AddObject(IExpectAnAnswer Object)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
                 return MessageObjects.TryAdd(Object.Id, Object);
             }
         }
 
-        public bool RemoveObject(Guid Id)
+        public bool RemoveObject(Guid id)
         {
-            return RemoveObject(Id, out IExpectAnAnswer obj);
+            return RemoveObject(id, out IExpectAnAnswer obj);
         }
 
-        public bool RemoveObject(Guid Id, out IExpectAnAnswer Object)
+        public bool RemoveObject(Guid id, out IExpectAnAnswer Object)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                return MessageObjects.TryRemove(Id, out Object);
+                return MessageObjects.TryRemove(id, out Object);
             }
         }
     }

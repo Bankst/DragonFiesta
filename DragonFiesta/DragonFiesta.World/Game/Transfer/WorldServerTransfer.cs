@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Game.Accounts;
 using DragonFiesta.Game.Transfer;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Game.Transfer
 {
@@ -11,7 +12,7 @@ namespace DragonFiesta.World.Game.Transfer
 
         public byte WorldId { get; set; }
 
-        public override void OnExpire(GameTime Now)
+        public override void OnExpire(GameTime gameTime)
         {
             if (WorldServerTransferManager.FinishTransfer(Account.ID, out WorldServerTransfer end))
             {

@@ -8,6 +8,6 @@ namespace DragonFiesta.Utils.ServerTask
         DateTime LastUpdate { get; set; }
         bool IsDisposed { get; }
 
-        void OnUpdate(GameTime Now);
+        void OnUpdate(GameTime gameTime);
     }
 }

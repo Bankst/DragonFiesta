@@ -4,6 +4,8 @@ using DragonFiesta.Zone.Game.Stats;
 using DragonFiesta.Zone.InternNetwork.InternHandler.Server.Character;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
 using System;
+using DragonFiesta.Providers.Characters;
+using DragonFiesta.Zone.Data.Characters;
 
 namespace DragonFiesta.Zone.Game.Character
 {
@@ -11,17 +13,13 @@ namespace DragonFiesta.Zone.Game.Character
     {
         private ZoneCharacter Character { get; set; }
 
-        private ushort _HPStones;
+        private ushort _hpStones;
 
-        private ushort _SPStones;
-
-
+        private ushort _spStones;
 
         public CharacterFreeStatsInfo FreeStats { get; private set; }
 
         public CharacterStatsManager Stats { get; private set; }
-
-
 
         public CharacterLevelParameter LevelParameter { get; set; }
 
@@ -31,10 +29,10 @@ namespace DragonFiesta.Zone.Game.Character
 
         public ushort HPStones
         {
-            get => _HPStones;
+            get => _hpStones;
             set
             {
-                _HPStones = Math.Min(MaxHPStones, value);
+                _hpStones = Math.Min(MaxHPStones, value);
 
                 if (Character.IsConnected
                     && Character.Session.Ingame)
@@ -46,10 +44,10 @@ namespace DragonFiesta.Zone.Game.Character
 
         public ushort SPStones
         {
-            get => _SPStones;
+            get => _spStones;
             set
             {
-                _SPStones = Math.Min(MaxSPStones, value);
+                _spStones = Math.Min(MaxSPStones, value);
 
                 if (Character.IsConnected
                     && Character.Session.Ingame)
@@ -88,9 +86,9 @@ namespace DragonFiesta.Zone.Game.Character
 
         public byte SkillPoints { get; set; }
 
-        public ZoneCharacterInfo(ZoneCharacter Character) : base()
+        public ZoneCharacterInfo(ZoneCharacter character) : base()
         {
-            this.Character = Character;
+            this.Character = character;
         }
 
         public override bool RefreshFromSQL(SQLResult pRes, int i)
@@ -99,44 +97,39 @@ namespace DragonFiesta.Zone.Game.Character
                 return false;
 
 
-
-            CharacterLevelParameter Parameter;
-            if (!CharacterDataProvider.GetLevelParameters(Class, Level, out Parameter))
-                return false;
-
-            LevelParameter = Parameter;
+	        if (!CharacterDataProvider.GetLevelParameters(Class, Level, out var parameter)) return false;
+	        LevelParameter = parameter;
 
 
-            ExpForNextLevel = CharacterDataProvider.GetEXPForNextLevel(Level);
+	        ExpForNextLevel = CharacterDataProviderBase.GetEXPForNextLevel(Level);
 
-            MaxHPStones = Parameter.MaxHPStones;
-            MaxSPStones = Parameter.MaxSPStones;
+	        MaxHPStones = parameter.MaxHPStones;
+	        MaxSPStones = parameter.MaxSPStones;
 
-            HPStones = pRes.Read<ushort>(i, "HPStones");
-            SPStones = pRes.Read<ushort>(i, "SPStones");
-
-
+	        HPStones = pRes.Read<ushort>(i, "HPStones");
+	        SPStones = pRes.Read<ushort>(i, "SPStones");
 
 
-            FreeStats = new CharacterFreeStatsInfo(Character);
+	        FreeStats = new CharacterFreeStatsInfo(Character);
 
-            if (!FreeStats.FreeStatsInfo(pRes, i))
-                return false;
+	        if (!FreeStats.FreeStatsInfo(pRes, i))
+		        return false;
 
 
-            Stats = new CharacterStatsManager(Character);
+	        Stats = new CharacterStatsManager(Character);
 
-            Stats.UpdateAll();
+	        Stats.UpdateAll();
 
-            KillPoints = pRes.Read<uint>(i, "KillPoints");
+	        KillPoints = pRes.Read<uint>(i, "KillPoints");
 
-            EXP = pRes.Read<ulong>(i, "EXP");
+	        EXP = pRes.Read<ulong>(i, "EXP");
 
-            Fame = pRes.Read<uint>(i, "Fame");
+	        Fame = pRes.Read<uint>(i, "Fame");
 
-            SkillPoints = pRes.Read<byte>(i, "SkillPoints");
+	        SkillPoints = pRes.Read<byte>(i, "SkillPoints");
 
-            return true;
+	        return true;
+
         }
 
         ~ZoneCharacterInfo()

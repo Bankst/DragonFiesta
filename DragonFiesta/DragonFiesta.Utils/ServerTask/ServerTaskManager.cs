@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 
 [ServerModule(ServerType.Login, InitializationStage.PreData)]
@@ -8,21 +9,21 @@ public sealed class ServerTaskManager : IUpdateAbleServer
 {
     public static ServerTaskManager Instance { get; private set; }
 
-    private SecureCollection<IServerTask> Objects;
+    private SecureCollection<IServerTask> _objects;
 
-    private object ThreadLocker;
+    private object _threadLocker;
 
     public TimeSpan UpdateInterval => TimeSpan.FromMilliseconds(100);
 
     public GameTime LastUpdate { get; private set; }
 
-    private int IsDisposedInt;
+    private int _isDisposedInt;
 
     public ServerTaskManager()
     {
         LastUpdate = GameTime.Now();
-        Objects = new SecureCollection<IServerTask>();
-        ThreadLocker = new object();
+        _objects = new SecureCollection<IServerTask>();
+        _threadLocker = new object();
 
     }
     ~ServerTaskManager()
@@ -32,66 +33,53 @@ public sealed class ServerTaskManager : IUpdateAbleServer
     [InitializerMethod]
     public static bool InitialTaskManager()
     {
-        if (Instance == null)
-            return false;
-
-        foreach (var Type in Reflector.GiveServerTasks())
-        {
-            if (!AddObject((IServerTask)Activator.CreateInstance(Type)))
-                return false;
-        }
-
-        return true;
+	    return Instance != null && Reflector.GiveServerTasks().All(type => AddObject((IServerTask) Activator.CreateInstance(type)));
     }
     public static ServerTaskManager InitialInstance() => Instance = new ServerTaskManager();
 
     public static bool AddObject(IServerTask Object)
     {
-        if (Instance.IsDisposedInt == 1) return false; //Adding no more ...
+        if (Instance._isDisposedInt == 1) return false; //Adding no more ...
 
-        lock (Instance.ThreadLocker)
+        lock (Instance._threadLocker)
         {
             Object.LastUpdate = GameTime.Now();
 
-            return Instance.Objects.Add(Object);
+            return Instance._objects.Add(Object);
         }
     }
 
     public static bool RemoveObject(IServerTask Object)
     {
-        if (Instance.IsDisposedInt == 1) return false; //Adding no more ...
+        if (Instance._isDisposedInt == 1) return false; //Adding no more ...
 
-        lock (Instance.ThreadLocker)
+        lock (Instance._threadLocker)
         {
-            return Instance.Objects.Remove(Object);
+            return Instance._objects.Remove(Object);
         }
     }
     public void Dispose()
     {
-        if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
-        {
-            Objects.Dispose();
-            Objects = null;
-            ThreadLocker = null;
-        }
+	    if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) != 0) return;
+	    _objects.Dispose();
+	    _objects = null;
+	    _threadLocker = null;
     }
 
-    public bool Update(GameTime Now)
+    public bool Update(GameTime gameTime)
     {
-        if (IsDisposedInt == 1)
+        if (_isDisposedInt == 1)
             return false;
 
-        foreach (var TaskObject in Objects)
+        foreach (var taskObject in _objects)
         {
-            if (Now.Subtract(TaskObject.LastUpdate).TotalMilliseconds >= (int)TaskObject.Interval)
-            {
-                if (!TaskObject.Update(Now))
-                {
-                    Objects.Remove(TaskObject);
-                    TaskObject.Dispose();
-                }
-                TaskObject.LastUpdate = GameTime.Now();
-            }
+	        if (!(gameTime.Subtract(taskObject.LastUpdate).TotalMilliseconds >= (int) taskObject.Interval)) continue;
+	        if (!taskObject.Update(gameTime))
+	        {
+		        _objects.Remove(taskObject);
+		        taskObject.Dispose();
+	        }
+	        taskObject.LastUpdate = GameTime.Now();
         }
 
         LastUpdate = GameTime.Now();

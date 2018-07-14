@@ -2,6 +2,7 @@
 using DragonFiesta.Zone.Config;
 using DragonFiesta.Zone.Game.Zone;
 using System.Collections.Concurrent;
+using DragonFiesta.Utils.Logging;
 using DragonFiesta.Zone.Game.Maps.Types;
 
 namespace DragonFiesta.Zone.Game.Maps.Object

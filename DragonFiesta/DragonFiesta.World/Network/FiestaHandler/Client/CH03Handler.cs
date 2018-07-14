@@ -22,21 +22,19 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
 
             if (!sender.Ingame ||
                 sender.IsDisposed
-                || !packet.Read(out bool BackToCharacterList))
+                || !packet.Read(out bool backToCharacterList))
             {
                 sender.Dispose();
                 return;
             }
 
 
-            if (BackToCharacterList)
-            {
-                if (sender.CharacterList.Refresh())
-                {
-                    SH03Handler.SendCharacterList(sender);
-                }
-                sender.GameStates.IsReady = false;
-            }
+	        if (!backToCharacterList) return;
+	        if (sender.CharacterList.Refresh())
+	        {
+		        SH03Handler.SendCharacterList(sender);
+	        }
+	        sender.GameStates.IsReady = false;
         }
 
         [PacketHandler(Handler03Type.CMSG_USER_WILL_WORLD_SELECT_REQ)]
@@ -50,13 +48,11 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
                 sender.GetIP(),
                 (msg) =>
                 {
-                    if (msg is AddLoginServerTransfer Transfer)
-                    {
-                        SH03Handler.SendLoginToWorldKey(sender, Transfer.Id, Transfer.Added);
+	                if (!(msg is AddLoginServerTransfer transfer)) return;
+	                SH03Handler.SendLoginToWorldKey(sender, transfer.Id, transfer.Added);
 
-                        if (!Transfer.Added)
-                            sender.Dispose();
-                    }
+	                if (!transfer.Added)
+		                sender.Dispose();
                 },
                 (msg) => //Time out
                 {
@@ -67,20 +63,18 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
         [PacketHandler(Handler03Type.CMSG_USER_LOGINWORLD_REQ, ClientRegion.NA)]
         public static void World_Key_NA(WorldSession sender, FiestaPacket packet)
         {
-            if (!packet.ReadString(out string AccountName, 256)
-                || !packet.Read(out int AccountID)
-                || !packet.ReadBytes(60, out byte[] authbytes)
-                || AccountID == 0)
+            if (!packet.ReadString(out var accountName, 256)
+                || !packet.Read(out int accountID)
+                || !packet.ReadBytes(60, out var authbytes)
+                || accountID == 0)
             {
                 sender.Dispose();
                 return;
             }
 
-            if (!VerifyWorldKey(AccountID, AccountName, sender))
-            {
-                SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.FailedToConnectToWorldServer);
-                sender.Dispose();
-            }
+	        if (VerifyWorldKey(accountID, accountName, sender)) return;
+	        SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.FailedToConnectToWorldServer);
+	        sender.Dispose();
         }
 
         [PacketHandler(Handler03Type.CMSG_USER_LOGINWORLD_REQ, ClientRegion.DE)]
@@ -89,32 +83,30 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
         [PacketHandler(Handler03Type.CMSG_USER_LOGINWORLD_REQ, ClientRegion.EU)]
         public static void World_Key_EU(WorldSession sender, FiestaPacket packet)
         {
-            if (!packet.ReadString(out string AccountName, 18)
-                || !packet.Read(out int AccountID)
-                || !packet.ReadBytes(60, out byte[] authbytes)
-                || AccountID == 0)
+            if (!packet.ReadString(out var accountName, 18)
+                || !packet.Read(out int accountID)
+                || !packet.ReadBytes(60, out var authbytes)
+                || accountID == 0)
             {
                 sender.Dispose();
                 return;
             }
 
-            if (!VerifyWorldKey(AccountID, AccountName, sender))
-            {
-                SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.ClientDataError);
-                sender.Dispose();
-            }
+	        if (VerifyWorldKey(accountID, accountName, sender)) return;
+	        SH03Helpers.SendVerifyError(sender, (ushort)ConnectionError.ClientDataError);
+	        sender.Dispose();
         }
 
         private static bool VerifyWorldKey(int accountID, string accountName, WorldSession sender)
         {
-            if (!WorldServerTransferManager.FinishTransfer(accountID, out WorldServerTransfer Transfer)
-                || !Transfer.IP.Equals(sender.GetIP())
-                || WorldConfiguration.Instance.WorldID != Transfer.WorldId
-                || !accountName.ToLower().Equals(Transfer.Account.Name.ToLower())
-                || !WorldSessionManager.Instance.AddAccount(Transfer.Account.ID, sender)) //verify...
+            if (!WorldServerTransferManager.FinishTransfer(accountID, out WorldServerTransfer transfer)
+                || !transfer.IP.Equals(sender.GetIP())
+                || WorldConfiguration.Instance.WorldID != transfer.WorldId
+                || !accountName.ToLower().Equals(transfer.Account.Name.ToLower())
+                || !WorldSessionManager.Instance.AddAccount(transfer.Account.ID, sender)) //verify...
                 return false;
 
-            sender.UserAccount = Transfer.Account;
+            sender.UserAccount = transfer.Account;
 
             sender.GameStates.Authenticated = true;
             sender.GameStates.HasPong = true;

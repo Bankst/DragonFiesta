@@ -11,8 +11,8 @@ namespace DragonFiesta.Networking.HandlerStores
     public class InternHandlerStore
     {
         public static InternHandlerStore Instance { get; set; }
-        protected ConcurrentDictionary<Type, Action<IMessage, InternSession>> _handlers;
-        protected ConcurrentDictionary<Guid, IExpectAnAnswer> _callbacks;
+        protected ConcurrentDictionary<Type, Action<IMessage, InternSession>> Handlers;
+        protected ConcurrentDictionary<Guid, IExpectAnAnswer> Callbacks;
         protected ExpireExpectManager ReponseManager;
 
         [InitializerMethod]
@@ -20,8 +20,8 @@ namespace DragonFiesta.Networking.HandlerStores
         {
             Instance = new InternHandlerStore
             {
-                _callbacks = new ConcurrentDictionary<Guid, IExpectAnAnswer>(),
-                _handlers = new ConcurrentDictionary<Type, Action<IMessage, InternSession>>(),
+                Callbacks = new ConcurrentDictionary<Guid, IExpectAnAnswer>(),
+                Handlers = new ConcurrentDictionary<Type, Action<IMessage, InternSession>>(),
                 ReponseManager = new ExpireExpectManager((int)ServerTaskTimes.SERVER_INTERN_MSG_RESPONSE_CHECK),
             };
             ThreadPool.AddUpdateAbleServer(Instance.ReponseManager);
@@ -34,43 +34,40 @@ namespace DragonFiesta.Networking.HandlerStores
             var pairs = Reflector.Global.GetMethodsWithAttribute<InternMessageHandlerAttribute>();
             foreach (var pair in pairs)
             {
-                Action<dynamic, InternSession> del = (message, client) => pair.Item2.Invoke(null, new object[] { message, client });
-                if (!Instance._handlers.TryAdd(pair.Item1.Type, del))
+	            void Del(dynamic message, InternSession client) => pair.Item2.Invoke(null, new object[] {message, client});
+	            if (!Instance.Handlers.TryAdd(pair.Item1.Type, Del))
                 {
                     EngineLog.Write(EngineLogLevel.Warning, "Duplicate InternHandler {0} Found!!", pair.Item1.Type.ToString());
                 }
             }
 
-            EngineLog.Write(EngineLogLevel.Startup, "Loaded {0} InterHandlers.", Instance._handlers.Count);
+            EngineLog.Write(EngineLogLevel.Startup, "Loaded {0} InterHandlers.", Instance.Handlers.Count);
         }
 
         public void AddCallBack(IMessage msg)
         {
-            if (!_callbacks.ContainsKey(msg.Id))
+            if (!Callbacks.ContainsKey(msg.Id))
             {
-                _callbacks.TryAdd(msg.Id, (IExpectAnAnswer)msg);
+                Callbacks.TryAdd(msg.Id, (IExpectAnAnswer)msg);
                 ReponseManager.AddObject((IExpectAnAnswer)msg);
             }
             else
             {
                 SocketLog.Write(SocketLogLevel.Warning, "Duplicate Callback Detect msg: {0} Id: {1}", msg.GetType(), msg.Id);
-                _callbacks.TryRemove(msg.Id, out IExpectAnAnswer val);
-                _callbacks.TryAdd(msg.Id, (IExpectAnAnswer)msg);
+                Callbacks.TryRemove(msg.Id, out var val);
+                Callbacks.TryAdd(msg.Id, (IExpectAnAnswer)msg);
                 ReponseManager.RemoveObject(msg.Id);
             }
         }
 
-        public bool IsCallbackContains(Guid Id) => _callbacks.ContainsKey(Id);
+        public bool IsCallbackContains(Guid id) => Callbacks.ContainsKey(id);
 
-        public bool CallMessage<Tsession>(IMessage pMessage, InternSession mSession)
-            where Tsession : InternSession
+        public bool CallMessage<TSession>(IMessage pMessage, InternSession mSession)
+            where TSession : InternSession
         {
-            if (Instance._handlers.ContainsKey(pMessage.GetType()))
-            {
-                Instance._handlers[pMessage.GetType()](pMessage, mSession);
-                return true;
-            }
-            return false;
+	        if (!Instance.Handlers.ContainsKey(pMessage.GetType())) return false;
+	        Instance.Handlers[pMessage.GetType()](pMessage, mSession);
+	        return true;
         }
 
         public virtual void HandleMessage<TSession>(TSession pSession, IMessage pMessage)
@@ -79,20 +76,20 @@ namespace DragonFiesta.Networking.HandlerStores
             if (ServerMainDebug.DebugPackets)
                 SocketLog.Write(SocketLogLevel.Debug, "Got message of type {0}", pMessage.GetType());
 
-            if (Instance._callbacks.ContainsKey(pMessage.Id)
-                && ReponseManager.MessageObjects.TryGetValue(pMessage.Id, out IExpectAnAnswer mRequest))
+            if (Instance.Callbacks.ContainsKey(pMessage.Id)
+                && ReponseManager.MessageObjects.TryGetValue(pMessage.Id, out var mRequest))
             {
                 ReponseManager.RemoveObject(pMessage.Id);
             }
 
-            if (Instance._callbacks.ContainsKey(pMessage.Id))
+            if (Instance.Callbacks.ContainsKey(pMessage.Id))
             {
-                Instance._callbacks[pMessage.Id]?.Callback(pMessage);
-                Instance._callbacks.TryRemove(pMessage.Id, out IExpectAnAnswer val);
+                Instance.Callbacks[pMessage.Id]?.Callback(pMessage);
+                Instance.Callbacks.TryRemove(pMessage.Id, out var val);
             }
-            else if (Instance._handlers.ContainsKey(pMessage.GetType()))
+            else if (Instance.Handlers.ContainsKey(pMessage.GetType()))
             {
-                Instance._handlers[pMessage.GetType()](pMessage, pSession);
+                Instance.Handlers[pMessage.GetType()](pMessage, pSession);
             }
             else
             {

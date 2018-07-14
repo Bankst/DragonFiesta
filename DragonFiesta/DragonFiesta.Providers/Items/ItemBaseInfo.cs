@@ -8,41 +8,41 @@ namespace DragonFiesta.Providers.Items
 {
     public class ItemBaseInfo
     {
-        public ushort ID { get; private set; }
-        public ItemType Type { get; private set; }
-        public ItemClass Class { get; private set; }
-        public uint MaxLot { get; private set; }
-        public bool IsWeapon { get { return ((EquipSlot == ItemEquipSlot.ITEMEQUIP_LEFTHAND || EquipSlot == ItemEquipSlot.ITEMEQUIP_RIGHTHAND) && Class != ItemClass.ITEMCLASS_COSSHIELD); } }
-        public bool IsRing { get { return (EquipSlot == ItemEquipSlot.ITEMEQUIP_LEFTRING || EquipSlot == ItemEquipSlot.ITEMEQUIP_RIGHTRING); } }
-        public bool IsEquippable { get { return (EquipSlot != ItemEquipSlot.ITEMEQUIP_NONE); } }
-        public ItemEquipSlot EquipSlot { get; private set; }
-        public bool IsTwoHand { get; private set; }
-        public TimeSpan AttackSpeed { get; private set; }
-        public byte RequiredLevel { get; private set; }
+        public ushort ID { get; }
+        public ItemType Type { get; }
+        public ItemClass Class { get; }
+        public uint MaxLot { get; }
+        public bool IsWeapon => ((EquipSlot == ItemEquipSlot.ITEMEQUIP_LEFTHAND || EquipSlot == ItemEquipSlot.ITEMEQUIP_RIGHTHAND) && Class != ItemClass.ITEMCLASS_COSSHIELD);
+	    public bool IsRing => (EquipSlot == ItemEquipSlot.ITEMEQUIP_LEFTRING || EquipSlot == ItemEquipSlot.ITEMEQUIP_RIGHTRING);
+	    public bool IsEquippable => (EquipSlot != ItemEquipSlot.ITEMEQUIP_NONE);
+	    public ItemEquipSlot EquipSlot { get; }
+        public bool IsTwoHand { get; }
+        public TimeSpan AttackSpeed { get; }
+        public byte RequiredLevel { get; }
 
-        //  public StatsHolder Stats { get; private set; }
+        public StatsHolder Stats { get; }
         public WhoEquip WhoEquip { get; private set; }
 
-        public uint BuyPrice { get; private set; }
-        public uint SellPrice { get; private set; }
-        public uint BuyFame { get; private set; }
-        public WeaponType WeaponType { get; private set; }
-        public bool IsBelonged { get; private set; }
-        public bool NoDrop { get; private set; }
-        public bool NoSell { get; private set; }
-        public bool NoStorage { get; private set; }
-        public bool NoTrade { get; private set; }
-        public bool NoDelete { get; private set; }
-        public byte UpgradeLimit { get; private set; }
-        public double UpgradeSuccessRate { get; private set; }
-        public double UpgradeLuckRate { get; private set; }
-        public UpgradeResource UpgradeResource { get; private set; }
-        public List<UpgradeInfo> UpgradeInfos { get; protected set; }
-        public ItemGradeType GradeType { get; private set; }
-        public bool IsAutoPickup { get; private set; }
+        public uint BuyPrice { get; }
+        public uint SellPrice { get; }
+        public uint BuyFame { get; }
+        public WeaponType WeaponType { get; }
+        public bool IsBelonged { get; }
+        public bool NoDrop { get; }
+        public bool NoSell { get; }
+        public bool NoStorage { get; }
+        public bool NoTrade { get; }
+        public bool NoDelete { get; }
+        public byte UpgradeLimit { get; }
+        public double UpgradeSuccessRate { get; }
+        public double UpgradeLuckRate { get; }
+        public UpgradeResource UpgradeResource { get; }
+        public List<ItemUpgradeInfo> UpgradeInfos { get; protected set; }
+        public ItemGradeType GradeType { get; }
+        public bool IsAutoPickup { get; }
 
 
-		public ItemBaseInfo(ItemInfo itemInfo, SecureCollection<BelongTypeInfo> belongTypeInfos)
+		public ItemBaseInfo(ItemInfo itemInfo, List<ItemUpgradeInfo> upgradeInfos, BelongTypeInfo belongTypeInfo, GradeItemOption gradeItemOption)
 		{
 			ID = itemInfo.ID;
 			Type = (ItemType)itemInfo.Type;
@@ -57,8 +57,25 @@ namespace DragonFiesta.Providers.Items
 			BuyFame = itemInfo.BuyFame;
 			WeaponType = (WeaponType)itemInfo.WeaponType;
 
+			Stats = new StatsHolder();
+			Stats.Evasion = (int) itemInfo.TB;
+			Stats.WeaponDamage = new MinMax<int>((int) itemInfo.MinWC, (int) itemInfo.MaxWC);
+			Stats.WeaponDefense = (int) itemInfo.AC;
+			Stats.MagicDamage = new MinMax<int>((int) itemInfo.MinMA, (int) itemInfo.MaxMA);
+			Stats.MagicDefense = (int) itemInfo.MR;
+			Stats.CriticalRate = (int) itemInfo.CriRate;
+			Stats.CriticalWeaponDamage = new MinMax<int>((int) itemInfo.CriMinWc, (int) itemInfo.CriMaxWc);
+			Stats.CriticalMagicDamage = new MinMax<int>((int) itemInfo.CriMinMa, (int) itemInfo.CriMaxMa);
+			Stats.Aim = (int) itemInfo.TH;
+
+			if (gradeItemOption != null)
+			{
+				Stats.MaxHP = (int) gradeItemOption.MaxHP;
+				Stats.MaxSP = (int) gradeItemOption.MaxSP;
+			}
+
 			// BT_Inx stuff
-			var btData = belongTypeInfos.Where(x => x.BT_Inx == itemInfo.BT_Inx).FirstOrDefault();
+			var btData = belongTypeInfo;
 			IsBelonged = btData.PutOnBelonged;
 			NoDrop = btData.NoDrop;
 			NoSell = btData.NoSell;
@@ -69,11 +86,10 @@ namespace DragonFiesta.Providers.Items
 			UpgradeLimit = itemInfo.UpLimit;
 			UpgradeSuccessRate = itemInfo.UpSucRatio;
 			UpgradeLuckRate = itemInfo.UpLuckRatio;
-			UpgradeResource = (UpgradeResource)itemInfo.UpResource;
-			UpgradeInfos = null; // TODO: wtf is this
-			GradeType = (ItemGradeType)itemInfo.Grade;
+			UpgradeResource = (UpgradeResource) itemInfo.UpResource;
+			UpgradeInfos = upgradeInfos; // TODO: wtf is this
+			GradeType = (ItemGradeType) itemInfo.Grade;
 			IsAutoPickup = btData.BT_Inx == 0 || btData.BT_Inx == 1 || btData.BT_Inx == 10;
-
 		}
 
 		/* New Stuff

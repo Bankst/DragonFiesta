@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Messages.World.Character;
 using DragonFiesta.Messages.Zone.Character;
+using DragonFiesta.Utils.Logging;
 using DragonFiesta.Zone.Game.Character;
 using DragonFiesta.Zone.Game.Chat;
 using DragonFiesta.Zone.Game.Maps;

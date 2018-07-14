@@ -4,6 +4,7 @@ using DragonFiesta.Zone.Game.Maps.Types;
 using DragonFiesta.Zone.Game.NPC;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
 using System;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Zone.Network.FiestaHandler.Client
 {

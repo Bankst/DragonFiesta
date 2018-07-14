@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DragonFiesta.Zone.Data.Buffs;
 using DragonFiesta.Zone.Game.Maps.Interface;
 using System.Threading;
+using DragonFiesta.Utils.Logging;
 using DragonFiesta.Utils.ServerTask;
 
 namespace DragonFiesta.Zone.Game.Buffs
@@ -238,7 +239,7 @@ namespace DragonFiesta.Zone.Game.Buffs
             return (BuffAction != null);
         }
 
-        public void OnExpire(GameTime Now)
+        public void OnExpire(GameTime gameTime)
         {
             /*
             if (Owner.BuffList.Remove(this))
@@ -248,7 +249,7 @@ namespace DragonFiesta.Zone.Game.Buffs
             */
         }
 
-        public void Update(GameTime Now)
+        public void Update(GameTime gameTime)
         {
             //Update BuffTime?
         }
