@@ -6,24 +6,24 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Server
 {
     public class SH3Handler
     {
-        public static void WorldServerIP(LoginSession pClient, World pWorld, WorldStatus Status = WorldStatus.LoginFailed)
+        public static void WorldServerIP(LoginSession pClient, World pWorld, WorldStatus status = WorldStatus.LoginFailed)
         {
-            using (FiestaPacket mIPPacket = new FiestaPacket(Handler03Type._Header, Handler03Type.SMSG_USER_WORLDSELECT_ACK))
+            using (var mIpPacket = new FiestaPacket(Handler03Type._Header, Handler03Type.SMSG_USER_WORLDSELECT_ACK))
             {
-                mIPPacket.Write<byte>(pWorld != null && Status != WorldStatus.OK ? pWorld.Status : Status);//state?
-                mIPPacket.WriteString(pWorld != null ? pWorld.ConnectionInfo.WorldExternalIP : "", 16);
-                mIPPacket.Write<ushort>(pWorld != null ? pWorld.ConnectionInfo.WorldPort : (ushort)0);
-                mIPPacket.Write<int>(pWorld != null ? pClient.UserAccount.ID : 0);//acc id
-                mIPPacket.Fill(60, 0x00);
-                pClient.SendPacket(mIPPacket);
+                mIpPacket.Write<byte>(pWorld != null && status != WorldStatus.OK ? pWorld.Status : status);//state?
+                mIpPacket.WriteString(pWorld != null ? pWorld.ConnectionInfo.WorldExternalIP : "", 16);
+                mIpPacket.Write<ushort>(pWorld?.ConnectionInfo.WorldPort ?? 0);
+                mIpPacket.Write<int>(pWorld != null ? pClient.UserAccount.ID : 0);//acc id
+                mIpPacket.Fill(60, 0x00);
+                pClient.SendPacket(mIpPacket);
             }
         }
 
-        public static void BinVersionAllowed(LoginSession pClient, bool Allowed)
+        public static void BinVersionAllowed(LoginSession pClient, bool allowed)
         {
-            using (var pack = new FiestaPacket(Handler03Type._Header, Allowed ? Handler03Type.SMSG_USER_CLIENT_RIGHTVERSION_CHECK_ACK : Handler03Type.SMSG_USER_CLIENT_WRONGVERSION_CHECK_ACK))
+            using (var pack = new FiestaPacket(Handler03Type._Header, allowed ? Handler03Type.SMSG_USER_CLIENT_RIGHTVERSION_CHECK_ACK : Handler03Type.SMSG_USER_CLIENT_WRONGVERSION_CHECK_ACK))
             {
-                pack.Write<bool>(Allowed);
+                pack.Write<bool>(allowed);
                 pack.Write<byte>(0);//unk
                 pClient.SendPacket(pack);
             }
