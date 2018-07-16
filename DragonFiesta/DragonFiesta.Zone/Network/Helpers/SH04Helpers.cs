@@ -20,45 +20,7 @@ namespace DragonFiesta.Zone.Network.Helpers
                 mSession.SendPacket(packet);
             }
         }
-        /*
-        struct PROTO_NC_CHAR_BASE_CMD::<unnamed-type-flags>::<unnamed-type-str>
-        {
-            int _bf0;
-        };
 
-
-        union PROTO_NC_CHAR_BASE_CMD::<unnamed-type-flags>
-        {
-            unsigned int bin;
-            PROTO_NC_CHAR_BASE_CMD::<unnamed-type-flags>::<unnamed-type-str> str;
-        };
-
-        struct PROTO_NC_CHAR_BASE_CMD
-        {
-            unsigned int chrregnum;
-            Name5 charid;
-            char slotno;
-            char Level;
-            unsigned __int64 Experience;
-            unsigned __int16 CurPwrStone;
-            unsigned __int16 CurGrdStone;
-            unsigned __int16 CurHPStone;
-            unsigned __int16 CurSPStone;
-            unsigned int CurHP;
-            unsigned int CurSP;
-            unsigned int CurLP;
-            unsigned int fame;
-            unsigned __int64 Cen;
-            PROTO_NC_CHAR_BASE_CMD::LoginLocation logininfo;
-            CHARSTATDISTSTR statdistribute;
-            char pkyellowtime;
-            unsigned int pkcount;
-            unsigned __int16 prisonmin;
-            char adminlevel;
-            PROTO_NC_CHAR_BASE_CMD::<unnamed-type-flags> flags;
-        };
-
-    */
         public static void WriteDetailedInfo(ZoneCharacter character, FiestaPacket packet)
         {
             packet.Write<int>(character.Info.CharacterID);
@@ -151,7 +113,7 @@ namespace DragonFiesta.Zone.Network.Helpers
             }
 
             packet.Fill(2, 0xFF);
-            packet.Write<ushort>(0xFF); // polymorph id (some skill idk lmao)
+            packet.Write<ushort>(65535); // polymorph id (some skill idk lmao)
 
             //STOPEMOTICON_DESCRIPT
             packet.Write<byte>(0); // emoticonId
@@ -163,14 +125,15 @@ namespace DragonFiesta.Zone.Network.Helpers
             packet.Write<ushort>(0); // MobID
 
             //ABNORMAL_STATE_BIT
-            packet.Fill(105, 0xFF); // statebit[105]
+            packet.Fill(105, 0x00); // statebit[105]
+            //packet.WriteHexAsBytes("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00");
 
             packet.Write<uint>(0); //myGuild
             packet.Write<byte>(character.Type);
             packet.Write<byte>(0); // isGuildAcademyMember
             packet.Write<byte>(0); // isAutoPick
             packet.Write<byte>(character.Level);
-            packet.Fill(32, 0x00); // sAnimation[32]
+            packet.Fill(32, 0xFF); // sAnimation[32]
             packet.Write<ushort>(0); // nMoverHnd
             packet.Write<byte>(0); // nMoverSlot
             packet.Write<byte>(0); // nKQTeamType
