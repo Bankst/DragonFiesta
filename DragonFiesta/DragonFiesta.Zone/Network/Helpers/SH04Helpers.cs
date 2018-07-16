@@ -99,23 +99,21 @@ namespace DragonFiesta.Zone.Network.Helpers
             packet.Fill(7, 0); // tmp ?
         }
 
-	    public static void WriteShape(ZoneCharacter character, FiestaPacket packet)
-	    {
-		    packet.Write<byte>(0); //Race
-		    packet.Write<byte>(character.Info.Class);
-		    packet.Write<byte>(character.Info.IsMale);
-		    packet.Write<byte>(character.Style.Hair.ID);
-		    packet.Write<byte>(character.Style.HairColor.ID);
-		    packet.Write<byte>(character.Style.Face.ID);
-	    }
+        public static void WriteShape(ZoneCharacter character, FiestaPacket packet)
+        {
+            packet.Write<byte>(0); //Unk
+            packet.Write<byte>(character.Style.Hair.ID);
+            packet.Write<byte>(character.Style.HairColor.ID);
+            packet.Write<byte>(character.Style.Face.ID);
+        }
 
-	    public static void WriteMinihouse(ZoneCharacter character, FiestaPacket packet)
-	    {
-		    packet.Write<short>(0); // minihouse (handle?)
-		    packet.WriteHexAsBytes("00 FF FF FF FF FF 50 00 00 00"); // dummy[10] -> captured from gamigo NA
-		}
-		
-		public static void WriteCharacterDisplay(ZoneCharacter character, FiestaPacket packet)
+        public static void WriteMinihouse(ZoneCharacter character, FiestaPacket packet)
+        {
+            packet.Write<ushort>(0); // minihouse (handle?)
+            packet.WriteHexAsBytes("00 FF FF FF FF FF 50 00 00 00"); // dummy[10] -> captured from gamigo NA
+        }
+
+        public static void WriteCharacterDisplay(ZoneCharacter character, FiestaPacket packet)
         {
             packet.Write<ushort>(character.MapObjectId);
             packet.WriteString(character.Info.Name, 20);
@@ -123,60 +121,63 @@ namespace DragonFiesta.Zone.Network.Helpers
             packet.Write<uint>(character.Position.X);
             packet.Write<uint>(character.Position.Y);
             packet.Write<byte>(character.Position.Rotation);
-			packet.Write<byte>(character.State);
-			packet.Write<byte>(character.Info.Class);
 
-			switch (character.State)
-			{
-				case CharacterState.Player:
-				case CharacterState.Dead:
-					WriteShape(character, packet);
-					_SH04Helpers.WriteEquipment(character, packet);
-					break;
-				case CharacterState.Resting:
-					WriteMinihouse(character, packet);
-					break;
-				case CharacterState.Vendor:
-					WriteMinihouse(character, packet);
-					packet.Write<byte>(0); // isSell
-					packet.Fill(30, 0x00); // signboard[30] 
-					break;
-				case CharacterState.OnMount:
-					_SH04Helpers.WriteEquipment(character, packet);
-					packet.Write<short>(0); // horse (handle?)
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(); // impossible (we hope)
-			}
+            packet.Write<byte>(character.State);
+            packet.Write<byte>(character.Info.Class);
+            _SH04Helpers.WriteLook(character, packet);
 
-			packet.Write<short>(0); // polymorph id (some skill idk lmao)
+            switch (character.State)
+            {
+                case CharacterState.Player:
+                    _SH04Helpers.WriteEquipment(character, packet);
+                    _SH04Helpers.WriteRefinement(character, packet);
+                    break;
 
-			//STOPEMOTICON_DESCRIPT
-			packet.Write<byte>(0); // emoticonId
-	        packet.Write<short>(0); // emoticonFrame
+                case CharacterState.Resting:
+                    WriteMinihouse(character, packet);
+                        break;
 
-			//CHARTITLE_BRIEFINFO
-	        packet.Write<byte>(0); // Type
-			packet.Write<byte>(0); // ElementNo
-			packet.Write<short>(0); // MobID
+                case CharacterState.Vendor:
+                    WriteMinihouse(character, packet);
+                    packet.Write<byte>(0); // isSell
+                    packet.Fill(30, 0x00); // signboard[30] 
+                    break;
 
-			//ABNORMAL_STATE_BIT
-			packet.Fill(103, 0x00); // statebit[103]
+                case CharacterState.OnMount:
+                    _SH04Helpers.WriteEquipment(character, packet);
+                    _SH04Helpers.WriteRefinement(character, packet);
+                    packet.Write<ushort>(0);
+                    break;
+            }
 
-			packet.Write<byte>(character.Type);
-			packet.Write<byte>(0); // isGuildAcademyMember
-			packet.Write<byte>(0); // isAutoPick
-	        packet.Write<byte>(character.Level);
-	        packet.Fill(32, 0x00); // sAnimation[32]
-	        packet.Write<short>(0); // nMoverHnd
-	        packet.Write<byte>(0); // nMoverSlot
-	        packet.Write<byte>(0); // nKQTeamType
-			packet.Write<byte>(0); // IsUseItemMinimon
+            packet.Fill(2, 0xFF);
+            packet.Write<ushort>(0xFF); // polymorph id (some skill idk lmao)
 
-			//packet.WriteHexAsBytes("01 17 DD 06 02 00 43 E0 FF FF FB E0 45 E0 FF FF 44 E0 42 E1 FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF E3 94 FF FF 00 00 00 00 00 FF FF FF 00 00 4A 00 00 00 00 00 90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 00 00 01 04 00 00 00 00 00 08 20 00 00 00 00 00 00 00 00 00 00 00 A0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4E 43 00 00 02 01 00 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF 0A 02 00");
-		}
+            //STOPEMOTICON_DESCRIPT
+            packet.Write<byte>(0); // emoticonId
+            packet.Write<ushort>(0); // emoticonFrame
 
-		public static void WriteEquippedItemList(ZoneCharacter character, FiestaPacket packet)
+            //CHARTITLE_BRIEFINFO
+            packet.Write<byte>(0); // Type
+            packet.Write<byte>(0); // ElementNo
+            packet.Write<ushort>(0); // MobID
+
+            //ABNORMAL_STATE_BIT
+            packet.Fill(105, 0xFF); // statebit[105]
+
+            packet.Write<uint>(0); //myGuild
+            packet.Write<byte>(character.Type);
+            packet.Write<byte>(0); // isGuildAcademyMember
+            packet.Write<byte>(0); // isAutoPick
+            packet.Write<byte>(character.Level);
+            packet.Fill(32, 0x00); // sAnimation[32]
+            packet.Write<ushort>(0); // nMoverHnd
+            packet.Write<byte>(0); // nMoverSlot
+            packet.Write<byte>(0); // nKQTeamType
+            packet.Write<byte>(0); // IsUseItemMinimon
+        }
+
+        public static void WriteEquippedItemList(ZoneCharacter character, FiestaPacket packet)
         {
         }
 
@@ -195,5 +196,5 @@ namespace DragonFiesta.Zone.Network.Helpers
         public static void WriteTimedItemList(ZoneCharacter character, FiestaPacket packet)
         {
         }
-	}
+    }
 }

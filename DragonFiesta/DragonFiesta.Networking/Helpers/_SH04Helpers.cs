@@ -84,9 +84,9 @@ namespace DragonFiesta.Networking.Helpers
 
         public static void WriteRefinement(CharacterBase character, FiestaPacket packet)
         {
-            packet.Write<byte>(0xff); //(Convert.ToByte(Character.Items.GetItemUpgradesByEquipSlot(ItemEquipSlot.Weapon) << 4 | Character.Items.GetItemUpgradesByEquipSlot(ItemEquipSlot.Weapon2)));
-            packet.Write<byte>(0xff);
-            packet.Write<byte>(0xff);
+            packet.Write<byte>(0xFF); //(Convert.ToByte(Character.Items.GetItemUpgradesByEquipSlot(ItemEquipSlot.Weapon) << 4 | Character.Items.GetItemUpgradesByEquipSlot(ItemEquipSlot.Weapon2)));
+            packet.Write<byte>(0xFF);
+            packet.Write<byte>(0xFF);
         }
 
         public static void SendCharacterError<TSession>(FiestaSession<TSession> mSession, ConnectionError error) where TSession : FiestaSession<TSession>
