@@ -41,7 +41,6 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
         {
             using (var pPacket = new FiestaPacket(Handler06Type._Header, Handler06Type.SMSG_MAP_LOGIN_ACK))
             {
-                //   pPacket.WriteHexAsBytes("40 24 48 03 00 00 00 00 00 00 B0 04 00 00 00 00 00 00 18 00 00 00 18 00 00 00 11 00 00 00 11 00 00 00 17 00 00 00 17 00 00 00 06 00 00 00 06 00 00 00 00 00 00 00 00 00 FF FF 10 00 00 00 10 00 00 00 00 00 00 00 3D 00 00 00 00 00 00 00 4E 00 00 00 00 00 00 00 11 00 00 00 00 00 00 00 32 00 00 00 00 00 00 00 17 00 00 00 00 00 00 00 06 00 00 00 00 00 00 00 06 00 00 00 00 00 00 00 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 B1 00 00 00 82 00 00 00 00 00 00 00 00 00 00 00 17 00 00 00 11 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4D 19 00 00 C3 28 00 00");
                 SH06Helper.WriteDetailedInfoExtra(pSession.Character, pPacket);
                 pSession.SendPacket(pPacket);
             }

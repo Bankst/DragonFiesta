@@ -1,5 +1,4 @@
-﻿using System;
-using DragonFiesta.Networking.HandlerTypes;
+﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Networking.Helpers;
 using DragonFiesta.Zone.Game.Character;
 
@@ -61,14 +60,6 @@ namespace DragonFiesta.Zone.Network.Helpers
             packet.Fill(7, 0); // tmp ?
         }
 
-        public static void WriteShape(ZoneCharacter character, FiestaPacket packet)
-        {
-            packet.Write<byte>(0); //Unk
-            packet.Write<byte>(character.Style.Hair.ID);
-            packet.Write<byte>(character.Style.HairColor.ID);
-            packet.Write<byte>(character.Style.Face.ID);
-        }
-
         public static void WriteMinihouse(ZoneCharacter character, FiestaPacket packet)
         {
             packet.Write<ushort>(0); // minihouse (handle?)
@@ -79,11 +70,9 @@ namespace DragonFiesta.Zone.Network.Helpers
         {
             packet.Write<ushort>(character.MapObjectId);
             packet.WriteString(character.Info.Name, 20);
-
             packet.Write<uint>(character.Position.X);
             packet.Write<uint>(character.Position.Y);
             packet.Write<byte>(character.Position.Rotation);
-
             packet.Write<byte>(character.State);
             packet.Write<byte>(character.Info.Class);
             _SH04Helpers.WriteLook(character, packet);
@@ -108,7 +97,7 @@ namespace DragonFiesta.Zone.Network.Helpers
                 case CharacterState.OnMount:
                     _SH04Helpers.WriteEquipment(character, packet);
                     _SH04Helpers.WriteRefinement(character, packet);
-                    packet.Write<ushort>(0);
+                    //packet.Write<ushort>(0); not more on NA lmao
                     break;
             }
 
@@ -126,7 +115,6 @@ namespace DragonFiesta.Zone.Network.Helpers
 
             //ABNORMAL_STATE_BIT
             packet.Fill(105, 0x00); // statebit[105]
-            //packet.WriteHexAsBytes("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 40 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00");
 
             packet.Write<uint>(0); //myGuild
             packet.Write<byte>(character.Type);
@@ -142,6 +130,7 @@ namespace DragonFiesta.Zone.Network.Helpers
 
         public static void WriteEquippedItemList(ZoneCharacter character, FiestaPacket packet)
         {
+
         }
 
         public static void WriteInventoryItemList(ZoneCharacter character, FiestaPacket packet)

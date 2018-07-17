@@ -10,7 +10,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
         [PacketHandler(Handler04Type.CMSG_CHAR_LOGOUTREADY_CMD)]
         public static void CMSG_LOGOUT_BEGIN(ZoneSession sender, FiestaPacket packet)
         {
-            if(!sender.Ingame)
+            if (!sender.Ingame)
             {
                 sender.Dispose();
                 return;
@@ -75,6 +75,13 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             sender.Character.Info.FreeStats.FreeStat_Points--;
 
             SH04Handler.SendPointOnStat(sender, Type);
+        }
+
+        // soon...
+        [PacketHandler(Handler04Type.CMSG_CHAR_REVIVE_REQ)]
+        public static void CMSG_CHAR_REVIVE_REQ(ZoneSession session, FiestaPacket packet)
+        {
+
         }
     }
 }

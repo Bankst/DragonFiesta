@@ -75,5 +75,17 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
                 }
             }
         }
+
+        // works ? not tested..
+        public static void SendRevive(ZoneSession session)
+        {
+            using (var Packet = new FiestaPacket(Handler04Type._Header, Handler04Type.SMSG_CHAR_REVIVESAME_CMD))
+            {
+                Packet.Write<ushort>(session.Character.Map.MapId);
+                Packet.Write<uint>(session.Character.Position.X);
+                Packet.Write<uint>(session.Character.Position.Y);
+                session.SendPacket(Packet);
+            }
+        }
     }
 }
