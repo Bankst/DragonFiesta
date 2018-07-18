@@ -120,8 +120,7 @@ namespace DragonFiesta.Zone.Game.Character
         {
             LoginInfo = new ZoneClientLoginInfo(this);
             base.Info = new ZoneCharacterInfo(this);
-
-
+			
             LivingStats = new LivingStats(this);
 
             LivingStats.OnHPChanged += LivingStats_OnHPChanged;
@@ -132,10 +131,7 @@ namespace DragonFiesta.Zone.Game.Character
             _onDisposeHandlers = new List<EventHandler<MapObjectEventArgs>>();
             _onUpdateCounterChangedHandler = new List<EventHandler<UpdateCounterChangeEventArgs>>();
 
-
-
-
-            InRange = new InRangeCollection(this);
+			InRange = new InRangeCollection(this);
             Selection = new CharacterObjectSelection(this);
 
         }
@@ -193,9 +189,10 @@ namespace DragonFiesta.Zone.Game.Character
                 pRes.Read<uint>(i, "SP"),
                 pRes.Read<uint>(i, "LP"));
 
-
             return true;
         }
+
+
 
 
         public void Broadcast(FiestaPacket packet) => InRange.Broadcast(packet);
@@ -261,9 +258,7 @@ namespace DragonFiesta.Zone.Game.Character
             }
         }
 
-
-
-        public void WriteDisplay(FiestaPacket packet)
+		public void WriteDisplay(FiestaPacket packet)
         {
             SH04Helpers.WriteCharacterDisplay(this, packet);
         }

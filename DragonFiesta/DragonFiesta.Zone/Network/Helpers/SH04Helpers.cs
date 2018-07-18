@@ -135,7 +135,14 @@ namespace DragonFiesta.Zone.Network.Helpers
 
         public static void WriteInventoryItemList(ZoneCharacter character, FiestaPacket packet)
         {
-        }
+			packet.Write<byte>(0); // inv item count
+			packet.Write<byte>(0x09); // inv number
+	        packet.Write<byte>(0xB7);  // unk
+	        //foreach (var item in character.InventoryItems.Values)
+	        //{
+				
+	        //}
+		}
 
         public static void WriteMiniHouseList(ZoneCharacter character, FiestaPacket packet)
         {
