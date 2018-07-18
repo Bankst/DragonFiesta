@@ -5,32 +5,32 @@ public class CommandLog : FileLog
 {
     protected override string LogTypeName => "CommandLog";
 
-    private CommandLog(string Directory)
-     : base(Directory)
+    private CommandLog(string directory)
+     : base(directory)
     {
     }
 
-    private static CommandLog Instance { get { return (_Instance ?? (_Instance = new CommandLog(@"CommandLog"))); } }
-    private static CommandLog _Instance;
+    private static CommandLog Instance => (_instance ?? (_instance = new CommandLog(@"CommandLog")));
+	private static CommandLog _instance;
 
-    public static void SetupLevels(byte mConsolenLevel, byte mFileLogLevel)
+    public static void SetupLevels(byte mConsoleLevel, byte mFileLogLevel)
     {
-        Instance.SetConsolenLevel(mConsolenLevel);
+        Instance.SetConsoleLevel(mConsoleLevel);
         Instance.SetFileLogLevel(mFileLogLevel);
     }
 
-    public static void WriteConsoleLine(CommandLogLevel Type, string Message, params object[] args)
+    public static void WriteConsoleLine(CommandLogLevel type, string message, params object[] args)
     {
-        Instance.ConsoleWriteLine(Instance.ToString(), Type, Message, args);
+        Instance.ConsoleWriteLine(Instance.ToString(), type, message, args);
     }
 
-    public static void Write(CommandLogLevel Type, string Message, params object[] args)
+    public static void Write(CommandLogLevel type, string message, params object[] args)
     {
-        Instance.Write(Instance.ToString(), Type, Message, args);
+        Instance.Write(Instance.ToString(), type, message, args);
     }
 
-    public static void Write(Exception Exception, string Message, params object[] args)
+    public static void Write(Exception exception, string message, params object[] args)
     {
-        Instance.WriteException(Exception, CommandLogLevel.Error, Message, args);
+        Instance.WriteException(exception, CommandLogLevel.Error, message, args);
     }
 }

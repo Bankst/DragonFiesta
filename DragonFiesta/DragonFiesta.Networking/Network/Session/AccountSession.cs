@@ -1,6 +1,7 @@
 ﻿using DragonFiesta.Game.Accounts;
 using DragonFiesta.Networking.Network.Managers;
 using System.Net.Sockets;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Networking.Network.Session
 {
@@ -8,9 +9,9 @@ namespace DragonFiesta.Networking.Network.Session
             where TSession : FiestaSession<TSession>
     {
 
-        public bool AccountIsLoggedIn { get { return (UserAccount != null); } }
+        public bool AccountIsLoggedIn => (UserAccount != null);
 
-        public Account UserAccount { get; set; }
+	    public Account UserAccount { get; set; }
 
         public AccountSession(ClientRegion mRegion, Socket mSocket) :
             base(mRegion, mSocket)
@@ -20,13 +21,11 @@ namespace DragonFiesta.Networking.Network.Session
 
         private void AccountSession_OnDisconnect(object sender, SessionDisconnectArgs e)
         {
-            if (AccountIsLoggedIn)
-            {
-                if (AccountSessionManager<TSession>.Instance.RemoveAccount(UserAccount.ID, out TSession Session))
-                {
-                    GameLog.Write(GameLogLevel.Debug, "Account {0} Disconnected", UserAccount.Name);
-                }
-            }
+	        if (!AccountIsLoggedIn) return;
+	        if (AccountSessionManager<TSession>.Instance.RemoveAccount(UserAccount.ID, out TSession Session))
+	        {
+		        GameLog.Write(GameLogLevel.Debug, "Account {0} Disconnected", UserAccount.Name);
+	        }
         }
         protected override void DisposeInternal()
         {

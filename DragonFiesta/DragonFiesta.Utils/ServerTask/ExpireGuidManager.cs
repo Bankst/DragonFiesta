@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace DragonFiesta.Utils.ServerTask
@@ -9,18 +10,18 @@ namespace DragonFiesta.Utils.ServerTask
     {
         public ConcurrentDictionary<Guid, IExpireGuidAble> Objects;
 
-        private object ThreadLocker;
+        private object _threadLocker;
 
-        private int IsDisposedInt;
+        private int _isDisposedInt;
 
         public TimeSpan UpdateInterval { get; private set; }
 
         public GameTime LastUpdate { get; private set; }
 
-        public ExpireGuidManager(int CheckIntervalMS)
+        public ExpireGuidManager(int checkIntervalMs)
         {
             Objects = new ConcurrentDictionary<Guid, IExpireGuidAble>();
-            ThreadLocker = new object();
+            _threadLocker = new object();
             LastUpdate = GameTime.Now();
         }
 
@@ -29,71 +30,58 @@ namespace DragonFiesta.Utils.ServerTask
             Dispose();
         }
 
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
-            if (IsDisposedInt == 1) return false;
+            if (_isDisposedInt == 1) return false;
 
 
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                if (Objects.Count > 0)
-                {
-                    var expired = new List<IExpireGuidAble>();
+	            if (Objects.Count <= 0) return true;
+	            var expired = Objects.Values.Where(obj => obj.IsDisposed || gameTime >= obj.ExpireTime).ToList();
 
-                    foreach (var Obj in Objects.Values)
-                    {
-                        if (Obj.IsDisposed
-                         || Now >= Obj.ExpireTime)
-                        {
-                            expired.Add(Obj);
-                        }
-                    }
+	            foreach (var t in expired)
+	            {
+		            var obj = t;
 
-                    for (int i = 0; i < expired.Count; i++)
-                    {
-                        var obj = expired[i];
-
-                        if (!obj.IsDisposed && Objects.TryRemove(obj.Id, out obj))
-                        {
-                            obj.OnExpire(Now);
-                        }
-                    }
-                    LastUpdate = GameTime.Now();
-                    expired.Clear();
-                    expired = null;
-                }
+		            if (!obj.IsDisposed && Objects.TryRemove(obj.Id, out obj))
+		            {
+			            obj.OnExpire(gameTime);
+		            }
+	            }
+	            LastUpdate = GameTime.Now();
+	            expired.Clear();
+	            expired = null;
             }
             return true;
         }
 
         public void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
-            {
-                Objects.Clear();
-                Objects = null;
-                ThreadLocker = null;
-            }
+	        if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) != 0) return;
+	        Objects.Clear();
+	        Objects = null;
+	        _threadLocker = null;
         }
 
         public bool AddObject(IExpireGuidAble Object)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
                 return Objects.TryAdd(Object.Id, Object);
             }
         }
 
-        public bool RemoveObject(Guid Id)
+        public bool RemoveObject(Guid id)
         {
-            return RemoveObject(Id, out IExpireGuidAble obj);
+            return RemoveObject(id, out IExpireGuidAble obj);
         }
 
-        public bool RemoveObject(Guid Id, out IExpireGuidAble Object)
+        public bool RemoveObject(Guid id, out IExpireGuidAble Object)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                return Objects.TryRemove(Id, out Object);
+                return Objects.TryRemove(id, out Object);
             }
         }
     }

@@ -26,11 +26,11 @@ namespace DragonFiesta.Game.Transfer
             Dispose();
         }
 
-        public virtual void OnExpire(GameTime Now)
+        public virtual void OnExpire(GameTime gameTime)
         {
         }
 
-        public virtual void Update(GameTime Now)
+        public virtual void Update(GameTime gameTime)
         {
         }
 

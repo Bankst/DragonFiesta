@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DragonFiesta.Providers.Items;
+﻿using DragonFiesta.Providers.Items;
 
 namespace DragonFiesta.Zone.Data.Items
 {
@@ -19,7 +14,7 @@ namespace DragonFiesta.Zone.Data.Items
 			LoadItemInfoServer();
 			LoadBelongTypeInfo();
 			LoadUpgradeInfo();
-			//FillItemUpgradeInfos();
+			LoadGradeItemOption();
 			FillItemBaseInfos();
 			return true;
 		}

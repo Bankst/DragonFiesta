@@ -9,6 +9,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Zone.Game.Maps.Types
 {

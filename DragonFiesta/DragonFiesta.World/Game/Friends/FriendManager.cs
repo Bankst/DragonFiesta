@@ -3,6 +3,7 @@ using DragonFiesta.Utils.Config;
 using DragonFiesta.World.Game.Character;
 using DragonFiesta.World.Network.FiestaHandler.Server;
 using System;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Game.Friends
 {

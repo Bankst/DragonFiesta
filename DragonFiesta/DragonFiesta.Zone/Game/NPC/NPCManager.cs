@@ -7,6 +7,7 @@ using DragonFiesta.Zone.Game.Maps.Event;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Zone.Game.Maps
 {
@@ -69,87 +70,87 @@ namespace DragonFiesta.Zone.Game.Maps
             return true;
         }
 
-        public bool CreateNPC(NPCInfo Info, out NPCBase npc)
+        public bool CreateNPC(NPCInfo info, out NPCBase npc)
         {
             npc = null;
 
-            switch (Info.Role)
+            switch (info.Role)
             {
                 case NPCRole.Merchant:
-                    switch (Info.RoleArgument)
+					switch (info.RoleArgument)
                     {
                         case NPCArgument.Weapon:
-                            npc = new WeaponNPC(Info);
+                            npc = new WeaponNPC(info);
                             break;
 
                         case NPCArgument.SoulStone:
-                            npc = new SoulStoneNPC(Info);
+                            npc = new SoulStoneNPC(info);
                             break;
 
                         case NPCArgument.WeaponTitle:
-                            npc = new WeaponTitle(Info);
+                            npc = new WeaponTitle(info);
                             break;
 
                         case NPCArgument.Quest:
-                            npc = new QuestNPC(Info);
+                            npc = new QuestNPC(info);
                             break;
 
                         case NPCArgument.Skill:
-                            npc = new SkillNPC(Info);
+                            npc = new SkillNPC(info);
                             break;
 
                         case NPCArgument.Item:
-                            npc = new StuffNPC(Info);
+                            npc = new StuffNPC(info);
                             break;
 
                         case NPCArgument.Guild:
-                            npc = new GuildNPC(Info);
+                            npc = new GuildNPC(info);
                             break;
 
                     }
                     break;
 
                 case NPCRole.ClientMenu:
-                    npc = new ClientMenu(Info);
+                    npc = new ClientMenu(info);
                     break;
 
                 case NPCRole.QuestNpc:
-                    switch (Info.RoleArgument)
+                    switch (info.RoleArgument)
                     {
                         case NPCArgument.Quest:
-                            npc = new QuestNPC(Info);
+                            npc = new QuestNPC(info);
                             break;
 
                         case NPCArgument.GBDice:
-                            npc = new GBDice(Info);
+                            npc = new GBDice(info);
                             break;
                     }
 
                     break;
 
                 case NPCRole.StoreManager:
-                    switch (Info.RoleArgument)
+                    switch (info.RoleArgument)
                     {
                         case NPCArgument.None:
-                            npc = new StoreManager(Info);
+                            npc = new StoreManager(info);
                             break;
 
                         case NPCArgument.Quest:
-                            npc = new QuestNPC(Info);
+                            npc = new QuestNPC(info);
                             break;
                     }
 
                     break;
 
                 case NPCRole.NPCMenu:
-                    switch (Info.RoleArgument)
+                    switch (info.RoleArgument)
                     {
                         case NPCArgument.Guild:
-                            npc = new GuildNPC(Info);
+                            npc = new GuildNPC(info);
                             break;
 
                         case NPCArgument.ExchangeCoin:
-                            npc = new ExchangeCoin(Info);
+                            npc = new ExchangeCoin(info);
                             break;
                     }
 
@@ -158,20 +159,20 @@ namespace DragonFiesta.Zone.Game.Maps
                 //Todo Add GateNPC
 
                 case NPCRole.JobMaster:
-                    npc = new JobNPC(Info);
+                    npc = new JobNPC(info);
                     break;
 
                 case NPCRole.Guard:
-                    npc = new QuestNPC(Info);
+                    npc = new QuestNPC(info);
                     break;
 
                 case NPCRole.Gate:
-                    npc = new GateNPC(Info);
+                    npc = new GateNPC(info);
                     break;
 
                 case NPCRole.None:
                 default:
-                    npc = new DefaultNPC(Info);
+                    npc = new DefaultNPC(info);
                     break;
             }
 
@@ -201,7 +202,7 @@ namespace DragonFiesta.Zone.Game.Maps
             }
         }
 
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
             if (IsDisposed) return false;
 

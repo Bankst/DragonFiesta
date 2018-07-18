@@ -1,4 +1,5 @@
 ﻿using System;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Networking.Network
 {

@@ -11,8 +11,8 @@ namespace DragonFiesta.World.Game.Character
 
         public override string Name
         {
-            get { return _Name; }
-            set
+            get => _Name;
+	        set
             {
                 var oldName = _Name;
                 _Name = value;

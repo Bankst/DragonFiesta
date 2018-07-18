@@ -6,81 +6,78 @@ using DragonFiesta.Providers.Characters;
 
 namespace DragonFiesta.Game.Characters
 {
-    public abstract class CharacterManagerBase<CharacterType> where CharacterType : CharacterBase, new()
+    public abstract class CharacterManagerBase<TCharacterType> where TCharacterType : CharacterBase, new()
     {
-        protected ConcurrentDictionary<int, CharacterType> CharactersByCharacterID { get; private set; }
-        protected ConcurrentDictionary<string, CharacterType> CharactersByName { get; private set; }
-        protected ConcurrentDictionary<long, CharacterType> LoggedInCharactersByAccountId { get; private set; }
-        protected ConcurrentDictionary<int, CharacterType> LoggedInCharactersByCharacterID { get; private set; }
+        protected ConcurrentDictionary<int, TCharacterType> CharactersByCharacterID { get; }
+        protected ConcurrentDictionary<string, TCharacterType> CharactersByName { get; }
+        protected ConcurrentDictionary<long, TCharacterType> LoggedInCharactersByAccountId { get; }
+        protected ConcurrentDictionary<int, TCharacterType> LoggedInCharactersByCharacterID { get; }
 
-        protected ConcurrentDictionary<string, CharacterType> LoggedInCharactersByName;
+        protected ConcurrentDictionary<string, TCharacterType> LoggedInCharactersByName;
         
      
 
-        public event EventHandler<CharacterMapEventArgs<CharacterType, IMap>> OnCharacterMapChanged { add { lock (ThreadLocker) OnCharacterMapChangedHandler.Add(value); } remove { lock (ThreadLocker) OnCharacterMapChangedHandler.Remove(value); } }
+        public event EventHandler<CharacterMapEventArgs<TCharacterType, IMap>> OnCharacterMapChanged { add { lock (ThreadLocker) _onCharacterMapChangedHandler.Add(value); } remove { lock (ThreadLocker) _onCharacterMapChangedHandler.Remove(value); } }
 
-        public event EventHandler<CharacterLevelChangedEventArgs<CharacterType>> OnCharacterLevelChanged { add { lock (ThreadLocker) OnCharacterLevelChangedHandler.Add(value); } remove { lock (ThreadLocker) OnCharacterLevelChangedHandler.Remove(value); } }
+        public event EventHandler<CharacterLevelChangedEventArgs<TCharacterType>> OnCharacterLevelChanged { add { lock (ThreadLocker) _onCharacterLevelChangedHandler.Add(value); } remove { lock (ThreadLocker) _onCharacterLevelChangedHandler.Remove(value); } }
 
-        public event EventHandler<CharacterDeleteEventArgs<CharacterType>> OnCharacterDelete { add { lock (ThreadLocker) OnCharacterDeleteHandler.Add(value); } remove { lock (ThreadLocker) OnCharacterDeleteHandler.Remove(value); } }
+        public event EventHandler<CharacterDeleteEventArgs<TCharacterType>> OnCharacterDelete { add { lock (ThreadLocker) _onCharacterDeleteHandler.Add(value); } remove { lock (ThreadLocker) _onCharacterDeleteHandler.Remove(value); } }
 
-        public event EventHandler<CharacterClassChangeEventArgs<CharacterType>> OnCharacterClassChange { add { lock (ThreadLocker) OnCharacterClassChangeHandler.Add(value); } remove { lock (ThreadLocker) OnCharacterClassChangeHandler.Remove(value); } }
+        public event EventHandler<CharacterClassChangeEventArgs<TCharacterType>> OnCharacterClassChange { add { lock (ThreadLocker) _onCharacterClassChangeHandler.Add(value); } remove { lock (ThreadLocker) _onCharacterClassChangeHandler.Remove(value); } }
 
-        public event EventHandler<CharacterEventArgs<CharacterType>> OnCharacterLogout { add { lock (ThreadLocker) OnCharacterLogoutHandler.Add(value); } remove { lock (ThreadLocker) OnCharacterLogoutHandler.Remove(value); } }
+        public event EventHandler<CharacterEventArgs<TCharacterType>> OnCharacterLogout { add { lock (ThreadLocker) _onCharacterLogoutHandler.Add(value); } remove { lock (ThreadLocker) _onCharacterLogoutHandler.Remove(value); } }
 
-        public event EventHandler<CharacterEventArgs<CharacterType>> OnCharacterLogin { add { lock (ThreadLocker) OnCharacterLoginHandler.Add(value); } remove { lock (ThreadLocker) OnCharacterLoginHandler.Remove(value); } }
+        public event EventHandler<CharacterEventArgs<TCharacterType>> OnCharacterLogin { add { lock (ThreadLocker) _onCharacterLoginHandler.Add(value); } remove { lock (ThreadLocker) _onCharacterLoginHandler.Remove(value); } }
 
-        public event EventHandler<CharacterMapRefreshEventArgs<CharacterType>> OnCharacterMapRefresh { add { lock (ThreadLocker) OnCharacterMapRefreshHandler.Add(value); } remove { lock (ThreadLocker) OnCharacterMapRefreshHandler.Remove(value); } }
+        public event EventHandler<CharacterMapRefreshEventArgs<TCharacterType>> OnCharacterMapRefresh { add { lock (ThreadLocker) _onCharacterMapRefreshHandler.Add(value); } remove { lock (ThreadLocker) _onCharacterMapRefreshHandler.Remove(value); } }
 
-        private SecureCollection<EventHandler<CharacterClassChangeEventArgs<CharacterType>>> OnCharacterClassChangeHandler;
+        private readonly SecureCollection<EventHandler<CharacterClassChangeEventArgs<TCharacterType>>> _onCharacterClassChangeHandler;
 
         //need this handler because packet exis...^^ and more..
-        private SecureCollection<EventHandler<CharacterDeleteEventArgs<CharacterType>>> OnCharacterDeleteHandler;
+        private readonly SecureCollection<EventHandler<CharacterDeleteEventArgs<TCharacterType>>> _onCharacterDeleteHandler;
 
-        private SecureCollection<EventHandler<CharacterMapEventArgs<CharacterType, IMap>>> OnCharacterMapChangedHandler;
+        private readonly SecureCollection<EventHandler<CharacterMapEventArgs<TCharacterType, IMap>>> _onCharacterMapChangedHandler;
 
-        private SecureCollection<EventHandler<CharacterLevelChangedEventArgs<CharacterType>>> OnCharacterLevelChangedHandler;
+        private readonly SecureCollection<EventHandler<CharacterLevelChangedEventArgs<TCharacterType>>> _onCharacterLevelChangedHandler;
 
-        private SecureCollection<EventHandler<CharacterEventArgs<CharacterType>>> OnCharacterLoginHandler;
+        private readonly SecureCollection<EventHandler<CharacterEventArgs<TCharacterType>>> _onCharacterLoginHandler;
 
-        private SecureCollection<EventHandler<CharacterEventArgs<CharacterType>>> OnCharacterLogoutHandler;
+        private readonly SecureCollection<EventHandler<CharacterEventArgs<TCharacterType>>> _onCharacterLogoutHandler;
 
-        private SecureCollection<EventHandler<CharacterMapRefreshEventArgs<CharacterType>>> OnCharacterMapRefreshHandler;
+        private readonly SecureCollection<EventHandler<CharacterMapRefreshEventArgs<TCharacterType>>> _onCharacterMapRefreshHandler;
 
 
-        protected object ThreadLocker { get; private set; }
+        protected object ThreadLocker { get; }
 
-        public CharacterManagerBase()
+	    protected CharacterManagerBase()
         {
-            CharactersByCharacterID = new ConcurrentDictionary<int, CharacterType>();
-            CharactersByName = new ConcurrentDictionary<string, CharacterType>();
-            LoggedInCharactersByAccountId = new ConcurrentDictionary<long, CharacterType>();
-            LoggedInCharactersByCharacterID = new ConcurrentDictionary<int, CharacterType>();
-            LoggedInCharactersByName = new ConcurrentDictionary<string, CharacterType>();
-            OnCharacterLoginHandler = new SecureCollection<EventHandler<CharacterEventArgs<CharacterType>>>();
-            OnCharacterLogoutHandler = new SecureCollection<EventHandler<CharacterEventArgs<CharacterType>>>();
-            OnCharacterMapChangedHandler = new SecureCollection<EventHandler<CharacterMapEventArgs<CharacterType, IMap>>>();
-            OnCharacterLevelChangedHandler = new SecureCollection<EventHandler<CharacterLevelChangedEventArgs<CharacterType>>>();
-            OnCharacterClassChangeHandler = new SecureCollection<EventHandler<CharacterClassChangeEventArgs<CharacterType>>>();
-            OnCharacterDeleteHandler = new SecureCollection<EventHandler<CharacterDeleteEventArgs<CharacterType>>>();
-            OnCharacterMapRefreshHandler = new SecureCollection<EventHandler<CharacterMapRefreshEventArgs<CharacterType>>>();
+            CharactersByCharacterID = new ConcurrentDictionary<int, TCharacterType>();
+            CharactersByName = new ConcurrentDictionary<string, TCharacterType>();
+            LoggedInCharactersByAccountId = new ConcurrentDictionary<long, TCharacterType>();
+            LoggedInCharactersByCharacterID = new ConcurrentDictionary<int, TCharacterType>();
+            LoggedInCharactersByName = new ConcurrentDictionary<string, TCharacterType>();
+            _onCharacterLoginHandler = new SecureCollection<EventHandler<CharacterEventArgs<TCharacterType>>>();
+            _onCharacterLogoutHandler = new SecureCollection<EventHandler<CharacterEventArgs<TCharacterType>>>();
+            _onCharacterMapChangedHandler = new SecureCollection<EventHandler<CharacterMapEventArgs<TCharacterType, IMap>>>();
+            _onCharacterLevelChangedHandler = new SecureCollection<EventHandler<CharacterLevelChangedEventArgs<TCharacterType>>>();
+            _onCharacterClassChangeHandler = new SecureCollection<EventHandler<CharacterClassChangeEventArgs<TCharacterType>>>();
+            _onCharacterDeleteHandler = new SecureCollection<EventHandler<CharacterDeleteEventArgs<TCharacterType>>>();
+            _onCharacterMapRefreshHandler = new SecureCollection<EventHandler<CharacterMapRefreshEventArgs<TCharacterType>>>();
 
             ThreadLocker = new object();
         }
 
-        private bool LoadCharacterFromDatabase(string Where, out CharacterType Character, out CharacterErrors Result, params SqlParameter[] Parameters)
+        private bool LoadCharacterFromDatabase(string where, out TCharacterType character, out CharacterErrors result, params SqlParameter[] parameters)
         {
-            Result = CharacterErrors.ErrorInCharacterInfo;
-            Character = default(CharacterType);
+            result = CharacterErrors.ErrorInCharacterInfo;
+            character = default(TCharacterType);
             try
             {
                 lock (ThreadLocker)
                 {
-                    SQLResult pResult = DB.Select(DatabaseType.World, "SELECT TOP 1 * FROM Characters WHERE " + Where, Parameters);
+                    var pResult = DB.Select(DatabaseType.World, "SELECT TOP 1 * FROM Characters WHERE " + where, parameters);
 
-                    if (!pResult.HasValues)
-                        return false;
-
-                    return GetCharacterFromSQL(pResult, 0, out Character, out Result);
+                    return pResult.HasValues && GetCharacterFromSQL(pResult, 0, out character, out result);
                 }
             }
             catch (Exception ex)
@@ -90,24 +87,18 @@ namespace DragonFiesta.Game.Characters
             }
         }
 
-        public bool GetCharacterFromSQL(SQLResult pRes, int i, out CharacterType Character, out CharacterErrors Result)
+        public bool GetCharacterFromSQL(SQLResult pRes, int i, out TCharacterType character, out CharacterErrors result)
         {
-            Character = null;
-            Result = CharacterErrors.ErrorInCharacterInfo;
+            character = null;
+            result = CharacterErrors.ErrorInCharacterInfo;
             try
             {
                 lock (ThreadLocker)
                 {
-                    if (!CharactersByCharacterID.TryGetValue(pRes.Read<int>(i, "ID"), out Character))
-                    {
-                        Character = new CharacterType();
+	                if (CharactersByCharacterID.TryGetValue(pRes.Read<int>(i, "ID"), out character)) return true;
+	                character = new TCharacterType();
 
-                        if (!Character.RefreshCharacter(pRes, i, out Result))
-                            return false;
-
-                        return AddCharacter(Character,out Result);
-                    }
-                    return true;
+	                return character.RefreshCharacter(pRes, i, out result) && AddCharacter(character,out result);
                 }
             }
             catch (Exception ex)
@@ -117,272 +108,269 @@ namespace DragonFiesta.Game.Characters
             }
         }
 
-        public bool GetCharacterByCharacterID(int ID, out CharacterType Character, bool RefreshCharacter = false)
+        public bool GetCharacterByCharacterID(int id, out TCharacterType character, bool refreshCharacter = false)
         {
-            return GetCharacterByCharacterID(ID, out Character, out CharacterErrors er, RefreshCharacter);
+            return GetCharacterByCharacterID(id, out character, out _, refreshCharacter);
         }
 
-        public bool GetCharacterByCharacterID(int ID, out CharacterType Character, out CharacterErrors Result, bool RefreshCharacter = false)
+        public bool GetCharacterByCharacterID(int id, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
         {
             lock (ThreadLocker)
             {
-                if (CharactersByCharacterID.TryGetValue(ID, out Character))
+                if (CharactersByCharacterID.TryGetValue(id, out character))
                 {
-                    if (RefreshCharacter)
+                    if (refreshCharacter)
                     {
-                        return this.RefreshCharacter(Character, out Result);
+                        return RefreshCharacter(character, out result);
                     }
 
-                    Result = CharacterErrors.LoadOK;
+                    result = CharacterErrors.LoadOK;
 
                     return true;
                 }
-                return LoadCharacterFromDatabase("ID = @pID", out Character, out Result, new SqlParameter("@pID", ID));
+                return LoadCharacterFromDatabase("ID = @pID", out character, out result, new SqlParameter("@pID", id));
             }
         }
 
-        public bool GetCharacterByName(string Name, out CharacterType Character, bool RefreshCharacter = false)
+        public bool GetCharacterByName(string name, out TCharacterType character, bool refreshCharacter = false)
         {
-            return GetCharacterByName(Name, out Character, out CharacterErrors err, RefreshCharacter);
+            return GetCharacterByName(name, out character, out _, refreshCharacter);
         }
 
-        public bool GetCharacterByName(string Name, out CharacterType Character, out CharacterErrors Result, bool RefreshCharacter = false)
+        public bool GetCharacterByName(string name, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
         {
             lock (ThreadLocker)
             {
-                if (CharactersByName.TryGetValue(Name, out Character))
+                if (CharactersByName.TryGetValue(name, out character))
                 {
-                    if (RefreshCharacter)
+                    if (refreshCharacter)
                     {
-                        return this.RefreshCharacter(Character, out Result);
+                        return RefreshCharacter(character, out result);
                     }
 
-                    Result = CharacterErrors.LoadOK;
+                    result = CharacterErrors.LoadOK;
 
                     return true;
                 }
 
-                return LoadCharacterFromDatabase("Name = @pName", out Character, out Result, new SqlParameter("@pName", Name));
+                return LoadCharacterFromDatabase("Name = @pName", out character, out result, new SqlParameter("@pName", name));
             }
         }
 
-        public bool GetLoggedInCharacterByAccountId(long ID, out CharacterType Character, bool RefreshCharacter = false)
+        public bool GetLoggedInCharacterByAccountId(long id, out TCharacterType character, bool refreshCharacter = false)
         {
-            return GetLoggedInCharacterByAccountId(ID, out Character, out CharacterErrors er, RefreshCharacter);
+            return GetLoggedInCharacterByAccountId(id, out character, out _, refreshCharacter);
         }
 
-        public bool GetLoggedInCharacterByAccountId(long ID, out CharacterType Character, out CharacterErrors Result, bool RefreshCharacter = false)
+        public bool GetLoggedInCharacterByAccountId(long id, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
         {
             lock (ThreadLocker)
             {
-                if (LoggedInCharactersByAccountId.TryGetValue(ID, out Character))
+                if (LoggedInCharactersByAccountId.TryGetValue(id, out character))
                 {
-                    if (RefreshCharacter)
+                    if (refreshCharacter)
                     {
-                        return this.RefreshCharacter(Character, out Result);
+                        return RefreshCharacter(character, out result);
                     }
 
-                    Result = CharacterErrors.LoadOK;
+                    result = CharacterErrors.LoadOK;
                     return true;
                 }
 
-                Result = CharacterErrors.ErrorInCharacterInfo;
+                result = CharacterErrors.ErrorInCharacterInfo;
                 return false;
             }
         }
 
-        public bool GetLoggedInCharacterByCharacterID(int ID, out CharacterType Character, bool RefreshCharacter = false)
+        public bool GetLoggedInCharacterByCharacterID(int id, out TCharacterType character, bool refreshCharacter = false)
         {
-            return GetLoggedInCharacterByCharacterID(ID, out Character, out CharacterErrors Err, RefreshCharacter);
+            return GetLoggedInCharacterByCharacterID(id, out character, out _, refreshCharacter);
         }
 
-        public bool GetLoggedInCharacterByCharacterID(int ID, out CharacterType Character, out CharacterErrors Result, bool RefreshCharacter = false)
+        public bool GetLoggedInCharacterByCharacterID(int id, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
         {
             lock (ThreadLocker)
             {
-                if (LoggedInCharactersByCharacterID.TryGetValue(ID, out Character))
+                if (LoggedInCharactersByCharacterID.TryGetValue(id, out character))
                 {
-                    if (RefreshCharacter)
+                    if (refreshCharacter)
                     {
-                        return this.RefreshCharacter(Character, out Result);
+                        return RefreshCharacter(character, out result);
                     }
 
-                    Result = CharacterErrors.LoadOK;
+                    result = CharacterErrors.LoadOK;
 
                     return true;
                 }
-                Result = CharacterErrors.ErrorInCharacterInfo;
+                result = CharacterErrors.ErrorInCharacterInfo;
                 return false;
             }
         }
 
-        public bool GetLoggedInCharacterByName(string Name, out CharacterType Character, bool RefreshCharacter = false)
+        public bool GetLoggedInCharacterByName(string name, out TCharacterType character, bool refreshCharacter = false)
         {
-            return GetLoggedInCharacterByName(Name, out Character, out CharacterErrors err, RefreshCharacter);
+            return GetLoggedInCharacterByName(name, out character, out _, refreshCharacter);
         }
 
-        public bool GetLoggedInCharacterByName(string Name, out CharacterType Character, out CharacterErrors Result, bool RefreshCharacter = false)
+        public bool GetLoggedInCharacterByName(string name, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
         {
             lock (ThreadLocker)
             {
-                if (LoggedInCharactersByName.TryGetValue(Name, out Character))
+                if (LoggedInCharactersByName.TryGetValue(name, out character))
                 {
-                    if (RefreshCharacter)
+                    if (refreshCharacter)
                     {
-                        return this.RefreshCharacter(Character, out Result);
+                        return RefreshCharacter(character, out result);
                     }
 
-                    Result = CharacterErrors.LoadOK;
+                    result = CharacterErrors.LoadOK;
                     return true;
                 }
 
-                Result = CharacterErrors.ErrorInCharacterInfo;
+                result = CharacterErrors.ErrorInCharacterInfo;
                 return false;
             }
         }
 
-        public bool RefreshCharacter(CharacterType Character, out CharacterErrors Result)
+        public bool RefreshCharacter(TCharacterType character, out CharacterErrors result)
         {
             try
             {
                 lock (ThreadLocker)
                 {
-                    SQLResult pResult = DB.Select(DatabaseType.World, "SELECT TOP 1 * FROM Characters WHERE ID = @pID",
-                        new SqlParameter("@pID", Character.Info.CharacterID));
+                    var pResult = DB.Select(DatabaseType.World, "SELECT TOP 1 * FROM Characters WHERE ID = @pID",
+                        new SqlParameter("@pID", character.Info.CharacterID));
 
-                    if (!pResult.HasValues)
-                    {
-                        Result = CharacterErrors.ErrorInCharacterInfo;
-                        return false;
-                    }
+	                if (pResult.HasValues) return character.RefreshCharacter(pResult, 0, out result);
 
-                    return Character.RefreshCharacter(pResult, 0, out Result);
+	                result = CharacterErrors.ErrorInCharacterInfo;
+	                return false;
                 }
             }
             catch (Exception ex)
             {
-                Result = CharacterErrors.ErrorInCharacterInfo;
+                result = CharacterErrors.ErrorInCharacterInfo;
                 EngineLog.Write(ex, "Error refreshing character: ");
 
                 return false;
             }
         }
 
-
-        protected virtual bool FinalizeCharacterDeleted(CharacterType Character)
+        protected virtual bool FinalizeCharacterDeleted(TCharacterType character)
         {
-            InvokeCharacterDeletet(Character);
+            InvokeCharacterDeleted(character);
 
             return true;
         }
-        public bool DeleteCharacter(CharacterType Character)
+
+        public bool DeleteCharacter(TCharacterType character)
         {
-
-            if (!RemoveCharacter(Character))
-                return false;
-
-            return FinalizeCharacterDeleted(Character);
+	        return RemoveCharacter(character) && FinalizeCharacterDeleted(character);
         }
 
-        public virtual void CharacterChangeClass(CharacterType Character, ClassId NewClass)
+        public virtual void CharacterChangeClass(TCharacterType character, ClassId newClass)
         {
-            if (Character.Info.Class == NewClass)
+            if (character.Info.Class == newClass)
                 return;
 
-            InvokeCharacterClassChange(Character, NewClass);
+            InvokeCharacterClassChange(character, newClass);
 
-            Character.Info.Class = NewClass;
-        }
-        public virtual void CharacterChangeMap(CharacterType Character, IMap NewMap)
-        {
-            InvokeCharacterMapChanged(Character, NewMap);
+            character.Info.Class = newClass;
         }
 
-        public virtual void CharacterMapRefreshed(CharacterType Character)
+        public virtual void CharacterChangeMap(TCharacterType character, IMap newMap)
         {
-            InvokeCharacterMapRefresh(Character);
-        }
-        protected virtual void FinalizeLogCharacterIn(CharacterType Character)
-        {
-            InvokeCharacterLogin(Character);
+            InvokeCharacterMapChanged(character, newMap);
         }
 
-        public void CharacterLevelChanged(CharacterType Character,byte NewLevel)
+        public virtual void CharacterMapRefreshed(TCharacterType character)
         {
-            if (Character.Info.Level == NewLevel)
+            InvokeCharacterMapRefresh(character);
+        }
+
+        protected virtual void FinalizeLogCharacterIn(TCharacterType character)
+        {
+            InvokeCharacterLogin(character);
+        }
+
+        public void CharacterLevelChanged(TCharacterType character,byte newLevel)
+        {
+            if (character.Info.Level == newLevel)
                 return;
 
-            FinalizeCharacterLevelChanged(Character, NewLevel);
+            FinalizeCharacterLevelChanged(character, newLevel);
         }
 
-        protected virtual void FinalizeCharacterLevelChanged(CharacterType Character, byte NewLevel, ushort MobId = ushort.MaxValue)
+        protected virtual void FinalizeCharacterLevelChanged(TCharacterType character, byte newLevel, ushort mobId = ushort.MaxValue)
         {
-          
-            InvokeCharacterLevelUP(Character, NewLevel);
+            InvokeCharacterLevelUp(character, newLevel);
         }
-        public void LogCharacterIn(CharacterType Character)
+
+        public void LogCharacterIn(TCharacterType character)
         {
             try
             {
                 lock (ThreadLocker)
                 {
-                    if (LoggedInCharactersByAccountId.TryAdd(Character.LoginInfo.AccountID, Character)
-                        && LoggedInCharactersByCharacterID.TryAdd(Character.Info.CharacterID, Character)
-                        && LoggedInCharactersByName.TryAdd(Character.Info.Name, Character))
+                    if (LoggedInCharactersByAccountId.TryAdd(character.LoginInfo.AccountID, character)
+                        && LoggedInCharactersByCharacterID.TryAdd(character.Info.CharacterID, character)
+                        && LoggedInCharactersByName.TryAdd(character.Info.Name, character))
                     {
-                        FinalizeLogCharacterIn(Character);
+                        FinalizeLogCharacterIn(character);
                     }
                 }
             }
             catch (Exception ex)
             {
-                EngineLog.Write(ex, "Error logging character '{0}' (ID: {1}) in:", Character.Info.Name, Character.Info.CharacterID);
+                EngineLog.Write(ex, "Error logging character '{0}' (ID: {1}) in:", character.Info.Name, character.Info.CharacterID);
             }
         }
-        protected virtual void FinalizeCharacterLogOut(CharacterType Character)
+
+        protected virtual void FinalizeCharacterLogOut(TCharacterType character)
         {
-            InvokeCharacterLogOut(Character);
+            InvokeCharacterLogOut(character);
         }
-        public void LogCharacterOut(CharacterType Character, bool SaveCharacter = true)
+
+        public void LogCharacterOut(TCharacterType character, bool saveCharacter = true)
         {
             try
             {
                 lock (ThreadLocker)
                 {
-                    if (LoggedInCharactersByAccountId.TryRemove(Character.LoginInfo.AccountID, out Character)
-                        && LoggedInCharactersByCharacterID.TryRemove(Character.Info.CharacterID, out Character)
-                        && LoggedInCharactersByName.TryRemove(Character.Info.Name, out Character))
+                    if (LoggedInCharactersByAccountId.TryRemove(character.LoginInfo.AccountID, out character)
+                        && LoggedInCharactersByCharacterID.TryRemove(character.Info.CharacterID, out character)
+                        && LoggedInCharactersByName.TryRemove(character.Info.Name, out character))
                     {
-                        if (SaveCharacter)
+                        if (saveCharacter)
                         {
-                            Character.Save();
+                            character.Save();
                         }
 
 
-                        FinalizeCharacterLogOut(Character);
+                        FinalizeCharacterLogOut(character);
                     }
                 }
             }
             catch (Exception ex)
             {
-                EngineLog.Write(ex, $"Error logging character '{Character.Info.Name}' (ID: {Character.Info.CharacterID}) out.");
+                EngineLog.Write(ex, $"Error logging character '{character.Info.Name}' (ID: {character.Info.CharacterID}) out.");
             }
         }
 
 
-        public bool AddCharacter(CharacterType Character, out CharacterErrors Error)
+        public bool AddCharacter(TCharacterType character, out CharacterErrors error)
         {
             lock (ThreadLocker)
             {
-                if (CharactersByCharacterID.TryAdd(Character.Info.CharacterID, Character)
-                    && CharactersByName.TryAdd(Character.Info.Name, Character))
+                if (CharactersByCharacterID.TryAdd(character.Info.CharacterID, character)
+                    && CharactersByName.TryAdd(character.Info.Name, character))
                 {
 
-                    return Character.FinalizeLoad(out Error);
+                    return character.FinalizeLoad(out error);
                 }
             }
 
-            Error = CharacterErrors.ErrorInCharacterInfo;
+            error = CharacterErrors.ErrorInCharacterInfo;
             return false;
         }
 
@@ -390,37 +378,33 @@ namespace DragonFiesta.Game.Characters
         {
             lock (ThreadLocker)
             {
-                if (CharactersByCharacterID.TryRemove(pCharacter.Info.CharacterID, out CharacterType pChar)
-                 && CharactersByName.TryRemove(pCharacter.Info.Name, out pChar))
-                {
-                    return true;
-                }
-                return false;
+	            return CharactersByCharacterID.TryRemove(pCharacter.Info.CharacterID, out _)
+	                   && CharactersByName.TryRemove(pCharacter.Info.Name, out _);
             }
         }
 
         #region Events
 
-        private void InvokeCharacterMapRefresh(CharacterType pCharacter) => InvokeEvents(OnCharacterMapRefreshHandler, new CharacterMapRefreshEventArgs<CharacterType>(pCharacter));
-        private void InvokeCharacterDeletet(CharacterType pCharacter) => InvokeEvents(OnCharacterDeleteHandler, new CharacterDeleteEventArgs<CharacterType>(pCharacter));
+        private void InvokeCharacterMapRefresh(TCharacterType pCharacter) => InvokeEvents(_onCharacterMapRefreshHandler, new CharacterMapRefreshEventArgs<TCharacterType>(pCharacter));
+        private void InvokeCharacterDeleted(TCharacterType pCharacter) => InvokeEvents(_onCharacterDeleteHandler, new CharacterDeleteEventArgs<TCharacterType>(pCharacter));
 
-        private void InvokeCharacterClassChange(CharacterType pCharacter, ClassId NewClass) => InvokeEvents(OnCharacterClassChangeHandler, new CharacterClassChangeEventArgs<CharacterType>(pCharacter, NewClass));
-        private void InvokeCharacterMapChanged(CharacterType pCharacter, IMap NewMap) => InvokeEvents(OnCharacterMapChangedHandler, new CharacterMapEventArgs<CharacterType, IMap>(pCharacter, NewMap));
+        private void InvokeCharacterClassChange(TCharacterType pCharacter, ClassId newClass) => InvokeEvents(_onCharacterClassChangeHandler, new CharacterClassChangeEventArgs<TCharacterType>(pCharacter, newClass));
+        private void InvokeCharacterMapChanged(TCharacterType pCharacter, IMap newMap) => InvokeEvents(_onCharacterMapChangedHandler, new CharacterMapEventArgs<TCharacterType, IMap>(pCharacter, newMap));
 
-        private void InvokeCharacterLevelUP(CharacterType Character, byte NewLevel) => InvokeEvents(OnCharacterLevelChangedHandler, new CharacterLevelChangedEventArgs<CharacterType>(Character, NewLevel));
+        private void InvokeCharacterLevelUp(TCharacterType character, byte newLevel) => InvokeEvents(_onCharacterLevelChangedHandler, new CharacterLevelChangedEventArgs<TCharacterType>(character, newLevel));
 
-        private void InvokeCharacterLogin(CharacterType pCharacter) => InvokeEvents(OnCharacterLoginHandler, new CharacterEventArgs<CharacterType>(pCharacter));
+        private void InvokeCharacterLogin(TCharacterType pCharacter) => InvokeEvents(_onCharacterLoginHandler, new CharacterEventArgs<TCharacterType>(pCharacter));
 
-        private void InvokeCharacterLogOut(CharacterType pCharacter) => InvokeEvents(OnCharacterLogoutHandler, new CharacterEventArgs<CharacterType>(pCharacter));
+        private void InvokeCharacterLogOut(TCharacterType pCharacter) => InvokeEvents(_onCharacterLogoutHandler, new CharacterEventArgs<TCharacterType>(pCharacter));
 
-        private void InvokeEvents<TArgs>(SecureCollection<EventHandler<TArgs>> List, TArgs args)
+        private void InvokeEvents<TArgs>(SecureCollection<EventHandler<TArgs>> list, TArgs args)
         {
             lock (ThreadLocker)
             {
-                for (int i = 0; i < List.Count; i++)
-                {
-                    List[i].Invoke(this, args);
-                }
+	            foreach (var eventHandler in list)
+	            {
+		            eventHandler.Invoke(this, args);
+	            }
             }
         }
 

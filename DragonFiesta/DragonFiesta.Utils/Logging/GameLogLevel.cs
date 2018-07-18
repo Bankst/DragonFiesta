@@ -1,8 +1,11 @@
-﻿public enum GameLogLevel : byte
+﻿namespace DragonFiesta.Utils.Logging
 {
-    Exception,
-    Warning,
-    Internal,
-    Startup,
-    Debug,
+	public enum GameLogLevel : byte
+	{
+		Exception,
+		Warning,
+		Internal,
+		Startup,
+		Debug,
+	}
 }

@@ -11,49 +11,46 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Chat
     public class ZoneChatHandler
     {
         [InternMessageHandler(typeof(GameCommandToServer))]
-        public static void HandleGameCommandToServer(GameCommandToServer Respone, InternZoneSession pSession)
+        public static void HandleGameCommandToServer(GameCommandToServer response, InternZoneSession pSession)
         {
-            if (!WorldCharacterManager.Instance.GetLoggedInCharacterByCharacterID(Respone.CharacterId, out WorldCharacter Character))
+            if (!WorldCharacterManager.Instance.GetLoggedInCharacterByCharacterID(response.CharacterId, out var character))
             {
-                CommandLog.Write(CommandLogLevel.Error, "Internal Command Error Character {0} not found!!", Respone.CharacterId);
+                CommandLog.Write(CommandLogLevel.Error, "Internal Command Error Character {0} not found!!", response.CharacterId);
                 return;
             }
 
-            if (!GameCommandManager.GetGameCommand(Respone.Category, Respone.Command, out GameCommand Command))
+            if (!GameCommandManager.GetGameCommand(response.Category, response.Command, out var command))
             {
-                CommandLog.Write(CommandLogLevel.Error, "Internal Command Error WorldCommand {0} {1} on World Not found!!", Respone.Category, Respone.Command);
+                CommandLog.Write(CommandLogLevel.Error, "Internal Command Error WorldCommand {0} {1} on World Not found!!", response.Category, response.Command);
                 return;
             }
-            string CommandString = $"{Respone.Category} {Respone.Command} {string.Join(" ", Respone.Args) }";
-            if (Command.Method != null)
+            var commandString = $"{response.Category} {response.Command} {string.Join(" ", response.Args) }";
+            if (command.Method != null)
             {
-                if ((bool)Command.Method.Invoke(Character, new object[] { Character, Respone.Args }))
-                {
-                    CommandLog.Write(CommandLogLevel.Execute, "Character {0} Execute Command {1}", Respone.CharacterId, CommandString);
-                    return;
-                }
+	            if (!(bool) command.Method.Invoke(character, new object[] {character, response.Args})) return;
+	            CommandLog.Write(CommandLogLevel.Execute, "Character {0} Execute Command {1}", response.CharacterId, commandString);
             }
             else
             {
-                ZoneChat.CharacterNote(Character, $"Command {CommandString } Not Found!");
+                ZoneChat.CharacterNote(character, $"Command {commandString } Not Found!");
             }
         }
 
         [InternMessageHandler(typeof(ServerNote))]
-        public static void HandleServerNote(ServerNote Respone, InternZoneSession pSession)
+        public static void HandleServerNote(ServerNote response, InternZoneSession pSession)
         {
-            foreach (var Zone in ZoneManager.FindAllActiveZone())
+            foreach (var zone in ZoneManager.FindAllActiveZone())
             {
-                ZoneChat.ZoneServerNote((Zone as ZoneServer), Respone.Text);
+                ZoneChat.ZoneServerNote((zone as ZoneServer), response.Text);
             }
         }
 
         [InternMessageHandler(typeof(MapNote))]
-        public static void HandleMapNote(MapNote Respone, InternZoneSession pSession)
+        public static void HandleMapNote(MapNote response, InternZoneSession pSession)
         {
-            if (MapManager.GetMap(Respone.MapId, Respone.InstanceId, out WorldServerMap Map))
+            if (MapManager.GetMap(response.MapId, response.InstanceId, out var map))
             {
-                Map.Zone.Send(Respone);
+                map.Zone.Send(response);
             }
 
         }

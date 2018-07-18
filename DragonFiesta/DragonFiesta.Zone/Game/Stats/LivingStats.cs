@@ -6,27 +6,25 @@ namespace DragonFiesta.Zone.Game.Stats
 {
     public class LivingStats
     {
-        private bool IsLoaded = false;
+        private bool _isLoaded = false;
 
         private uint _SP { get; set; } = 0;
         private uint _HP { get; set; } = 0;
 
         private uint _LP { get; set; } = 0;
 
-        private ILivingObject Sender;
+        private ILivingObject _sender;
 
         public  uint LP
         {
             get => _LP;
             set
             {
-                uint OldValue = _LP;
+                var oldValue = _LP;
 
-                if (IsLoaded)
-                {
-                    _LP = (uint)Math.Min(value, Sender.Stats.FullStats.MaxLP);
-                    InvokeOnLPChanged(OldValue);
-                }
+	            if (!_isLoaded) return;
+	            _LP = (uint)Math.Min(value, _sender.Stats.FullStats.MaxLP);
+	            InvokeOnLPChanged(oldValue);
             }
         }
         public uint HP
@@ -34,28 +32,24 @@ namespace DragonFiesta.Zone.Game.Stats
             get => _HP;
             set
             {
-                uint OldValue = _HP;
+                var oldValue = _HP;
 
-                if (IsLoaded)
-                {
-                    _HP = (uint)Math.Min(value, Sender.Stats.FullStats.MaxHP);
-                    InvokeOnHPChanged(OldValue);
-                }
+	            if (!_isLoaded) return;
+	            _HP = (uint)Math.Min(value, _sender.Stats.FullStats.MaxHP);
+	            InvokeOnHPChanged(oldValue);
             }
         }
 
         public uint SP
         {
-            get { return _SP; }
-            set
+            get => _SP;
+	        set
             {
-                uint OldValue = _SP;
+                var oldValue = _SP;
 
-                if (IsLoaded)
-                {
-                    _SP = (uint)Math.Min(value, Sender.Stats.FullStats.MaxSP);
-                    InvokeOnSPChanged(OldValue);
-                }
+	            if (!_isLoaded) return;
+	            _SP = (uint)Math.Min(value, _sender.Stats.FullStats.MaxSP);
+	            InvokeOnSPChanged(oldValue);
             }
         }
 
@@ -65,27 +59,27 @@ namespace DragonFiesta.Zone.Game.Stats
 
         public event EventHandler<LivingObjectInterActiveStatsChangedEventArgs> OnLPChanged;
 
-        private void InvokeOnHPChanged(uint OldValue) => OnHPChanged?.Invoke(this, new LivingObjectInterActiveStatsChangedEventArgs(Sender, OldValue));
+        private void InvokeOnHPChanged(uint oldValue) => OnHPChanged?.Invoke(this, new LivingObjectInterActiveStatsChangedEventArgs(_sender, oldValue));
 
-        private void InvokeOnSPChanged(uint OldValue) => OnSPChanged?.Invoke(this, new LivingObjectInterActiveStatsChangedEventArgs(Sender, OldValue));
+        private void InvokeOnSPChanged(uint oldValue) => OnSPChanged?.Invoke(this, new LivingObjectInterActiveStatsChangedEventArgs(_sender, oldValue));
 
-        private void InvokeOnLPChanged(uint OldValue) => OnLPChanged?.Invoke(this, new LivingObjectInterActiveStatsChangedEventArgs(Sender, OldValue));
-        public void Load(uint HP,uint SP,uint LP)
+        private void InvokeOnLPChanged(uint oldValue) => OnLPChanged?.Invoke(this, new LivingObjectInterActiveStatsChangedEventArgs(_sender, oldValue));
+        public void Load(uint hp,uint sp,uint lp)
         {
-            _HP = HP;
-            _SP = SP;
-            _LP = LP;
+            _HP = hp;
+            _SP = sp;
+            _LP = lp;
 
-            IsLoaded = true;
+            _isLoaded = true;
         }
-        public LivingStats(ILivingObject Sender)
+        public LivingStats(ILivingObject sender)
         {
-            this.Sender = Sender;
+            _sender = sender;
         }
 
         public void Dispose()
         {
-            this.Sender = null;
+            _sender = null;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Game.Stats;
+using DragonFiesta.Providers.Items;
 
 namespace DragonFiesta.Zone.Game.Stats
 {
@@ -39,19 +40,13 @@ namespace DragonFiesta.Zone.Game.Stats
         public double MagicDefenseP { get; set; }
 
         //iStatsChanger
-        StatsHolder iStatsChanger.Stats
+        StatsHolder iStatsChanger.Stats => new StatsHolder()
         {
-            get
-            {
-                return new StatsHolder()
-                {
-                    Str = Str,
-                    End = End,
-                    Dex = Dex,
-                    Int = Int,
-                    Spr = Spr,
-                };
-            }
-        }
+	        Str = Str,
+	        End = End,
+	        Dex = Dex,
+	        Int = Int,
+	        Spr = Spr,
+        };
     }
 }

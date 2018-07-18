@@ -10,6 +10,7 @@ using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Utils.Core;
 using System;
 using System.Globalization;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Login.Network.FiestaHandler.Client
 {

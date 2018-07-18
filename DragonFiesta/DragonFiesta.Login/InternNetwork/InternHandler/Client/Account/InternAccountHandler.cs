@@ -3,6 +3,7 @@ using DragonFiesta.Login.Game.Accounts;
 using DragonFiesta.Login.InternNetwork;
 using DragonFiesta.Messages.Accounts;
 using DragonFiesta.Messages.Login.Accounts;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Login.Network.InternHandler.Client
 {

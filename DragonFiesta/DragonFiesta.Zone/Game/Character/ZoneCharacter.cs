@@ -6,10 +6,12 @@ using DragonFiesta.Game.Stats;
 using DragonFiesta.Providers.Characters;
 using DragonFiesta.Providers.Maps;
 using DragonFiesta.Utils.Config;
+using DragonFiesta.Utils.Logging;
 using DragonFiesta.Zone.Game.Maps.Event;
 using DragonFiesta.Zone.Game.Maps.Object;
 using DragonFiesta.Zone.Game.Maps.Interface;
 using DragonFiesta.Zone.Data.Character;
+using DragonFiesta.Zone.Data.Characters;
 using DragonFiesta.Zone.Game.Chat;
 using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Maps.Types;
@@ -38,9 +40,9 @@ namespace DragonFiesta.Zone.Game.Character
             set => base.LoginInfo = value;
         }
 
-        public new ZoneCharacterInfo Info { get => base.Info as ZoneCharacterInfo; }
+        public new ZoneCharacterInfo Info => base.Info as ZoneCharacterInfo;
 
-        public bool IsOnThisZone => (IsConnected && Map != null && Map is LocalMap);
+	    public bool IsOnThisZone => (IsConnected && Map is LocalMap);
 
         public byte Level
         {
@@ -61,16 +63,16 @@ namespace DragonFiesta.Zone.Game.Character
 
         public IMap Map { get => AreaInfo.Map; set => AreaInfo.Map = value; }
 
-        private MapSector _MapSector;
+        private MapSector _mapSector;
 
         public MapSector MapSector
         {
-            get { return _MapSector; }
-            set
+            get => _mapSector;
+	        set
             {
-                var oldSector = _MapSector;
+                var oldSector = _mapSector;
 
-                _MapSector = value;
+                _mapSector = value;
 
                 InvokeOnMapSectorChanged(oldSector);
             }
@@ -91,26 +93,26 @@ namespace DragonFiesta.Zone.Game.Character
 
         public LivingObjectSelectionBase Selection { get; set; }
 
-        private ushort _UpdateCounter;
+        private ushort _updateCounter;
 
         public ushort UpdateCounter
         {
             get
             {
-                if (_UpdateCounter == 0xffff)
+                if (_updateCounter == 0xffff)
                 {
-                    _UpdateCounter = 0;
+                    _updateCounter = 0;
                 }
-                _UpdateCounter++;
+                _updateCounter++;
 
                 InvokeUpdateCounterChanged();
 
-                return _UpdateCounter;
+                return _updateCounter;
             }
         }
 
 
-        private int IsDisposedInt;
+        private int _isDisposedInt;
 
         #endregion Property
 
@@ -118,22 +120,18 @@ namespace DragonFiesta.Zone.Game.Character
         {
             LoginInfo = new ZoneClientLoginInfo(this);
             base.Info = new ZoneCharacterInfo(this);
-
-
+			
             LivingStats = new LivingStats(this);
 
             LivingStats.OnHPChanged += LivingStats_OnHPChanged;
             LivingStats.OnSPChanged += LivingStats_OnSPChanged;
             LivingStats.OnLPChanged += LivingStats_OnLPChanged;
-            OnMapChangedHandlers = new List<EventHandler<MapChangedEventArgs>>();
-            OnMapSectorChangedHandlers = new List<EventHandler<MapSectorChangedEventArgs>>();
-            OnDisposeHandlers = new List<EventHandler<MapObjectEventArgs>>();
-            OnUpdateCounterChangedHandler = new List<EventHandler<UpdateCounterChangeEventArgs>>();
+            _onMapChangedHandlers = new List<EventHandler<MapChangedEventArgs>>();
+            _onMapSectorChangedHandlers = new List<EventHandler<MapSectorChangedEventArgs>>();
+            _onDisposeHandlers = new List<EventHandler<MapObjectEventArgs>>();
+            _onUpdateCounterChangedHandler = new List<EventHandler<UpdateCounterChangeEventArgs>>();
 
-
-
-
-            InRange = new InRangeCollection(this);
+			InRange = new InRangeCollection(this);
             Selection = new CharacterObjectSelection(this);
 
         }
@@ -143,23 +141,31 @@ namespace DragonFiesta.Zone.Game.Character
 
         #region MapObject
 
-        private List<EventHandler<MapChangedEventArgs>> OnMapChangedHandlers;
+        private List<EventHandler<MapChangedEventArgs>> _onMapChangedHandlers;
 
-        public event EventHandler<MapChangedEventArgs> OnMapChanged { add { OnMapChangedHandlers.Add(value); } remove { OnMapChangedHandlers.Remove(value); } }
+        public event EventHandler<MapChangedEventArgs> OnMapChanged { add => _onMapChangedHandlers.Add(value);
+	        remove => _onMapChangedHandlers.Remove(value);
+        }
 
-        private List<EventHandler<MapSectorChangedEventArgs>> OnMapSectorChangedHandlers;
+        private readonly List<EventHandler<MapSectorChangedEventArgs>> _onMapSectorChangedHandlers;
 
-        public event EventHandler<MapSectorChangedEventArgs> OnMapSectorChanged { add { OnMapSectorChangedHandlers.Add(value); } remove { OnMapSectorChangedHandlers.Remove(value); } }
+        public event EventHandler<MapSectorChangedEventArgs> OnMapSectorChanged { add => _onMapSectorChangedHandlers.Add(value);
+	        remove => _onMapSectorChangedHandlers.Remove(value);
+        }
 
         public event EventHandler<LivingObjectMovementEventArgs> OnMove;
 
-        private List<EventHandler<MapObjectEventArgs>> OnDisposeHandlers;
+        private List<EventHandler<MapObjectEventArgs>> _onDisposeHandlers;
 
-        public event EventHandler<MapObjectEventArgs> OnDispose { add { OnDisposeHandlers.Add(value); } remove { OnDisposeHandlers.Remove(value); } }
+        public event EventHandler<MapObjectEventArgs> OnDispose { add => _onDisposeHandlers.Add(value);
+	        remove => _onDisposeHandlers.Remove(value);
+        }
 
-        private List<EventHandler<UpdateCounterChangeEventArgs>> OnUpdateCounterChangedHandler;
+        private readonly List<EventHandler<UpdateCounterChangeEventArgs>> _onUpdateCounterChangedHandler;
 
-        public event EventHandler<UpdateCounterChangeEventArgs> OnUpdateCounterChanged { add { OnUpdateCounterChangedHandler.Add(value); } remove { OnUpdateCounterChangedHandler.Remove(value); } }
+        public event EventHandler<UpdateCounterChangeEventArgs> OnUpdateCounterChanged { add => _onUpdateCounterChangedHandler.Add(value);
+	        remove => _onUpdateCounterChangedHandler.Remove(value);
+        }
         
         #endregion MapObject
 
@@ -167,20 +173,15 @@ namespace DragonFiesta.Zone.Game.Character
         {
             lock (ThreadLocker)
             {
-                if (Question != null)
-                    Question.Dispose();
+	            Question?.Dispose();
 
-                Question = pQuestion;
+	            Question = pQuestion;
             }
         }
 
-
-
-
-
-        public override bool RefreshCharacter(SQLResult pRes, int i, out CharacterErrors Result)
+        public override bool RefreshCharacter(SQLResult pRes, int i, out CharacterErrors result)
         {
-            if (!base.RefreshCharacter(pRes, i, out Result))
+            if (!base.RefreshCharacter(pRes, i, out result))
                 return false;
 
             LivingStats.Load(
@@ -188,29 +189,28 @@ namespace DragonFiesta.Zone.Game.Character
                 pRes.Read<uint>(i, "SP"),
                 pRes.Read<uint>(i, "LP"));
 
-
             return true;
         }
 
 
-        public void Broadcast(FiestaPacket Packet) => InRange.Broadcast(Packet);
 
-        public void Broadcast(FiestaPacket Packet, bool IncludeSelf)
+
+        public void Broadcast(FiestaPacket packet) => InRange.Broadcast(packet);
+
+        public void Broadcast(FiestaPacket packet, bool includeSelf)
         {
-            Broadcast(Packet);
+            Broadcast(packet);
 
-            if (IncludeSelf
+            if (includeSelf
                 && IsConnected)
             {
-                Session.SendPacket(Packet);
+                Session.SendPacket(packet);
             }
         }
 
-
-
         public override void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) == 0)
             {
                 base.Dispose();
             }
@@ -258,9 +258,7 @@ namespace DragonFiesta.Zone.Game.Character
             }
         }
 
-
-
-        public void WriteDisplay(FiestaPacket packet)
+		public void WriteDisplay(FiestaPacket packet)
         {
             SH04Helpers.WriteCharacterDisplay(this, packet);
         }
@@ -269,49 +267,45 @@ namespace DragonFiesta.Zone.Game.Character
         {
         }
 
-        public void OnUpdate(GameTime Now)
+        public void OnUpdate(GameTime gameTime)
         {
         }
 
-        public void WriteSelectionUpdate(FiestaPacket Packet)
+        public void WriteSelectionUpdate(FiestaPacket packet)
         {
-            Packet.Write<uint>(LivingStats.HP);
-            Packet.Write<int>(Stats.FullStats.MaxHP);
-            Packet.Write<uint>(LivingStats.SP);
-            Packet.Write<int>(Stats.FullStats.MaxSP);
-            Packet.Write<uint>(LivingStats.LP);
-            Packet.Write<int>(Stats.FullStats.MaxLP);
-            Packet.Write<byte>(Level);
-            Packet.Write<ushort>(UpdateCounter);
+            packet.Write<uint>(LivingStats.HP);
+            packet.Write<int>(Stats.FullStats.MaxHP);
+            packet.Write<uint>(LivingStats.SP);
+            packet.Write<int>(Stats.FullStats.MaxSP);
+            packet.Write<uint>(LivingStats.LP);
+            packet.Write<int>(Stats.FullStats.MaxLP);
+            packet.Write<byte>(Level);
+            packet.Write<ushort>(UpdateCounter);
         }
 
 
-        public void ChangeMap(ushort NewMapId, ushort InstanceId, uint SpawnX = 0, uint SpawnY = 0)
+        public void ChangeMap(ushort newMapId, ushort instanceId, uint spawnX = 0, uint spawnY = 0)
         {
 
-            if (!MapDataProvider.GetMapInfoByID(NewMapId, out MapInfo NewMap))
+            if (!MapDataProvider.GetMapInfoByID(newMapId, out var newMap))
             {
                 ZoneChat.CharacterNote(this, $"Map not Found in Database");
                 return;
             }
 
-            if (!MapManager.GetMap(NewMapId, InstanceId, out ZoneServerMap Map))
+            if (!MapManager.GetMap(newMapId, instanceId, out var map))
             {
-                ZoneChat.CharacterNote(this, $"Map {NewMapId}:{InstanceId} is Offline");
+                ZoneChat.CharacterNote(this, $"Map {newMapId}:{instanceId} is Offline");
                 return;
             }
 
-            SpawnX = (SpawnX == 0 ? NewMap.Regen.X : SpawnX);
-            SpawnY = (SpawnY == 0 ? NewMap.Regen.Y : SpawnY);
-
-
-
-
+            spawnX = (spawnX == 0 ? newMap.Regen.X : spawnX);
+            spawnY = (spawnY == 0 ? newMap.Regen.Y : spawnY);
 
             CharacterMethods.SendCharacterChangeMap(Info.CharacterID,
-                NewMap.ID,
-                new Position(SpawnX, SpawnY),
-                InstanceId);
+                newMap.ID,
+                new Position(spawnX, spawnY),
+                instanceId);
         }
 
         protected override void DisposeInternal()
@@ -320,14 +314,14 @@ namespace DragonFiesta.Zone.Game.Character
 
             InRange.Dispose();
             InRange = null;
-            OnMapChangedHandlers.Clear();
-            OnMapChangedHandlers = null;
+            _onMapChangedHandlers.Clear();
+            _onMapChangedHandlers = null;
 
-            OnDisposeHandlers.Clear();
-            OnDisposeHandlers = null;
+            _onDisposeHandlers.Clear();
+            _onDisposeHandlers = null;
 
 
-            _MapSector = null;
+            _mapSector = null;
 
             Question?.Dispose();
             Question = null;
@@ -362,66 +356,62 @@ namespace DragonFiesta.Zone.Game.Character
         }
 
 
-        public void Move(Position NewPosition, bool IsRun, bool IsStop)
+        public void Move(Position newPosition, bool isRun, bool isStop)
         {
             lock (ThreadLocker)
             {
-                var OldPosition = Position;
-                Position = NewPosition;
-                if (OnMove != null)
-                {
-                    var args = new LivingObjectMovementEventArgs(this, OldPosition, NewPosition, IsRun, IsStop);
+                var oldPosition = Position;
+                Position = newPosition;
+	            if (OnMove == null) return;
+	            var args = new LivingObjectMovementEventArgs(this, oldPosition, newPosition, isRun, isStop);
 
-                    OnMove.Invoke(this, args);
-                }
+	            OnMove.Invoke(this, args);
             }
         }
         private void InvokeUpdateCounterChanged()
         {
-            var args = new UpdateCounterChangeEventArgs(this, _UpdateCounter);
-            for (int i = 0; i < OnUpdateCounterChangedHandler.Count; i++)
-            {
-                OnUpdateCounterChangedHandler[i].Invoke(this, args);
-            }
+	        var args = new UpdateCounterChangeEventArgs(this, _updateCounter);
+	        foreach (var t in _onUpdateCounterChangedHandler)
+	        {
+		        t.Invoke(this, args);
+	        }
         }
         private void InvokeOnDispose()
         {
-            if (OnDisposeHandlers.Count > 0)
-            {
-                var args = new MapObjectEventArgs(this);
-                for (int i = 0; i < OnDisposeHandlers.Count; i++)
-                {
-                    OnDisposeHandlers[i].Invoke(this, args);
-                }
-            }
+	        if (_onDisposeHandlers.Count <= 0) return;
+	        var args = new MapObjectEventArgs(this);
+	        foreach (var t in _onDisposeHandlers)
+	        {
+		        t.Invoke(this, args);
+	        }
         }
 
-        private void InvokeOnMapSectorChanged(MapSector OldSector)
+        private void InvokeOnMapSectorChanged(MapSector oldSector)
         {
-            var args = new MapSectorChangedEventArgs(this, OldSector, _MapSector);
+	        var args = new MapSectorChangedEventArgs(this, oldSector, _mapSector);
 
-            for (int i = 0; i < OnMapSectorChangedHandlers.Count; i++)
-            {
-                OnMapSectorChangedHandlers[i].Invoke(this, args);
-            }
+	        foreach (var t in _onMapSectorChangedHandlers)
+	        {
+		        t.Invoke(this, args);
+	        }
         }
 
-        public void InvokeOnMapChanged(IMap OldMap)
+        public void InvokeOnMapChanged(IMap oldMap)
         {
-            var args = new MapChangedEventArgs(this, OldMap, Map);
+	        var args = new MapChangedEventArgs(this, oldMap, Map);
 
-            for (int i = 0; i < OnMapChangedHandlers.Count; i++)
-            {
-                OnMapChangedHandlers[i].Invoke(this, args);
-            }
+	        foreach (var t in _onMapChangedHandlers)
+	        {
+		        t.Invoke(this, args);
+	        }
         }
-        public override bool LevelUP(ushort MobID = ushort.MaxValue, bool FinalizeLevelUp = true)
+        public override bool LevelUP(ushort mobID = ushort.MaxValue, bool finalizeLevelUp = true)
         {
-            if (!base.LevelUP(MobID, false))
+            if (!base.LevelUP(mobID, false))
                 return false;
 
 
-            if (!CharacterDataProvider.GetLevelParameters(Info.Class, Info.Level, out CharacterLevelParameter Parameters))
+            if (!CharacterDataProvider.GetLevelParameters(Info.Class, Info.Level, out var parameters))
             {
                 GameLog.Write(GameLogLevel.Warning, "Failed to Get Level Parameters Class {0} Level {1}", Info.Class,Info.Level);
                 return false;
@@ -440,7 +430,7 @@ namespace DragonFiesta.Zone.Game.Character
             //give stat point
             Info.FreeStats.FreeStat_Points++;
 
-            Info.LevelParameter = Parameters;
+            Info.LevelParameter = parameters;
 
             //give skill point
             if (Level % 2 != 0)
@@ -448,8 +438,8 @@ namespace DragonFiesta.Zone.Game.Character
                 Info.SkillPoints++;
             }
 
-            SH09Handler.SendLevelUpAnimation(this, MobID);
-            SH09Handler.SendLevelUpData(this, MobID);
+            SH09Handler.SendLevelUpAnimation(this, mobID);
+            SH09Handler.SendLevelUpData(this, mobID);
             //stat points
             SH04Handler.SendRemainingStatPoints(this.Session);
             //skill points
@@ -458,7 +448,7 @@ namespace DragonFiesta.Zone.Game.Character
                 SH18Handler.SendRemainingSkillPoints(this);
             }
 
-            if (FinalizeLevelUp)
+            if (finalizeLevelUp)
                 CharacterMethods.SendCharacterLevelChanged(Info.CharacterID, Level);
 
 
@@ -466,24 +456,24 @@ namespace DragonFiesta.Zone.Game.Character
             return true;
         }
 
-        public void ChangeClass(ClassId NewClass)
+        public void ChangeClass(ClassId newClass)
         {
-            CharacterMethods.SendCharacterChangeClass(this, NewClass);
+            CharacterMethods.SendCharacterChangeClass(this, newClass);
         }
 
-        public override bool GiveEXP(uint Amount, ushort MobId = ushort.MaxValue)
+        public override bool GiveEXP(uint amount, ushort mobId = ushort.MaxValue)
         {
 
             if (Level >= GameConfiguration.Instance.LimitSetting.LevelLimit)
                 return false;
 
 
-            if (!base.GiveEXP(Amount, MobId))
+            if (!base.GiveEXP(amount, mobId))
             {
                 return false;  
             }
 
-            SH09Handler.SendGainEXP(this, Amount, MobId);
+            SH09Handler.SendGainEXP(this, amount, mobId);
 
             return true;
         }

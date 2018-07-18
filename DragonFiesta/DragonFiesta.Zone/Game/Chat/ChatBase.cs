@@ -8,30 +8,31 @@ using DragonFiesta.Zone.Network;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
 using System;
 using System.Linq;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Zone.Game.Chat
 {
     public abstract class ChatBase : ChatManager
     {
-        public ChatBase(ChatSection Config) : base(Config)
+        public ChatBase(ChatSection config) : base(config)
         {
         }
 
-        public sealed override void Chat(CharacterBase Base, string Message)
+        public sealed override void Chat(CharacterBase Base, string message)
         {
             ThreadPool.AddCall(() =>
             {
                 var pChar = (Base as ZoneCharacter);
 
-                switch (PerfomChat(pChar, Message))
+                switch (PerfomChat(pChar, message))
                 {
                     case ChatResult.LevelTooLow:
                     case ChatResult.Spamming:
-                        SH02Handler.SendChatBlock(pChar.Session, Config.Delay);
+                        SH02Handler.SendChatBlock(pChar?.Session, Config.Delay);
                         break;
 
                     case ChatResult.Success:
-                        BroadcastMessage(pChar.Session, Message);
+                        BroadcastMessage(pChar?.Session, message);
                         break;
                 }
             });
@@ -41,62 +42,58 @@ namespace DragonFiesta.Zone.Game.Chat
         {
         }
 
-        public sealed override bool ExecuteCommand(CharacterBase Character, string Message)
+        public sealed override bool ExecuteCommand(CharacterBase character, string message)
         {
-            string[] Args = Message.Split(' ');
+            var args = message.Split(' ');
 
-            if (!(Character as ZoneCharacter).Session.Ingame)
+            if (!((ZoneCharacter) character).Session.Ingame)
                 return false;
 
-            if (Args.Length < 2)
+            if (args.Length < 2)
                 return false;
 
-            if (!Character.IsGM)
+            if (!character.IsGM)
                 return false;
 
-            string Category = Args[0].Replace("&", "").ToUpper();
+            var category = args[0].Replace("&", "").ToUpper();
 
-            string Command = Args[1].ToUpper();
+            var command = args[1].ToUpper();
 
-            string[] CommandArgs = Args.Skip(2).ToArray();
+            var commandArgs = args.Skip(2).ToArray();
 
-            if (!GameCommandManager.GetGameCommand(Category, Command, out GameCommand Cmd))
+            if (!GameCommandManager.GetGameCommand(category, command, out GameCommand cmd))
             {
-                ZoneChat.CharacterNote((Character as ZoneCharacter), $"Command { Message} not found!");
+                ZoneChat.CharacterNote(((ZoneCharacter) character), $"Command { message} not found!");
                 return false;
             }
 
-            if (!Cmd.RoleInfo.ContainsKey((Character as ZoneCharacter).LoginInfo.RoleId))
+            if (!cmd.RoleInfo.ContainsKey(((ZoneCharacter) character).LoginInfo.RoleId))
             {
-                ZoneChat.CharacterNote((Character as ZoneCharacter), "Access Denied!!");
+                ZoneChat.CharacterNote(((ZoneCharacter) character), "Access Denied!!");
                 return false;
             }
 
-            if (Cmd.Method != null)
+            if (cmd.Method != null)
             {
-                if ((bool)Cmd.Method.Invoke(this, new object[] { Character, CommandArgs }))
-                {
-                    CommandLog.Write(CommandLogLevel.Execute, "Character {0} Execute Command {1}", Character.Info.Name, Message);
-                    return true;
-                }
+	            if (!(bool) cmd.Method.Invoke(this, new object[] {character, commandArgs})) return false;
+	            CommandLog.Write(CommandLogLevel.Execute, "Character {0} Execute Command {1}", character.Info.Name, message);
+	            return true;
             }
             else
             {
-                InternWorldConnector.Instance.SendMessage(new GameCommandToServer
+                InternConnector.Instance.SendMessage(new GameCommandToServer
                 {
                     Id = Guid.NewGuid(),
-                    Args = CommandArgs,
-                    CharacterId = Character.Info.CharacterID,
-                    Category = Category,
-                    Command = Command,
+                    Args = commandArgs,
+                    CharacterId = character.Info.CharacterID,
+                    Category = category,
+                    Command = command,
                 });
 
                 return true;
             }
-
-            return false;
         }
 
-        public abstract void BroadcastMessage(ZoneSession Session, string Message);
+        public abstract void BroadcastMessage(ZoneSession session, string message);
     }
 }

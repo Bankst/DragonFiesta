@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Messages.Zone.Character;
+using DragonFiesta.Utils.Logging;
 using DragonFiesta.World.Game.Character;
 
 namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Transfer

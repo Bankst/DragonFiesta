@@ -7,8 +7,8 @@ namespace DragonFiesta.Utils.ServerTask
         DateTime ExpireTime { get; }
         bool IsDisposed { get; }
 
-        void OnExpire(GameTime Now);
+        void OnExpire(GameTime gameTime);
 
-        void Update(GameTime Now);
+        void Update(GameTime gameTime);
     }
 }

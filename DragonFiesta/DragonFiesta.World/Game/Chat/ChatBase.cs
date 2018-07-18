@@ -12,17 +12,17 @@ namespace DragonFiesta.World.Game.Chat
 {
     public abstract class ChatBase : ChatManager
     {
-        public ChatBase(ChatSection Config) : base(Config)
+        public ChatBase(ChatSection config) : base(config)
         {
         }
 
-        public sealed override void Chat(CharacterBase Base, string Message)
+        public sealed override void Chat(CharacterBase Base, string message)
         {
             ThreadPool.AddCall(() =>
             {
                 var pChar = (Base as WorldCharacter);
 
-                switch (PerfomChat(pChar, Message))
+                switch (PerfomChat(pChar, message))
                 {
                     case ChatResult.LevelTooLow:
                     case ChatResult.Spamming:
@@ -30,7 +30,7 @@ namespace DragonFiesta.World.Game.Chat
                         break;
 
                     case ChatResult.Success:
-                        BroadcastMessage(pChar.Session, Message);
+                        BroadcastMessage(pChar?.Session, message);
                         break;
                 }
             });
@@ -40,62 +40,58 @@ namespace DragonFiesta.World.Game.Chat
         {
         }
 
-        public sealed override bool ExecuteCommand(CharacterBase Character, string Message)
+        public sealed override bool ExecuteCommand(CharacterBase character, string message)
         {
-            string[] Args = Message.Split(' ');
+            var args = message.Split(' ');
 
-            if (!(Character as WorldCharacter).Session.Ingame)
+            if (!((WorldCharacter) character).Session.Ingame)
                 return false;
 
-            if (Args.Length < 2)
+            if (args.Length < 2)
                 return false;
 
-            if (!Character.IsGM)
+            if (!character.IsGM)
                 return false;
 
-            string Category = Args[0].Replace("&", "").ToUpper();
+            var category = args[0].Replace("&", "").ToUpper();
 
-            string Command = Args[1].ToUpper();
+            var command = args[1].ToUpper();
 
-            string[] CommandArgs = Args.Skip(2).ToArray();
+            var commandArgs = args.Skip(2).ToArray();
 
-            if (!GameCommandManager.GetGameCommand(Category, Command, out GameCommand Cmd))
+            if (!GameCommandManager.GetGameCommand(category, command, out var cmd))
             {
-                ZoneChat.CharacterNote((Character as WorldCharacter), $"Command { Message} not found!");
+                ZoneChat.CharacterNote(((WorldCharacter) character), $"Command {message} not found!");
                 return false;
             }
 
-            if (!Cmd.RoleInfo.ContainsKey((Character as WorldCharacter).LoginInfo.GameRole.Id))
+            if (!cmd.RoleInfo.ContainsKey(((WorldCharacter) character).LoginInfo.GameRole.Id))
             {
-                ZoneChat.CharacterNote((Character as WorldCharacter), "Access Denied!!");
+                ZoneChat.CharacterNote(((WorldCharacter) character), "Access Denied!!");
                 return false;
             }
 
-            if (Cmd.Method != null)
+            if (cmd.Method != null)
             {
-                if ((bool)Cmd.Method.Invoke(this, new object[] { Character, CommandArgs }))
-                {
-                    CommandLog.Write(CommandLogLevel.Execute, "Character {0} Execute Command {1}", Character.Info.Name, Message);
-                    return true;
-                }
+	            if (!(bool) cmd.Method.Invoke(this, new object[] {character, commandArgs})) return false;
+	            CommandLog.Write(CommandLogLevel.Execute, $"Character {character.Info.Name} Execute Command {message}");
+	            return true;
             }
             else
             {
-                (Character as WorldCharacter).Map.Zone.Send(new GameCommandToServer
+                ((WorldCharacter) character).Map.Zone.Send(new GameCommandToServer
                 {
                     Id = Guid.NewGuid(),
-                    Args = CommandArgs,
-                    CharacterId = Character.Info.CharacterID,
-                    Category = Category,
-                    Command = Command,
+                    Args = commandArgs,
+                    CharacterId = character.Info.CharacterID,
+                    Category = category,
+                    Command = command,
                 });
 
                 return true;
             }
-
-            return false;
         }
 
-        public abstract void BroadcastMessage(WorldSession Session, string Message);
+        public abstract void BroadcastMessage(WorldSession session, string message);
     }
 }

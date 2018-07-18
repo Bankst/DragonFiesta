@@ -1,66 +1,66 @@
 ﻿using DragonFiesta.Utils.IO.SHN;
 
-namespace DragonFiesta.Providers.Items
+namespace DragonFiesta.Providers.Items.SHN
 {
     public class ItemInfo
 	{
-		public ushort ID { get; private set; }
-		public string InxName { get; private set; }
-		public string Name { get; private set; }
-		public uint Type { get; private set; }
-		public uint Class { get; private set; }
-		public uint MaxLot { get; private set; }
-		public uint Equip { get; private set; } // type:ItemEquipSlot, EquipSlot
-		public byte ItemAuctionGroup { get; private set; }
-		public byte ItemGradeType { get; private set; }
-		public bool TwoHand { get; private set; }
-		public int AtkSpeed { get; private set; } // type:TimeSpan
-		public byte DemandLv { get; private set; } // RequiredLevel
-		public uint Grade { get; private set; }
-		public uint MinWC { get; private set; }
-		public uint MaxWC { get; private set; }
-		public uint AC { get; private set; }
-		public uint MinMA { get; private set; }
-		public uint MaxMA { get; private set; }
-		public uint MR { get; private set; }
-		public uint TH { get; private set; } // Aim
-		public uint TB { get; private set; }
-		public uint WCRate { get; private set; } // ??
-		public uint MARate { get; private set; } // ??
-		public uint ACRate { get; private set; } // ??
-		public uint MRRate { get; private set; } // ??
-		public uint CriRate { get; private set; } // CriticalRate
-		public uint CriMinWc { get; private set; } // 
-		public uint CriMaxWc { get; private set; }
-		public uint CriMinMa { get; private set; }
-		public uint CriMaxMa { get; private set; }
-		public uint CrlTB { get; private set; }
-		public uint UseClass { get; private set; } // WhoEquip
-		public uint BuyPrice { get; private set; }
-		public uint SellPrice { get; private set; }
-		public byte BuyDemandLv { get; private set; }
-		public uint BuyFame { get; private set; }
-		public uint BuyGToken { get; private set; }
-		public uint BuyGBCoin { get; private set; }
-		public uint WeaponType { get; private set; }
-		public uint ArmorType { get; private set; }
-		public byte UpLimit { get; private set; }
-		public uint BasicUpInx { get; private set; }
-		public double UpSucRatio { get; private set; }
-		public double UpLuckRatio { get; private set; }
-		public byte UpResource { get; private set; }
-		public byte AddUpInx { get; private set; }
-		public uint ShieldAC { get; private set; }
-		public byte HitRatePlus { get; private set; }
-		public byte EvaRatePlus { get; private set; }
-		public byte MACriPlus { get; private set; }
-		public byte CriDamPlus { get; private set; }
-		public byte MagCriDamPlus { get; private set; }
-		public byte BT_Inx { get; private set; }
-		public string TitleName { get; private set; }
-		public string ItemUseSkill { get; private set; }
-		public string SetItemIndex { get; private set; }
-		public byte ItemFunc { get; private set; }
+		public ushort ID { get; }
+		public string InxName { get; } // ref - NPCItemLists, GradeItemOption
+		public string Name { get; }
+		public uint Type { get; }
+		public uint Class { get; }
+		public uint MaxLot { get; }
+		public uint Equip { get; }
+		public byte ItemAuctionGroup { get; }
+		public byte ItemGradeType { get; }
+		public bool TwoHand { get; }
+		public int AtkSpeed { get; }
+		public byte DemandLv { get; }
+		public uint Grade { get; }
+		public uint MinWC { get; }
+		public uint MaxWC { get; }
+		public uint AC { get; }
+		public uint MinMA { get; }
+		public uint MaxMA { get; }
+		public uint MR { get; }
+		public uint TH { get; }
+		public uint TB { get; }
+		public uint WCRate { get; }
+		public uint MARate { get; }
+		public uint ACRate { get; }
+		public uint MRRate { get; }	
+		public uint CriRate { get; }
+		public uint CriMinWc { get; }
+		public uint CriMaxWc { get; }
+		public uint CriMinMa { get; }
+		public uint CriMaxMa { get; }
+		public uint CrlTB { get; }
+		public uint UseClass { get; }
+		public uint BuyPrice { get; }
+		public uint SellPrice { get; }
+		public byte BuyDemandLv { get; }
+		public uint BuyFame { get; }
+		public uint BuyGToken { get; }
+		public uint BuyGBCoin { get; }
+		public uint WeaponType { get; }
+		public uint ArmorType { get; }
+		public byte UpLimit { get; }
+		public ushort BasicUpInx { get; } // ref - UpgradeInfo
+		public double UpSucRatio { get; }
+		public double UpLuckRatio { get; }
+		public byte UpResource { get; }
+		public byte AddUpInx { get; }
+		public uint ShieldAC { get; }
+		public byte HitRatePlus { get; }
+		public byte EvaRatePlus { get; }
+		public byte MACriPlus { get; }
+		public byte CriDamPlus { get; }
+		public byte MagCriDamPlus { get; }
+		public byte BT_Inx { get; } // ref - BelongTypeInfo
+		public string TitleName { get; }
+		public string ItemUseSkill { get; }
+		public string SetItemIndex { get; }
+		public byte ItemFunc { get; }
 		
 		public ItemInfo(SHNResult pResult, int i)
 		{
@@ -105,7 +105,7 @@ namespace DragonFiesta.Providers.Items
 			WeaponType = pResult.Read<uint>(i, "WeaponType");
 			ArmorType = pResult.Read<uint>(i, "ArmorType");
 			UpLimit = pResult.Read<byte>(i, "UpLimit");
-			BasicUpInx = pResult.Read<uint>(i, "BasicUpInx");
+			BasicUpInx = pResult.Read<ushort>(i, "BasicUpInx");
 			UpSucRatio = pResult.Read<ushort>(i, "UpSucRatio");
 			UpLuckRatio = pResult.Read<ushort>(i, "UpLuckRatio");
 			UpResource = pResult.Read<byte>(i, "UpResource");

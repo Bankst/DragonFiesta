@@ -1,6 +1,8 @@
 ﻿using DragonFiesta.Providers.Characters;
 using DragonFiesta.Zone.Data.Stats;
 using System.Collections.Concurrent;
+using DragonFiesta.Providers.Items;
+using DragonFiesta.Zone.Data.Characters;
 
 namespace DragonFiesta.Zone.Data.Character
 {
@@ -8,9 +10,8 @@ namespace DragonFiesta.Zone.Data.Character
     [GameServerModule(ServerType.Zone,GameInitalStage.CharacterData)]
     public class CharacterDataProvider : CharacterDataProviderBase
     {
-        private static ConcurrentDictionary<ClassId, ConcurrentDictionary<byte, CharacterLevelParameter>> CharacterStatParameters;
-
-        private static ConcurrentDictionary<byte, FreeStatData> CharacterFreeStatsByLevel;
+        private static ConcurrentDictionary<ClassId, ConcurrentDictionary<byte, CharacterLevelParameter>> _characterStatParameters;
+        private static ConcurrentDictionary<byte, FreeStatData> _characterFreeStatsByLevel;
 
         [InitializerMethod]
         public static bool InitialCharacterData()
@@ -24,43 +25,43 @@ namespace DragonFiesta.Zone.Data.Character
 
         private static void LoadCharacterFreeStats()
         {
-            CharacterFreeStatsByLevel = new ConcurrentDictionary<byte, FreeStatData>();
+            _characterFreeStatsByLevel = new ConcurrentDictionary<byte, FreeStatData>();
 
-            SQLResult Result = DB.Select(DatabaseType.Data, "SELECT * FROM FreeStates");
+            var result = DB.Select(DatabaseType.Data, "SELECT * FROM FreeStates");
 
             DatabaseLog.WriteProgressBar(">> Load FreeStats");
 
-            using (ProgressBar mBar = new ProgressBar(Result.Count))
+            using (var mBar = new ProgressBar(result.Count))
             {
-                for (int i = 0; i < Result.Count; i++)
+                for (var i = 0; i < result.Count; i++)
                 {
-                    FreeStatData Data = new FreeStatData(Result, i);
+                    var data = new FreeStatData(result, i);
 
-                    if (!CharacterFreeStatsByLevel.TryAdd(Data.Level, Data))
+                    if (!_characterFreeStatsByLevel.TryAdd(data.Level, data))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate FreeStatdata found Level {0}", Data.Level);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate FreeStatdata found Level {0}", data.Level);
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} FreeStats", CharacterFreeStatsByLevel.Count);
+                DatabaseLog.WriteProgressBar(">> Loaded {0} FreeStats", _characterFreeStatsByLevel.Count);
             }
         }
 
         private static void LoadCharacterParameters()
         {
-            CharacterStatParameters = new ConcurrentDictionary<ClassId, ConcurrentDictionary<byte, CharacterLevelParameter>>();
+            _characterStatParameters = new ConcurrentDictionary<ClassId, ConcurrentDictionary<byte, CharacterLevelParameter>>();
 
-            DatabaseLog.WriteProgressBar(">> Load ChaacterParameters");
+            DatabaseLog.WriteProgressBar(">> Load CharacterParameters");
 
-            SQLResult Result = DB.Select(DatabaseType.Data, "SELECT * FROM CharacterParameters");
+            var result = DB.Select(DatabaseType.Data, "SELECT * FROM CharacterParameters");
 
-            int StatsCounter = 0;
+            var statsCounter = 0;
 
-            using (ProgressBar mBar = new ProgressBar(Result.Count))
+            using (var mBar = new ProgressBar(result.Count))
             {
-                for (int i = 0; i < Result.Count; i++)
+                for (var i = 0; i < result.Count; i++)
                 {
-                    byte Class = Result.Read<byte>(i, "Class");
+                    var Class = result.Read<byte>(i, "Class");
 
                     mBar.Step();
 
@@ -71,49 +72,41 @@ namespace DragonFiesta.Zone.Data.Character
                     }
 
 
-                    CharacterLevelParameter LevelParams = new CharacterLevelParameter(Result, i);
+                    var levelParams = new CharacterLevelParameter(result, i);
 
                     //Create new CLass :P
-                    if (!CharacterStatParameters.TryGetValue((ClassId)Class, out ConcurrentDictionary<byte, CharacterLevelParameter> LevelParms))
-                        CharacterStatParameters.TryAdd((ClassId)Class, new ConcurrentDictionary<byte, CharacterLevelParameter>());
+                    if (!_characterStatParameters.TryGetValue((ClassId)Class, out var levelParms))
+                        _characterStatParameters.TryAdd((ClassId)Class, new ConcurrentDictionary<byte, CharacterLevelParameter>());
 
-                    if(!GetFreeStat(LevelParams.Level,out FreeStatData Data))
+                    if(!GetFreeStat(levelParams.Level,out var data))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "No FreeStat Data for Level {0} found!", LevelParams.Level);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "No FreeStat Data for Level {0} found!", levelParams.Level);
                         continue;
                     }
 
-                    LevelParams.FreeStats = Data;
+                    levelParams.FreeStats = data;
 
-                    if (!CharacterStatParameters[(ClassId)Class].TryAdd(LevelParams.Level, LevelParams))
+                    if (!_characterStatParameters[(ClassId)Class].TryAdd(levelParams.Level, levelParams))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate CharacterParameters Found!! Class {0} Level {1}", Class, LevelParams.Level);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate CharacterParameters Found!! Class {0} Level {1}", Class, levelParams.Level);
                         continue;
                     }
-                    StatsCounter++;
+                    statsCounter++;
 
                 }
 
-                DatabaseLog.WriteProgressBar(">> Loaded {0} CharacterParameters", StatsCounter);
+                DatabaseLog.WriteProgressBar(">> Loaded {0} CharacterParameters", statsCounter);
             }
 
         }
 
 
 
-        public static bool GetFreeStat(byte Level, out FreeStatData Data) => CharacterFreeStatsByLevel.TryGetValue(Level, out Data);
-        public static bool GetLevelParameters(ClassId Class, byte Level, out CharacterLevelParameter Params)
+        public static bool GetFreeStat(byte level, out FreeStatData data) => _characterFreeStatsByLevel.TryGetValue(level, out data);
+        public static bool GetLevelParameters(ClassId Class, byte level, out CharacterLevelParameter Params)
         {
             Params = null;
-            if (!CharacterStatParameters.TryGetValue(Class, out ConcurrentDictionary<byte, CharacterLevelParameter> ClassParams))
-                return false;
-
-
-            if (!ClassParams.TryGetValue(Level, out Params))
-                return false;
-
-
-            return true;
+            return _characterStatParameters.TryGetValue(Class, out var classParams) && classParams.TryGetValue(level, out Params);
         }
     }
 }

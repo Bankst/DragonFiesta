@@ -4,6 +4,7 @@ using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Maps.Object;
 using System;
 using System.Collections.Generic;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Zone.InternNetwork.InternHandler.Maps
 {

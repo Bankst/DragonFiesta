@@ -91,7 +91,7 @@ namespace DragonFiesta.Zone.Game.Mobs
 
 
 
-        bool IUpdateAbleServer.Update(GameTime Now)
+        bool IUpdateAbleServer.Update(GameTime gameTime)
         {
             if (IsDisposed) return false;
 

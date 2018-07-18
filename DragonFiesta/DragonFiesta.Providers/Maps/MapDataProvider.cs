@@ -2,6 +2,8 @@
 using DragonFiesta.Utils.IO.SHN;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace DragonFiesta.Providers.Maps
 {
@@ -10,9 +12,9 @@ namespace DragonFiesta.Providers.Maps
     {
         public static SecureCollection<FieldInfo> FieldInfos { get; private set; }
         public static SecureCollection<MapInfo> MapInfos { get; private set; }
-        private static ConcurrentDictionary<ushort, MapInfo> MapInfosByID;
-        private static ConcurrentDictionary<string, MapInfo> MapInfosByIndex;
-        private static ConcurrentDictionary<ushort, FieldInfo> FieldInfosByMapID;
+        private static ConcurrentDictionary<ushort, MapInfo> _mapInfosByID;
+        private static ConcurrentDictionary<string, MapInfo> _mapInfosByIndex;
+        private static ConcurrentDictionary<ushort, FieldInfo> _fieldInfosByMapID;
         public static MapInfo DefaultMapInfo { get; private set; }
         public static MapInfo TutorialMapInfo { get; private set; }
 
@@ -27,83 +29,88 @@ namespace DragonFiesta.Providers.Maps
 
         private static void LoadLevelCondition()
         {
-            int Count = 0;
-            SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM FieldLvCondition");
+			var watch = System.Diagnostics.Stopwatch.StartNew();
+            var count = 0;
+			var pResult = SHNManager.Load(SHNType.FieldLvCondition);
             DatabaseLog.WriteProgressBar(">> Load Level Condition");
-            using (ProgressBar mBar = new ProgressBar(pResult.Count))
+            using (var mBar = new ProgressBar(pResult.Count))
             {
-                for (int i = 0; i < pResult.Count; i++)
+                for (var i = 0; i < pResult.Count; i++)
                 {
                     mBar.Step();
-                    ushort MapID = pResult.Read<ushort>(i, "MapID");
-                    if (GetMapInfoByID(MapID, out MapInfo mMap))
-                    {
-                        mMap.LevelCondition = new FieldLvCondition(pResult, i);
-                        Count++;
-                    }
+                    var mapId = pResult.Read<string>(i, "MapIndex");
+	                var mMap = MapInfos.First(x => x.Index == mapId);
+	                mMap.LevelCondition = new FieldLvCondition(pResult, i);
+	                count++;
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} Level Condition", Count);
+				watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {count} Level Condition in {(double)watch.ElapsedMilliseconds / 1000}");
             }
         }
 
         private static void LoadMapInfos()
         {
+	        var watch = Stopwatch.StartNew();
             MapInfos = new SecureCollection<MapInfo>();
-            MapInfosByID = new ConcurrentDictionary<ushort, MapInfo>();
-            MapInfosByIndex = new ConcurrentDictionary<string, MapInfo>();
-            SHNResult pResult = SHNManager.Load(SHNType.MapInfo);
-            DatabaseLog.WriteProgressBar(">> Load Map Infos");
-            using (ProgressBar mBar = new ProgressBar(pResult.Count))
+            _mapInfosByID = new ConcurrentDictionary<ushort, MapInfo>();
+            _mapInfosByIndex = new ConcurrentDictionary<string, MapInfo>();
+            var pResult = SHNManager.Load(SHNType.MapInfo);
+            DatabaseLog.WriteProgressBar(">> Load MapInfos");
+            using (var mBar = new ProgressBar(pResult.Count))
             {
-                for (int i = 0; i < pResult.Count; i++)
-                {
-                    var info = new MapInfo(pResult, i);
-                    if (!MapInfosByID.TryAdd(info.ID, info))
-                    {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate map id found: " + info.ID);
-                        continue;
-                    }
-                    if (!MapInfosByIndex.TryAdd(info.Index, info))
-                    {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate map index found: " + info.Index);
-                        //reset
-                        MapInfosByID.TryRemove(info.ID, out info);
-                        continue;
-                    }
-                    MapInfos.Add(info);
-                    mBar.Step();
-                }
-                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos");
+	            for (var i = 0; i < pResult.Count; i++)
+	            {
+		            var info = new MapInfo(pResult, i);
+		            if (!_mapInfosByID.TryAdd(info.ID, info))
+		            {
+			            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate map id found: {info.ID}");
+			            continue;
+		            }
+
+		            if (!_mapInfosByIndex.TryAdd(info.Index, info))
+		            {
+			            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate map index found: {info.Index}");
+			            //reset
+			            _mapInfosByID.TryRemove(info.ID, out info);
+			            continue;
+		            }
+
+		            MapInfos.Add(info);
+		            mBar.Step();
+	            }
+	            watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos in {(double) watch.ElapsedMilliseconds / 1000}s");
             }
 
-            if (!GetMapInfoByID(GameConfiguration.Instance.DefaultSpawnMapId, out MapInfo DefaultMap))
-                throw new KeyNotFoundException("Can't find default spawn map " + GameConfiguration.Instance.DefaultSpawnMapId + "");
+            if (!GetMapInfoByID(GameConfiguration.Instance.DefaultSpawnMapId, out var defaultMap))
+                throw new KeyNotFoundException("Can't find default spawn map {GameConfiguration.Instance.DefaultSpawnMapId}");
 
-            if (!GetMapInfoByID(GameConfiguration.Instance.TutorialMap, out MapInfo TutorialMap))
-                throw new KeyNotFoundException("Can't find TutorialMap  " + GameConfiguration.Instance.TutorialMap + "");
+            if (!GetMapInfoByID(GameConfiguration.Instance.TutorialMap, out var tutorialMap))
+                throw new KeyNotFoundException($"Can't find TutorialMap {GameConfiguration.Instance.TutorialMap}");
 
-            DefaultMapInfo = DefaultMap;
-            TutorialMapInfo = TutorialMap;
+            DefaultMapInfo = defaultMap;
+            TutorialMapInfo = tutorialMap;
         }
 
         private static void LoadFieldInfos()
         {
+	        var watch = Stopwatch.StartNew();
             FieldInfos = new SecureCollection<FieldInfo>();
-            FieldInfosByMapID = new ConcurrentDictionary<ushort, FieldInfo>();
+            _fieldInfosByMapID = new ConcurrentDictionary<ushort, FieldInfo>();
 
-            SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM FieldInfos");
+            var pResult = DB.Select(DatabaseType.Data, "SELECT * FROM FieldInfos");
             DatabaseLog.WriteProgressBar(">> Load Field Infos");
-            using (ProgressBar mBar = new ProgressBar(pResult.Count))
+            using (var mBar = new ProgressBar(pResult.Count))
             {
-                for (int i = 0; i < pResult.Count; i++)
+                for (var i = 0; i < pResult.Count; i++)
                 {
                     mBar.Step();
 
-                    ushort MapClientID = pResult.Read<ushort>(i, "MapID");
+                    var mapClientId = pResult.Read<ushort>(i, "MapID");
                     //load map
-                    if (!MapInfosByID.TryGetValue(MapClientID, out MapInfo map))
+                    if (!_mapInfosByID.TryGetValue(mapClientId, out var map))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find map field info. Map ID: '{0}'.", MapClientID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find map field info. Map ID: '{0}'", mapClientId);
                         continue;
                     }
                     var info = new FieldInfo(pResult, i)
@@ -111,39 +118,41 @@ namespace DragonFiesta.Providers.Maps
                         MapInfo = map,
                     };
                     //load regen map
-                    if (!MapInfosByID.TryGetValue(pResult.Read<ushort>(i, "RegenCity"), out MapInfo regenMap))
+                    if (!_mapInfosByID.TryGetValue(pResult.Read<ushort>(i, "RegenCity"), out var regenMap))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find regen map Map ID: '{0}'.", MapClientID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find regen map. Map ID: '{0}'", mapClientId);
                         continue;
                     }
 
                     info.RegenMap = regenMap;
 
-                    if (!FieldInfosByMapID.TryAdd(info.MapInfo.ID, info))
+                    if (!_fieldInfosByMapID.TryAdd(info.MapInfo.ID, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate field  found. Map ID: {0}", MapClientID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate field found. Map ID: {0}", mapClientId);
                         continue;
                     }
 
                     FieldInfos.Add(info);
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} Field Infos", FieldInfos.Count);
+
+	            watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {FieldInfos.Count} Field Infos in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
-        public static bool GetMapInfoByID(ushort MapID, out MapInfo MapInfo)
+        public static bool GetMapInfoByID(ushort mapID, out MapInfo mapInfo)
         {
-            return MapInfosByID.TryGetValue(MapID, out MapInfo);
+            return _mapInfosByID.TryGetValue(mapID, out mapInfo);
         }
 
-        public static bool GetMapInfoByIndex(string MapIndex, out MapInfo MapInfo)
+        public static bool GetMapInfoByIndex(string mapIndex, out MapInfo mapInfo)
         {
-            return MapInfosByIndex.TryGetValue(MapIndex, out MapInfo);
+            return _mapInfosByIndex.TryGetValue(mapIndex, out mapInfo);
         }
 
-        public static bool GetFieldInfosByMapID(ushort Serial, out FieldInfo FieldInfo)
+        public static bool GetFieldInfosByMapID(ushort serial, out FieldInfo fieldInfo)
         {
-            return FieldInfosByMapID.TryGetValue(Serial, out FieldInfo);
+            return _fieldInfosByMapID.TryGetValue(serial, out fieldInfo);
         }
     }
 }

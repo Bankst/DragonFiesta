@@ -10,5 +10,11 @@
             TextId = pResult.Read<uint>(i, "TextId");
             Text = pResult.Read<string>(i, "Text");
         }
+
+	    public TextData(uint textId, string text)
+	    {
+		    TextId = textId;
+		    Text = text;
+	    }
     }
 }

@@ -91,6 +91,7 @@
     <Compile Include="Characters\Data\CharacterAreaInfo.cs" />
     <Compile Include="Characters\CharacterBase.cs" />
     <Compile Include="Characters\CharacterCollection.cs" />
+    <Compile Include="Characters\Data\CharacterInventory.cs" />
     <Compile Include="Characters\Event\CharacterClassChangeEventArgs.cs" />
     <Compile Include="Characters\Event\CharacterDeleteEventArgs.cs" />
     <Compile Include="Characters\Event\CharacterEventArgs.cs" />
@@ -123,7 +124,6 @@
     <Compile Include="ServerConsole\Command\CONSOLE_VERSION_HANDLER.cs" />
     <Compile Include="ServerConsole\Server\ShutdownHandlerBase.cs" />
     <Compile Include="Stats\iStatsChanger.cs" />
-    <Compile Include="Stats\StatsHolder.cs" />
     <Compile Include="Stats\StatsManager.cs" />
     <Compile Include="Stats\StatsType.cs" />
     <Compile Include="Transfer\ServerTransferBase.cs" />

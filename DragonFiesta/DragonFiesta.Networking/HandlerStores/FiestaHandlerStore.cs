@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using DragonFiesta.Networking.Network.Session;
 
 namespace DragonFiesta.Networking.HandlerStores
 {

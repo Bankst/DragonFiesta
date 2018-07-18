@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Utils.Core
 {

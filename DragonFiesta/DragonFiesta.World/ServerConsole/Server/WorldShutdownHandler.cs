@@ -54,7 +54,7 @@ namespace DragonFiesta.World.ServerConsole.Server
             return true;
         }
 
-        public override void FinalyShutdown()
+        public override void FinallyShutdown()
         {
             ZoneMethods.BroadCastServerShutdown();
 

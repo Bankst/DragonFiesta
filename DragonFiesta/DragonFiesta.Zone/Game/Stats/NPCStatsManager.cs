@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Game.Stats;
+using DragonFiesta.Providers.Items;
 using DragonFiesta.Zone.Game.NPC;
 
 namespace DragonFiesta.Zone.Game.Stats
@@ -7,14 +8,11 @@ namespace DragonFiesta.Zone.Game.Stats
     {
         public NPCBase NPC { get; private set; }
 
-        public override StatsHolder BaseStats
-        {
-            get { return NPC.Info.MobInfo.Stats; }
-        }
+        public override StatsHolder BaseStats => NPC.Info.MobInfo.Stats;
 
-        public NPCStatsManager(NPCBase NPC)
+	    public NPCStatsManager(NPCBase npc)
         {
-            this.NPC = NPC;
+            this.NPC = npc;
         }
 
         protected override void DisposeInternal()

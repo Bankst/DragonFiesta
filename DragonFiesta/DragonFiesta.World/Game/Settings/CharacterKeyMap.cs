@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Game.Settings
 {

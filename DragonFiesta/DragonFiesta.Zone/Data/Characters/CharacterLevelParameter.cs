@@ -1,7 +1,8 @@
-﻿using DragonFiesta.Utils.Config;
+﻿using DragonFiesta.Providers.Items;
+using DragonFiesta.Utils.Config;
 using DragonFiesta.Zone.Data.Stats;
 
-namespace DragonFiesta.Zone.Data.Character
+namespace DragonFiesta.Zone.Data.Characters
 {
     public class CharacterLevelParameter
     {

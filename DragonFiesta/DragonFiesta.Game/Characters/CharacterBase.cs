@@ -8,8 +8,8 @@ namespace DragonFiesta.Game.Characters
 {
     public abstract class CharacterBase : IDisposable
     {
-        public bool IsDisposed { get { return (IsDisposedInt > 0); } }
-        private int IsDisposedInt;
+        public bool IsDisposed => (_isDisposedInt > 0);
+	    private int _isDisposedInt;
 
 
         public object ThreadLocker { get; private set; }
@@ -24,6 +24,7 @@ namespace DragonFiesta.Game.Characters
 
         public CharacterStyle Style { get; set; }
 
+		public CharacterInventory Inventory { get; set; }
 
         public abstract bool IsGM { get; }
       
@@ -33,6 +34,8 @@ namespace DragonFiesta.Game.Characters
 
             AreaInfo = new CharacterAreaInfo();
             Style = new CharacterStyle();
+			Inventory = new CharacterInventory();
+
         }
 
         ~CharacterBase()
@@ -74,8 +77,13 @@ namespace DragonFiesta.Game.Characters
                 Result = CharacterErrors.ErrorInCharacterInfo;
                 return false;
             }
-            Result = CharacterErrors.LoadOK;
 
+	        if (!Inventory.RefreshFromSQL(pRes, i))
+	        {
+		        Result = CharacterErrors.ErrorInItem;
+	        }
+
+            Result = CharacterErrors.LoadOK;
             return true;
         }
 
@@ -105,7 +113,7 @@ namespace DragonFiesta.Game.Characters
 
         public virtual void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) == 0)
             {
                 DisposeInternal();
             }

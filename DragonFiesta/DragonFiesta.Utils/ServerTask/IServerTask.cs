@@ -7,7 +7,7 @@ public interface IServerTask : IDisposable
 
     GameTime LastUpdate { get; set; }
 
-    bool Update(GameTime Now);
+    bool Update(GameTime gameTime);
 }
 
 

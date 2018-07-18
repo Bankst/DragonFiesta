@@ -4,6 +4,7 @@ using DragonFiesta.World.Game.Maps;
 using DragonFiesta.World.InternNetwork;
 using System;
 using System.Runtime.Serialization;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Game.Zone
 {

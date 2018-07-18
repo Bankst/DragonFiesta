@@ -101,6 +101,13 @@
     <Compile Include="IO\TXT\Headers.cs" />
     <Compile Include="IO\TXT\ShineTable.cs" />
     <Compile Include="IO\TXT\Table.cs" />
+    <Compile Include="IO\TXT\TXTManager.cs" />
+    <Compile Include="IO\TXT\TXTPaths.cs" />
+    <Compile Include="IO\TXT\TXTResult.cs" />
+    <Compile Include="IO\TXT\TXTTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IO\TXT\TXTType.cs" />
     <Compile Include="Logging\ProgressBar.cs" />
     <Compile Include="ServerTask\ExpireAbleManager.cs" />
     <Compile Include="ServerTask\ExpireGuidManager.cs" />

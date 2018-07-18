@@ -2,7 +2,7 @@
 
 namespace DragonFiesta.Game.Characters.Data
 {
-    public class CharacterAreaInfo : AreaInfo
+    public sealed class CharacterAreaInfo : AreaInfo
     {
 
         private IMap _Map { get; set; }
@@ -35,9 +35,9 @@ namespace DragonFiesta.Game.Characters.Data
         {
 
         }
-        public CharacterAreaInfo(MapInfo MapInfo)
+        public CharacterAreaInfo(MapInfo mapInfo)
         {
-            this.MapInfo = MapInfo;
+            this.MapInfo = mapInfo;
         }
         public override bool RefreshFromSQL(SQLResult pRes, int i)
         {

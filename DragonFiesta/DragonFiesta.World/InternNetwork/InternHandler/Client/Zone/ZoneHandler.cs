@@ -3,6 +3,7 @@ using DragonFiesta.World.Game.Character;
 using DragonFiesta.World.Game.Zone;
 using System;
 using System.Collections.Generic;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.InternNetwork.InternHandler.Client.Zone
 {

@@ -3,6 +3,7 @@ using DragonFiesta.Zone.Data.WayPoints;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace DragonFiesta.Zone.Data.Mob
@@ -10,10 +11,10 @@ namespace DragonFiesta.Zone.Data.Mob
     [GameServerModule(ServerType.Zone, GameInitalStage.Mob)]
     public class MobDataProvider
     {
-        public const ushort MobInfo_Summon_ID = 6504;
-        public static MobInfo MobInfo_Summon { get; private set; }
-        private static ConcurrentDictionary<ushort, MobInfo> MobInfosByID;
-        private static ConcurrentDictionary<string, MobInfo> MobInfosByIndex;
+        public const ushort MobInfoSummonID = 6504;
+        public static MobInfo MobInfoSummon { get; private set; }
+        private static ConcurrentDictionary<ushort, MobInfo> _mobInfosByID;
+        private static ConcurrentDictionary<string, MobInfo> _mobInfosByIndex;
 
         private static ConcurrentDictionary<int, MobGroupInfo> MobGroupInfosById { get; set; }
 
@@ -37,26 +38,26 @@ namespace DragonFiesta.Zone.Data.Mob
         {
             MobChatByType = new ConcurrentDictionary<MobChatType, ConcurrentDictionary<ushort, MobChatInfo>>();
 
-            using (SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobChat"))
+            using (var pResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobChat"))
             {
-                for (int i = 0; i < pResult.Count; i++)
+                for (var i = 0; i < pResult.Count; i++)
                 {
-                    ushort MobId = pResult.Read<ushort>(i, "MobId");
+                    var mobId = pResult.Read<ushort>(i, "MobId");
 
-                    MobChatType Type = (MobChatType)pResult.Read<byte>(i, "ChatType");
+                    var type = (MobChatType)pResult.Read<byte>(i, "ChatType");
 
-                    if (MobChatByType.TryGetValue(Type, out ConcurrentDictionary<ushort, MobChatInfo> Value))
-                        MobChatByType.TryAdd(Type, new ConcurrentDictionary<ushort, MobChatInfo>());
+                    if (MobChatByType.TryGetValue(type, out var value))
+                        MobChatByType.TryAdd(type, new ConcurrentDictionary<ushort, MobChatInfo>());
 
-                    if (MobChatByType[Type].TryGetValue(MobId, out MobChatInfo Info))
+                    if (MobChatByType[type].TryGetValue(mobId, out var info))
                     {
-                        Info.MobChatList.Add(new MobChatMessageInfo(pResult, i));
+                        info.MobChatList.Add(new MobChatMessageInfo(pResult, i));
                     }
                     else
                     {
                         var chatInfo = new MobChatInfo(pResult, i);
                         chatInfo.MobChatList.Add(new MobChatMessageInfo(pResult, i));
-                        MobChatByType[Type].TryAdd(MobId, chatInfo);
+                        MobChatByType[type].TryAdd(mobId, chatInfo);
                     }
                 }
             }
@@ -67,64 +68,60 @@ namespace DragonFiesta.Zone.Data.Mob
             //SELECT * FROM Groups
             //Find ALL Members in GroupMember
 
-            SQLResult AllMemberResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobGroup_Members");
-            var MemberView = AllMemberResult.DefaultView;
-            MemberView.Sort = "GroupId";
+            var allMemberResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobGroup_Members");
+            var memberView = allMemberResult.DefaultView;
+            memberView.Sort = "GroupId";
 
             MobGroupInfosById = new ConcurrentDictionary<int, MobGroupInfo>();
             MobGroupInfosByMapId = new ConcurrentDictionary<ushort, ConcurrentDictionary<int, MobGroupInfo>>();
 
-            using (SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobGroups"))
+            using (var pResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobGroups"))
             {
-                for (int i = 0; i < pResult.Count; i++)
+                for (var i = 0; i < pResult.Count; i++)
                 {
-                    MobGroupInfo Info = new MobGroupInfo(pResult, i);
+                    var info = new MobGroupInfo(pResult, i);
 
-                    if (!MapDataProvider.GetMapInfoByID(Info.MapId, out MapInfo MapInfo))//Check is Sppawnned map exis...
+                    if (!MapDataProvider.GetMapInfoByID(info.MapId, out var mapInfo))//Check is Sppawnned map exis...
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't Find MapInfo for Group {0}", Info.GroupId);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't Find MapInfo for Group {0}", info.GroupId);
                         continue;
                     }
 
-                    if (!MobGroupInfosByMapId.ContainsKey(MapInfo.ID))
-                        MobGroupInfosByMapId.TryAdd(MapInfo.ID, new ConcurrentDictionary<int, MobGroupInfo>());
+                    if (!MobGroupInfosByMapId.ContainsKey(mapInfo.ID))
+                        MobGroupInfosByMapId.TryAdd(mapInfo.ID, new ConcurrentDictionary<int, MobGroupInfo>());
 
-                    if (MobGroupInfosByMapId[MapInfo.ID].ContainsKey(Info.GroupId) || MobGroupInfosById.ContainsKey(Info.GroupId))
+                    if (MobGroupInfosByMapId[mapInfo.ID].ContainsKey(info.GroupId) || MobGroupInfosById.ContainsKey(info.GroupId))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate GroupId {0} Found!!", Info.GroupId);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate GroupId {0} Found!!", info.GroupId);
                         continue;
                     }
 
-                    var MemberResults = MemberView.FindRows(Info.GroupId);
+                    var memberResults = memberView.FindRows(info.GroupId);
 
-                    if (MemberResults.Count() <= 0)
+                    if (!memberResults.Any())
                     {
                         DatabaseLog.Write(DatabaseLogLevel.Warning, "No Members For Group {0} Found....");
                         continue;
                     }
 
-                    foreach (var MemberRow in MemberResults)
+                    foreach (var memberRow in memberResults)
                     {
-                        ushort MobId = Convert.ToUInt16(MemberRow.Row["MobId"]);
-                        if (!GetMobInfoByID(MobId, out MobInfo MobInfo))
+                        var mobId = Convert.ToUInt16(memberRow.Row["MobId"]);
+                        if (!GetMobInfoByID(mobId, out var mobInfo))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find MobId {0} for Group {1}", MobId, Info.GroupId);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find MobId {0} for Group {1}", mobId, info.GroupId);
                             continue;
                         }
 
-                        MobGroupMemberInfo MemberInfo = new MobGroupMemberInfo(MobInfo, MemberRow.Row);
+                        var memberInfo = new MobGroupMemberInfo(mobInfo, memberRow.Row);
 
-                        if (!Info.MemberInfo.TryAdd(MemberInfo.MobInfo.ID, MemberInfo))
-                        {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate GroupMember Found!! MobId {0} ", MemberInfo.MobInfo.ID);
-                            continue;
-                        }
+	                    if (info.MemberInfo.TryAdd(memberInfo.MobInfo.ID, memberInfo)) continue;
+	                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate GroupMember Found!! MobId {0} ", memberInfo.MobInfo.ID);
                     }
                     //Add Group To Data..
-                    if (!MobGroupInfosByMapId[MapInfo.ID].TryAdd(Info.GroupId, Info) || !MobGroupInfosById.TryAdd(Info.GroupId, Info))
+                    if (!MobGroupInfosByMapId[mapInfo.ID].TryAdd(info.GroupId, info) || !MobGroupInfosById.TryAdd(info.GroupId, info))
                     {
-                        //TOod
-                        continue;
+                        // TODO
                     }
                 }
             }
@@ -134,18 +131,15 @@ namespace DragonFiesta.Zone.Data.Mob
         {
             WayPointsById = new ConcurrentDictionary<int, WayPointInfo>();
 
-            using (SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM WayPoints"))
+            using (var pResult = DB.Select(DatabaseType.Data, "SELECT * FROM WayPoints"))
             {
-                for (int i = 0; i < pResult.Count; i++)
+                for (var i = 0; i < pResult.Count; i++)
                 {
-                    int WayPointId = pResult.Read<int>(i, "Id");
-                    if (GetWayPointById(WayPointId, out WayPointInfo Point))
+                    var wayPointId = pResult.Read<int>(i, "Id");
+                    if (GetWayPointById(wayPointId, out var point))
                     {
-                        if (!Point.AddPosition(pResult, i))
-                        {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Waypoint Index found ID {0}", WayPointId);
-                            continue;
-                        }
+	                    if (point.AddPosition(pResult, i)) continue;
+	                    DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate Waypoint Index found ID {0}", wayPointId);
                     }
                     else
                     {
@@ -159,22 +153,23 @@ namespace DragonFiesta.Zone.Data.Mob
 
         private static void LoadMobInfos()
         {
-            MobInfosByID = new ConcurrentDictionary<ushort, MobInfo>();
-            MobInfosByIndex = new ConcurrentDictionary<string, MobInfo>();
+	        var watch = Stopwatch.StartNew();
+            _mobInfosByID = new ConcurrentDictionary<ushort, MobInfo>();
+            _mobInfosByIndex = new ConcurrentDictionary<string, MobInfo>();
             //mobinfoserver
-            SQLResult serverInfo = DB.Select(DatabaseType.Data, "SELECT * FROM MobInfoServer");
+            var serverInfo = DB.Select(DatabaseType.Data, "SELECT * FROM MobInfoServer");
             var serverView = serverInfo.DefaultView;
             serverView.Sort = "ID";
 
-            using (SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobInfo"))
+            using (var pResult = DB.Select(DatabaseType.Data, "SELECT * FROM MobInfo"))
             {
                 DatabaseLog.WriteProgressBar(">> Load MobInfos");
 
-                using (ProgressBar mBar = new ProgressBar(pResult.Count))
+                using (var mBar = new ProgressBar(pResult.Count))
                 {
-                    for (int i = 0; i < pResult.Count; i++)
+                    for (var i = 0; i < pResult.Count; i++)
                     {
-                        ushort mobID = pResult.Read<ushort>(i, "ID");
+                        var mobID = pResult.Read<ushort>(i, "ID");
                         //find server info
                         var serverResult = serverView.FindRows(mobID);
                         if (serverResult.Length < 1)
@@ -184,63 +179,65 @@ namespace DragonFiesta.Zone.Data.Mob
                             continue;
                         }
                         var mobInfo = new MobInfo(pResult, i, serverResult[0].Row);
-                        if (!MobInfosByID.TryAdd(mobInfo.ID, mobInfo))
+                        if (!_mobInfosByID.TryAdd(mobInfo.ID, mobInfo))
                         {
                             DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate mob ID found: {0}", mobInfo.ID);
                             mBar.Step();
                             continue;
                         }
-                        if (!MobInfosByIndex.TryAdd(mobInfo.Index, mobInfo))
+                        if (!_mobInfosByIndex.TryAdd(mobInfo.Index, mobInfo))
                         {
-                            MobInfosByID.TryRemove(mobInfo.ID, out mobInfo);
+                            _mobInfosByID.TryRemove(mobInfo.ID, out mobInfo);
                             DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate mob index found: {0}", mobInfo.Index);
                             mBar.Step();
                             continue;
                         }
                         mBar.Step();
                     }
+	                watch.Stop();
 
-                    DatabaseLog.WriteProgressBar(">> Loaded {0} MobInfos", MobInfosByID.Count);
+                    DatabaseLog.WriteProgressBar($">> Loaded {_mobInfosByID.Count} MobInfos in {(double) watch.ElapsedMilliseconds / 1000}s");
                 }
             }
             //clean up
             serverInfo.Dispose();
             //get summon mobinfo
-            MobInfo summon;
-            if (!GetMobInfoByID(MobInfo_Summon_ID, out summon))
-                throw new InvalidOperationException(String.Format("Can't find 'Resurrected Soldier' mob (ID: {0}).", MobInfo_Summon_ID));
-            MobInfo_Summon = summon;
+	        if (!GetMobInfoByID(MobInfoSummonID, out var summon))
+                throw new InvalidOperationException($"Can't find 'Resurrected Soldier' mob (ID: {MobInfoSummonID}).");
+            MobInfoSummon = summon;
         }
 
-        public bool GetNextFreeGroupId(out int GroupId)//need later for command....
+        public bool GetNextFreeGroupId(out int groupId)//need later for command....
         {
-            GroupId = 0;
-            IEnumerable<int> keyRange = Enumerable.Range(0, int.MaxValue);
+            groupId = 0;
+            var keyRange = Enumerable.Range(0, int.MaxValue);
             var freeKeys = keyRange.Except(MobGroupInfosById.Keys);
-            if (freeKeys.Count() == 0)
-                return false; // no free slot
+            if (!freeKeys.Any())
+			{
+				return false; // no free slot
+			}
 
-            GroupId = freeKeys.First();
+			groupId = freeKeys.First();
             return true;
         }
 
-        public static bool GetMobInfoByID(ushort ID, out MobInfo MobInfo) => MobInfosByID.TryGetValue(ID, out MobInfo);
+        public static bool GetMobInfoByID(ushort id, out MobInfo mobInfo) => _mobInfosByID.TryGetValue(id, out mobInfo);
 
-        public static bool GetMobInfoByIndex(string Index, out MobInfo MobInfo) => MobInfosByIndex.TryGetValue(Index, out MobInfo);
+        public static bool GetMobInfoByIndex(string index, out MobInfo mobInfo) => _mobInfosByIndex.TryGetValue(index, out mobInfo);
 
-        public static bool GetMobGroupInfosById(int GroupId, out MobGroupInfo Infos) => MobGroupInfosById.TryGetValue(GroupId, out Infos);
+        public static bool GetMobGroupInfosById(int groupId, out MobGroupInfo infos) => MobGroupInfosById.TryGetValue(groupId, out infos);
 
-        public static bool GetMobGroupsByMapId(ushort MapId, out ConcurrentDictionary<int, MobGroupInfo> GroupList) => MobGroupInfosByMapId.TryGetValue(MapId, out GroupList);
+        public static bool GetMobGroupsByMapId(ushort mapId, out ConcurrentDictionary<int, MobGroupInfo> groupList) => MobGroupInfosByMapId.TryGetValue(mapId, out groupList);
 
-        public static bool GetWayPointById(int WayPointId, out WayPointInfo Info) => WayPointsById.TryGetValue(WayPointId, out Info);
+        public static bool GetWayPointById(int wayPointId, out WayPointInfo info) => WayPointsById.TryGetValue(wayPointId, out info);
 
-        public static bool GetMobChatInfo(ushort MobId, MobChatType Type, out MobChatInfo Info)
+        public static bool GetMobChatInfo(ushort mobId, MobChatType type, out MobChatInfo info)
         {
-            Info = null;
+            info = null;
 
-            if (MobChatByType.TryGetValue(Type, out ConcurrentDictionary<ushort, MobChatInfo> Messages))
+            if (MobChatByType.TryGetValue(type, out var messages))
             {
-                if (Messages.TryGetValue(MobId, out Info))
+                if (messages.TryGetValue(mobId, out info))
                     return true;
             }
 

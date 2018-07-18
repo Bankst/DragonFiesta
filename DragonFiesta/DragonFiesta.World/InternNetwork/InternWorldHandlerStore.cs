@@ -4,6 +4,7 @@ using DragonFiesta.Networking.Network;
 using DragonFiesta.World.Game.Zone;
 using System;
 using System.Collections.Concurrent;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.InternNetwork
 {
@@ -12,12 +13,12 @@ namespace DragonFiesta.World.InternNetwork
     {
 
         [InitializerMethod]
-        public static new bool Initialize()
+        public new static bool Initialize()
         {
             Instance = new InternWorldHandlerStore
             {
-                _callbacks = new ConcurrentDictionary<Guid, IExpectAnAnswer>(),
-                _handlers = new ConcurrentDictionary<Type, Action<IMessage, InternSession>>(),
+                Callbacks = new ConcurrentDictionary<Guid, IExpectAnAnswer>(),
+                Handlers = new ConcurrentDictionary<Type, Action<IMessage, InternSession>>(),
                 ReponseManager = new ExpireExpectManager((int)ServerTaskTimes.SERVER_INTERN_MSG_RESPONSE_CHECK),
                
             };
@@ -33,38 +34,40 @@ namespace DragonFiesta.World.InternNetwork
         #region ZoneHandleTypes
 
 
-        private void HandleZoneToAll(IZoneToAll AllMessage, InternZoneSession pSession)
+        private void HandleZoneToAll(IZoneToAll allMessage, InternZoneSession pSession)
         {
-            if (!pSession.IsAuthenticated)
+	        if (allMessage == null) throw new ArgumentNullException(nameof(allMessage));
+	        if (!pSession.IsAuthenticated)
                 return;
 
-            if (_handlers.ContainsKey(AllMessage.GetType()))
+            if (Handlers.ContainsKey(allMessage.GetType()))
             {
-                _handlers[AllMessage.GetType()](AllMessage, pSession);
+                Handlers[allMessage.GetType()](allMessage, pSession);
             }
 
-            ZoneManager.Broadcast(AllMessage, pSession.Zone.ID);
+            ZoneManager.Broadcast(allMessage, pSession.Zone.ID);
         }
 
-        private void HandleZoneToZoneMessage(IZoneToZoneMessage Message, InternZoneSession pSession)
+        private void HandleZoneToZoneMessage(IZoneToZoneMessage message, InternZoneSession pSession)
         {
-            if (!ZoneManager.GetZoneByID(Message.DestZone, out ZoneServer mZone))
+	        if (pSession == null) throw new ArgumentNullException(nameof(pSession));
+	        if (!ZoneManager.GetZoneByID(message.DestZone, out var mZone))
             {
-                GameLog.Write(GameLogLevel.Warning, $"Can't Send {Message.GetType()} Zone {Message.DestZone } is not Exis..");
+                GameLog.Write(GameLogLevel.Warning, $"Can't Send {message.GetType()} Zone {message.DestZone } is not Exis..");
                 return;
             }
             else if (!mZone.IsConnected)
             {
-                GameLog.Write(GameLogLevel.Warning, $"Can't Send {Message.GetType() } Zone {Message.DestZone } is not Connectet");
+                GameLog.Write(GameLogLevel.Warning, $"Can't Send {message.GetType() } Zone {message.DestZone } is not Connectet");
                 return;
             }
 
-            if (_handlers.ContainsKey(Message.GetType()))
+            if (Handlers.ContainsKey(message.GetType()))
             {
-                _handlers[Message.GetType()](Message, pSession);
+                Handlers[message.GetType()](message, pSession);
             }
 
-            mZone.Send(Message);
+            mZone.Send(message);
         }
 
         #endregion ZoneHandleTypes
@@ -75,12 +78,12 @@ namespace DragonFiesta.World.InternNetwork
         {
             switch (pMessage)
             {
-                case IZoneToZoneMessage Message:
-                    HandleZoneToZoneMessage(Message, pSession as InternZoneSession);//throwed exp when not call by internzone...^^
+                case IZoneToZoneMessage message:
+                    HandleZoneToZoneMessage(message, pSession as InternZoneSession);//throwed exp when not call by internzone...^^
                     break;
 
-                case IZoneToAll Message:
-                    HandleZoneToAll(Message, pSession as InternZoneSession);
+                case IZoneToAll message:
+                    HandleZoneToAll(message, pSession as InternZoneSession);
                     break;
 
                 default:

@@ -16,25 +16,22 @@ namespace DragonFiesta.Login.ServerConsole
                 return true;
             }
 
-            if (!IPAddress.TryParse(Params[0], out IPAddress IP))
+            if (!IPAddress.TryParse(Params[0], out var ip))
             {
-                CommandLog.Write(CommandLogLevel.InvalidParameters, "Is Not Valid IP Address");
+                CommandLog.Write(CommandLogLevel.InvalidParameters, $"{ip} Is Not Valid IP Address");
                 return true;
             }
 
-            if (!IPBlockManager.GetIPBlockByIP(Params[0], out IPBlockEntry E))
+            if (!IPBlockManager.GetIPBlockByIP(Params[0], out var e))
             {
-                CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, "IP {0} is not blocked");
+                CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, $"IP {e.IP} is not blocked");
                 return true;
             }
 
-            if (IPBlockManager.RemoveIPBlock(Params[0]))
-            {
-                CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, "Removed IPBlock {0} Success!", Params[0]);
-                return true;
-            }
+	        if (!IPBlockManager.RemoveIPBlock(Params[0])) return true;
+	        CommandLog.WriteConsoleLine(CommandLogLevel.InvalidParameters, "Removed IPBlock {0} Successfully!", Params[0]);
+	        return true;
 
-            return true;
         }
 
         [ConsoleCommand("Block")]
@@ -46,30 +43,24 @@ namespace DragonFiesta.Login.ServerConsole
                 return true;
             }
 
-            if (!IPAddress.TryParse(Params[0], out IPAddress IP))
+            if (!IPAddress.TryParse(Params[0], out var ip))
             {
-                CommandLog.Write(CommandLogLevel.InvalidParameters, "Is Not Valid IP Address");
+                CommandLog.Write(CommandLogLevel.InvalidParameters, $"{ip} Is Not Valid IP Address");
                 return true;
             }
 
-            string Reason = string.Empty;
-            if (Params.Length == 1)
-                Reason = "Banned by Console No Reason";
-            else
-                Reason = String.Join(" ", 2, Params.Length);
+	        var reason = Params.Length == 1 ? "Banned by Console No Reason" : string.Join(" ", 2, Params.Length);
 
-            if (IPBlockManager.GetIPBlockByIP(Params[0], out IPBlockEntry E))
+            if (IPBlockManager.GetIPBlockByIP(Params[0], out var e))
             {
-                CommandLog.Write(CommandLogLevel.InvalidParameters, "IP {0} is Already Blocked");
-                return true;
-            }
-            if (IPBlockManager.BlockIP(Params[0], DateTime.Now, Reason))
-            {
-                CommandLog.Write(CommandLogLevel.Execute, "Blocked IP {0} Success!", Params[0]);
+                CommandLog.Write(CommandLogLevel.InvalidParameters, $"IP {e.IP} is Already Blocked");
                 return true;
             }
 
-            return false;
+	        if (!IPBlockManager.BlockIP(Params[0], DateTime.Now, reason)) return false;
+	        CommandLog.Write(CommandLogLevel.Execute, $"Blocked IP {Params[0]} Successfully!");
+	        return true;
+
         }
     }
 }

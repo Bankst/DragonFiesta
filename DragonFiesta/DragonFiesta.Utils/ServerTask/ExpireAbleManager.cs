@@ -8,22 +8,22 @@ namespace DragonFiesta.Utils.ServerTask
     {
         public SecureCollection<iExpireAble> Objects;
 
-        private object ThreadLocker;
+        private object _threadLocker;
 
-        private int IsDisposedInt;
+        private int _isDisposedInt;
 
         public TimeSpan UpdateInterval { get; private set; }
 
         public GameTime LastUpdate { get; private set; }
 
-        public ExpireAbleManager(int CheckIntervalMS)
+        public ExpireAbleManager(int checkIntervalMs)
         {
             Objects = new SecureCollection<iExpireAble>();
 
             LastUpdate = GameTime.Now();
 
-            UpdateInterval = TimeSpan.FromMilliseconds(CheckIntervalMS);
-            ThreadLocker = new object();
+            UpdateInterval = TimeSpan.FromMilliseconds(checkIntervalMs);
+            _threadLocker = new object();
 
         }
 
@@ -32,56 +32,49 @@ namespace DragonFiesta.Utils.ServerTask
             Dispose();
         }
 
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
-            if (IsDisposedInt == 1) return false;
+            if (_isDisposedInt == 1) return false;
 
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                if (Objects.Count > 0)
-                {
-                    var expired = new List<iExpireAble>();
+	            if (Objects.Count <= 0) return true;
+	            var expired = new List<iExpireAble>();
 
-                    for (int i = 0; i < Objects.Count; i++)
-                    {
-                        var obj = Objects[i];
-
-                        if (obj.IsDisposed
-                            || Now >= obj.ExpireTime)
-                        {
-                            expired.Add(obj);
-                        }
-                        obj.Update(Now);
-                    }
-                    for (int i = 0; i < expired.Count; i++)
-                    {
-                        var obj = expired[i];
-                        Objects.Remove(obj);
-                        if (!obj.IsDisposed)
-                        {
-                            obj.OnExpire(Now);
-                        }
-                    }
-                    expired.Clear();
-                    expired = null;
-                }
+	            foreach (var obj in Objects)
+	            {
+		            if (obj.IsDisposed
+		                || gameTime >= obj.ExpireTime)
+		            {
+			            expired.Add(obj);
+		            }
+		            obj.Update(gameTime);
+	            }
+	            foreach (var obj in expired)
+	            {
+		            Objects.Remove(obj);
+		            if (!obj.IsDisposed)
+		            {
+			            obj.OnExpire(gameTime);
+		            }
+	            }
+	            expired.Clear();
+	            expired = null;
             }
             return true;
         }
 
         public void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
-            {
-                Objects.Dispose();
-                Objects = null;
-                ThreadLocker = null;
-            }
+	        if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) != 0) return;
+	        Objects.Dispose();
+	        Objects = null;
+	        _threadLocker = null;
         }
 
         public bool AddObject(iExpireAble Object)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
                 return Objects.Add(Object);
             }
@@ -89,7 +82,7 @@ namespace DragonFiesta.Utils.ServerTask
 
         public bool RemoveObject(iExpireAble Object)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
                 return Objects.Remove(Object);
             }

@@ -5,7 +5,7 @@ namespace DragonFiesta.World.ServerTask.Accounts
 {
     public class TASK_KICK_TIMER : IServerTask
     {
-        public bool IsStartet { get; private set; }
+        public bool IsStarted { get; private set; }
 
         private int TimeToKick { get; set; }
 
@@ -16,32 +16,32 @@ namespace DragonFiesta.World.ServerTask.Accounts
 
         public DateTime ExpireTime { get; private set; }
 
-        public bool IsDisposed { get { return (IsDisposedInt > 0); } }
+        public bool IsDisposed => (_isDisposedInt > 0);
 
-        ServerTaskTimes IServerTask.Interval => ServerTaskTimes.INGAME_TIMER_INTERVALL;
+	    ServerTaskTimes IServerTask.Interval => ServerTaskTimes.INGAME_TIMER_INTERVALL;
 
         GameTime IServerTask.LastUpdate { get; set; }
 
-        private int IsDisposedInt;
+        private int _isDisposedInt;
 
         public TASK_KICK_TIMER(
-            Action OnKickCallBack,
-            Action<int> OnTickCallBack,
-            int TimeToKick = 0)
+            Action onKickCallBack,
+            Action<int> onTickCallBack,
+            int timeToKick = 0)
         {
-            this.OnKickCallBack = OnKickCallBack;
-            this.OnTickCallBack = OnTickCallBack;
+            this.OnKickCallBack = onKickCallBack;
+            this.OnTickCallBack = onTickCallBack;
 
-            ExpireTime = DateTime.Now.AddSeconds(TimeToKick);
+            ExpireTime = DateTime.Now.AddSeconds(timeToKick);
 
         }
 
-        bool IServerTask.Update(GameTime Now)
+        bool IServerTask.Update(GameTime now)
         {
             if (IsDisposed) return false;
 
 
-            if (Now >= ExpireTime)
+            if (now >= ExpireTime)
             {
                 try
                 {
@@ -57,19 +57,17 @@ namespace DragonFiesta.World.ServerTask.Accounts
             }
             else
             {
-                OnTickCallBack.Invoke((int)ExpireTime.Subtract(Now.Time).TotalSeconds);
+                OnTickCallBack.Invoke((int)ExpireTime.Subtract(now.Time).TotalSeconds);
                 return true;
             }
         }
 
         public void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
-            {
-                TimeToKick = 0;
-                OnKickCallBack = null;
-                OnTickCallBack = null;
-            }
+	        if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) != 0) return;
+	        TimeToKick = 0;
+	        OnKickCallBack = null;
+	        OnTickCallBack = null;
         }
     }
 }

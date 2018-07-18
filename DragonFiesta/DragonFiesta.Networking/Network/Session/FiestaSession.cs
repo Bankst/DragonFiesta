@@ -1,11 +1,12 @@
-﻿using DragonFiesta.Networking.HandlerStores;
+﻿using System;
+using System.Net.Sockets;
+using DragonFiesta.Networking.HandlerStores;
 using DragonFiesta.Networking.HandlerTypes;
+using DragonFiesta.Networking.Network.Callbacks;
 using DragonFiesta.Networking.Utils;
 using DragonFiesta.Utils.Core;
-using System;
-using System.Net.Sockets;
 
-namespace DragonFiesta.Networking.Network
+namespace DragonFiesta.Networking.Network.Session
 {
     public class FiestaSession<TSession> : SessionBase
         where TSession : FiestaSession<TSession>
@@ -16,7 +17,7 @@ namespace DragonFiesta.Networking.Network
 
 
 
-        private TCPRecvCallBack<FiestaDataParser> RecvCallBack;
+        private TCPRecvCallBack<FiestaDataParser> _recvCallBack;
 
         private FiestaSharkDumper DebugPackets { get; set; }
 
@@ -45,12 +46,12 @@ namespace DragonFiesta.Networking.Network
 
         public override void StartRecv()
         {
-            RecvCallBack = new TCPRecvCallBack<FiestaDataParser>(MSocket);
-            RecvCallBack.DataParser.OnDataRecv += OnDataRecv;
+            _recvCallBack = new TCPRecvCallBack<FiestaDataParser>(MSocket);
+            _recvCallBack.DataParser.OnDataRecv += OnDataRecv;
 
-            RecvCallBack.OnError += HandleSocketError;
+            _recvCallBack.OnError += HandleSocketError;
 
-            RecvCallBack.Start();
+            _recvCallBack.Start();
         }
 
         protected override void OnDataRecv(object sender, DataRecievedEventArgs e)
@@ -66,14 +67,13 @@ namespace DragonFiesta.Networking.Network
                 if (IsDisposed)
                     return;
 
-                var Packet = new FiestaPacket(GameStates.Crypto.Decrypt(e.PacketData, 0, e.PacketData.Length));
+                var packet = new FiestaPacket(GameStates.Crypto.Decrypt(e.PacketData, 0, e.PacketData.Length));
 
-                SocketLog.Write(SocketLogLevel.Debug, "Read FiestaPacket H{0} T{1}", Packet.Header, Packet.Type);
+                SocketLog.Write(SocketLogLevel.Debug, "Read FiestaPacket H{0} T{1}", packet.Header, packet.Type);
 
-                if (DebugPackets != null)
-                    DebugPackets.DumpPacket(Packet, true);
+	            DebugPackets?.DumpPacket(packet, true);
 
-                FiestaHandlerStore.Instance.HandlePacket(Packet, this);
+	            FiestaHandlerStore.Instance.HandlePacket(packet, this);
 
                 BaseStateInfo.PacketsReceived++;
 
@@ -82,8 +82,8 @@ namespace DragonFiesta.Networking.Network
 
         public void SetXorKeyPositionToRandom()
         {
-            Random rng = new Random();
-            ushort position = (ushort)rng.Next(0, 499);
+            var rng = new Random();
+            var position = (ushort)rng.Next(0, 499);
             SetXorKeyPosition(position);
         }
 
@@ -103,10 +103,9 @@ namespace DragonFiesta.Networking.Network
                 return;
             }
 
-            if (DebugPackets != null)
-                DebugPackets.DumpPacket(pPacket, false);
+	        DebugPackets?.DumpPacket(pPacket, false);
 
-            Send(pPacket.GetPacketBytes());
+	        Send(pPacket.GetPacketBytes());
 
             BaseStateInfo.PacketsSent++;
 
@@ -114,9 +113,9 @@ namespace DragonFiesta.Networking.Network
 
         private void SendSetXorKeyPosition(ushort position)
         {
-            using (FiestaPacket packetWriter = new FiestaPacket(Handler02Type._Header, Handler02Type.SMSG_MISC_SEED_ACK))
+            using (var packetWriter = new FiestaPacket(Handler02Type._Header, Handler02Type.SMSG_MISC_SEED_ACK))
             {
-                packetWriter.Write<UInt32>(position);
+                packetWriter.Write<uint>(position);
                 SendPacket(packetWriter);
             }
 
@@ -125,9 +124,9 @@ namespace DragonFiesta.Networking.Network
 
         internal override void SendPacket<T>(T pPacket) => SendPacket(pPacket);
 
-        protected override void DisposeInternal()
+	    protected override void DisposeInternal()
         {
-            RecvCallBack = null;
+            _recvCallBack = null;
             GameStates = null;
             DebugPackets = null;
 

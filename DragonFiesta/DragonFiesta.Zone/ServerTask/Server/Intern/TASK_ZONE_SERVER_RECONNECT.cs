@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Zone.Core;
+﻿using DragonFiesta.Utils.Logging;
+using DragonFiesta.Zone.Core;
 
 namespace DragonFiesta.Zone.ServerTask.Intern
 {
@@ -19,7 +20,7 @@ namespace DragonFiesta.Zone.ServerTask.Intern
 
         }
 
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
             if (!InternWorldConnector.GetIsConnected())
             {

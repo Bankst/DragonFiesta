@@ -51,7 +51,7 @@ namespace DragonFiesta.Login.ServerConsole.Server
             return true;
         }
 
-        public override void FinalyShutdown() => ServerMain.InternalInstance.Shutdown();
+        public override void FinallyShutdown() => ServerMain.InternalInstance.Shutdown();
         
         private void DisplayMessage(TimeSpan RestTime)
         {

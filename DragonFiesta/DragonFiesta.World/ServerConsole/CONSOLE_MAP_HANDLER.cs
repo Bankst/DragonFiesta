@@ -15,59 +15,53 @@ namespace DragonFiesta.World.ServerConsole
             [ConsoleCommand("start")]
             public static bool CMD_MAP_START(string[] Params)
             {
-                if (Params.Length == 1 && ushort.TryParse(Params[0], out ushort MapId))
+                if (Params.Length == 1 && ushort.TryParse(Params[0], out var mapId))
                 {
-                    if (!MapDataProvider.GetFieldInfosByMapID(MapId, out FieldInfo mInfo))
+                    if (!MapDataProvider.GetFieldInfosByMapID(mapId, out var mInfo))
                     {
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "No Map for ID : {0} found!", MapId);
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, $"No Map for ID : {mapId} found!");
                         return true;
                     }
-                    else if (MapManager.GetMap(MapId, 0, out WorldServerMap Map) && mInfo.MapInfo.Type == MapType.Normal)
-                    {
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, $"Map {MapId } Alredy Startet");
-                        return true;
-                    }
-                    else if (!ZoneManager.GetZoneByID(mInfo.ZoneID, out ZoneServer Zone))
-                    {
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "ZoneServer for map {0} is not Online", MapId);
-                        return true;
-                    }
-                    else
-                    {
 
-                        MapMethods.SendStartNewMap(mInfo.MapInfo, out ushort InstanceId);
-                        return true;
-                    }
+	                if (MapManager.GetMap(mapId, 0, out var map) && mInfo.MapInfo.Type == MapType.Normal)
+	                {
+		                CommandLog.WriteConsoleLine(CommandLogLevel.Error, $"Map {mapId} Already Started");
+		                return true;
+	                }
+	                if (!ZoneManager.GetZoneByID(mInfo.ZoneID, out var zone))
+	                {
+		                CommandLog.WriteConsoleLine(CommandLogLevel.Error, $"ZoneServer for map {mapId} is not Online");
+		                return true;
+	                }
+
+	                MapMethods.SendStartNewMap(mInfo.MapInfo, out var instanceId);
+	                return true;
                 }
-                else
-                {
-                    CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Invalid Parameters use : Map Start <Mapid> ");
-                }
-                return true;
+
+	            CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Invalid Parameters use : Map Start <Mapid> ");
+	            return true;
             }
 
             [ConsoleCommand("stop")]
             public static bool CMD_MAP_STOP(string[] Params)
             {
-                if (Params.Length == 1 && ushort.TryParse(Params[0], out ushort MapId))
+                if (Params.Length == 1 && ushort.TryParse(Params[0], out var mapId))
                 {
-                    if (!MapDataProvider.GetFieldInfosByMapID(MapId, out FieldInfo info))
+                    if (!MapDataProvider.GetFieldInfosByMapID(mapId, out var info))
                     {
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Can't find Map {0}", MapId);
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, $"Can't find Map {mapId}");
                         return true;
                     }
 
-                    if (!ZoneManager.GetZoneByID(info.ZoneID, out ZoneServer Zone))
+                    if (!ZoneManager.GetZoneByID(info.ZoneID, out var zone))
                     {
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Zone for Map {0}", info.ZoneID);
+                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, $"Zone for Map {info.ZoneID}");
                         return true;
                     }
 
-                    if (!MapManager.StopMap(MapId))//hmm I need info ..
-                    {
-                        CommandLog.WriteConsoleLine(CommandLogLevel.Error, "Invalid Stop Map {0}", MapId);
-                        return true;
-                    }
+	                if (MapManager.StopMap(mapId)) return true; //hmm I need info ..
+					CommandLog.WriteConsoleLine(CommandLogLevel.Error, $"Invalid Stop Map {mapId}");
+	                return true;
                 }
                 else
                 {
@@ -80,17 +74,18 @@ namespace DragonFiesta.World.ServerConsole
             [ConsoleCommand("Instances")]
             public static bool CMD_MAP_INSTACES(string[] Params)
             {
-                if (Params.Length == 1 && ushort.TryParse(Params[0], out ushort MapId))
+                if (Params.Length == 1 && ushort.TryParse(Params[0], out var mapId))
                 {
-                    if (!MapManager.GetInstancesOfMapId(MapId, out List<InstanceMap> Maps))
+                    if (!MapManager.GetInstancesOfMapId(mapId, out var maps))
                     {
-                        CommandLog.Write(CommandLogLevel.Error, "No Instances of Map {0} found !", MapId);
+                        CommandLog.Write(CommandLogLevel.Error, $"No Instances of Map {mapId} found !");
                         return true;
                     }
 
-                    Maps.ForEach(Map => CommandLog.Write(CommandLogLevel.Execute, "Instances {0} MapId {1}", Map.InstanceId, Map.MapId));
+                    maps.ForEach(map => CommandLog.Write(CommandLogLevel.Execute, $"Instances {map.InstanceId} MapId {map.MapId}"));
 
-                    return true;
+
+					return true;
                 }
                 else
                 {

@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Networking.Network
+﻿using DragonFiesta.Networking.Network.Session;
+
+namespace DragonFiesta.Networking.Network
 {
     public class FiestaServer<TSession> : ServerBase
         where TSession : FiestaSession<TSession>

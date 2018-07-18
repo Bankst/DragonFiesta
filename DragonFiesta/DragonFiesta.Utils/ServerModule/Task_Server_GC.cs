@@ -13,7 +13,7 @@ namespace DragonFiesta.Utils.Module.Server
         {
         }
 
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
             GC.Collect();
             return true;

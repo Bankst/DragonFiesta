@@ -1,21 +1,25 @@
-﻿namespace DragonFiesta.Providers.Maps
+﻿using DragonFiesta.Utils.IO.SHN;
+
+namespace DragonFiesta.Providers.Maps
 {
-    public class FieldLvCondition
+	public class FieldLvCondition
     {
-        public ushort MapId { get; set; }
+        public string MapId { get; set; }
+		public ushort ModeIDLv { get; set; }
         public ushort MinLevel { get; set; }
         public ushort MaxLevel { get; set; }
 
-        public FieldLvCondition(SQLResult pResult, int i)
+        public FieldLvCondition(SHNResult pResult, int i)
         {
-            MapId = pResult.Read<ushort>(i, "MapId");
-            MinLevel = pResult.Read<ushort>(i, "MinLevel");
-            MaxLevel = pResult.Read<ushort>(i, "MaxLevel");
+            MapId = pResult.Read<string>(i, "MapIndex");
+	        ModeIDLv = pResult.Read<ushort>(i, "ModeIDLv");
+            MinLevel = pResult.Read<ushort>(i, "LvFrom");
+            MaxLevel = pResult.Read<ushort>(i, "LvTo");
         }
 
-        public bool IsLevelInRange(byte Level)
+        public bool IsLevelInRange(byte level)
         {
-            return Level > MinLevel && Level < MaxLevel;
+            return level > MinLevel && level < MaxLevel;
         }
     }
 }

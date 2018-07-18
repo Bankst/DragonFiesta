@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace DragonFiesta.Networking.Network
+namespace DragonFiesta.Networking.Network.Callbacks
 {
 
 //todo fix protocol parsing -.-
@@ -14,17 +14,17 @@ namespace DragonFiesta.Networking.Network
 
         private const int ReceivingBufferSize = ushort.MaxValue * 2;
 
-        private Socket mSocket;
+        private Socket _mSocket;
 
         internal TDataParser DataParser { get; set; }
 
         public event EventHandler<SocketDisconnectArgs> OnError;
 
-        internal void InvokeError(SocketError Error, string msg = "") => OnError?.Invoke(this, new SocketDisconnectArgs(Error, msg));
+        internal void InvokeError(SocketError error, string msg = "") => OnError?.Invoke(this, new SocketDisconnectArgs(error, msg));
 
         public TCPRecvCallBack(Socket mSocket)
         {
-            this.mSocket = mSocket;
+            this._mSocket = mSocket;
 
             CurrentReceiveBuffer = new byte[ReceivingBufferSize];
 
@@ -52,7 +52,7 @@ namespace DragonFiesta.Networking.Network
                     CurrentPositionInReceiveBuffer,
                     CurrentReceiveBuffer.Length - CurrentPositionInReceiveBuffer);
 
-                if (!mSocket.ReceiveAsync(args))
+                if (!_mSocket.ReceiveAsync(args))
                 {
                     FinishReceive(this, args);
                 }
@@ -74,16 +74,7 @@ namespace DragonFiesta.Networking.Network
             }
             try
             {
-
-                if (CurrentPositionInReceiveBuffer <= int.MaxValue)
-                {
-                    DataParser.ParseNext(CurrentReceiveBuffer, ref CurrentPositionInReceiveBuffer, transfered);
-                }
-                else
-                {
-                    CurrentPositionInReceiveBuffer = 0;
-                    DataParser.ParseNext(CurrentReceiveBuffer, ref CurrentPositionInReceiveBuffer, transfered);
-                }
+	            DataParser.ParseNext(CurrentReceiveBuffer, ref CurrentPositionInReceiveBuffer, transfered);
             }
             catch (Exception e)
             {
@@ -98,7 +89,7 @@ namespace DragonFiesta.Networking.Network
 
         public void Dispose()
         {
-            mSocket = null;
+            _mSocket = null;
             DataParser = null;
         }
     }

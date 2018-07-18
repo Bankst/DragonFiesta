@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Game.Transfer;
+using DragonFiesta.Utils.Logging;
 using DragonFiesta.World.Game.Character;
 using DragonFiesta.World.Game.Maps;
 
@@ -11,7 +12,7 @@ namespace DragonFiesta.World.Game.Transfer
         public WorldServerMap Map { get; set; }
 
 
-        public override void OnExpire(GameTime Now)
+        public override void OnExpire(GameTime gameTime)
         {
             if (WorldServerTransferManager.FinishTransfer(Character.Info.CharacterID, out WorldMapTransfer end))
             {

@@ -6,14 +6,14 @@ namespace DragonFiesta.Utils.ServerConsole
 {
     public static class ConsoleThread
     {
-        private static bool Reading;
+        private static bool _reading;
 
         private static Thread CmdThread { get; set; }
 
         public static void Stop()
         {
             
-            Reading = false;
+            _reading = false;
             CmdThread.Abort();
 
             SendEnter();
@@ -23,25 +23,23 @@ namespace DragonFiesta.Utils.ServerConsole
             SendKeys.SendWait("~");
         public static void Start()
         {
-            Reading = true;
-            CmdThread = new Thread(Read) { Name = string.Concat("CmdThread") };
+            _reading = true;
+            CmdThread = new Thread(Read) { Name = "CmdThread" };
             CmdThread.Start();
         }
 
         private static void Read()
         {
-            while (Reading)
+            while (_reading)
             {
-                string Input = Console.ReadLine();
-                string[] args = Input.Split(' ');
-                if (args.Length >= 1)
-                {
-                    string cmd = args[0];
-                    if (!ConsoleCommandHandlerStore.InvokeConsoleCommand(cmd.ToUpper(), args))
-                    {
-                        CommandLog.Write(CommandLogLevel.Error, "Can't find Command {0}", Input);
-                    }
-                }
+                var input = Console.ReadLine();
+                var args = input?.Split(' ');
+	            if (args?.Length < 1) continue;
+	            var cmd = args?[0];
+	            if (!ConsoleCommandHandlerStore.InvokeConsoleCommand(cmd?.ToUpper(), args))
+	            {
+		            CommandLog.Write(CommandLogLevel.Error, "Can't find Command {0}", input);
+	            }
             }
         }
     }

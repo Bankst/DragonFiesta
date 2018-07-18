@@ -15,10 +15,10 @@ namespace DragonFiesta.World.ServerTask.Game.Clock
            
         }
 
-        public bool Update(GameTime Now)
+        public bool Update(GameTime gameTime)
         {
-            WorldSessionManager.Instance.ClientAction((Session) 
-                => SH02Handler.SendGameTimeUpdatePacket(Session,Now.Time),(m => m.Ingame));
+            WorldSessionManager.Instance.ClientAction((session) 
+                => SH02Handler.SendGameTimeUpdatePacket(session, gameTime.Time),(m => m.Ingame));
 
             return true;
         }

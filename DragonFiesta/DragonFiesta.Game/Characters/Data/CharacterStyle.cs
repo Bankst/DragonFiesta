@@ -1,4 +1,5 @@
 ﻿using DragonFiesta.Providers.Characters;
+using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Game.Characters.Data
 {
@@ -12,25 +13,25 @@ namespace DragonFiesta.Game.Characters.Data
 
         public bool RefreshFromSQL(SQLResult pRes, int i)
         {
-            byte hairID = pRes.Read<byte>(i, "Hair");
+            var hairID = pRes.Read<byte>(i, "Hair");
 
-            if (!CharacterLookProvider.GetHairInfoByID(hairID, out HairInfo pHair))
+            if (!CharacterLookProvider.GetHairInfoByID(hairID, out var pHair))
             {
                 GameLog.Write(GameLogLevel.Warning, $"Can't find hair with ID '{hairID}' for characters");
                 return false;
             }
 
-            byte hairColorID = pRes.Read<byte>(i, "HairColor");
-            if (!CharacterLookProvider.GetHairColorInfoByID(hairColorID, out HairColorInfo pHairColor))
+            var hairColorID = pRes.Read<byte>(i, "HairColor");
+            if (!CharacterLookProvider.GetHairColorInfoByID(hairColorID, out var pHairColor))
             {
                 GameLog.Write(GameLogLevel.Warning, $"Can't find hair color with ID '{hairColorID}' for chracters");
                 return false;
             }
 
-            byte FaceID = pRes.Read<byte>(i, "Face");
-            if (!CharacterLookProvider.GetFaceInfoByID(FaceID, out FaceInfo pFace))
+            var faceID = pRes.Read<byte>(i, "Face");
+            if (!CharacterLookProvider.GetFaceInfoByID(faceID, out var pFace))
             {
-                GameLog.Write(GameLogLevel.Warning, $"Can't find face with ID '{FaceID}' for a characters");
+                GameLog.Write(GameLogLevel.Warning, $"Can't find face with ID '{faceID}' for a characters");
                 return false;
             }
             Hair = pHair;

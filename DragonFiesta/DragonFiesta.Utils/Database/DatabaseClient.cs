@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using DragonFiesta.Utils.Core;
 
 namespace DragonFiesta.Utils.Database
 {
@@ -80,7 +81,7 @@ namespace DragonFiesta.Utils.Database
             ResetCommand();
             mAvailable = true;
             UpdateLastActivity();
-            DatabaseLog.Write(DatabaseLogLevel.Debug, "(Sql)Released client " + Id + " for availability.");
+	        if (ServerMainDebug.DebugSql) DatabaseLog.Write(DatabaseLogLevel.Debug, "(Sql)Released client " + Id + " for availability.");
         }
 
         public void Close()

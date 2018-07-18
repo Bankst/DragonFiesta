@@ -21,19 +21,19 @@ namespace DragonFiesta.Utils.Logging
         /// </summary>
         public DateTime SessionTime { get; private set; }
 
-        protected internal byte mFileLogLevel = byte.MaxValue;
+        protected internal byte MFileLogLevel = byte.MaxValue;
 
-        private ConcurrentDictionary<string, StreamWriter> Writers;
+        private ConcurrentDictionary<string, StreamWriter> _writers;
 
-        public FileLog(string Directory) : base()
+        public FileLog(string directory) : base()
         {
-            this.Directory = Directory.ToEscapedString();
+            this.Directory = directory.ToEscapedString();
 
             if (!System.IO.Directory.Exists(this.Directory))
                 System.IO.Directory.CreateDirectory(this.Directory);
 
             LoadSession();
-            Writers = new ConcurrentDictionary<string, StreamWriter>();
+            _writers = new ConcurrentDictionary<string, StreamWriter>();
             IOLocker = new object();
         }
 
@@ -47,10 +47,10 @@ namespace DragonFiesta.Utils.Logging
                 {
                     var split = withoutEx.Split('_');
 
-                    if (uint.TryParse(split[0], out uint ID)
-                        && ID >= SessionID)
+                    if (uint.TryParse(split[0], out uint id)
+                        && id >= SessionID)
                     {
-                        SessionID = (ID + 1);
+                        SessionID = (id + 1);
                     }
                 }
             }
@@ -58,44 +58,43 @@ namespace DragonFiesta.Utils.Logging
             SessionTime = DateTime.Now;
         }
 
-        public void SetFileLogLevel(byte LogLevel)
-        {
-            mFileLogLevel = LogLevel;
-        }
+		public void SetFileLogLevel(byte logLevel) => MFileLogLevel = logLevel;
 
-        public void Write(string LogName, dynamic LogType, string Message, params object[] args)
+		public void Write(string logName, dynamic logType, string message, params object[] args)
         {
             try
             {
                 lock (IOLocker)
                 {
-                    if (!Writers.TryGetValue(LogName.ToLower(), out StreamWriter writer))
+                    if (!_writers.TryGetValue(logName.ToLower(), out StreamWriter writer))
                     {
-                        writer = new StreamWriter(String.Format("{0}{1}_{2}_{3}.txt", Directory, SessionID, LogName, SessionTime.ToString("MM_dd_yyyy"))) { AutoFlush = true };
-                        Writers.TryAdd(LogName.ToLower(), writer);
+                        writer = new StreamWriter(
+	                        $"{Directory}{SessionID}_{logName}_{SessionTime:MM_dd_yyyy}.txt") { AutoFlush = true };
+                        _writers.TryAdd(logName.ToLower(), writer);
                     }
 
-                    string msg = (String.Format("[{0}][{1}][{2}] {3}", DateTime.Now, LogTypeName, LogType, String.Format(Message, args)));
+                    var msg = ($"[{DateTime.Now}][{LogTypeName}][{logType}] {string.Format(message, args)}");
 
-                    if ((byte)LogType <= mFileLogLevel)
+                    if ((byte)logType <= MFileLogLevel)
                     {
                         writer.WriteLine(msg);
                     }
 
-                    if ((byte)LogType <= mConsoleLogLevel)
+                    if ((byte)logType <= mConsoleLogLevel)
                     {
-                        ConsoleWriteLine(LogName, LogType, msg);
+                        ConsoleWriteLine(logName, logType, msg);
                     }
                 }
             }
-            catch (Exception)
-            {
-            }
+	        catch (Exception)
+	        {
+		        // ignored
+	        }
         }
 
-        public void WriteException(Exception Exception, dynamic LogType, string Commend, params object[] args)
+        public void WriteException(Exception exception, dynamic logType, string commend, params object[] args)
         {
-            Write(LogTypeName, LogType, String.Format("{0}{1}{1}{1}{2}{1}{1}{3}{1}{1}{1}", Commend, Environment.NewLine, Exception.Message, Exception.StackTrace), args);
+            Write(LogTypeName, logType, String.Format("{0}{1}{1}{1}{2}{1}{1}{3}{1}{1}{1}", commend, Environment.NewLine, exception.Message, exception.StackTrace), args);
         }
     }
 }

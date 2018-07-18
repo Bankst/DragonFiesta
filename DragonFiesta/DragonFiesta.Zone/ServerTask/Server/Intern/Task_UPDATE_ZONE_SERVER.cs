@@ -14,7 +14,7 @@ namespace DragonFiesta.Zone.ServerTask.Intern
         GameTime IServerTask.LastUpdate { get; set; }
 
 
-        bool IServerTask.Update(GameTime Now)
+        bool IServerTask.Update(GameTime gameTime)
         {
             if (InternWorldConnector.GetIsConnected() && ServerMain.InternalInstance.ServerIsReady)
             {
