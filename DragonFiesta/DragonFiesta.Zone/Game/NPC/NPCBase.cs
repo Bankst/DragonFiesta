@@ -48,11 +48,11 @@ namespace DragonFiesta.Zone.Game.NPC
         public override void WriteDisplay(FiestaPacket Packet)
         {
             Packet.Write<ushort>(MapObjectId);
-            Packet.Write<byte>(2);//rank????
+            Packet.Write<byte>(2); // Mode
             Packet.Write<ushort>(Info.MobInfo.ID);
             Packet.Write<uint>(Position.X);
             Packet.Write<uint>(Position.Y);
-            Packet.Write<byte>(Position.Rotation); // 14 bytes
+            Packet.Write<byte>(Position.Rotation);
             Packet.Write<bool>(Info.IsGate);//00 = buffArray
 
             switch (Info.Role)
@@ -60,7 +60,11 @@ namespace DragonFiesta.Zone.Game.NPC
                 case NPCRole.Gate:
                 case NPCRole.IDGate:
                     Packet.WriteString(Info.LinkTable.PortMap.Index, 12);
-                    Packet.Fill(128, 0x00); // EU -> 127
+                    Packet.Fill(93, 0x00); // Unk
+                    Packet.Fill(32, 0x00); // Animation
+                    Packet.Write<byte>(0); // AnimationLevel
+                    Packet.Write<byte>(0); // KQTeamType
+                    Packet.Write<byte>(0); // RegenAni
                     break;
                 case NPCRole.RandomGate:
                 case NPCRole.ClientMenu:
@@ -71,8 +75,12 @@ namespace DragonFiesta.Zone.Game.NPC
                 case NPCRole.NPCMenu:
                 case NPCRole.QuestNpc:
                 case NPCRole.StoreManager:
-                default:
-                    Packet.Fill(140, 0x00); // EU -> 138
+                default:            
+                    Packet.Fill(105, 0x00); // Abnormal_state_bit
+                    Packet.Fill(32, 0x00); // Animation
+                    Packet.Write<byte>(0); // AnimationLevel
+                    Packet.Write<byte>(0); // KQTeamType
+                    Packet.Write<byte>(0); // RegenAni
                     break;
             }
         }
