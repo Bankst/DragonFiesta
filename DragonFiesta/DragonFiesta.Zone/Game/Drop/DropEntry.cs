@@ -1,5 +1,4 @@
 ﻿using DragonFiesta.Zone.Game.Maps.Object;
-using System.Data.SqlClient;
 
 namespace DragonFiesta.Zone.Game.Maps
 {

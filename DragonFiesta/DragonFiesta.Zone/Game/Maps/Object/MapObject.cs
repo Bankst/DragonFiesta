@@ -2,7 +2,6 @@
 using DragonFiesta.Zone.Game.Maps.Interface;
 using System;
 using System.Threading;
-using System.Data.SqlClient;
 
 namespace DragonFiesta.Zone.Game.Maps.Object
 {

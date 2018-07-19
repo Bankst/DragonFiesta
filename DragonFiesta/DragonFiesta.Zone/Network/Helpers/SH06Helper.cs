@@ -1,7 +1,4 @@
-﻿/*
-    Wrong Struc fix this!
-*/
-using DragonFiesta.Zone.Game.Character;
+﻿using DragonFiesta.Zone.Game.Character;
 
 namespace DragonFiesta.Zone.Network.Helpers
 {

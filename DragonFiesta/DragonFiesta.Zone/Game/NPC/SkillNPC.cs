@@ -1,8 +1,6 @@
-﻿using DragonFiesta.Providers.Text;
-using DragonFiesta.Zone.Data.Menu;
+﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Zone.Data.NPC;
 using DragonFiesta.Zone.Game.Character;
-using DragonFiesta.Zone.Game.Chat;
 
 namespace DragonFiesta.Zone.Game.NPC
 {
@@ -15,7 +13,6 @@ namespace DragonFiesta.Zone.Game.NPC
 		public override void OpenMenu(ZoneCharacter Character)
 		{
 			//bruh
-
 		}
 
 
@@ -23,5 +20,12 @@ namespace DragonFiesta.Zone.Game.NPC
 		{
 			base.DisposeInternal();
 		}
-	}
+
+        protected override FiestaPacket CreateItemListPacket()
+        {
+            var packet = new FiestaPacket(Handler07Type._Header, Handler07Type.SMSG_BRIEFINFO_CHANGEWEAPON_CMD);
+
+            return packet;
+        }
+    }
 }

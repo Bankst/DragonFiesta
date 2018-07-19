@@ -1,7 +1,6 @@
 ﻿using DragonFiesta.Providers.Characters;
 using DragonFiesta.Zone.Data.Stats;
 using System.Collections.Concurrent;
-using DragonFiesta.Providers.Items;
 using DragonFiesta.Zone.Data.Characters;
 
 namespace DragonFiesta.Zone.Data.Character

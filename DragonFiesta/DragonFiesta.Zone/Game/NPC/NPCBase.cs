@@ -4,6 +4,7 @@ using DragonFiesta.Zone.Game.Character;
 using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Mobs;
 using DragonFiesta.Zone.Game.Stats;
+using DragonFiesta.Zone.Network.Helpers;
 
 namespace DragonFiesta.Zone.Game.NPC
 {
@@ -87,6 +88,11 @@ namespace DragonFiesta.Zone.Game.NPC
 
         internal virtual void HandleInteraction(ZoneCharacter Character)
         {
+            using (var packet = SH08Helper.GetNPCInterActionPacket(this))
+            {
+                Character.Session.SendPacket(packet);
+            }
+            
         }
 
         public abstract void OpenMenu(ZoneCharacter Character);

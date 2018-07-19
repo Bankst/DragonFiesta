@@ -1,6 +1,5 @@
 ﻿using DragonFiesta.Game.Characters;
 using DragonFiesta.Zone.Core;
-using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Maps.Types;
 using DragonFiesta.Zone.InternNetwork.InternHandler.Server.Character;
 using DragonFiesta.Zone.Network;
