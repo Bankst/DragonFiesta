@@ -101,13 +101,17 @@ namespace DragonFiesta.Zone.Game.Mobs
         public override void WriteDisplay(FiestaPacket packet)
         {
             packet.Write<ushort>(MapObjectId);
-            packet.Write<bool>(1);
+            packet.Write<bool>(1); // Mode
             packet.Write<ushort>(Info.ID);
             packet.Write<uint>(Position.X);
             packet.Write<uint>(Position.Y);
             packet.Write<byte>(Position.Rotation);
-            packet.Write<byte>(0);
-            packet.Fill(140, 00); // EU -> 139
+            packet.Write<byte>(0); // State
+            packet.Fill(105, 0x00); // Abnormal_state_bit
+            packet.Fill(32, 0x00); // Animation
+            packet.Write<byte>(0); // AnimationLevel
+            packet.Write<byte>(0); // KQTeamType
+            packet.Write<byte>(0); // RegenAni
         }
 
         public virtual void WriteSelectionUpdate(FiestaPacket Packet)

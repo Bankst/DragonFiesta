@@ -246,8 +246,6 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
 
             //SH3Handler.BinVersionAllowed(sender, false);
 
-            //TODO
-#warning "TODO VersionAllowed"
             //SH3Handler.VersionAllowed(sender, false);
         }
     }

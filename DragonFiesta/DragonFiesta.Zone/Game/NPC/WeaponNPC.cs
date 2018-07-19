@@ -17,7 +17,18 @@ namespace DragonFiesta.Zone.Game.NPC
 
         protected override FiestaPacket CreateItemListPacket()
         {
-            var packet = new FiestaPacket(Handler07Type._Header, Handler07Type.SMSG_BRIEFINFO_CHANGEWEAPON_CMD);
+            var packet = new FiestaPacket(Handler15Type._Header, Handler15Type.SMSG_MENU_SHOPOPENTABLE_WEAPON_CMD);
+
+            packet.Write<ushort>(Info.Items.Count);
+            packet.Write<ushort>(17084);
+
+            for (int i = 0; i < Info.Items.Count; i++)
+            {
+                var item = Info.Items[i];
+
+                packet.Write<byte>(item.Slot);
+                packet.Write<ushort>(item.Info.ID);
+            }
 
             return packet;
         }
