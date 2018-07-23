@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WorldModelStoreContainer" CdmEntityContainer="WorldEntity">
+    <EntitySetMapping Name="BlockLists">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.BlockList)">
+        <MappingFragment StoreEntitySet="BlockLists">
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+          <ScalarProperty Name="BlockedID" ColumnName="BlockedID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Buffs">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.Buff)">
+        <MappingFragment StoreEntitySet="Buffs">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+          <ScalarProperty Name="AbStateIndex" ColumnName="AbStateIndex" />
+          <ScalarProperty Name="Strength" ColumnName="Strength" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+          <ScalarProperty Name="test" ColumnName="test" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Character_Options">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.Character_Options)">
+        <MappingFragment StoreEntitySet="Character_Options">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ShortCutData" ColumnName="ShortCutData" />
+          <ScalarProperty Name="ShortCutSize" ColumnName="ShortCutSize" />
+          <ScalarProperty Name="Video" ColumnName="Video" />
+          <ScalarProperty Name="Sound" ColumnName="Sound" />
+          <ScalarProperty Name="Game" ColumnName="Game" />
+          <ScalarProperty Name="WindowsPos" ColumnName="WindowsPos" />
+          <ScalarProperty Name="KeyMapping" ColumnName="KeyMapping" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DBCharacters">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBCharacter)">
+        <MappingFragment StoreEntitySet="Characters">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Slot" ColumnName="Slot" />
+          <ScalarProperty Name="Map" ColumnName="Map" />
+          <ScalarProperty Name="PositionX" ColumnName="PositionX" />
+          <ScalarProperty Name="PositionY" ColumnName="PositionY" />
+          <ScalarProperty Name="Rotation" ColumnName="Rotation" />
+          <ScalarProperty Name="Class" ColumnName="Class" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="HP" ColumnName="HP" />
+          <ScalarProperty Name="SP" ColumnName="SP" />
+          <ScalarProperty Name="HPStones" ColumnName="HPStones" />
+          <ScalarProperty Name="SPStones" ColumnName="SPStones" />
+          <ScalarProperty Name="EXP" ColumnName="EXP" />
+          <ScalarProperty Name="Money" ColumnName="Money" />
+          <ScalarProperty Name="Fame" ColumnName="Fame" />
+          <ScalarProperty Name="KillPoints" ColumnName="KillPoints" />
+          <ScalarProperty Name="IsMale" ColumnName="IsMale" />
+          <ScalarProperty Name="Hair" ColumnName="Hair" />
+          <ScalarProperty Name="HairColor" ColumnName="HairColor" />
+          <ScalarProperty Name="Face" ColumnName="Face" />
+          <ScalarProperty Name="FreeStat_Points" ColumnName="FreeStat_Points" />
+          <ScalarProperty Name="FreeStat_Str" ColumnName="FreeStat_Str" />
+          <ScalarProperty Name="FreeStat_End" ColumnName="FreeStat_End" />
+          <ScalarProperty Name="FreeStat_Dex" ColumnName="FreeStat_Dex" />
+          <ScalarProperty Name="FreeStat_Int" ColumnName="FreeStat_Int" />
+          <ScalarProperty Name="FreeStat_Spr" ColumnName="FreeStat_Spr" />
+          <ScalarProperty Name="SkillPoints" ColumnName="SkillPoints" />
+          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+          <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+          <ScalarProperty Name="IsFirstLogin" ColumnName="IsFirstLogin" />
+          <ScalarProperty Name="LP" ColumnName="LP" />
+          <ScalarProperty Name="FriendPoints" ColumnName="FriendPoints" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GoldSpammers">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.GoldSpammer)">
+        <MappingFragment StoreEntitySet="GoldSpammers">
+          <ScalarProperty Name="ReporterID" ColumnName="ReporterID" />
+          <ScalarProperty Name="ReporterIP" ColumnName="ReporterIP" />
+          <ScalarProperty Name="SpammerID" ColumnName="SpammerID" />
+          <ScalarProperty Name="SpammerIP" ColumnName="SpammerIP" />
+          <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GroupMembers">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.GroupMember)">
+        <MappingFragment StoreEntitySet="GroupMembers">
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="Rank" ColumnName="Rank" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Groups">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.Group)">
+        <MappingFragment StoreEntitySet="Groups">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Flags" ColumnName="Flags" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GuildMembers">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.GuildMember)">
+        <MappingFragment StoreEntitySet="GuildMembers">
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="GuildID" ColumnName="GuildID" />
+          <ScalarProperty Name="Rank" ColumnName="Rank" />
+          <ScalarProperty Name="Corp" ColumnName="Corp" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Guilds">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.Guild)">
+        <MappingFragment StoreEntitySet="Guilds">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="AllowGuildWar" ColumnName="AllowGuildWar" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="MessageCreateDate" ColumnName="MessageCreateDate" />
+          <ScalarProperty Name="MessageCreaterID" ColumnName="MessageCreaterID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="Money" ColumnName="Money" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ItemOptions">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.ItemOption)">
+        <MappingFragment StoreEntitySet="ItemOptions">
+          <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
+          <ScalarProperty Name="OptionType" ColumnName="OptionType" />
+          <ScalarProperty Name="OptionData" ColumnName="OptionData" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DBItems">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBItem)">
+        <MappingFragment StoreEntitySet="Items">
+          <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
+          <ScalarProperty Name="StorageType" ColumnName="StorageType" />
+          <ScalarProperty Name="Owner" ColumnName="Owner" />
+          <ScalarProperty Name="Storage" ColumnName="Storage" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="Flags" ColumnName="Flags" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Skills">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.Skill)">
+        <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+          <ScalarProperty Name="SkillID" ColumnName="SkillID" />
+          <ScalarProperty Name="IsPassive" ColumnName="IsPassive" />
+          <ScalarProperty Name="Upgrades" ColumnName="Upgrades" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Titles">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.Title)">
+        <MappingFragment StoreEntitySet="Titles">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+          <ScalarProperty Name="TitleType" ColumnName="TitleType" />
+          <ScalarProperty Name="TitleLevel" ColumnName="TitleLevel" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Data" ColumnName="Data" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DBFriends">
+      <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBFriend)">
+        <MappingFragment StoreEntitySet="Friends">
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+          <ScalarProperty Name="FriendID" ColumnName="FriendID" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="Group_GroupMembers" TypeName="WorldModel.Group_GroupMembers" StoreEntitySet="GroupMembers">
+      <EndProperty Name="Groups">
+        <ScalarProperty Name="ID" ColumnName="Group_ID" />
+      </EndProperty>
+      <EndProperty Name="GroupMembers">
+        <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Item_ItemOptions" TypeName="WorldModel.Item_ItemOptions" StoreEntitySet="ItemOptions">
+      <EndProperty Name="Items">
+        <ScalarProperty Name="ItemKey" ColumnName="Item_ItemKey" />
+      </EndProperty>
+      <EndProperty Name="ItemOptions">
+        <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Character_Items" TypeName="WorldModel.Character_Items" StoreEntitySet="Items">
+      <EndProperty Name="Character">
+        <ScalarProperty Name="ID" ColumnName="Character_ID" />
+      </EndProperty>
+      <EndProperty Name="Item">
+        <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Character_Friends" TypeName="WorldModel.Character_Friends" StoreEntitySet="Friends">
+      <EndProperty Name="Character">
+        <ScalarProperty Name="ID" ColumnName="Character_ID" />
+      </EndProperty>
+      <EndProperty Name="Friend">
+        <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

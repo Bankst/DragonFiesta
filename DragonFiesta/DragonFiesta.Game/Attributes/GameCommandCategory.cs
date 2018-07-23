@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 public sealed class GameCommandCategory : Attribute
 {

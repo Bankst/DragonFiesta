@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading;
 using DragonFiesta.Providers.Items;
+
+#endregion
 
 namespace DragonFiesta.Game.Stats
 {

@@ -158,16 +158,6 @@
     <Compile Include="Config\Section\Log\SocketLogSection.cs" />
     <Compile Include="Core\ServerMainBase.cs" />
     <Compile Include="Cryptography\MD5.cs" />
-    <Compile Include="Database\Database.cs" />
-    <Compile Include="Database\DatabaseServer.cs" />
-    <Compile Include="Database\DatabaseType.cs" />
-    <Compile Include="Database\DB.cs" />
-    <Compile Include="Database\DatabaseClient.cs" />
-    <Compile Include="Database\DatabaseException.cs" />
-    <Compile Include="Database\DatabaseManager.cs" />
-    <Compile Include="Database\SQLResult.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Enum\InitializationStage.cs" />
     <Compile Include="Enum\InitialType.cs" />
     <Compile Include="Enum\ServerTaskTimes.cs" />

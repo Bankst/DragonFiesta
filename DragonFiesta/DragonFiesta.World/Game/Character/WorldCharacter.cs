@@ -1,4 +1,7 @@
-﻿using DragonFiesta.Game.Characters;
+﻿using System;
+
+using DragonFiesta.Database.SQL;
+using DragonFiesta.Game.Characters;
 using DragonFiesta.Messages.Zone.Transfer;
 using DragonFiesta.Providers.Maps;
 using DragonFiesta.World.Game.Chat;
@@ -8,11 +11,10 @@ using DragonFiesta.World.Game.Transfer;
 using DragonFiesta.World.InternNetwork.InternHandler.Response.Transfer;
 using DragonFiesta.World.InternNetwork.InternHandler.Server.Character;
 using DragonFiesta.World.Network;
-using System;
 
 namespace DragonFiesta.World.Game.Character
 {
-    public class WorldCharacter : CharacterBase
+	public class WorldCharacter : CharacterBase
     {
 
 

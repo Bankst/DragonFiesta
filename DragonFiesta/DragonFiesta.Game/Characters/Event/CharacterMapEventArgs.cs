@@ -1,5 +1,9 @@
-﻿using DragonFiesta.Game.Characters;
+﻿#region
+
+using DragonFiesta.Game.Characters;
 using DragonFiesta.Game.Characters.Event;
+
+#endregion
 
 public class CharacterMapEventArgs<TCharacter, TMap> : CharacterEventArgs<TCharacter>
     where TCharacter : CharacterBase

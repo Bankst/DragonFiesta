@@ -1,8 +1,13 @@
-﻿using DragonFiesta.Game.Characters.Event;
+﻿#region
+
 using System;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
+using DragonFiesta.Database.SQL;
+using DragonFiesta.Game.Characters.Event;
 using DragonFiesta.Providers.Characters;
+
+#endregion
 
 namespace DragonFiesta.Game.Characters
 {

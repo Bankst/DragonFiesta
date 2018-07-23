@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using DragonFiesta.Utils.Core;
 
-namespace DragonFiesta.Utils.Database
+namespace DragonFiesta.Database.SQL
 {
     /// <summary>
     /// Represents a client of a database,

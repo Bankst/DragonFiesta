@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
 using System.Threading;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.World.Game.Friends
 {

@@ -1,4 +1,7 @@
-﻿using DragonFiesta.Utils.Core;
+﻿using DragonFiesta.Database.Models;
+using DragonFiesta.Database.SQL;
+using DragonFiesta.Networking.Network.Session;
+using DragonFiesta.Utils.Core;
 using DragonFiesta.World.Config;
 using DragonFiesta.World.InternNetwork;
 using DragonFiesta.World.Network;
@@ -8,7 +11,7 @@ namespace DragonFiesta.World
 {
     public class ServerMain : ServerMainBase
     {
-        public static new ServerMain InternalInstance { get; private set; }
+        public new static ServerMain InternalInstance { get; private set; }
 
         public bool IsDataLoaded = false;
 
@@ -22,7 +25,7 @@ namespace DragonFiesta.World
 
         public override void Shutdown()
         {
-            InternLoginConnector.Instance.Dispose();
+            InternConnector.Instance.Dispose();
             InternZoneServer.Instance.Stop();
             WorldServer.Instance.Stop();
             base.Shutdown();
@@ -36,48 +39,46 @@ namespace DragonFiesta.World
             return base.LoadBaseServerModule();
         }
 
-        public static bool LoadGameServer()
-        {
-            if (InternalInstance.LoadGameServerModules())
-            {
-                //Here All Modules After Register
-                //GameNetwork ever Last
-                return true;
-            }
-            return true;
-        }
+	    public static bool LoadGameServer() => InternalInstance.LoadGameServerModules();
 
-        public static bool Initialize()
+		public static bool Initialize()
         {
             InternalInstance = new ServerMain();
             InternalInstance.WriteConsoleLogo();
-            System.Threading.Thread.Sleep(5000);
+            System.Threading.Thread.Sleep(5000); // TODO: Find better way to delay start based on Login Server status. Maybe 250ms pings?
+
             if (!WorldConfiguration.Initialize())
             {
-                throw new StartupException("Invalid Load WorldConfiguration");
+                throw new StartupException("Failed to load WorldConfiguration");
             }
 
             ThreadPool.Start(WorldConfiguration.Instance.WorkTaskThreadCount);
 
             ThreadPool.AddUpdateAbleServer(ServerTaskManager.InitialInstance());
 
+	        if (!EntityFactory.TestWorldEntity(WorldConfiguration.Instance.WorldDatabaseSettings))
+	        {
+				throw new StartupException("Failed to load World EntityModel");
+	        }
+
             if (!DB.AddManager(DatabaseType.World, WorldConfiguration.Instance.WorldDatabaseSettings))
             {
-                throw new StartupException("Invalid Add World DatabaseManager");
+                throw new StartupException("Failed to add World DatabaseManager");
             }
+
             if (!DB.AddManager(DatabaseType.Data, WorldConfiguration.Instance.DataDatabaseSettings))
             {
-                throw new StartupException("Invalid Add Data DatabaseManager");
+                throw new StartupException("Failed to add Data DatabaseManager");
             }
 
             if (!InternalInstance.LoadBaseServerModule())
             {
-                throw new StartupException("Invalid Load Server");
+                throw new StartupException("Failed to load Server");
             }
 
             if (!DB.AddDBMonitor(DatabaseType.Data) || !DB.AddDBMonitor(DatabaseType.World))
             {
-                throw new StartupException("Invalid Add Database Monitor");
+                throw new StartupException("Failed to add Database Monitor");
             }
 
             return true;

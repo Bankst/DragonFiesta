@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DragonFiesta.Utils.Database
+namespace DragonFiesta.Database.SQL
 {
     /// <summary>
     /// Represents a database server and holds information about the database host, port and access credentials.

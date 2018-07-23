@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DragonFiesta.Utils.Database
+namespace DragonFiesta.Database.SQL
 {
     [Serializable]
     public class DatabaseException : Exception

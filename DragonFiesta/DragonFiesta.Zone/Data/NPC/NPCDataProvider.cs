@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Maps;
 using DragonFiesta.Utils.IO.TXT;
 using DragonFiesta.Zone.Data.Mob;

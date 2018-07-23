@@ -82,12 +82,9 @@ namespace DragonFiesta.Utils.Core
             {
                 if (Reflector.GetInitializerGameMethods(ServerType).Any(method =>
                 {
-                    if (!method.Invoke())
-                    {
-                        GameLog.Write(GameLogLevel.Exception, "Invalid Initial GameServerModule {0}", method.Method.ReflectedType.FullName);
-                        return true;
-                    }
-                    return false;
+	                if (method.Invoke()) return false;
+	                GameLog.Write(GameLogLevel.Exception, "Invalid Initial GameServerModule {0}", method.Method.ReflectedType?.FullName);
+	                return true;
                 }))
                 {
                     GameLog.Write(GameLogLevel.Exception, "GameServer could not be started. Errors occured.");

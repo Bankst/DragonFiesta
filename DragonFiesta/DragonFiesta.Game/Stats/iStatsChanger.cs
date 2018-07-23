@@ -1,4 +1,8 @@
-﻿using DragonFiesta.Providers.Items;
+﻿#region
+
+using DragonFiesta.Providers.Items;
+
+#endregion
 
 namespace DragonFiesta.Game.Stats
 {

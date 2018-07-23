@@ -3,6 +3,7 @@ using DragonFiesta.Zone.Data.Mob;
 using DragonFiesta.Zone.Data.WayPoints;
 using System;
 using System.Collections.Generic;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Data.NPC
 {
@@ -58,7 +59,8 @@ namespace DragonFiesta.Zone.Data.NPC
             Items = new List<NPCItem>();
         }
 
-        private void Load(SQLResult pResult, int i)
+        private void Load(
+			SQLResult pResult, int i)
         {
             ushort MobID = pResult.Read<ushort>(i, "MobID");
             ushort MapID = pResult.Read<ushort>(i, "MapID");

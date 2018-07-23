@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DF_AuthModelStoreContainer" CdmEntityContainer="AccountEntity">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="DF_AuthModel.Account">
+        <MappingFragment StoreEntitySet="Accounts">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="EMail" ColumnName="EMail" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="CreationIP" ColumnName="CreationIP" />
+          <ScalarProperty Name="IsActivated" ColumnName="IsActivated" />
+          <ScalarProperty Name="IsBanned" ColumnName="IsBanned" />
+          <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+          <ScalarProperty Name="LastIP" ColumnName="LastIP" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="RegionID" ColumnName="RegionID" />
+          <ScalarProperty Name="BanDate" ColumnName="BanDate" />
+          <ScalarProperty Name="BanTime" ColumnName="BanTime" />
+          <ScalarProperty Name="BanReason" ColumnName="BanReason" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IPBlocks">
+      <EntityTypeMapping TypeName="DF_AuthModel.IPBlock">
+        <MappingFragment StoreEntitySet="IPBlock">
+          <ScalarProperty Name="BlockedIP" ColumnName="BlockedIP" />
+          <ScalarProperty Name="BlockDate" ColumnName="BlockDate" />
+          <ScalarProperty Name="BlockReason" ColumnName="BlockReason" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RegionServers">
+      <EntityTypeMapping TypeName="DF_AuthModel.RegionServer">
+        <MappingFragment StoreEntitySet="RegionServers">
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="ListenerIP" ColumnName="ListenerIP" />
+          <ScalarProperty Name="Port" ColumnName="Port" />
+          <ScalarProperty Name="WorkThreadCount" ColumnName="WorkThreadCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Versions">
+      <EntityTypeMapping TypeName="DF_AuthModel.Version">
+        <MappingFragment StoreEntitySet="Versions">
+          <ScalarProperty Name="ClientDate" ColumnName="ClientDate" />
+          <ScalarProperty Name="ClientHash" ColumnName="ClientHash" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorldLists">
+      <EntityTypeMapping TypeName="DF_AuthModel.WorldList">
+        <MappingFragment StoreEntitySet="WorldList">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="WorldName" ColumnName="WorldName" />
+          <ScalarProperty Name="TestServer" ColumnName="TestServer" />
+          <ScalarProperty Name="AllowIP" ColumnName="AllowIP" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

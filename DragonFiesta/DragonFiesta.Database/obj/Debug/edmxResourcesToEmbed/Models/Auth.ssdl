@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DF_AuthModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Accounts">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="16" Nullable="false" />
+    <Property Name="EMail" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="32" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="CreationIP" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="IsActivated" Type="bit" Nullable="false" />
+    <Property Name="IsBanned" Type="bit" Nullable="false" />
+    <Property Name="IsOnline" Type="bit" Nullable="false" />
+    <Property Name="LastLogin" Type="datetime" Nullable="false" />
+    <Property Name="LastIP" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="RoleID" Type="tinyint" Nullable="false" />
+    <Property Name="RegionID" Type="tinyint" Nullable="false" />
+    <Property Name="BanDate" Type="datetime" Nullable="false" />
+    <Property Name="BanTime" Type="bigint" Nullable="false" />
+    <Property Name="BanReason" Type="text" />
+  </EntityType>
+  <EntityType Name="IPBlock">
+    <Key>
+      <PropertyRef Name="BlockedIP" />
+    </Key>
+    <Property Name="BlockedIP" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="BlockDate" Type="datetime" Nullable="false" />
+    <Property Name="BlockReason" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RegionServers">
+    <Key>
+      <PropertyRef Name="Region" />
+      <PropertyRef Name="Port" />
+    </Key>
+    <Property Name="Region" Type="tinyint" Nullable="false" />
+    <Property Name="ListenerIP" Type="varchar" MaxLength="16" Nullable="false" />
+    <Property Name="Port" Type="int" Nullable="false" />
+    <Property Name="WorkThreadCount" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Versions">
+    <Key>
+      <PropertyRef Name="ClientDate" />
+      <PropertyRef Name="ClientHash" />
+    </Key>
+    <Property Name="ClientDate" Type="datetime" Nullable="false" />
+    <Property Name="ClientHash" Type="varchar" MaxLength="32" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DF_Auth.dbo.WorldList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="WorldList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="WorldName" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="TestServer" Type="bit" Nullable="false" />
+    <Property Name="AllowIP" Type="varchar" MaxLength="16" Nullable="false" />
+    <Property Name="Region" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="DF_AuthModelStoreContainer">
+    <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IPBlock" EntityType="Self.IPBlock" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RegionServers" EntityType="Self.RegionServers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Versions" EntityType="Self.Versions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WorldList" EntityType="Self.WorldList" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [WorldList].[ID] AS [ID], 
+    [WorldList].[WorldName] AS [WorldName], 
+    [WorldList].[TestServer] AS [TestServer], 
+    [WorldList].[AllowIP] AS [AllowIP], 
+    [WorldList].[Region] AS [Region]
+    FROM [dbo].[WorldList] AS [WorldList]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

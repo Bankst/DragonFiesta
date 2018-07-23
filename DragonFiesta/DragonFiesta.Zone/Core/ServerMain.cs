@@ -3,6 +3,7 @@ using DragonFiesta.Zone.Config;
 using DragonFiesta.Zone.Network;
 using DragonFiesta.Zone.ServerConsole.Title;
 using System;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Core
 {

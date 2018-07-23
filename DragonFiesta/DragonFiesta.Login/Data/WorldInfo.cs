@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Login.Data
+﻿using DragonFiesta.Database.SQL;
+
+namespace DragonFiesta.Login.Data
 {
     public class WorldInfo
     {

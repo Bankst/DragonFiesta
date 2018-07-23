@@ -1,4 +1,9 @@
-﻿using DragonFiesta.Providers.Maps;
+﻿#region
+
+using DragonFiesta.Database.SQL;
+using DragonFiesta.Providers.Maps;
+
+#endregion
 
 namespace DragonFiesta.Game.Characters.Data
 {

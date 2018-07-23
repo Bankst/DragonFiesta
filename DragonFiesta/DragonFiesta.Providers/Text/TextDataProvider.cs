@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Text.TXT;
 using DragonFiesta.Utils.IO.TXT;
 
@@ -14,9 +15,8 @@ namespace DragonFiesta.Providers.Text
     {
         private static ConcurrentDictionary<uint, TextData> _textDataById;
 	    private static SecureCollection<ScriptTXT> _scriptData;
-	    private static SecureCollection<MenuStringTXT> _menuStringData;
 
-        [InitializerMethod]
+	    [InitializerMethod]
         public static bool OnStart()
         {
             try

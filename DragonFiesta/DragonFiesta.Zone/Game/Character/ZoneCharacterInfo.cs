@@ -4,6 +4,7 @@ using DragonFiesta.Zone.Game.Stats;
 using DragonFiesta.Zone.InternNetwork.InternHandler.Server.Character;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
 using System;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Characters;
 using DragonFiesta.Zone.Data.Characters;
 

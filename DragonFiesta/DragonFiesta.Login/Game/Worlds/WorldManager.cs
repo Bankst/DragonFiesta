@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Login.Game.Worlds
 {

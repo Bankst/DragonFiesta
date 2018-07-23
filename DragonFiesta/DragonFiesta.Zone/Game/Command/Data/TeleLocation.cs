@@ -1,6 +1,7 @@
 ﻿using DragonFiesta.Game.Characters.Data;
 using DragonFiesta.Providers.Maps;
 using System;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Game.Command.Data
 {

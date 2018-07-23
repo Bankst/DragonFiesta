@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Game.Character

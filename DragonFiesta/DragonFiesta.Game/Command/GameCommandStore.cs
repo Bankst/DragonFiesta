@@ -1,8 +1,12 @@
-﻿using DragonFiesta.Game.CommandAccess;
+﻿#region
+
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DragonFiesta.Game.CommandAccess;
+
+#endregion
 
 namespace DragonFiesta.Game.Command
 {

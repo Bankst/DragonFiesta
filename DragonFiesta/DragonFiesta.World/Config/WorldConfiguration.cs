@@ -37,13 +37,10 @@ namespace DragonFiesta.World.Config
                 }
                 else
                 {
-                    if (Write(out WorldConfiguration pConfig))
-                    {
-                        pConfig.WriteXml();
-                        EngineLog.Write(EngineLogLevel.Startup, "Successfully created World config.");
-                        return false;
-                    }
-                    return false;
+	                if (!Write(out var pConfig)) return false;
+	                pConfig.WriteXml();
+	                EngineLog.Write(EngineLogLevel.Startup, "Successfully created World config.");
+	                return false;
                 }
             }
             catch (Exception ex)

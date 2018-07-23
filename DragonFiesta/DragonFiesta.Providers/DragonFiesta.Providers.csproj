@@ -123,6 +123,10 @@
     <Compile Include="Text\TXT\ScriptTXT.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DragonFiesta.Database\DragonFiesta.Database.csproj">
+      <Project>{33E5DBD8-CEB4-4B5F-8D6C-841F2C5707BD}</Project>
+      <Name>DragonFiesta.Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DragonFiesta.Utils\DragonFiesta.Utils.csproj">
       <Project>{4c75a441-9386-41a2-b113-7b03a2305563}</Project>
       <Name>DragonFiesta.Utils</Name>
