@@ -1,5 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿#region
+
+using System.Collections.Concurrent;
 using System.Reflection;
+using DragonFiesta.Database.SQL;
+
+#endregion
 
 namespace DragonFiesta.Game.CommandAccess
 {

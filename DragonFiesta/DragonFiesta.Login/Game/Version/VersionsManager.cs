@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Login.Game.Authentication
 {

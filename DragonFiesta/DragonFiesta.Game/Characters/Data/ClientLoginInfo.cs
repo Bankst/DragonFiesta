@@ -1,4 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
+using DragonFiesta.Database.SQL;
+
+#endregion
 
 namespace DragonFiesta.Game.Characters.Data
 {

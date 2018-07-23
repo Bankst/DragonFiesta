@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Game.Characters;
+﻿using DragonFiesta.Database.SQL;
+using DragonFiesta.Game.Characters;
 using DragonFiesta.Networking.Helpers;
 using DragonFiesta.World.Network;
 

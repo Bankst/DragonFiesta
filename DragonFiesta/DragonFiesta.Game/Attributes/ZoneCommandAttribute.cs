@@ -1,4 +1,8 @@
-﻿using DragonFiesta.Game.Attributes;
+﻿#region
+
+using DragonFiesta.Game.Attributes;
+
+#endregion
 
 public sealed class ZoneCommandAttribute : GameCommandAttribute
 {

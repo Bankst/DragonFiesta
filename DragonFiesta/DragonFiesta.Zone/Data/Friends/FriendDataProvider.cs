@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Data.Friends
 {

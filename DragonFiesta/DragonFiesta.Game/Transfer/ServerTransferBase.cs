@@ -1,7 +1,11 @@
-﻿using DragonFiesta.Utils.Core;
-using DragonFiesta.Utils.ServerTask;
+﻿#region
+
 using System;
 using System.Threading;
+using DragonFiesta.Utils.Core;
+using DragonFiesta.Utils.ServerTask;
+
+#endregion
 
 namespace DragonFiesta.Game.Transfer
 {

@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Login.Config;
+﻿using DragonFiesta.Database.SQL;
+using DragonFiesta.Login.Config;
 using DragonFiesta.Login.Network;
 
 namespace DragonFiesta.Login.Game.Authentication

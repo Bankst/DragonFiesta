@@ -1,5 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿#region
+
+using System.Collections.Concurrent;
 using System.Threading;
+
+#endregion
 
 namespace DragonFiesta.Game.Characters
 {

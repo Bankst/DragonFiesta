@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Game.Characters.Data;
+﻿using DragonFiesta.Database.SQL;
+using DragonFiesta.Game.Characters.Data;
 
 namespace DragonFiesta.Zone.Game.Character
 {

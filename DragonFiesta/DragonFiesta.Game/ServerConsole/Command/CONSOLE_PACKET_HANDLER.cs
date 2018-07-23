@@ -1,4 +1,8 @@
-﻿using DragonFiesta.Utils.Core;
+﻿#region
+
+using DragonFiesta.Utils.Core;
+
+#endregion
 
 namespace DragonFiesta.Game.ServerConsole.Command
 {

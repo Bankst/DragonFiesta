@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Data.Mob
 {

@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.World.Data.Characters
+﻿using DragonFiesta.Database.SQL;
+
+namespace DragonFiesta.World.Data.Characters
 {
     public sealed class DefaultCharacterItemOptions
     {

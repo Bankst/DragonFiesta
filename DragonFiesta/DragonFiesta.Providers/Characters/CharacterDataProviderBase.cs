@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Utils.Config;
 using System.Collections.Concurrent;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Providers.Characters
 {

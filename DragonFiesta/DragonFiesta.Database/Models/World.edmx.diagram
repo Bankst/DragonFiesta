@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8a66fc5aeaaa49abaa4dd1e8bc538a80" Name="Diagram1" ZoomLevel="101" ShowGrid="true">
+        <EntityTypeShape EntityType="WorldModel.BlockList" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.Buff" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.Character_Options" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.DBCharacter" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.GoldSpammer" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.GroupMember" Width="1.5" PointX="8" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.Group" Width="1.5" PointX="5.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.GuildMember" Width="1.5" PointX="6.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.Guild" Width="1.5" PointX="8.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.ItemOption" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.DBItem" Width="1.5" PointX="3" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.Skill" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WorldModel.Title" Width="1.5" PointX="10.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="WorldModel.Group_GroupMembers" ManuallyRouted="false" />
+        <AssociationConnector Association="WorldModel.Item_ItemOptions" ManuallyRouted="false" />
+        <AssociationConnector Association="WorldModel.Character_Items" />
+        <EntityTypeShape EntityType="WorldModel.DBFriend" Width="1.5" PointX="3" PointY="6" />
+        <AssociationConnector Association="WorldModel.Character_Friends" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

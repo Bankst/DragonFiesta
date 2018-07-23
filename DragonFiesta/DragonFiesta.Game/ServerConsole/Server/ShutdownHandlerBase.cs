@@ -1,6 +1,10 @@
-﻿using DragonFiesta.Utils.Core;
+﻿#region
+
 using System;
 using System.Threading;
+using DragonFiesta.Utils.Core;
+
+#endregion
 
 namespace DragonFiesta.Game.ServerConsole.Handler
 {

@@ -4,6 +4,7 @@ using DragonFiesta.Utils.Core;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Login.Game.Accounts
 {

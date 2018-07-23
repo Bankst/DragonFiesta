@@ -1,4 +1,8 @@
-﻿using DragonFiesta.Providers.Characters;
+﻿#region
+
+using DragonFiesta.Providers.Characters;
+
+#endregion
 
 namespace DragonFiesta.Game.Characters.Event
 {

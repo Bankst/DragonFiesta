@@ -1,6 +1,7 @@
 ﻿using DragonFiesta.Providers.Maps;
 using DragonFiesta.World.Data.Characters;
 using System.Collections.Concurrent;
+using DragonFiesta.Database.SQL;
 
 public class DefaultCharacterInfo
 {

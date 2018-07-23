@@ -2,6 +2,7 @@
 using DragonFiesta.Zone.Game.Chat;
 using DragonFiesta.Zone.Game.Command.Data;
 using System.Collections.Concurrent;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Game.Command
 {

@@ -1,4 +1,10 @@
-﻿namespace DragonFiesta.Game.CommandAccess
+﻿#region
+
+using DragonFiesta.Database.SQL;
+
+#endregion
+
+namespace DragonFiesta.Game.CommandAccess
 {
     public class GameRole
     {
