@@ -189,8 +189,19 @@ namespace DragonFiesta.Providers.Items
 				DatabaseLog.WriteProgressBar($">> Filled {ItemBaseInfosByID.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
-		
-        public static bool GetUpgradeInfosByID(ushort id, out List<ItemUpgradeInfo> list)
+
+	    public static int GetItemIDByInxName(string inxName)
+	    {
+		    return ItemInfoSC.First(x => x.InxName == inxName).ID;
+	    }
+
+	    public static ItemBaseInfo GetItemBaseInfoByInxName(string inxName)
+	    {
+		    var id = GetItemIDByInxName(inxName);
+		    return ItemBaseInfosByID.First(x => x.Key == id).Value;
+	    }
+
+	    public static bool GetUpgradeInfosByID(ushort id, out List<ItemUpgradeInfo> list)
         {
             return UpgradeInfosByID.TryGetValue(id, out list);
         }

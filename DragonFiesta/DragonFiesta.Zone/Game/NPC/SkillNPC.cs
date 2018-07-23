@@ -12,13 +12,6 @@ namespace DragonFiesta.Zone.Game.NPC
 
 		public override void OpenMenu(ZoneCharacter Character)
 		{
-			//bruh
-		}
-
-
-		protected override void DisposeInternal()
-		{
-			base.DisposeInternal();
 		}
 
         protected override FiestaPacket CreateItemListPacket()

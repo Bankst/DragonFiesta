@@ -5,6 +5,7 @@ using System.Data;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Maps;
 using DragonFiesta.Utils.IO.TXT;
+using DragonFiesta.Zone.Data.Items;
 using DragonFiesta.Zone.Data.Mob;
 
 namespace DragonFiesta.Zone.Data.NPC
@@ -71,13 +72,13 @@ namespace DragonFiesta.Zone.Data.NPC
 					}
 					else if (currentInfo.Role == NPCRole.Merchant)
 					{
-						/*
+						
 						if (!LoadItemList(currentInfo, out int incrItemCount))
 						{
 						    DatabaseLog.Write(DatabaseLogLevel.Warning, "Error loading item list for NPC '{0}'-'{1}'.", currentInfo.MobInfo.ID, currentInfo.MobInfo.Index);
 						    continue;
 						}
-						*/
+						
 						//itemCount += incrItemCount;
 					}
 					list.Add(currentInfo);
@@ -101,29 +102,34 @@ namespace DragonFiesta.Zone.Data.NPC
 			try
 			{
 				var itemListShine = new ShineTable(filePath);
-				foreach (var kvp in itemListShine.Tables)
+				itemListShine.Read();
+				if (!itemListShine.IsShineTable()) return false;
+				foreach (var table in itemListShine.Tables)
 				{
-					//byte tabNum = Convert.ToByte(kvp.Key.Substring(3,2));
-					var slotNo = 0;
-					foreach (DataRow row in kvp.Source.Rows)
+					foreach (DataRow row in table.Source.Rows)
 					{
-							//byte rowNum = Convert.ToByte(row.Table.Rows[0]);
-							for (var i = 1; i < 7; i++)
+						for (int i = 1; i < row.ItemArray.Length - 1; i++)
+						{
+							var item = row.ItemArray[i];
+							if ((string) item == "-")
 							{
-								slotNo++;
-								var itemInxName = row.ItemArray[i];
-								//var itemID = 
+								incrItemCount++;
+								continue;
 							}
+							itemList.Add(new NPCItem((byte)incrItemCount, ZoneItemDataProvider.GetItemBaseInfoByInxName((string)item)));
 							incrItemCount++;
-						
-					}					
+						}
+					}
 				}
+
 				foreach (var item in itemList)
 				{
 					currentInfo.Items.Add(item);
 					//incrItemCount++;
 				}
-				DatabaseLog.Write(DatabaseLogLevel.Startup, "Loaded NPC {0} with {1} items in shop", currentInfo.MobInfo.Index, currentInfo.Items.Count);
+
+				DatabaseLog.Write(DatabaseLogLevel.Startup, "Loaded NPC {0} with {1} items in shop",
+					currentInfo.MobInfo.Index, currentInfo.Items.Count);
 				return true;
 			}
 			catch(Exception)
