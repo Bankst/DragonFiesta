@@ -1,5 +1,4 @@
-﻿using DragonFiesta.Zone.Game.Maps;
-using DragonFiesta.Zone.Game.Maps.Interface;
+﻿using DragonFiesta.Zone.Game.Maps.Interface;
 using System;
 
 namespace DragonFiesta.Zone.Game.Maps.Object

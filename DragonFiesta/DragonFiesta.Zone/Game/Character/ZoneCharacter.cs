@@ -12,7 +12,6 @@ using DragonFiesta.Zone.Game.Maps.Event;
 using DragonFiesta.Zone.Game.Maps.Object;
 using DragonFiesta.Zone.Game.Maps.Interface;
 using DragonFiesta.Zone.Data.Character;
-using DragonFiesta.Zone.Data.Characters;
 using DragonFiesta.Zone.Game.Chat;
 using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Maps.Types;

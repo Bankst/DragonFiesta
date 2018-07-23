@@ -261,6 +261,7 @@
     <Compile Include="Network\Helpers\Enum\ZoneGameErrors.cs" />
     <Compile Include="Network\Helpers\SH04Helpers.cs" />
     <Compile Include="Network\Helpers\SH06Helper.cs" />
+    <Compile Include="Network\Helpers\SH08Helper.cs" />
     <Compile Include="Network\ZonePingManager.cs" />
     <Compile Include="Network\ZoneServer.cs" />
     <Compile Include="Network\ZoneSession.cs" />

@@ -76,7 +76,7 @@ namespace DragonFiesta.World.Game.Friends
                             return false;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return false;
                 }

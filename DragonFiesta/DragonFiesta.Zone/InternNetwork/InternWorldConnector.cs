@@ -4,7 +4,6 @@ using DragonFiesta.Zone.InternNetwork.InternHandler.Server.Auth;
 using DragonFiesta.Zone.ServerTask.Intern;
 using System.Net.Sockets;
 using DragonFiesta.Zone.Game.Zone;
-using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Maps.Object;
 
 [ServerModule(ServerType.Zone, InitializationStage.Networking)]

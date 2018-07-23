@@ -3,7 +3,6 @@ using DragonFiesta.Messages.Command;
 using DragonFiesta.Messages.Zone.Note;
 using DragonFiesta.Zone.Game.Character;
 using DragonFiesta.Zone.Game.Chat;
-using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Maps.Object;
 using DragonFiesta.Zone.Game.Maps.Types;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
