@@ -16,35 +16,36 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
         /// <summary>
         /// Used for spawning multiple characters / mobs / NPCs
         /// </summary>
-        /// <param name="Collection"></param>
-        /// <param name="AreCharacters"></param>
-        /// <param name="SendAction"></param>
-        /// <param name="ObjectsPerPacket"></param>
-        public static void SpawnMultiObject(IMapObject[] Collection, bool AreCharacters, Action<FiestaPacket> SendAction, int ObjectsPerPacket = 255)
+        /// <param name="collection"></param>
+        /// <param name="areCharacters"></param>
+        /// <param name="sendAction"></param>
+        /// <param name="objectsPerPacket"></param>
+        public static void SpawnMultiObject(IMapObject[] collection, bool areCharacters, Action<FiestaPacket> sendAction, int objectsPerPacket = 255)
         {
-            for (int i = 0; i < Collection.Length; i += ObjectsPerPacket)
+            for (var i = 0; i < collection.Length; i += objectsPerPacket)
             {
-                using (var packet = SpawnMultiObject(Collection, i, (i + Math.Min(ObjectsPerPacket, (Collection.Length - 1))), AreCharacters))
+                using (var packet = SpawnMultiObject(collection, i, (i + Math.Min(objectsPerPacket, (collection.Length - 1))), areCharacters))
                 {
-                    SendAction.Invoke(packet);
+                    sendAction.Invoke(packet);
                 }
             }
         }
 
-        /// <summary>
-        /// Used for spawning multiple characters / mobs / NPCs based on the start and end position.
-        /// </summary>
-        /// <param name="Collection"></param>
-        /// <param name="Start"></param>
-        /// <param name="End"></param>
-        /// <returns></returns>
-        public static FiestaPacket SpawnMultiObject(IMapObject[] Collection, int Start, int End, bool AreCharacters)
+	    /// <summary>
+	    /// Used for spawning multiple characters / mobs / NPCs based on the start and end position.
+	    /// </summary>
+	    /// <param name="collection"></param>
+	    /// <param name="start"></param>
+	    /// <param name="end"></param>
+	    /// <param name="areCharacters"></param>
+	    /// <returns></returns>
+	    public static FiestaPacket SpawnMultiObject(IMapObject[] collection, int start, int end, bool areCharacters)
         {
-            var packet = new FiestaPacket(Handler07Type._Header, (AreCharacters ? Handler07Type.SMSG_BRIEFINFO_CHARACTER_CMD : Handler07Type.SMSG_BRIEFINFO_MOB_CMD));
-            packet.Write<byte>((byte)(End - Start));
-            for (int i = Start; i < End; i++)
+            var packet = new FiestaPacket(Handler07Type._Header, (areCharacters ? Handler07Type.SMSG_BRIEFINFO_CHARACTER_CMD : Handler07Type.SMSG_BRIEFINFO_MOB_CMD));
+            packet.Write<byte>((byte)(end - start));
+            for (var i = start; i < end; i++)
             {
-                Collection[i].WriteDisplay(packet);
+                collection[i].WriteDisplay(packet);
             }
             return packet;
         }

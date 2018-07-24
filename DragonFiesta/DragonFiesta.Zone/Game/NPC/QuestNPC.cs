@@ -16,7 +16,7 @@ namespace DragonFiesta.Zone.Game.NPC
         protected override FiestaPacket CreateItemListPacket()
         {
             var packet = new FiestaPacket(Handler07Type._Header, Handler07Type.SMSG_BRIEFINFO_CHANGEWEAPON_CMD);
-
+			//whut
             return packet;
         }
     }

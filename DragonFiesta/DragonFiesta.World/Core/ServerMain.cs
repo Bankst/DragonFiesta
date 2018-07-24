@@ -2,6 +2,7 @@
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Networking.Network.Session;
 using DragonFiesta.Utils.Core;
+using DragonFiesta.Utils.Utils;
 using DragonFiesta.World.Config;
 using DragonFiesta.World.InternNetwork;
 using DragonFiesta.World.Network;
@@ -41,11 +42,22 @@ namespace DragonFiesta.World
 
 	    public static bool LoadGameServer() => InternalInstance.LoadGameServerModules();
 
+	    private static void WaitForLogin()
+	    {
+		    while (!PortChecker.IsPortOpen(
+			    WorldConfiguration.Instance.ConnectToInfo.ConnectIP,
+			    WorldConfiguration.Instance.ConnectToInfo.ConnectPort,
+			    250
+			    ))
+		    {							    
+		    }
+	    }
+
 		public static bool Initialize()
         {
             InternalInstance = new ServerMain();
             InternalInstance.WriteConsoleLogo();
-            System.Threading.Thread.Sleep(5000); // TODO: Find better way to delay start based on Login Server status. Maybe 250ms pings?
+            //System.Threading.Thread.Sleep(5000); // TODO: Find better way to delay start based on Login Server status. Maybe 250ms pings?
 
             if (!WorldConfiguration.Initialize())
             {
@@ -81,7 +93,8 @@ namespace DragonFiesta.World
                 throw new StartupException("Failed to add Database Monitor");
             }
 
-            return true;
+	       // WaitForLogin();
+			return true;
         }
     }
 }

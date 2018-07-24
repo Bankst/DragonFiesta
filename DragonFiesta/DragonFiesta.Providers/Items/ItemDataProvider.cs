@@ -197,8 +197,15 @@ namespace DragonFiesta.Providers.Items
 
 	    public static ItemBaseInfo GetItemBaseInfoByInxName(string inxName)
 	    {
-		    var id = GetItemIDByInxName(inxName);
-		    return ItemBaseInfosByID.First(x => x.Key == id).Value;
+		    try
+		    {
+			    var id = GetItemIDByInxName(inxName);
+			    return ItemBaseInfosByID.First(x => x.Key == id).Value;
+		    }
+		    catch
+		    {
+			    return null;
+		    }
 	    }
 
 	    public static bool GetUpgradeInfosByID(ushort id, out List<ItemUpgradeInfo> list)

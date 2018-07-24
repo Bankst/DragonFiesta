@@ -1,15 +1,16 @@
 ﻿using DragonFiesta.Messages.Message.Auth;
+using DragonFiesta.Networking.Network.Session;
 using DragonFiesta.World.Config;
 
 namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Login
 {
     public static class Auth_Response
     {
-        public static void HandleAuthtecicateWorld_Response(IMessage msg)
+        public static void HandleAuthenticateWorld_Response(IMessage msg)
         {
-            var Response = (msg as AuthenticatedWorld_Response);
+            var response = (msg as AuthenticatedWorld_Response);
 
-            switch (Response.Result)
+            switch (response.Result)
             {
                 case InternWorldAuthResult.AlredyRegister:
                     EngineLog.Write(EngineLogLevel.Exception, "World With ID {0} Alredy Resgitriert", WorldConfiguration.Instance.WorldID);
@@ -28,7 +29,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Login
                     break;
 
                 case InternWorldAuthResult.OK:
-                    WorldConfiguration.Instance.ServerRegion = Response.Region;
+                    WorldConfiguration.Instance.ServerRegion = response.Region;
 
                     SocketLog.Write(SocketLogLevel.Startup, "Authenticatet OK");
 
@@ -44,18 +45,15 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Response.Login
 
                     EngineLog.Write(EngineLogLevel.Info, "WorldServer Start Success!!");
                     break;
-
-                default:
-                    break;
             }
 
-            if (Response.Result != InternWorldAuthResult.OK)
+            if (response.Result != InternWorldAuthResult.OK)
                 ServerMain.InternalInstance.Shutdown();
             else
                 ServerMain.InternalInstance.Title.Update();
         }
 
         //When Auth Sending TimeOutet then again...
-        public static void AuthLoginTimeout(IMessage msg) => InternLoginConnector.Instance.Dispose();
+        public static void AuthLoginTimeout(IMessage msg) => InternConnector.Instance.Dispose();
     }
 }

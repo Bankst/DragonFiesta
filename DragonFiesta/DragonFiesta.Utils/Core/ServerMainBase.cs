@@ -56,7 +56,7 @@ namespace DragonFiesta.Utils.Core
             Console.WriteLine("*  | |__/ / |  ( ( | ( ( | | |_| | | | | |     | ( (/ /|___ | |_( ( | | *");
             Console.WriteLine("*  |_____/|_|   \\_||_|\\_|| |\\___/|_| |_|_|     |_|\\____|___/ \\___)_||_| *");
             Console.WriteLine("*                    (_____|                                            *");
-            Console.WriteLine("*                            Copyright 2018 by Mathias1000 & Sequess    *");
+            Console.WriteLine("*               Copyright 2018 by Mathias1000, Sequess, SeerOfVoid420   *");
             Console.WriteLine("*************************************************************************");
             Console.ResetColor();
         }

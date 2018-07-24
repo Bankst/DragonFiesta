@@ -47,7 +47,7 @@ namespace DragonFiesta.Zone.Game.Maps
         {
             if (!CreateNPC(Inf, out NPCBase NPC))
             {
-                GameLog.Write(GameLogLevel.Warning, $"Failed to Create NPC Please Check Role of NPC {Inf.MobInfo}");
+                GameLog.Write(GameLogLevel.Warning, $"Failed to Create NPC Please Check Role of NPC {Inf.MobInfo.ID}");
                 return false;
             }
 

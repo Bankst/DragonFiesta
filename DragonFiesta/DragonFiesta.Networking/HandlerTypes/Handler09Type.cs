@@ -27,7 +27,7 @@
 
         public const ushort SMSG_BAT_LEVELUP_CMD = 12;
 
-        public const ushort SMSG_BAT_SUMEONELEVELUP_CMD = 13;
+        public const ushort SMSG_BAT_SOMEONELEVELUP_CMD = 13;
 
         public const ushort SMSG_BAT_HPCHANGE_CMD = 14;
 

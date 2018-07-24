@@ -182,6 +182,7 @@
     <Compile Include="Utils\FiestaSharkDumper.cs" />
     <Compile Include="Utils\MinMax.cs" />
     <Compile Include="Position.cs" />
+    <Compile Include="Utils\PortChecker.cs" />
     <Compile Include="Utils\RandomMT.cs" />
     <Compile Include="ServerConsole\ConsoleCommandHandlerStore.cs" />
     <Compile Include="ServerConsole\ConsoleThread.cs" />

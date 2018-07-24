@@ -29,7 +29,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
         }
         public static void SendLevelUpAnimation(ZoneCharacter Character, ushort MobID = 0xFFFF)
         {
-            using (var packet = new FiestaPacket(Handler09Type._Header, Handler09Type.SMSG_BAT_SUMEONELEVELUP_CMD))
+            using (var packet = new FiestaPacket(Handler09Type._Header, Handler09Type.SMSG_BAT_SOMEONELEVELUP_CMD))
             {
                 packet.Write<ushort>(Character.MapObjectId);
                 packet.Write<ushort>(MobID);

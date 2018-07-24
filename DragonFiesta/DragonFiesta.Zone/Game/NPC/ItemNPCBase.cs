@@ -9,13 +9,14 @@ namespace DragonFiesta.Zone.Game.NPC
 
         protected abstract FiestaPacket CreateItemListPacket();
 
-        public ItemNPCBase(NPCInfo Info) : base(Info)
-        {
-
-        }
+	    protected ItemNPCBase(NPCInfo Info) : base(Info)
+	    {
+		    //ItemListPacket = CreateItemListPacket();
+	    }
 
         public override void OpenMenu(ZoneCharacter Character)
         {
+	        ItemListPacket = CreateItemListPacket();
             Character.Session.SendPacket(ItemListPacket);
         }
 

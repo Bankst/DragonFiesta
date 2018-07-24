@@ -9,9 +9,12 @@
 
         public const ushort CMSG_Unk2 = 8;
 
+	    public const ushort CMSG_Unk3 = 16;
 
-        //SMSG
-        public const ushort SMSG_Unk = 2;
+	    public const ushort CMSG_Unk4 = 17;
+
+		//SMSG
+		public const ushort SMSG_Unk = 2;
 
         public const ushort SMSG_Unk2 = 9;
     }

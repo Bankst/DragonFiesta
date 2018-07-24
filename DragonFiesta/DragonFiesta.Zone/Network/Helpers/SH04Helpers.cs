@@ -114,7 +114,7 @@ namespace DragonFiesta.Zone.Network.Helpers
             packet.Write<ushort>(0); // MobID
 
             //ABNORMAL_STATE_BIT
-            packet.Fill(105, 0x00); // statebit[105]
+            packet.Fill(103, 0x00); // statebit[105]
 
             packet.Write<uint>(0); //myGuild
             packet.Write<byte>(character.Type);

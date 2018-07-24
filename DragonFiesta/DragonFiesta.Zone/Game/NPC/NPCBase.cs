@@ -12,24 +12,24 @@ namespace DragonFiesta.Zone.Game.NPC
     {
         public new NPCInfo Info { get; private set; }
 
-        public sealed override StatsManager Stats => _Stats;
+        public sealed override StatsManager Stats => _stats;
 
         public override MapObjectType Type => MapObjectType.NPC;
 
-        private NPCStatsManager _Stats;
+        private NPCStatsManager _stats;
 
-        public NPCBase(NPCInfo Info) : base(Info.MobInfo)
+	    protected NPCBase(NPCInfo info) : base(info.MobInfo)
         {
-            this.Info = Info;
+			Info = info;
 
-            _Stats = new NPCStatsManager(this);
-            _Stats.UpdateAll();
+            _stats = new NPCStatsManager(this);
+            _stats.UpdateAll();
 
-            LivingStats.Load((uint)_Stats.FullStats.MaxHP, (uint)_Stats.FullStats.MaxSP, (uint)_Stats.FullStats.MaxLP);
+            LivingStats.Load((uint)_stats.FullStats.MaxHP, (uint)_stats.FullStats.MaxSP, (uint)_stats.FullStats.MaxLP);
 
-            if (Info.HasWayPoints)
+            if (info.HasWayPoints)
             {
-                WalkPosition = Info.WayPointInfo.WalkPosition;
+                WalkPosition = info.WayPointInfo.WalkPosition;
             }
 
             Selection = new NPCObjectSelection(this);
@@ -38,34 +38,34 @@ namespace DragonFiesta.Zone.Game.NPC
         protected override void DisposeInternal()
         {
             Info = null;
-            _Stats.Dispose();
-            _Stats = null;
+            _stats.Dispose();
+            _stats = null;
             LivingStats.Dispose();
             LivingStats = null;
             Selection.DeselectObject();        
             base.DisposeInternal();
         }
 
-        public override void WriteDisplay(FiestaPacket Packet)
+        public override void WriteDisplay(FiestaPacket packet)
         {
-            Packet.Write<ushort>(MapObjectId);
-            Packet.Write<byte>(2); // Mode
-            Packet.Write<ushort>(Info.MobInfo.ID);
-            Packet.Write<uint>(Position.X);
-            Packet.Write<uint>(Position.Y);
-            Packet.Write<byte>(Position.Rotation);
-            Packet.Write<bool>(Info.IsGate);//00 = buffArray
+            packet.Write<ushort>(MapObjectId);
+            packet.Write<byte>(2); // Mode
+            packet.Write<ushort>(Info.MobInfo.ID);
+            packet.Write<uint>(Position.X);
+            packet.Write<uint>(Position.Y);
+            packet.Write<byte>(Position.Rotation);
+            packet.Write<bool>(Info.IsGate);//00 = buffArray
 
             switch (Info.Role)
             {
                 case NPCRole.Gate:
                 case NPCRole.IDGate:
-                    Packet.WriteString(Info.LinkTable.PortMap.Index, 12);
-                    Packet.Fill(93, 0x00); // Unk
-                    Packet.Fill(32, 0x00); // Animation
-                    Packet.Write<byte>(0); // AnimationLevel
-                    Packet.Write<byte>(0); // KQTeamType
-                    Packet.Write<byte>(0); // RegenAni
+                    packet.WriteString(Info.LinkTable.PortMap.Index, 12);
+                    packet.Fill(93, 0x00); // Unk
+                    packet.Fill(32, 0x00); // Animation
+                    packet.Write<byte>(0); // AnimationLevel
+                    packet.Write<byte>(0); // KQTeamType
+                    packet.Write<byte>(0); // RegenAni
                     break;
                 case NPCRole.RandomGate:
                 case NPCRole.ClientMenu:
@@ -77,25 +77,24 @@ namespace DragonFiesta.Zone.Game.NPC
                 case NPCRole.QuestNpc:
                 case NPCRole.StoreManager:
                 default:            
-                    Packet.Fill(105, 0x00); // Abnormal_state_bit
-                    Packet.Fill(32, 0x00); // Animation
-                    Packet.Write<byte>(0); // AnimationLevel
-                    Packet.Write<byte>(0); // KQTeamType
-                    Packet.Write<byte>(0); // RegenAni
+                    packet.Fill(105, 0x00); // Abnormal_state_bit
+                    packet.Fill(32, 0x00); // Animation
+                    packet.Write<byte>(0); // AnimationLevel
+                    packet.Write<byte>(0); // KQTeamType
+                    packet.Write<byte>(0); // RegenAni
                     break;
             }
         }
 
-        internal virtual void HandleInteraction(ZoneCharacter Character)
+        internal virtual void HandleInteraction(ZoneCharacter character)
         {
             using (var packet = SH08Helper.GetNPCInterActionPacket(this))
             {
-                Character.Session.SendPacket(packet);
+                character.Session.SendPacket(packet);
             }
-            
         }
 
-        public abstract void OpenMenu(ZoneCharacter Character);
+        public abstract void OpenMenu(ZoneCharacter character);
 
         public override void MoveToNextPoint()//hmm Use this is funny?
         {
