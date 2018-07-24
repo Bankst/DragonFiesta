@@ -6,7 +6,7 @@ namespace DragonFiesta.Zone.Network
 {
     public sealed class ZoneSession : FiestaSession<ZoneSession>
     {
-        public bool IsAuthenticatet => (Character != null && GameStates.Authenticated);
+        public bool IsAuthenticated => (Character != null && GameStates.Authenticated);
 
         public bool IsLoggingOut { get; set; }
 
@@ -26,7 +26,7 @@ namespace DragonFiesta.Zone.Network
 
         private void ZoneSession_OnDisconnect(object sender, SessionDisconnectArgs e)
         {
-            if (IsAuthenticatet &&
+            if (IsAuthenticated &&
                 !GameStates.IsTransferring)
             {
                 ZoneCharacterManager.Instance.LogCharacterOut(Character, true);

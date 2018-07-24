@@ -2,7 +2,7 @@
 {
     public static class ServerMainDebug
     {
-        public static bool DebugPackets = false;
+        public static bool DebugPackets = true;
 
         public static bool DumpPacket = false;
 

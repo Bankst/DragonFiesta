@@ -192,7 +192,14 @@ namespace DragonFiesta.Providers.Items
 
 	    public static int GetItemIDByInxName(string inxName)
 	    {
-		    return ItemInfoSC.First(x => x.InxName == inxName).ID;
+		    try
+		    {
+			    return ItemInfoSC.First(x => x.InxName == inxName).ID;
+		    }
+		    catch
+		    {
+			    return -1;
+		    }
 	    }
 
 	    public static ItemBaseInfo GetItemBaseInfoByInxName(string inxName)
@@ -200,6 +207,7 @@ namespace DragonFiesta.Providers.Items
 		    try
 		    {
 			    var id = GetItemIDByInxName(inxName);
+			    if (id == -1) throw new Exception("fuku");
 			    return ItemBaseInfosByID.First(x => x.Key == id).Value;
 		    }
 		    catch

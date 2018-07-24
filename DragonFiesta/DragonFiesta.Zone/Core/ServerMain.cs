@@ -4,12 +4,13 @@ using DragonFiesta.Zone.Network;
 using DragonFiesta.Zone.ServerConsole.Title;
 using System;
 using DragonFiesta.Database.SQL;
+using DragonFiesta.Utils.Utils;
 
 namespace DragonFiesta.Zone.Core
 {
     public class ServerMain : ServerMainBase
     {
-        public static new ServerMain InternalInstance { get; private set; }
+        public new static ServerMain InternalInstance { get; private set; }
 
         public ZoneConsoleTitle Title { get; set; }
 
@@ -50,18 +51,22 @@ namespace DragonFiesta.Zone.Core
         }
 
 
-        public static bool Initialize(byte ZoneId = 0)
-        {
-            InternalInstance = new ServerMain();
-            InternalInstance.WriteConsoleLogo();
-			System.Threading.Thread.Sleep(10000);
+	    public static bool Initialize(byte ZoneId = 0)
+	    {
+		    InternalInstance = new ServerMain();
+		    InternalInstance.WriteConsoleLogo();
+
 			if (!ZoneConfiguration.Initialize(ZoneId))
             {
                 throw new StartupException("Invalid Load ZoneConfiguration");
             }
 
+		    if (!PortChecker.IsPortOpen(
+			    ZoneConfiguration.Instance.WorldConnectInfo.ConnectIP,
+			    ZoneConfiguration.Instance.WorldConnectInfo.ConnectPort, 250))
+		    { System.Threading.Thread.Sleep(10000); }
 
-            ThreadPool.Start(ZoneConfiguration.Instance.WorkThreadCount);
+			ThreadPool.Start(ZoneConfiguration.Instance.WorkThreadCount);
 
             ThreadPool.AddUpdateAbleServer(ServerTaskManager.InitialInstance());
 

@@ -164,7 +164,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
         [PacketHandler(Handler06Type.CMSG_MAP_LOGINCOMPLETE_CMD)]
         public static void CMSG_CHARACTER_MAP_LOAD_READY(ZoneSession sender, FiestaPacket packet)
         {
-            if (!sender.IsAuthenticatet)
+            if (!sender.IsAuthenticated)
             {
                 SH04Helpers.SendZoneError(sender, ConnectionError.ClientManipulation);
                 sender.Dispose();

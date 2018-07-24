@@ -21,8 +21,8 @@ namespace DragonFiesta.Utils.Utils
 					{
 						return false;
 					}
-
 					client.EndConnect(result);
+					client.Close();
 				}
 			}
 			catch
