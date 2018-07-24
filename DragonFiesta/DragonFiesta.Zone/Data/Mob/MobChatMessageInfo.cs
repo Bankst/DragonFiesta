@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Zone.Data.Mob
+﻿using DragonFiesta.Database.SQL;
+
+namespace DragonFiesta.Zone.Data.Mob
 {
     public class MobChatMessageInfo
     {

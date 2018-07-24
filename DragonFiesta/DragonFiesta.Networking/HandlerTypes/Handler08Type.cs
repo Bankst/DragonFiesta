@@ -59,7 +59,7 @@
 
         public const ushort SMSG_ACT_SOMEONESHOUT_CMD = 31;
 
-        public const ushort SMSG_ACT_SOMEEONEJUMP_CMD = 37;
+        public const ushort SMSG_ACT_SOMEONEJUMP_CMD = 37;
 
         public const ushort SMSG_ACT_PITCHTENT_ACK = 40;
 

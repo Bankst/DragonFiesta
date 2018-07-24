@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DragonFiesta.Utils.Database
+namespace DragonFiesta.Database.SQL
 {
     /// <summary>
     /// Represents a storage database.
@@ -9,48 +9,31 @@ namespace DragonFiesta.Utils.Database
     {
         #region Fields
 
-        private readonly string mName;
-        private readonly int mMinPoolSize;
-        private readonly int mMaxPoolSize;
-        private readonly int mPoolLifeTime;
-
-        #endregion Fields
+	    #endregion Fields
 
         #region Properties
 
         /// <summary>
         /// The name of the database to connect to.
         /// </summary>
-        internal string Name
-        {
-            get { return mName; }
-        }
+        internal string Name { get; }
 
-        /// <summary>
+	    /// <summary>
         /// The minimum connection pool size for the database.
         /// </summary>
-        internal int MinPoolSize
-        {
-            get { return mMinPoolSize; }
-        }
+        internal int MinPoolSize { get; }
 
-        /// <summary>
+	    /// <summary>
         /// The maximum connection pool size for the database.
         /// </summary>
-        internal int ClientLifeTime
-        {
-            get { return mPoolLifeTime; }
-        }
+        internal int ClientLifeTime { get; }
 
-        /// <summary>
+	    /// <summary>
         /// The maximum connection pool size for the database.
         /// </summary>
-        internal int MaxPoolSize
-        {
-            get { return mMaxPoolSize; }
-        }
+        internal int MaxPoolSize { get; }
 
-        #endregion Properties
+	    #endregion Properties
 
         #region Constructor
 
@@ -62,13 +45,13 @@ namespace DragonFiesta.Utils.Database
         /// <param name="maxPoolSize"> The maximum connection pool size for the database.</param>
         internal Database(string sName, int minPoolSize, int maxPoolSize, int _mPoolLifeTime)
         {
-            if (sName == null || sName.Length == 0)
+            if (string.IsNullOrEmpty(sName))
                 throw new ArgumentException(sName);
 
-            mName = sName;
-            mMinPoolSize = minPoolSize;
-            mMaxPoolSize = maxPoolSize;
-            mPoolLifeTime = _mPoolLifeTime;
+            Name = sName;
+            MinPoolSize = minPoolSize;
+            MaxPoolSize = maxPoolSize;
+            ClientLifeTime = _mPoolLifeTime;
         }
 
         #endregion Constructor

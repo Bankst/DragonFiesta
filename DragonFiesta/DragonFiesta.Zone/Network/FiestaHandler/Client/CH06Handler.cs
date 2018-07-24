@@ -24,7 +24,6 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
                 return;
             }
 
-
             if (!ZoneMapDataProvider.GetTownPortalInfoByID(Index, out TownPortalInfo Portal))
             {
                 ZoneChat.CharacterNote(sender.Character, $"Invalid Database Info for Index {Index}");
@@ -65,7 +64,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             }
 
             //Online Handling by World...
-            if(!Transfer.Character.LoginInfo.IsOnline)
+            if (!Transfer.Character.LoginInfo.IsOnline)
             {
                 sender.Dispose();
                 return;
@@ -83,7 +82,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             //Set Position
             sender.Character.AreaInfo.Map = Transfer.Map;
             sender.Character.AreaInfo.Position = Transfer.SpawnPosition;
-        
+
             //Set Authenticate
             sender.GameStates.Authenticated = true;
             sender.GameStates.IsTransferring = false;
@@ -97,7 +96,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
                 mPacket.WriteHexAsBytes("FF FF FF FF");
                 sender.SendPacket(mPacket);
             }
-            
+
             using (var mPacket = new FiestaPacket(4, 58))
             {
                 mPacket.WriteHexAsBytes("A7 13 1C 00 01 01 3A 01 06 5E 43 D3 4E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00");
@@ -130,27 +129,6 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
                 mPacket.WriteHexAsBytes("00 00");
                 sender.SendPacket(mPacket);
             }
-            using (var mPacket = new FiestaPacket(4, 71))
-            {
-                mPacket.WriteHexAsBytes("09 09 61 45 00 24 E2 04 00 00 00 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF FF FF FF FF FF FF FF 00 00 00 00 00 00 00 00 05 01 24 89 4E 4C 33 02 24 0A A5 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 07 03 01 00 02 01 00 00 01 00 0C 03 24 B4 B3 00 00 00 00 00 00 00 00 05 04 24 BE 0B 0B 4E 05 24 79 E0 00 00 00 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF FF FF FF FF FF FF FF 00 00 00 00 00 00 00 07 02 03 00 04 02 00 00 02 00 45 06 24 FA 00 00 00 00 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF FF FF FF FF FF FF FF 00 00 00 00 00 00 00 01 05 0A 24 42 0A 04 05 0B 24 AC 0D 02");
-                sender.SendPacket(mPacket);
-            }
-
-            using (var mPacket = new FiestaPacket(4, 71))
-            {
-                mPacket.WriteHexAsBytes("01 08 93 45 0C 20 14 E0 00 00 00 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 FF FF 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF FF FF FF FF FF FF FF 00 00 00 00 00 00 00 01");
-                sender.SendPacket(mPacket);
-            }
-            using (var mPacket = new FiestaPacket(4, 71))
-            {
-                mPacket.WriteHexAsBytes("01 0C C9 08 00 30 18 79 FF EC BB 76");
-                sender.SendPacket(mPacket);
-            }
-            using (var mPacket = new FiestaPacket(4, 71))
-            {
-                mPacket.WriteHexAsBytes("01 0C F9 08 00 30 18 79 FF EC BB 76");
-                sender.SendPacket(mPacket);
-            }
 
             using (var mPacket = new FiestaPacket(4, 73))
             {
@@ -179,7 +157,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
                 mPacket.WriteHexAsBytes("60 A5 85 56 60 53 C7 57 E0 D3 D5 57 E0 BC DD 57");
                 sender.SendPacket(mPacket);
             }
-            
+
             SH06Handler.SendDetailedInfoExtra(sender);
         }
 
@@ -205,14 +183,11 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
                 sender.Character.LivingStats.HP = (uint)sender.Character.Info.Stats.FullStats.MaxHP;
                 sender.Character.LivingStats.SP = (uint)sender.Character.Info.Stats.FullStats.MaxSP;
                 sender.Character.LivingStats.LP = (uint)sender.Character.Info.Stats.FullStats.MaxLP;
-
-
                 sender.Character.LoginInfo.IsFirstLogin = false;
             }
 
             //update stats in Client
             sender.Character.Info.Stats.UpdateAll();
-
             SH09Handler.SendHPUpdate(sender.Character);
             SH09Handler.SendSPUpdate(sender.Character);
 
@@ -220,18 +195,16 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             {
                 SH09Handler.SendLPUpdate(sender.Character);
             }
-       
+
             //FreeStats
             if (sender.Character.Info.FreeStats.FreeStat_Points > 0)
             {
                 SH04Handler.SendRemainingStatPoints(sender);
             }
-          
+
             sender.GameStates.IsReady = true;
             sender.GameStates.IsTransferring = false;
             sender.GameStates.HasPong = true;
-
-
             ZoneCharacterManager.Instance.CharacterMapRefreshed(sender.Character);
         }
     }

@@ -1,5 +1,10 @@
-﻿using DragonFiesta.Providers.Characters;
+﻿#region
+
+using DragonFiesta.Database.SQL;
+using DragonFiesta.Providers.Characters;
 using DragonFiesta.Utils.Logging;
+
+#endregion
 
 namespace DragonFiesta.Game.Characters.Data
 {

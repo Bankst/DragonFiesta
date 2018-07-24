@@ -29,3 +29,6 @@
 /.vs
 /Tools_2018/DragonLauncher/.vs/DragonLauncher/v15
 *.DotSettings
+/DragonFiesta/packages/
+/DragonFiesta/Database/obj/Debug
+/DragonFiesta/Database/Properties

@@ -2,8 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Maps;
 using DragonFiesta.Utils.IO.TXT;
+using DragonFiesta.Zone.Data.Items;
 using DragonFiesta.Zone.Data.Mob;
 
 namespace DragonFiesta.Zone.Data.NPC
@@ -70,62 +72,53 @@ namespace DragonFiesta.Zone.Data.NPC
 					}
 					else if (currentInfo.Role == NPCRole.Merchant)
 					{
-						/*
-						if (!LoadItemList(currentInfo, out int incrItemCount))
+						
+						if (!LoadItemList(currentInfo))
 						{
-						    DatabaseLog.Write(DatabaseLogLevel.Warning, "Error loading item list for NPC '{0}'-'{1}'.", currentInfo.MobInfo.ID, currentInfo.MobInfo.Index);
+						    DatabaseLog.Write(DatabaseLogLevel.Warning, $"Error loading item list for NPC '{currentInfo.MobInfo.ID}'-'{currentInfo.MobInfo.Index}'.");
 						    continue;
 						}
-						*/
-						//itemCount += incrItemCount;
 					}
 					list.Add(currentInfo);
 				}
 			}
-			//DatabaseLog.Write(DatabaseLogLevel.Startup, "Loaded {0} NPCItemLists with {1} items in shop", 420, 69);
         }
 		 
-		private static bool LoadItemList(NPCInfo currentInfo, out int incrItemCount)
+		private static bool LoadItemList(NPCInfo currentInfo)
 		{
-			incrItemCount = 0;
-			var itemList = new List<NPCItem>();
-
 			// open NPCItemList for currentInfo
-			var shinePath = "Shine/NPCItemList/";
+			const string shinePath = "Shine/NPCItemList/";
 			var filePath = $"{shinePath}{currentInfo.MobInfo.Index}.txt";
 			
-			//itemListShine.
-			 
-			// parse
 			try
 			{
 				var itemListShine = new ShineTable(filePath);
-				foreach (var kvp in itemListShine.Tables)
-				{
-					//byte tabNum = Convert.ToByte(kvp.Key.Substring(3,2));
-					var slotNo = 0;
-					foreach (DataRow row in kvp.Source.Rows)
+				itemListShine.Read();
+				if (!itemListShine.IsShineTable()) return false;
+				foreach (var table in itemListShine.Tables)
+				{ // each tab starts slot at 0
+					byte incrItemCount = 0;
+					foreach (DataRow row in table.Source.Rows)
 					{
-							//byte rowNum = Convert.ToByte(row.Table.Rows[0]);
-							for (var i = 1; i < 7; i++)
+						for (var i = 0; i < 7; i++)
+						{
+							if (i == 0) continue;
+							var item = row.ItemArray[i];
+							if ((string) item == "-")
 							{
-								slotNo++;
-								var itemInxName = row.ItemArray[i];
-								//var itemID = 
+								incrItemCount++;
+								continue;
 							}
+							currentInfo.Items.Add(new NPCItem((byte)incrItemCount, ZoneItemDataProvider.GetItemBaseInfoByInxName((string)item)));
 							incrItemCount++;
-						
-					}					
+						}
+					}
 				}
-				foreach (var item in itemList)
-				{
-					currentInfo.Items.Add(item);
-					//incrItemCount++;
-				}
-				DatabaseLog.Write(DatabaseLogLevel.Startup, "Loaded NPC {0} with {1} items in shop", currentInfo.MobInfo.Index, currentInfo.Items.Count);
+
+				DatabaseLog.Write(DatabaseLogLevel.Startup, $"Loaded NPC {currentInfo.MobInfo.Index} with {currentInfo.Items.Count} items in shop");
 				return true;
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				return false;
 			}

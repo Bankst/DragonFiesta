@@ -1,11 +1,12 @@
-﻿using DragonFiesta.Networking.HandlerTypes;
+﻿using System;
+using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Zone.Game;
 
 namespace DragonFiesta.Zone.Network.FiestaHandler.Server
 {
     public static class SH15Handler
     {
-        public static void SendQuestion(Question Question, ushort Distance)
+		public static void SendQuestion(Question Question, ushort Distance)
         {
             using (var packet = new FiestaPacket(Handler15Type._Header, Handler15Type.SMSG_MENU_SERVERMENU_REQ))
             {
@@ -28,5 +29,5 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
                 Question.Character.Session.SendPacket(packet);
             }
         }
-    }
+	}
 }

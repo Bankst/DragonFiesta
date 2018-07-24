@@ -3,6 +3,7 @@ using DragonFiesta.Zone.Data.Mob;
 using DragonFiesta.Zone.Data.WayPoints;
 using System;
 using System.Collections.Generic;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Data.NPC
 {

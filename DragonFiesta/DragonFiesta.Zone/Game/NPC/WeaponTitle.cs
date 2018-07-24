@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Zone.Data.NPC;
+﻿using DragonFiesta.Networking.HandlerTypes;
+using DragonFiesta.Zone.Data.NPC;
 
 namespace DragonFiesta.Zone.Game.NPC
 {
@@ -8,9 +9,20 @@ namespace DragonFiesta.Zone.Game.NPC
         {
         }
 
-        protected override void DisposeInternal()
+        protected override FiestaPacket CreateItemListPacket()
         {
-            base.DisposeInternal();
+            var packet = new FiestaPacket(Handler15Type._Header, Handler15Type.SMSG_MENU_SHOPOPENTABLE_SKILL_CMD);
+
+	        packet.Write<ushort>(Info.Items.Count);
+	        packet.Write<ushort>(MapObjectId);
+
+	        foreach (var item in Info.Items)
+	        {
+		        packet.Write<byte>(item.Slot);
+		        packet.Write<ushort>(item.Info.ID);
+	        }
+
+			return packet;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Providers.Text
+﻿using DragonFiesta.Database.SQL;
+
+namespace DragonFiesta.Providers.Text
 {
     public class TextData
     {

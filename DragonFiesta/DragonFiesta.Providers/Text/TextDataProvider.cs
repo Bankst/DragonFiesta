@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Text.TXT;
 using DragonFiesta.Utils.IO.TXT;
 
@@ -14,15 +15,13 @@ namespace DragonFiesta.Providers.Text
     {
         private static ConcurrentDictionary<uint, TextData> _textDataById;
 	    private static SecureCollection<ScriptTXT> _scriptData;
-	    private static SecureCollection<MenuStringTXT> _menuStringData;
 
-        [InitializerMethod]
+	    [InitializerMethod]
         public static bool OnStart()
         {
             try
             {
 				LoadTextData();
-                //LoadTextDataSql();
                 return true;
             }
             catch
@@ -39,7 +38,6 @@ namespace DragonFiesta.Providers.Text
 	    public static void LoadTextData()
 	    {
 			LoadScript();
-//		    LoadMenuString();
 		    FillTextData();
 	    }
 
@@ -89,50 +87,5 @@ namespace DragonFiesta.Providers.Text
 		    watch.Stop();
 			DatabaseLog.WriteProgressBar($"Loaded {_scriptData.Count} rows from Script.txt in {(double) watch.ElapsedMilliseconds / 1000}s");
 		}
-
-	    private static void LoadMenuString()
-	    {
-
-	    }
-
-        public static void ReloadTextData()
-        {
-            SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM TextData");
-
-            for (int i = 0; i < pResult.Count; i++)
-            {
-                TextData mData = new TextData(pResult, i);
-                _textDataById.AddOrUpdate(mData.TextId, mData, (key, oldValue) =>
-                 {
-                     if (!mData.Equals(oldValue))
-                         return mData;
-
-                     return oldValue;
-                 });
-            }
-        }
-
-        public static void LoadTextDataSql()
-        {
-            _textDataById = new ConcurrentDictionary<uint, TextData>();
-
-            SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM TextData");
-
-            DatabaseLog.WriteProgressBar(">> Load TextData");
-
-            using (var mBar = new ProgressBar(pResult.Count))
-            {
-                for (int i = 0; i < pResult.Count; i++)
-                {
-                    TextData mData = new TextData(pResult, i);
-                    if (!_textDataById.TryAdd(mData.TextId, mData))
-                    {
-                        DatabaseLog.Write(DatabaseLogLevel.Error, "Duplicate Text With {0} found!", mData.TextId);
-                    }
-                    mBar.Step();
-                }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} TextDatas", _textDataById.Count);
-            }
-        }
     }
 }

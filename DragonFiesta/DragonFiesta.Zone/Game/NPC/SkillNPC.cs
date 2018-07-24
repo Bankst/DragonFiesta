@@ -1,8 +1,6 @@
-﻿using DragonFiesta.Providers.Text;
-using DragonFiesta.Zone.Data.Menu;
+﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Zone.Data.NPC;
 using DragonFiesta.Zone.Game.Character;
-using DragonFiesta.Zone.Game.Chat;
 
 namespace DragonFiesta.Zone.Game.NPC
 {
@@ -12,16 +10,20 @@ namespace DragonFiesta.Zone.Game.NPC
 		{
 		}
 
-		public override void OpenMenu(ZoneCharacter Character)
-		{
-			//bruh
+        protected override FiestaPacket CreateItemListPacket()
+        {
+            var packet = new FiestaPacket(Handler15Type._Header, Handler15Type.SMSG_MENU_SHOPOPENTABLE_SKILL_CMD);
 
-		}
+	        packet.Write<ushort>(Info.Items.Count);
+	        packet.Write<ushort>(MapObjectId);
 
+	        foreach (var item in Info.Items)
+	        {
+		        packet.Write<byte>(item.Slot);
+		        packet.Write<ushort>(item.Info.ID);
+	        }
 
-		protected override void DisposeInternal()
-		{
-			base.DisposeInternal();
-		}
-	}
+			return packet;
+        }
+    }
 }

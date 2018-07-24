@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Game.Settings

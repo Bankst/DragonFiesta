@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Zone.Data.Friends
+﻿using DragonFiesta.Database.SQL;
+
+namespace DragonFiesta.Zone.Data.Friends
 {
 
     public class FriendPointReward

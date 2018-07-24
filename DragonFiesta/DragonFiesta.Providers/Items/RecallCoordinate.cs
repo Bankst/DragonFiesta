@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Providers.Maps;
 using System;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Providers.Data.Items
 {
@@ -14,7 +15,8 @@ namespace DragonFiesta.Providers.Data.Items
             ItemID = pResult.Read<ushort>(i, "ItemID");
             ushort MapID = pResult.Read<ushort>(i, "MapID");
             if (!MapDataProvider.GetMapInfoByID(MapID, out MapInfo mapInfo))
-                throw new InvalidOperationException(String.Format("Can't find map with ItemID '{0}' for recall coordinate '{1}'", MapID, ItemID));
+                throw new InvalidOperationException(
+		                $"Can't find map with ItemID '{MapID}' for recall coordinate '{ItemID}'");
             MapInfo = mapInfo;
             Position = new Position()
             {

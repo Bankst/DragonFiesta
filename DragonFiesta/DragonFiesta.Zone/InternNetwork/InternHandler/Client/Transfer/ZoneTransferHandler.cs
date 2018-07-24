@@ -1,6 +1,5 @@
 ﻿using DragonFiesta.Messages.Zone.Transfer;
 using DragonFiesta.Zone.Game.Character;
-using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Transfer;
 using DragonFiesta.Zone.Game.Maps.Types;
 using DragonFiesta.Zone.Game.Maps.Object;

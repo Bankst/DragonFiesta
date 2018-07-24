@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Providers.Items;
+﻿using DragonFiesta.Database.SQL;
+using DragonFiesta.Providers.Items;
 
 namespace DragonFiesta.World.Data.Characters
 {

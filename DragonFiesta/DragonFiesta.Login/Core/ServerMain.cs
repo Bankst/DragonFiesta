@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Login.Config;
+﻿using DragonFiesta.Database.SQL;
+using DragonFiesta.Login.Config;
 using DragonFiesta.Login.Game.Authentication;
 using DragonFiesta.Login.ServerConsole.Title;
 using DragonFiesta.Utils.Core;

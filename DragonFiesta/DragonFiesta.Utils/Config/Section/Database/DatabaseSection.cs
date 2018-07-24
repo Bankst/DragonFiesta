@@ -15,5 +15,7 @@
         public virtual string SQLPassword { get; set; } = "123456";
 
         public virtual string SQLName { get; set; } = "auth";
+
+	    public virtual string EntityMetadata { get; set; } = null;
     }
 }

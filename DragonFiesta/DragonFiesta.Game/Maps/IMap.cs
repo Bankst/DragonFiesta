@@ -1,5 +1,9 @@
-﻿using DragonFiesta.Providers.Maps;
+﻿#region
+
 using System.Runtime.Serialization;
+using DragonFiesta.Providers.Maps;
+
+#endregion
 
 public interface IMap : ISerializable
 {

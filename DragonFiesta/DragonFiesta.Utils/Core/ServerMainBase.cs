@@ -56,7 +56,7 @@ namespace DragonFiesta.Utils.Core
             Console.WriteLine("*  | |__/ / |  ( ( | ( ( | | |_| | | | | |     | ( (/ /|___ | |_( ( | | *");
             Console.WriteLine("*  |_____/|_|   \\_||_|\\_|| |\\___/|_| |_|_|     |_|\\____|___/ \\___)_||_| *");
             Console.WriteLine("*                    (_____|                                            *");
-            Console.WriteLine("*                            Copyright 2018 by Mathias1000 & Sequess    *");
+            Console.WriteLine("*               Copyright 2018 by Mathias1000, Sequess, SeerOfVoid420   *");
             Console.WriteLine("*************************************************************************");
             Console.ResetColor();
         }
@@ -82,12 +82,9 @@ namespace DragonFiesta.Utils.Core
             {
                 if (Reflector.GetInitializerGameMethods(ServerType).Any(method =>
                 {
-                    if (!method.Invoke())
-                    {
-                        GameLog.Write(GameLogLevel.Exception, "Invalid Initial GameServerModule {0}", method.Method.ReflectedType.FullName);
-                        return true;
-                    }
-                    return false;
+	                if (method.Invoke()) return false;
+	                GameLog.Write(GameLogLevel.Exception, "Invalid Initial GameServerModule {0}", method.Method.ReflectedType?.FullName);
+	                return true;
                 }))
                 {
                     GameLog.Write(GameLogLevel.Exception, "GameServer could not be started. Errors occured.");

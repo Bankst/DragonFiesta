@@ -1,21 +1,30 @@
 ﻿using DragonFiesta.Zone.Data.NPC;
 using DragonFiesta.Zone.Game.Character;
-using System.Data.SqlClient;
 
 namespace DragonFiesta.Zone.Game.NPC
 {
     public abstract class ItemNPCBase : NPCBase
     {
-        public ItemNPCBase(NPCInfo Info) : base(Info)
-        {
-        }
+        private FiestaPacket ItemListPacket;
+
+        protected abstract FiestaPacket CreateItemListPacket();
+
+	    protected ItemNPCBase(NPCInfo Info) : base(Info)
+	    {
+		    //ItemListPacket = CreateItemListPacket();
+	    }
 
         public override void OpenMenu(ZoneCharacter Character)
         {
+	        ItemListPacket = CreateItemListPacket();
+            Character.Session.SendPacket(ItemListPacket);
         }
 
         protected override void DisposeInternal()
         {
+            ItemListPacket.Dispose();
+            ItemListPacket = null;
+
             base.DisposeInternal();
         }
     }

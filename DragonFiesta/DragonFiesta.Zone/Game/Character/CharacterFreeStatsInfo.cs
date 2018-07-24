@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Zone.Game.Stats;
 using System;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Game.Character
 {

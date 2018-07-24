@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.World.Game.Settings;
 using System.Data.SqlClient;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.World.Game.Character
 {

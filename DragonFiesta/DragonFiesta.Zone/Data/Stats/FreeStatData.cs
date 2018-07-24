@@ -1,4 +1,6 @@
-﻿namespace DragonFiesta.Zone.Data.Stats
+﻿using DragonFiesta.Database.SQL;
+
+namespace DragonFiesta.Zone.Data.Stats
 {
     public class FreeStatData
     {

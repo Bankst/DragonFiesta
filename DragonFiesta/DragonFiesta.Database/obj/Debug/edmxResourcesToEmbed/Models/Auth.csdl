@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DF_AuthModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="EMail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreationIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IsActivated" Type="Boolean" Nullable="false" />
+    <Property Name="IsBanned" Type="Boolean" Nullable="false" />
+    <Property Name="IsOnline" Type="Boolean" Nullable="false" />
+    <Property Name="LastLogin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RoleID" Type="Byte" Nullable="false" />
+    <Property Name="RegionID" Type="Byte" Nullable="false" />
+    <Property Name="BanDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="BanTime" Type="Int64" Nullable="false" />
+    <Property Name="BanReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="IPBlock">
+    <Key>
+      <PropertyRef Name="BlockedIP" />
+    </Key>
+    <Property Name="BlockedIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="BlockDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="BlockReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RegionServer">
+    <Key>
+      <PropertyRef Name="Region" />
+      <PropertyRef Name="Port" />
+    </Key>
+    <Property Name="Region" Type="Byte" Nullable="false" />
+    <Property Name="ListenerIP" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Port" Type="Int32" Nullable="false" />
+    <Property Name="WorkThreadCount" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Version">
+    <Key>
+      <PropertyRef Name="ClientDate" />
+      <PropertyRef Name="ClientHash" />
+    </Key>
+    <Property Name="ClientDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ClientHash" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WorldList">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="WorldName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TestServer" Type="Boolean" Nullable="false" />
+    <Property Name="AllowIP" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Region" Type="Byte" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="AccountEntity" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accounts" EntityType="Self.Account" />
+    <EntitySet Name="IPBlocks" EntityType="Self.IPBlock" />
+    <EntitySet Name="RegionServers" EntityType="Self.RegionServer" />
+    <EntitySet Name="Versions" EntityType="Self.Version" />
+    <EntitySet Name="WorldLists" EntityType="Self.WorldList" />
+  </EntityContainer>
+</Schema>

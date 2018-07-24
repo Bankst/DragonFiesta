@@ -2,6 +2,7 @@
 using DragonFiesta.World.Game.Settings;
 using System;
 using System.Data.SqlClient;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.World.Data.Settings
 {

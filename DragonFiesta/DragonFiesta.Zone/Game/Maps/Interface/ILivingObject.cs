@@ -1,6 +1,5 @@
 ﻿using DragonFiesta.Game.Stats;
 using DragonFiesta.Zone.Game.Maps.Event;
-using DragonFiesta.Zone.Game.Maps;
 using DragonFiesta.Zone.Game.Stats;
 using System;
 using DragonFiesta.Zone.Game.Maps.Object;

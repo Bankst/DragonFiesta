@@ -10,7 +10,7 @@ namespace DragonFiesta.Zone.Network
     {
         public static ZoneServer Instance { get; set; }
 
-        public ZoneServer(ClientRegion Regio, int port) : base(Regio, port)
+        public ZoneServer(ClientRegion region, int port) : base(region, port)
         {
         }
 
@@ -24,7 +24,7 @@ namespace DragonFiesta.Zone.Network
                 await Task.Factory.StartNew(() => mSession.Start());
         }
 
-        public static bool Start(ClientRegion Region)
+        public static bool Start(ClientRegion region)
         {
             try
 
@@ -32,7 +32,7 @@ namespace DragonFiesta.Zone.Network
                 if (ZoneConfiguration.Instance.ZoneServerInfo.MaxConnection <= 0)
                     throw new StartupException("Invalid Max InternConnection Please Check you Config");
                 Instance = new ZoneServer(
-                    Region,
+                    region,
                     ZoneConfiguration.Instance.ZoneServerInfo.ListeningPort);
 
                 return true;

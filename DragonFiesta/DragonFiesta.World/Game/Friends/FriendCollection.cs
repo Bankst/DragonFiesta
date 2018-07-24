@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
 using System.Threading;
+using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.World.Game.Friends
 {
@@ -75,7 +76,7 @@ namespace DragonFiesta.World.Game.Friends
                             return false;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return false;
                 }

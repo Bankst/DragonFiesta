@@ -1,9 +1,13 @@
-﻿using DragonFiesta.Game.Characters;
-using DragonFiesta.Utils.Config.Section.Chat;
-using DragonFiesta.Utils.Core;
+﻿#region
+
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using DragonFiesta.Game.Characters;
+using DragonFiesta.Utils.Config.Section.Chat;
+using DragonFiesta.Utils.Core;
+
+#endregion
 
 namespace DragonFiesta.Game.Chat
 {
