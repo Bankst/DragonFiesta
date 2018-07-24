@@ -5,6 +5,8 @@ using DragonFiesta.Zone.Game.NPC;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
 using System;
 using DragonFiesta.Utils.Logging;
+using DragonFiesta.Zone.Data.NPC;
+using DragonFiesta.Zone.Game.Maps;
 
 namespace DragonFiesta.Zone.Network.FiestaHandler.Client
 {
@@ -42,6 +44,13 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             MoveCharacter(sender, packet, true, false);
         }
 
+	    [PacketHandler(Handler08Type.CMSG_ACT_NPCMENUOPEN_ACK)]
+	    public static void CMSG_CHARACTER_OPENMENU_ACK(ZoneSession sender, FiestaPacket packet)
+	    {
+		    var selection = (NPCBase) sender.Character.Selection.SelectedObject;
+			selection.OpenMenu(sender.Character);
+	    }
+
         [PacketHandler(Handler08Type.CMSG_ACT_MOVEWALK_CMD)]
         public static void CMSG_CHARACTER_WALK(ZoneSession sender, FiestaPacket packet)
         {
@@ -66,11 +75,11 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             MoveCharacter(sender, packet, true, true);
         }
 
-        private static void MoveCharacter(ZoneSession Session, FiestaPacket Packet, bool IsRun, bool IsStop)
+        private static void MoveCharacter(ZoneSession session, FiestaPacket packet, bool isRun, bool isStop)
         {
-            if (Session.Character.State != CharacterState.Player
-                && Session.Character.State != CharacterState.OnMount ||
-                Session.IsLoggingOut)
+            if (session.Character.State != CharacterState.Player
+                && session.Character.State != CharacterState.OnMount ||
+                session.IsLoggingOut)
                 return;
 
             uint oldX,
@@ -79,47 +88,47 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
                  newX,
                  newY;
 
-            if (IsStop)
+            if (isStop)
             {
-                if (!Packet.Read(out newX)
-                    || !Packet.Read(out newY))
+                if (!packet.Read(out newX)
+                    || !packet.Read(out newY))
                 {
-                    Session.Dispose();
+                    session.Dispose();
                     return;
                 }
 
-                oldX = Session.Character.Position.X;
-                oldY = Session.Character.Position.Y;
+                oldX = session.Character.Position.X;
+                oldY = session.Character.Position.Y;
             }
-            else if (!Packet.Read(out oldX)
-                     || !Packet.Read(out oldY)
-                     || !Packet.Read(out newX)
-                     || !Packet.Read(out newY))
+            else if (!packet.Read(out oldX)
+                     || !packet.Read(out oldY)
+                     || !packet.Read(out newX)
+                     || !packet.Read(out newY))
             {
-                Session.Dispose();
+                session.Dispose();
                 return;
             }
 
             //check if character can move to this position
-            if (!(Session.Character.Map as SectorMap).BlockInfos.CanWalk(newX, newY))
+            if (!((SectorMap) session.Character.Map).BlockInfos.CanWalk(newX, newY))
             {
-                SH08Handler.SendBlockWalk(Session, newX, newY);
-                SH08Handler.SendTeleport(Session, oldX, oldY);
+                SH08Handler.SendBlockWalk(session, newX, newY);
+                SH08Handler.SendTeleport(session, oldX, oldY);
 
                 return;
             }
 
             //check the distance the character walked (possible hack if doesnt match)
             //todo: check also when character is on mount
-            if (Session.Character.State == CharacterState.Player)
+            if (session.Character.State == CharacterState.Player)
             {
                 var distance = Position.GetDistance(newX, oldX, newY, oldY);
 
-                if ((IsRun && distance > 500d)
-                 || (!IsRun && distance > 400d))
+                if (isRun && distance > 500d
+                 || !isRun && distance > 400d)
                 {
-                    GameLog.Write(GameLogLevel.Warning, "Possible movement hack detected   >>   From: {0}:{1}   -   To: {2}:{3}   -   Distance: {4}", oldX, oldY, newX, newY, distance);
-                    Session.Dispose();
+                    GameLog.Write(GameLogLevel.Warning, "Possible movement hack detected >> From: {0}:{1} - To: {2}:{3} - Distance: {4}", oldX, oldY, newX, newY, distance);
+                    session.Dispose();
                     return;
                 }
             }
@@ -127,70 +136,70 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
             //create new pos and move the character
             var newPos = new Position(newX, newY);
 
-            if (!IsStop)
+            if (!isStop)
             {
                 //get rotation based on old and new position
                 uint deltaY = (newY - oldY),
                      deltaX = (newX - oldX);
 
                 var radians = Math.Atan((double)deltaY / deltaX);
-                var angle = (radians * (180d / Math.PI));
+                var angle = radians * (180d / Math.PI);
 
                 newPos.Rotation = (byte)(angle / 2d);
             }
             else
             {
-                newPos.Rotation = Session.Character.Position.Rotation;
+                newPos.Rotation = session.Character.Position.Rotation;
             }
 
-            Session.Character.Move(newPos, IsRun, IsStop);
+            session.Character.Move(newPos, isRun, isStop);
         }
 
         [PacketHandler(Handler08Type.CMSG_ACT_CHAT_REQ)]
-        public static void CMSG_CHAT_MESSAGE_NORMAL(ZoneSession Session, FiestaPacket packet)
+        public static void CMSG_CHAT_MESSAGE_NORMAL(ZoneSession session, FiestaPacket packet)
         {
-            if (!Session.Ingame ||
+            if (!session.Ingame ||
                 !packet.Read(out byte unk) ||
-                !packet.Read(out byte Lenght) ||
-                !packet.ReadEncodeString(out string Message, Lenght))
+                !packet.Read(out byte length) ||
+                !packet.ReadEncodeString(out var message, length))
 
             {
-                Session.Dispose();
+                session.Dispose();
                 return;
             }
 
-            (Session.Character.Map as LocalMap).MapChat.Chat(Session.Character, Message);
+            ((LocalMap) session.Character.Map).MapChat.Chat(session.Character, message);
         }
 
         [PacketHandler(Handler08Type.CMSG_ACT_SHOUT_CMD)]
-        public static void CMSG_CHARACTER_SHOUT(ZoneSession Session, FiestaPacket packet)
+        public static void CMSG_CHARACTER_SHOUT(ZoneSession session, FiestaPacket packet)
         {
-            if (!Session.Ingame ||
-                !packet.Read(out byte Lenght) ||
-                !packet.ReadEncodeString(out string Message, Lenght))
+            if (!session.Ingame ||
+                !packet.Read(out byte length) ||
+                !packet.ReadEncodeString(out var message, length))
 
             {
-                Session.Dispose();
+                session.Dispose();
                 return;
             }
 
-            (Session.Character.Map as LocalMap).MapShout.Chat(Session.Character, Message);
+            ((LocalMap) session.Character.Map).MapShout.Chat(session.Character, message);
         }
 
         [PacketHandler(Handler08Type.CMSG_ACT_NPCCLICK_CMD)]
-        public static void CMSG_CHARACTER_BEGIN_INTERACTION(ZoneSession Session, FiestaPacket packet)
+        public static void CMSG_CHARACTER_BEGIN_INTERACTION(ZoneSession session, FiestaPacket packet)
         {
-            if (!Session.Ingame ||
-                !packet.Read(out ushort MapObjectId))
+            if (!session.Ingame ||
+                !packet.Read(out ushort mapObjectId))
             {
-                Session.Dispose();
+                session.Dispose();
                 return;
             }
 
-            if ((Session.Character.Map as LocalMap).GetObjectByID(MapObjectId, out IMapObject obj)
+            if (((LocalMap) session.Character.Map).GetObjectByID(mapObjectId, out var obj)
                 && obj.Type == MapObjectType.NPC)
             {
-                (obj as NPCBase).HandleInteraction(Session.Character);
+                ((NPCBase) obj).HandleInteraction(session.Character);
             }
         }
     }

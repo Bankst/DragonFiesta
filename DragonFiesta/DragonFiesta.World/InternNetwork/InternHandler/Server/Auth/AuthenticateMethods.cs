@@ -20,7 +20,7 @@ namespace DragonFiesta.World.InternNetwork.InternHandler.Server.Auth
                 MaxConnection = WorldConfiguration.Instance.ServerInfo.MaxConnection,
                 ActiveAccounts = WorldSessionManager.Instance.GetAccountList(),
                 IP = WorldConfiguration.Instance.ServerInfo.ListeningIP,
-                Callback = Auth_Response.HandleAuthtecicateWorld_Response,
+                Callback = Auth_Response.HandleAuthenticateWorld_Response,
                 TimeOutCallBack = Auth_Response.AuthLoginTimeout,
             });
         }

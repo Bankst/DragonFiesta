@@ -59,8 +59,7 @@ namespace DragonFiesta.Zone.Data.NPC
             Items = new List<NPCItem>();
         }
 
-        private void Load(
-			SQLResult pResult, int i)
+        private void Load(SQLResult pResult, int i)
         {
             ushort MobID = pResult.Read<ushort>(i, "MobID");
             ushort MapID = pResult.Read<ushort>(i, "MapID");

@@ -10,22 +10,20 @@ namespace DragonFiesta.Zone.Game.NPC
 		{
 		}
 
-		public override void OpenMenu(ZoneCharacter Character)
-		{
-			//bruh
-		}
-
-
-		protected override void DisposeInternal()
-		{
-			base.DisposeInternal();
-		}
-
         protected override FiestaPacket CreateItemListPacket()
         {
-            var packet = new FiestaPacket(Handler07Type._Header, Handler07Type.SMSG_BRIEFINFO_CHANGEWEAPON_CMD);
+            var packet = new FiestaPacket(Handler15Type._Header, Handler15Type.SMSG_MENU_SHOPOPENTABLE_SKILL_CMD);
 
-            return packet;
+	        packet.Write<ushort>(Info.Items.Count);
+	        packet.Write<ushort>(MapObjectId);
+
+	        foreach (var item in Info.Items)
+	        {
+		        packet.Write<byte>(item.Slot);
+		        packet.Write<ushort>(item.Info.ID);
+	        }
+
+			return packet;
         }
     }
 }
