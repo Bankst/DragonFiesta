@@ -186,6 +186,7 @@
       <DependentUpon>Account.edmx</DependentUpon>
       <LastGenOutput>Account.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="Models\Account.edmx.sql" />
     <Content Include="Models\Account.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Account.edmx</DependentUpon>

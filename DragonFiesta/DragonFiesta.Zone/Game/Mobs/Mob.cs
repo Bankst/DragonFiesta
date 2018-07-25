@@ -116,11 +116,11 @@ namespace DragonFiesta.Zone.Game.Mobs
 
         public virtual void WriteSelectionUpdate(FiestaPacket Packet)
         {
-            Packet.Write<uint>(100);
-            Packet.Write<uint>(100);
+            Packet.Write<uint>(LivingStats.HP);
+            Packet.Write<uint>(Info.Stats.MaxHP);
             Packet.Write<uint>(LivingStats.SP);
-            Packet.Write<uint>(LivingStats.SP);
-            Packet.Write<byte>(200);
+            Packet.Write<uint>(Info.Stats.MaxSP);
+            Packet.Write<byte>(Info.Level);
             Packet.Write<ushort>(UpdateCounter);
         }
 

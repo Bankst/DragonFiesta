@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8a66fc5aeaaa49abaa4dd1e8bc538a80" Name="Diagram1" ZoomLevel="101" ShowGrid="true">
+      <Diagram DiagramId="8a66fc5aeaaa49abaa4dd1e8bc538a80" Name="Diagram1" ZoomLevel="91" ShowGrid="true">
         <EntityTypeShape EntityType="WorldModel.BlockList" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="WorldModel.Buff" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="WorldModel.Character_Options" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />

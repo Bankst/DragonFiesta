@@ -2,7 +2,7 @@
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="AccountModelStoreContainer" CdmEntityContainer="AccountEntity">
     <EntitySetMapping Name="Accounts">
-      <EntityTypeMapping TypeName="AccountModel.Account">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountModel.Account)">
         <MappingFragment StoreEntitySet="Accounts">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -24,8 +24,8 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="IPBlocks">
-      <EntityTypeMapping TypeName="AccountModel.IPBlock">
-        <MappingFragment StoreEntitySet="IPBlock">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountModel.IPBlock)">
+        <MappingFragment StoreEntitySet="IPBlocks">
           <ScalarProperty Name="BlockedIP" ColumnName="BlockedIP" />
           <ScalarProperty Name="BlockDate" ColumnName="BlockDate" />
           <ScalarProperty Name="BlockReason" ColumnName="BlockReason" />
@@ -33,17 +33,17 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="RegionServers">
-      <EntityTypeMapping TypeName="AccountModel.RegionServer">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountModel.RegionServer)">
         <MappingFragment StoreEntitySet="RegionServers">
           <ScalarProperty Name="Region" ColumnName="Region" />
-          <ScalarProperty Name="ListenerIP" ColumnName="ListenerIP" />
           <ScalarProperty Name="Port" ColumnName="Port" />
+          <ScalarProperty Name="ListenerIP" ColumnName="ListenerIP" />
           <ScalarProperty Name="WorkThreadCount" ColumnName="WorkThreadCount" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Versions">
-      <EntityTypeMapping TypeName="AccountModel.Version">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountModel.Version)">
         <MappingFragment StoreEntitySet="Versions">
           <ScalarProperty Name="ClientDate" ColumnName="ClientDate" />
           <ScalarProperty Name="ClientHash" ColumnName="ClientHash" />
@@ -51,8 +51,8 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="WorldLists">
-      <EntityTypeMapping TypeName="AccountModel.WorldList">
-        <MappingFragment StoreEntitySet="WorldList">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountModel.WorldList)">
+        <MappingFragment StoreEntitySet="WorldLists">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="WorldName" ColumnName="WorldName" />
           <ScalarProperty Name="TestServer" ColumnName="TestServer" />

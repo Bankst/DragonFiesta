@@ -26,6 +26,8 @@
         
         public const ushort CMSG_GUILD_NAME_REQ = 118;
 
+        public const ushort CMSG_ITEMDB_CLOSE_GUILD_STORAGE_CMD = 160;
+
         public const ushort CMSG_GUILD_MY_GUILD_TOKEN_INFO_REQ = 190;     
                 
         
@@ -335,8 +337,6 @@
         public const ushort NC_GUILD_STORAGE_WITHDRAW_GRADE_REQ = 158;
 
         public const ushort NC_GUILD_STORAGE_WITHDRAW_GRADE_ACK = 159;
-
-        public const ushort NC_ITEMDB_CLOSE_GUILD_STORAGE_CMD = 160;
 
         public const ushort NC_GUILD_GRADE_GROWTH_REQ = 161;
 

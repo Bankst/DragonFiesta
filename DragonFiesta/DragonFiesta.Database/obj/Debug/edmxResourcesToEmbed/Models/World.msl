@@ -38,7 +38,7 @@
     </EntitySetMapping>
     <EntitySetMapping Name="DBCharacters">
       <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBCharacter)">
-        <MappingFragment StoreEntitySet="Characters">
+        <MappingFragment StoreEntitySet="DBCharacters">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="AccountID" ColumnName="AccountID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -139,7 +139,7 @@
     </EntitySetMapping>
     <EntitySetMapping Name="DBItems">
       <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBItem)">
-        <MappingFragment StoreEntitySet="Items">
+        <MappingFragment StoreEntitySet="DBItems">
           <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
           <ScalarProperty Name="StorageType" ColumnName="StorageType" />
           <ScalarProperty Name="Owner" ColumnName="Owner" />
@@ -176,7 +176,7 @@
     </EntitySetMapping>
     <EntitySetMapping Name="DBFriends">
       <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBFriend)">
-        <MappingFragment StoreEntitySet="Friends">
+        <MappingFragment StoreEntitySet="DBFriends">
           <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
           <ScalarProperty Name="FriendID" ColumnName="FriendID" />
           <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
@@ -199,7 +199,7 @@
         <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="Character_Items" TypeName="WorldModel.Character_Items" StoreEntitySet="Items">
+    <AssociationSetMapping Name="Character_Items" TypeName="WorldModel.Character_Items" StoreEntitySet="DBItems">
       <EndProperty Name="Character">
         <ScalarProperty Name="ID" ColumnName="Character_ID" />
       </EndProperty>
@@ -207,7 +207,7 @@
         <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="Character_Friends" TypeName="WorldModel.Character_Friends" StoreEntitySet="Friends">
+    <AssociationSetMapping Name="Character_Friends" TypeName="WorldModel.Character_Friends" StoreEntitySet="DBFriends">
       <EndProperty Name="Character">
         <ScalarProperty Name="ID" ColumnName="Character_ID" />
       </EndProperty>

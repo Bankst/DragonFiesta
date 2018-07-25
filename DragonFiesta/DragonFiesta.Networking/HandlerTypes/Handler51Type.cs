@@ -7,6 +7,8 @@
         //SMSG
         public const ushort SMSG_MOVER_SOMEONE_RIDE_ON_CMD = 4;
 
+        public const ushort SMSG_MOVER_SOMEONE_RIDE_OFF_CMD = 8;
+
 
         //NC
         public const ushort NC_MOVER_RIDE_ON_REQ = 1;
@@ -20,8 +22,6 @@
         public const ushort NC_MOVER_RIDE_OFF_CMD = 6;
 
         public const ushort NC_MOVER_RIDE_OFF_FAIL_CMD = 7;
-
-        public const ushort NC_MOVER_SOMEONE_RIDE_OFF_CMD = 8;
 
         public const ushort NC_MOVER_FEEDING_ERROR_CMD = 9;
 

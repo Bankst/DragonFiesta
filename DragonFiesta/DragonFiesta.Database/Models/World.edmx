@@ -9,32 +9,32 @@
     <EntitySet Name="BlockLists" EntityType="WorldModel.Store.BlockLists" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Buffs" EntityType="WorldModel.Store.Buffs" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Character_Options" EntityType="WorldModel.Store.Character_Options" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Characters" EntityType="WorldModel.Store.Characters" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DBCharacters" EntityType="WorldModel.Store.DBCharacters" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="GoldSpammers" EntityType="WorldModel.Store.GoldSpammers" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="GroupMembers" EntityType="WorldModel.Store.GroupMembers" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Groups" EntityType="WorldModel.Store.Groups" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="GuildMembers" EntityType="WorldModel.Store.GuildMembers" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Guilds" EntityType="WorldModel.Store.Guilds" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ItemOptions" EntityType="WorldModel.Store.ItemOptions" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Items" EntityType="WorldModel.Store.Items" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DBItems" EntityType="WorldModel.Store.DBItems" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Skills" EntityType="WorldModel.Store.Skills" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Titles" EntityType="WorldModel.Store.Titles" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Friends" EntityType="WorldModel.Store.Friends" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DBFriends" EntityType="WorldModel.Store.DBFriends" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="Group_GroupMembers" Association="WorldModel.Store.Group_GroupMembers">
       <End Role="Groups" EntitySet="Groups" />
       <End Role="GroupMembers" EntitySet="GroupMembers" />
     </AssociationSet>
     <AssociationSet Name="Item_ItemOptions" Association="WorldModel.Store.Item_ItemOptions">
-      <End Role="Items" EntitySet="Items" />
+      <End Role="Items" EntitySet="DBItems" />
       <End Role="ItemOptions" EntitySet="ItemOptions" />
     </AssociationSet>
     <AssociationSet Name="Character_Items" Association="WorldModel.Store.Character_Items">
-      <End Role="Character" EntitySet="Characters" />
-      <End Role="Item" EntitySet="Items" />
+      <End Role="Character" EntitySet="DBCharacters" />
+      <End Role="Item" EntitySet="DBItems" />
     </AssociationSet>
     <AssociationSet Name="Character_Friends" Association="WorldModel.Store.Character_Friends">
-      <End Role="Character" EntitySet="Characters" />
-      <End Role="Friend" EntitySet="Friends" />
+      <End Role="Character" EntitySet="DBCharacters" />
+      <End Role="Friend" EntitySet="DBFriends" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="BlockLists">
@@ -69,7 +69,7 @@
     <Property Name="WindowsPos" Type="varbinary" Nullable="false" MaxLength="392" />
     <Property Name="KeyMapping" Type="varbinary" Nullable="false" MaxLength="308" />
   </EntityType>
-  <EntityType Name="Characters">
+  <EntityType Name="DBCharacters">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
@@ -165,7 +165,7 @@
     <Property Name="OptionData" Type="bigint" Nullable="false" />
     <Property Name="Item_ItemKey" Type="bigint" Nullable="false" />
   </EntityType>
-  <EntityType Name="Items">
+  <EntityType Name="DBItems">
     <Key>
       <PropertyRef Name="ItemKey" />
     </Key>
@@ -200,7 +200,7 @@
     <Property Name="IsActive" Type="bit" Nullable="false" />
     <Property Name="Data" Type="bigint" Nullable="false" />
   </EntityType>
-  <EntityType Name="Friends">
+  <EntityType Name="DBFriends">
     <Key>
       <PropertyRef Name="OwnerID" />
     </Key>
@@ -224,7 +224,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="Item_ItemOptions">
-    <End Role="Items" Type="WorldModel.Store.Items" Multiplicity="1">
+    <End Role="Items" Type="WorldModel.Store.DBItems" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="ItemOptions" Type="WorldModel.Store.ItemOptions" Multiplicity="*" />
@@ -238,8 +238,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="Character_Items">
-    <End Role="Character" Type="WorldModel.Store.Characters" Multiplicity="1" />
-    <End Role="Item" Type="WorldModel.Store.Items" Multiplicity="*" />
+    <End Role="Character" Type="WorldModel.Store.DBCharacters" Multiplicity="1" />
+    <End Role="Item" Type="WorldModel.Store.DBItems" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Character">
         <PropertyRef Name="ID" />
@@ -250,8 +250,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="Character_Friends">
-    <End Role="Character" Type="WorldModel.Store.Characters" Multiplicity="1" />
-    <End Role="Friend" Type="WorldModel.Store.Friends" Multiplicity="*" />
+    <End Role="Character" Type="WorldModel.Store.DBCharacters" Multiplicity="1" />
+    <End Role="Friend" Type="WorldModel.Store.DBFriends" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Character">
         <PropertyRef Name="ID" />
@@ -536,7 +536,7 @@
     </EntitySetMapping>
     <EntitySetMapping Name="DBCharacters">
       <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBCharacter)">
-        <MappingFragment StoreEntitySet="Characters">
+        <MappingFragment StoreEntitySet="DBCharacters">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="AccountID" ColumnName="AccountID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -637,7 +637,7 @@
     </EntitySetMapping>
     <EntitySetMapping Name="DBItems">
       <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBItem)">
-        <MappingFragment StoreEntitySet="Items">
+        <MappingFragment StoreEntitySet="DBItems">
           <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
           <ScalarProperty Name="StorageType" ColumnName="StorageType" />
           <ScalarProperty Name="Owner" ColumnName="Owner" />
@@ -674,7 +674,7 @@
     </EntitySetMapping>
     <EntitySetMapping Name="DBFriends">
       <EntityTypeMapping TypeName="IsTypeOf(WorldModel.DBFriend)">
-        <MappingFragment StoreEntitySet="Friends">
+        <MappingFragment StoreEntitySet="DBFriends">
           <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
           <ScalarProperty Name="FriendID" ColumnName="FriendID" />
           <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
@@ -697,7 +697,7 @@
         <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="Character_Items" TypeName="WorldModel.Character_Items" StoreEntitySet="Items">
+    <AssociationSetMapping Name="Character_Items" TypeName="WorldModel.Character_Items" StoreEntitySet="DBItems">
       <EndProperty Name="Character">
         <ScalarProperty Name="ID" ColumnName="Character_ID" />
       </EndProperty>
@@ -705,7 +705,7 @@
         <ScalarProperty Name="ItemKey" ColumnName="ItemKey" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="Character_Friends" TypeName="WorldModel.Character_Friends" StoreEntitySet="Friends">
+    <AssociationSetMapping Name="Character_Friends" TypeName="WorldModel.Character_Friends" StoreEntitySet="DBFriends">
       <EndProperty Name="Character">
         <ScalarProperty Name="ID" ColumnName="Character_ID" />
       </EndProperty>

@@ -11,7 +11,7 @@ namespace DragonFiesta.Zone.Game.NPC
 
         protected override FiestaPacket CreateItemListPacket()
         {
-            var packet = new FiestaPacket(Handler15Type._Header, Handler15Type.SMSG_MENU_SHOPOPENTABLE_SKILL_CMD);
+            var packet = new FiestaPacket(Handler15Type._Header, Handler15Type.SMSG_MENU_SHOPOPENTABLE_ITEM_CMD);
 
 	        packet.Write<ushort>(Info.Items.Count);
 	        packet.Write<ushort>(MapObjectId);

@@ -78,8 +78,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardCollect\CardCollectGradeType.cs" />
-    <Compile Include="CardCollect\CardCollectReward.cs" />
     <Compile Include="Characters\CharacterClass.cs" />
     <Compile Include="Characters\CharacterDataProviderBase.cs" />
     <Compile Include="Characters\CharacterLookProvider.cs" />

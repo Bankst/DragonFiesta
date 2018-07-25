@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 07/23/2018 13:59:54
--- Generated from EDMX file: F:\Fiesta\Emus\DragonFiesta\Source\Emulator\DragonFiesta\DragonFiesta.Database\Models\World.edmx
+-- Date Created: 07/25/2018 17:18:19
+-- Generated from EDMX file: D:\Gitlab\DragonFiesta\DragonFiesta\DragonFiesta.Database\Models\World.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -17,19 +17,25 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[FK__GroupMemb__Group__6E01572D]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[GroupMembers] DROP CONSTRAINT [FK__GroupMemb__Group__6E01572D];
+IF OBJECT_ID(N'[dbo].[FK_Group_GroupMembers]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GroupMembers] DROP CONSTRAINT [FK_Group_GroupMembers];
 GO
-IF OBJECT_ID(N'[dbo].[FK__ItemOptio__ItemI__6EF57B66]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ItemOptions] DROP CONSTRAINT [FK__ItemOptio__ItemI__6EF57B66];
+IF OBJECT_ID(N'[dbo].[FK_Item_ItemOptions]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ItemOptions] DROP CONSTRAINT [FK_Item_ItemOptions];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Character_Items]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Items] DROP CONSTRAINT [FK_Character_Items];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Character_Friends]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Friends] DROP CONSTRAINT [FK_Character_Friends];
 GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[BlockList]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[BlockList];
+IF OBJECT_ID(N'[dbo].[BlockLists]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[BlockLists];
 GO
 IF OBJECT_ID(N'[dbo].[Buffs]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Buffs];
@@ -40,11 +46,8 @@ GO
 IF OBJECT_ID(N'[dbo].[Characters]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Characters];
 GO
-IF OBJECT_ID(N'[dbo].[Friends]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Friends];
-GO
-IF OBJECT_ID(N'[dbo].[GoldSpammer]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[GoldSpammer];
+IF OBJECT_ID(N'[dbo].[GoldSpammers]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[GoldSpammers];
 GO
 IF OBJECT_ID(N'[dbo].[GroupMembers]', 'U') IS NOT NULL
     DROP TABLE [dbo].[GroupMembers];
@@ -69,6 +72,9 @@ IF OBJECT_ID(N'[dbo].[Skills]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[Titles]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Titles];
+GO
+IF OBJECT_ID(N'[dbo].[Friends]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Friends];
 GO
 
 -- --------------------------------------------------
@@ -107,8 +113,8 @@ CREATE TABLE [dbo].[Character_Options] (
 );
 GO
 
--- Creating table 'Characters'
-CREATE TABLE [dbo].[Characters] (
+-- Creating table 'DBCharacters'
+CREATE TABLE [dbo].[DBCharacters] (
     [ID] int IDENTITY(1,1) NOT NULL,
     [AccountID] int  NOT NULL,
     [Name] nvarchar(20)  NOT NULL,
@@ -203,8 +209,8 @@ CREATE TABLE [dbo].[ItemOptions] (
 );
 GO
 
--- Creating table 'Items'
-CREATE TABLE [dbo].[Items] (
+-- Creating table 'DBItems'
+CREATE TABLE [dbo].[DBItems] (
     [ItemKey] bigint IDENTITY(1,1) NOT NULL,
     [StorageType] tinyint  NOT NULL,
     [Owner] int  NOT NULL,
@@ -238,8 +244,8 @@ CREATE TABLE [dbo].[Titles] (
 );
 GO
 
--- Creating table 'Friends'
-CREATE TABLE [dbo].[Friends] (
+-- Creating table 'DBFriends'
+CREATE TABLE [dbo].[DBFriends] (
     [OwnerID] int IDENTITY(1,1) NOT NULL,
     [FriendID] int  NOT NULL,
     [RegisterDate] datetime  NOT NULL,
@@ -269,9 +275,9 @@ ADD CONSTRAINT [PK_Character_Options]
     PRIMARY KEY CLUSTERED ([ID] ASC);
 GO
 
--- Creating primary key on [ID] in table 'Characters'
-ALTER TABLE [dbo].[Characters]
-ADD CONSTRAINT [PK_Characters]
+-- Creating primary key on [ID] in table 'DBCharacters'
+ALTER TABLE [dbo].[DBCharacters]
+ADD CONSTRAINT [PK_DBCharacters]
     PRIMARY KEY CLUSTERED ([ID] ASC);
 GO
 
@@ -311,9 +317,9 @@ ADD CONSTRAINT [PK_ItemOptions]
     PRIMARY KEY CLUSTERED ([ItemKey] ASC);
 GO
 
--- Creating primary key on [ItemKey] in table 'Items'
-ALTER TABLE [dbo].[Items]
-ADD CONSTRAINT [PK_Items]
+-- Creating primary key on [ItemKey] in table 'DBItems'
+ALTER TABLE [dbo].[DBItems]
+ADD CONSTRAINT [PK_DBItems]
     PRIMARY KEY CLUSTERED ([ItemKey] ASC);
 GO
 
@@ -329,9 +335,9 @@ ADD CONSTRAINT [PK_Titles]
     PRIMARY KEY CLUSTERED ([ID] ASC);
 GO
 
--- Creating primary key on [OwnerID] in table 'Friends'
-ALTER TABLE [dbo].[Friends]
-ADD CONSTRAINT [PK_Friends]
+-- Creating primary key on [OwnerID] in table 'DBFriends'
+ALTER TABLE [dbo].[DBFriends]
+ADD CONSTRAINT [PK_DBFriends]
     PRIMARY KEY CLUSTERED ([OwnerID] ASC);
 GO
 
@@ -358,7 +364,7 @@ GO
 ALTER TABLE [dbo].[ItemOptions]
 ADD CONSTRAINT [FK_Item_ItemOptions]
     FOREIGN KEY ([Item_ItemKey])
-    REFERENCES [dbo].[Items]
+    REFERENCES [dbo].[DBItems]
         ([ItemKey])
     ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
@@ -369,33 +375,33 @@ ON [dbo].[ItemOptions]
     ([Item_ItemKey]);
 GO
 
--- Creating foreign key on [Character_ID] in table 'Items'
-ALTER TABLE [dbo].[Items]
+-- Creating foreign key on [Character_ID] in table 'DBItems'
+ALTER TABLE [dbo].[DBItems]
 ADD CONSTRAINT [FK_Character_Items]
     FOREIGN KEY ([Character_ID])
-    REFERENCES [dbo].[Characters]
+    REFERENCES [dbo].[DBCharacters]
         ([ID])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_Character_Items'
 CREATE INDEX [IX_FK_Character_Items]
-ON [dbo].[Items]
+ON [dbo].[DBItems]
     ([Character_ID]);
 GO
 
--- Creating foreign key on [Character_ID] in table 'Friends'
-ALTER TABLE [dbo].[Friends]
+-- Creating foreign key on [Character_ID] in table 'DBFriends'
+ALTER TABLE [dbo].[DBFriends]
 ADD CONSTRAINT [FK_Character_Friends]
     FOREIGN KEY ([Character_ID])
-    REFERENCES [dbo].[Characters]
+    REFERENCES [dbo].[DBCharacters]
         ([ID])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_Character_Friends'
 CREATE INDEX [IX_FK_Character_Friends]
-ON [dbo].[Friends]
+ON [dbo].[DBFriends]
     ([Character_ID]);
 GO
 

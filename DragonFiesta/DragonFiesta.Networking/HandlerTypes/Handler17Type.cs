@@ -4,14 +4,17 @@
     {
         public new const byte _Header = 17;
 
+        //CMSG
+        public const ushort CMSG_QUEST_SCRIPT_CMD_ACK = 2;
+
         //SMSG
+        public const ushort SMSG_QUEST_SCRIPT_CMD_REQ = 1;
+
         public const ushort SMSG_QUEST_RESET_TIME_CLIENT_CMD = 30;
 
+
+
         //NC
-        public const ushort NC_QUEST_SCRIPT_CMD_REQ = 1;
-
-        public const ushort NC_QUEST_SCRIPT_CMD_ACK = 2;
-
         public const ushort NC_QUEST_DB_SET_INFO_REQ = 3;
 
         public const ushort NC_QUEST_DB_SET_INFO_ACK = 4;

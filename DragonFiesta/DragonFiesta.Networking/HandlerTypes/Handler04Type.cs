@@ -16,6 +16,8 @@
 
         public const ushort CMSG_CHAR_LOGOUTCANCEL_CMD = 114;
 
+        public const ushort CMSG_CHAR_NEWBIE_GUIDE_VIEW_SET_CMD = 218;
+
         public const ushort CMSG_CHAR_TUTORIAL_POPUP_ACK = 273;
 
 
@@ -387,8 +389,6 @@
         public const ushort NC_CHAR_ZONE_QUEST_REPEAT_CMD = 214;
 
         public const ushort NC_CHAR_NEWBIE_GUIDE_VIEW_LIST_CMD = 216;
-
-        public const ushort NC_CHAR_NEWBIE_GUIDE_VIEW_SET_CMD = 218;
 
         public const ushort NC_CHAR_DB_NEWBIE_GUIDE_VIEW_SET_CMD = 219;
 
