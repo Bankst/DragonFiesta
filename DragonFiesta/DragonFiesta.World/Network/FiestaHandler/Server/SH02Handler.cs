@@ -24,13 +24,6 @@ namespace DragonFiesta.World.Network.FiestaHandler.Server
                 packet.Write<int>(1);
 
                 Session.SendPacket(packet);
-
-                /*struct PROTO_NC_MISC_SERVER_TIME_NOTIFY_CMD
-                {
-                    tm dCurrentTM;
-                    char nTimeZone;
-                };
-                */
             }
         }
     }

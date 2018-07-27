@@ -37,6 +37,8 @@
         //SMSG
         public const ushort SMSG_ACT_SOMEONECHAT_CMD = 2;
 
+        public const ushort SMSG_ACT_SOMEONECHANGEMODE_CMD = 9;
+
         public const ushort SMSG_ACT_SOMEONEWHISPER_CMD = 13;
 
         public const ushort SMSG_ACT_WHISPERFAIL_ACK = 14;
@@ -69,6 +71,12 @@
 
         public const ushort SMSG_ACT_SOMEONEFOLDTENT_CMD = 44;
 
+        public const ushort SMSG_ACT_SOMEONEPRODUCE_CAST_CMD = 56;
+
+        public const ushort SMSG_ACT_SOMEONEPRODUCE_CASTCUT_CMD = 58;
+
+        public const ushort SMSG_ACT_SOMEONEPRODUCE_MAKE_CMD = 60;
+
         public const ushort SMSG_ACT_RIDE_ON_CMD = 63;
 
         public const ushort SMSG_ACT_SOMEONERIDE_ON_CMD = 64;
@@ -96,8 +104,6 @@
         public const ushort NC_ACT_MOVEFAIL_ACK = 7;
 
         public const ushort NC_ACT_CHANGEMODE_REQ = 8;
-
-        public const ushort NC_ACT_SOMEONECHANGEMODE_CMD = 9;
 
         public const ushort NC_ACT_NOTICE_REQ = 16;
 
@@ -135,15 +141,9 @@
 
         public const ushort NC_ACT_PRODUCE_CAST_SUC_ACK = 55;
 
-        public const ushort NC_ACT_SOMEONEPRODUCE_CAST_CMD = 56;
-
         public const ushort NC_ACT_PRODUCE_CASTABORT_CMD = 57;
 
-        public const ushort NC_ACT_SOMEONEPRODUCE_CASTCUT_CMD = 58;
-
         public const ushort NC_ACT_PRODUCE_MAKE_CMD = 59;
-
-        public const ushort NC_ACT_SOMEONEPRODUCE_MAKE_CMD = 60;
 
         public const ushort NC_ACT_REINFORCE_FOLDTENT_CMD = 61;
 

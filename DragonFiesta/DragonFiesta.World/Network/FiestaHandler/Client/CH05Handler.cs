@@ -13,7 +13,6 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
         [PacketHandler(Handler05Type.CMSG_AVATAR_CREATE_REQ)]
         public static void HandlerCreateCharacter(WorldSession sender, FiestaPacket packet)
         {
-            //new Data no idea :D
             if (sender.Ingame
                 || !sender.AccountIsLoggedIn
                 || !packet.Read(out byte Slot)

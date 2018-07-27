@@ -26,8 +26,12 @@
 
         public const ushort CMSG_ITEM_CHARGEDINVENOPEN_REQ = 32;
 
+        public const ushort CMSG_ITEM_CHARGED_WITHDRAW_REQ = 34;
+
         public const ushort CMSG_ITEM_REWARDINVENOPEN_REQ = 44;
-        
+
+        public const ushort CMSG_ITEM_ACCOUNT_STORAGE_CLOSE_CMD = 77;
+
 
         //SMSG
         public const ushort SMSG_ITEM_CELLCHANGE_CMD = 1;
@@ -37,7 +41,9 @@
         public const ushort SMSG_ITEM_BUY_ACK = 4;
 
         public const ushort SMSG_ITEM_PICK_ACK = 10;
-        
+
+        public const ushort SMSG_ITEM_RELOC_ACK = 12;
+
         public const ushort SMSG_ITEM_EQUIP_ACK = 17;
 
         public const ushort SMSG_ITEM_UNEQUIP_ACK = 19;        
@@ -48,8 +54,10 @@
         
         public const ushort SMSG_ITEM_USECOMPLETE_CMD = 26;       
         
-        public const ushort SMSG_ITEM_CHARGEDINVENOPEN_ACK = 33;        
-        
+        public const ushort SMSG_ITEM_CHARGEDINVENOPEN_ACK = 33;
+
+        public const ushort SMSG_ITEM_CHARGED_WITHDRAW_ACK = 35;
+
         public const ushort SMSG_ITEM_GUILD_STORAGE_WITHDRAW_ACK = 39;        
         
         public const ushort SMSG_ITEM_REWARDINVENOPEN_ACK = 45;
@@ -59,8 +67,6 @@
         public const ushort NC_ITEM_SELL_ACK = 5;
 
         public const ushort NC_ITEM_DROP_ACK = 8;
-
-        public const ushort NC_ITEM_RELOC_ACK = 12;
 
         public const ushort NC_ITEM_SPLIT_REQ = 13;
 
@@ -81,10 +87,6 @@
         public const ushort NC_ITEM_WITHDRAW_REQ = 30;
 
         public const ushort NC_ITEM_WITHDRAW_ACK = 31;
-
-        public const ushort NC_ITEM_CHARGED_WITHDRAW_REQ = 34;
-
-        public const ushort NC_ITEM_CHARGED_WITHDRAW_ACK = 35;
 
         public const ushort NC_ITEM_BREAKSUCCESS_CMD = 36;
 
@@ -161,8 +163,6 @@
         public const ushort NC_ITEM_AUTO_ARRANGE_INVEN_ACK = 75;
 
         public const ushort NC_ITEM_ACCOUNT_STORAGE_OPEN_CMD = 76;
-
-        public const ushort NC_ITEM_ACCOUNT_STORAGE_CLOSE_CMD = 77;
 
         public const ushort NC_ITEM_USE_ACTIVESKILL_REQ = 78;
 
