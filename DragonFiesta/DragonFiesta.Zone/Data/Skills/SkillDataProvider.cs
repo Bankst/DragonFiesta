@@ -11,10 +11,10 @@ namespace DragonFiesta.Zone.Data.Skills
         [InitializerMethod]
         public static bool Initialize()
         {
-            LoadActiveSkillInfos();
+            //LoadActiveSkillInfos();
             return true;
         }
-
+        /*
         private static void LoadActiveSkillInfos()
         {
             ActiveSkillInfosByID = new ConcurrentDictionary<ushort, ActiveSkillInfo>();
@@ -59,7 +59,7 @@ namespace DragonFiesta.Zone.Data.Skills
         public static bool GetActiveSkillInfoByID(ushort ID, out ActiveSkillInfo ActiveSkillInfo)
         {
             return ActiveSkillInfosByID.TryGetValue(ID, out ActiveSkillInfo);
-        }
+        }*/
 
         /*
         public static bool InsertSkillToDatabase(int Owner, ushort SkillID, bool IsPassive, out long ID, byte[] Upgrades = null)

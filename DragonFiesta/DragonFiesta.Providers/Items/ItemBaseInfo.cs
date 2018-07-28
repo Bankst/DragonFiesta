@@ -16,16 +16,19 @@ namespace DragonFiesta.Providers.Items
 	    public bool IsRing => (EquipSlot == ItemEquipSlot.ITEMEQUIP_LEFTRING || EquipSlot == ItemEquipSlot.ITEMEQUIP_RIGHTRING);
 	    public bool IsEquippable => (EquipSlot != ItemEquipSlot.ITEMEQUIP_NONE);
 	    public ItemEquipSlot EquipSlot { get; }
+
+        public AuctionGroupType AuctionGroup { get; }
         public bool IsTwoHand { get; }
         public TimeSpan AttackSpeed { get; }
         public byte RequiredLevel { get; }
 
         public StatsHolder Stats { get; }
         public WhoEquip WhoEquip { get; private set; }
-
+        public uint Grade { get; }
         public uint BuyPrice { get; }
         public uint SellPrice { get; }
         public uint BuyFame { get; }
+        public uint UseClass { get; }
         public WeaponType WeaponType { get; }
         public bool IsBelonged { get; }
         public bool NoDrop { get; }
@@ -49,10 +52,14 @@ namespace DragonFiesta.Providers.Items
 			Class = (ItemClass)itemInfo.Class;
 			MaxLot = itemInfo.MaxLot;
 			EquipSlot = (ItemEquipSlot)itemInfo.Equip;
-			IsTwoHand = itemInfo.TwoHand;
+            AuctionGroup = (AuctionGroupType)itemInfo.ItemAuctionGroup;
+            GradeType = (ItemGradeType)itemInfo.Grade;
+            IsTwoHand = itemInfo.TwoHand;
 			AttackSpeed = TimeSpan.FromMilliseconds(itemInfo.AtkSpeed);
 			RequiredLevel = itemInfo.DemandLv;
-			BuyPrice = itemInfo.BuyPrice;
+            Grade = itemInfo.Grade;
+
+            BuyPrice = itemInfo.BuyPrice;
 			SellPrice = itemInfo.SellPrice;
 			BuyFame = itemInfo.BuyFame;
 			WeaponType = (WeaponType)itemInfo.WeaponType;
@@ -67,6 +74,8 @@ namespace DragonFiesta.Providers.Items
 			Stats.CriticalWeaponDamage = new MinMax<int>((int) itemInfo.CriMinWc, (int) itemInfo.CriMaxWc);
 			Stats.CriticalMagicDamage = new MinMax<int>((int) itemInfo.CriMinMa, (int) itemInfo.CriMaxMa);
 			Stats.Aim = (int) itemInfo.TH;
+
+            UseClass = itemInfo.UseClass; // TODO
 
 			if (gradeItemOption != null)
 			{
@@ -88,7 +97,6 @@ namespace DragonFiesta.Providers.Items
 			UpgradeLuckRate = itemInfo.UpLuckRatio;
 			UpgradeResource = (UpgradeResource) itemInfo.UpResource;
 			UpgradeInfos = upgradeInfos; // TODO: wtf is this
-			GradeType = (ItemGradeType) itemInfo.Grade;
 			IsAutoPickup = btData.BT_Inx == 0 || btData.BT_Inx == 1 || btData.BT_Inx == 10;
 		}
 	}

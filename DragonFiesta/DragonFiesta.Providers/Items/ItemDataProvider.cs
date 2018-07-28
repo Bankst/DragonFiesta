@@ -19,6 +19,7 @@ namespace DragonFiesta.Providers.Items
 		protected static SecureCollection<ItemInfo> ItemInfoSC;
 		protected static SecureCollection<ItemInfoServer> ItemInfoServerSC;
 		protected static SecureCollection<BelongTypeInfo> BelongTypeInfoSC;
+        protected static SecureCollection<UseClassTypeInfo> UseClassTypeInfosSC;
 	    protected static SecureCollection<GradeItemOption> GradeItemOptionSC;
 
 		public static void LoadItemInfo()
@@ -149,6 +150,26 @@ namespace DragonFiesta.Providers.Items
 		    }
 	    }
 
+        public static void LoadUseClassTypeInfo()
+        {
+            var watch = Stopwatch.StartNew();
+            UseClassTypeInfosSC = new SecureCollection<UseClassTypeInfo>();
+            var pResult = SHNManager.Load(SHNType.UseClassTypeInfo);
+            DatabaseLog.WriteProgressBar("<< Load UseClassTypeInfo");
+
+            using (var mBar = new ProgressBar(pResult.Count))
+            {
+                for (var i = 0; i < pResult.Count; i++)
+                {
+                    var info = new UseClassTypeInfo(pResult, i);
+                    UseClassTypeInfosSC.Add(info);
+                    mBar.Step();
+                }
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($"<< Loaded {UseClassTypeInfosSC.Count} rows ins {(double) watch.ElapsedMilliseconds / 1000}s");
+            }
+        }
+
 	    public static void FillItemBaseInfos()
 	    {
 			var watch = Stopwatch.StartNew();
@@ -177,6 +198,14 @@ namespace DragonFiesta.Providers.Items
 						DatabaseLog.Write(DatabaseLogLevel.Debug,
 							$"Bad or No GradeItemOption for item ID: {itemInfo.ID}");
 					}
+
+                    var useClassInfo = UseClassTypeInfosSC.FirstOrDefault(x => x.UseClass == itemInfo.UseClass);
+
+                    if (useClassInfo == null)
+                    {
+                        DatabaseLog.Write(DatabaseLogLevel.Debug, $"Bad UseClassTypeInfo for item ID; {itemInfo.ID}");
+                    }
+
 					var info = new ItemBaseInfo(itemInfo, upgradeInfosList, btInfo, gioInfo);
 					if (!ItemBaseInfosByID.TryAdd(itemInfo.ID, info))
 					{

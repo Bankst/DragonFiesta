@@ -15,6 +15,7 @@ namespace DragonFiesta.Zone.Data.Items
 			LoadBelongTypeInfo();
 			LoadUpgradeInfo();
 			LoadGradeItemOption();
+            LoadUseClassTypeInfo();
 			FillItemBaseInfos();
 			return true;
 		}

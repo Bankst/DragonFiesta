@@ -3,11 +3,179 @@ using DragonFiesta.Providers.Characters;
 using System;
 using System.Collections.Generic;
 using DragonFiesta.Database.SQL;
+using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Zone.Data.Skills
 {
     public sealed class ActiveSkillInfo
     {
+        public uint ID { get; }
+
+        public string InxName { get; }
+
+        public string Name { get; }
+
+        public uint Grade { get; }
+
+        public uint Step { get; }
+
+        public uint MaxStep { get; }
+
+        public uint DemandType { get; }
+
+        public string DemandSk { get; }
+
+        public ushort UseItem { get; }
+
+        public uint ItemNumber { get; }
+
+        public uint ItemOption { get; }
+
+        public ushort DemandItem1 { get; }      
+
+        public ushort DemandItem2 { get; }
+
+        public uint SP { get; }
+
+        public uint SPRate { get; }
+
+        public uint HP { get; }
+
+        public uint HPRate { get; }
+
+        public uint LP { get; }
+
+        public uint Range { get; }
+
+        public uint First { get; }
+
+        public uint Last { get; }
+
+        public byte IsMovingSkill { get; }
+
+        public ushort UsableDegree { get; }
+
+        public ushort DirectionRotate { get; }
+
+        public ushort SkillDegree { get; }
+
+        public uint SkillTargetState { get; }
+
+        public uint CastTime { get; }
+
+        public uint DlyTime { get; }
+
+        public uint DlyGroupName { get; }
+
+        public uint DlyTimeGroup { get; }
+
+        public uint MinWC { get; }
+
+        public uint MinWCRate { get; }
+
+        public uint MaxWC { get; }
+
+        public uint MaxWCRate { get; }
+
+        public uint MinMA { get; }
+
+        public uint MinMARate { get; }
+
+        public uint MaxMA { get; }
+
+        public uint MaxMARAte { get; }
+
+        public uint AC { get; }
+
+        public uint MR{ get; }
+
+        public uint Area { get; }
+
+        public uint TargetNumber { get; }
+
+        public uint UseClass { get; }
+
+        public string StaNameA { get; }
+
+        public uint StaStrengthA { get; }
+
+        public uint StaSucRateA { get; }
+
+        public string StaNameB { get; }
+
+        public uint StaStrengthB { get; }
+
+        public uint StaSucRateB { get; }
+
+        public string StaNameC { get; }
+
+        public uint StaStrengthC { get; }
+        
+        public uint StaSucRateC { get; }
+
+        public string StaNameD { get; }
+
+        public uint StaStrengthD { get; }
+
+        public uint StaSucRateD { get; }
+
+        public uint NIMPT { get; }
+
+        public uint NT0 { get; }
+
+        public uint NT1 { get; }
+
+        public uint NT2 { get; }
+
+        public uint NT3 { get; }
+
+        public uint EffectType { get; }
+
+        public uint SpecialIndexA { get; }
+
+        public uint SpecialValueA { get; }
+
+        public uint SpecialIndexB { get; }
+
+        public uint SpecialValueB { get; }
+
+        public uint SpecialIndexC { get; }
+
+        public uint SpecialValueC { get; }
+
+        public uint SpecialIndexD { get; }
+
+        public uint SpecialValueD { get; }
+
+        public uint SpecialIndexE { get; }
+
+        public uint SpecialValueE { get; }
+
+        public string SkillClassifierA { get; }
+
+        public string SkillClassifierB { get; }
+
+        public string SkillClassifierC { get; }
+
+        public byte CannotInside { get; }
+
+        public byte DemandSoul { get; }
+
+        public ushort HitID { get; }
+
+
+        public ActiveSkillInfo(SHNResult pResult, int i)
+        {
+            ID = pResult.Read<ushort>(i, "ID");
+            InxName = pResult.Read<string>(i, "InxName");
+            Name = pResult.Read<string>(i, "Name");
+            Grade = pResult.Read<uint>(i, "Grade");
+            Step = pResult.Read<uint>(i, "Step");
+            MaxStep = pResult.Read<uint>(i, "MaxStep");
+        }
+
+        #region SQL
+        /*
         public ushort ID { get; private set; }
 
         public uint Step { get; private set; }
@@ -96,6 +264,7 @@ namespace DragonFiesta.Zone.Data.Skills
                 Actions.Add(new ActiveSkillActionInfo(actionIndex, pResult.Read<uint>(i, "SpecialValue" + letter)));
             }
             return true;
-        }
+        }*/
+        #endregion
     }
 }
