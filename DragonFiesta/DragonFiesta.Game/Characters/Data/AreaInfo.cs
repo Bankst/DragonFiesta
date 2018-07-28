@@ -1,5 +1,6 @@
 ﻿#region
 
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Maps;
 using DragonFiesta.Utils.Logging;
@@ -8,12 +9,33 @@ using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.Game.Characters.Data
 {
-    public class AreaInfo
+	public class AreaInfo
     {
        
         public virtual MapInfo MapInfo { get; protected set; }
 
         public Position Position { get; set; }
+
+	    public virtual bool RefreshFromEntity(DBCharacter character)
+	    {
+			Position = new Position
+			{
+				X = (uint) character.PositionX,
+				Y = (uint) character.PositionY,
+				Rotation = character.Rotation
+
+			};
+
+		    if (!MapDataProvider.GetMapInfoByID((ushort) character.Map, out var mMapInfo))
+		    {
+			    GameLog.Write(GameLogLevel.Warning, $@"Can't find Map ID {character.Map} for refresh");
+			    return false;
+			}
+
+		    MapInfo = mMapInfo;
+
+		    return true;
+	    }
 
         public virtual bool RefreshFromSQL(SQLResult pRes, int i)
         {
@@ -23,11 +45,11 @@ namespace DragonFiesta.Game.Characters.Data
                 Y = pRes.Read<uint>(i, "PositionY"),
                 Rotation = pRes.Read<byte>(i, "Rotation"),
             };
-            ushort mapid = pRes.Read<ushort>(i, "Map");
-            if (!MapDataProvider.GetMapInfoByID(mapid, out MapInfo mMapInfo))
+            var mapid = pRes.Read<ushort>(i, "Map");
+            if (!MapDataProvider.GetMapInfoByID(mapid, out var mMapInfo))
             {
-                GameLog.Write(GameLogLevel.Warning, "Can't find mapid " + mapid + " from refeshing");
-                return false;
+				GameLog.Write(GameLogLevel.Warning, $@"Can't find Map ID {mapid} for refresh");
+				return false;
             }
 
             MapInfo = mMapInfo;

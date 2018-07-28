@@ -1,5 +1,4 @@
-﻿using DragonFiesta.Game.Accounts;
-using DragonFiesta.Game.Characters;
+﻿using DragonFiesta.Game.Characters;
 using DragonFiesta.Game.Characters.Data;
 using DragonFiesta.Providers.Characters;
 using DragonFiesta.Providers.Maps;
@@ -10,8 +9,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Utils.Logging;
+using Account = DragonFiesta.Game.Accounts.Account;
 
 namespace DragonFiesta.World.Game.Character
 {
@@ -19,19 +20,32 @@ namespace DragonFiesta.World.Game.Character
     public class WorldCharacterManager : CharacterManagerBase<WorldCharacter>
     {
         public static WorldCharacterManager Instance { get; set; }
-
-        public List<WorldCharacter> OnlineCharacterList => LoggedInCharactersByCharacterID.Values.ToList();
+		
+		public List<WorldCharacter> OnlineCharacterList => LoggedInCharactersByCharacterID.Values.ToList();
         [InitializerMethod]
         public static bool Initial()
         {
             Instance = new WorldCharacterManager();
-            SetAllCharacterOffline();
+            SetAllCharacterOfflineEntity();
             return true;
         }
+
+	    public static void SetAllCharacterOfflineEntity()
+	    {
+		    using (var worldEntity = EDM.GetWorldEntity())
+		    {
+			    foreach (var character in worldEntity.DBCharacters)
+			    {
+				    character.IsOnline = false;
+			    }
+			    worldEntity.SaveChanges();
+		    }
+	    }
 
         public static void SetAllCharacterOffline()
         {
             //Clean up when world crashed then all character offline
+			// TODO: Is doing this thru SQL faster than thru Entity? Will it break entity if done thru sql?
             DB.RunSQL(DatabaseType.World, "UPDATE Characters SET IsOnline='0'");
         }
         public WorldCharacterManager() : base()
@@ -45,8 +59,7 @@ namespace DragonFiesta.World.Game.Character
 
 
         #endregion
-
-
+		
         public void UpdateCharacterState(int ID, bool IsOnline, DateTime LastLogin)
         {
             try

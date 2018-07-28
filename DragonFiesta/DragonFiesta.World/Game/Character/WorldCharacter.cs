@@ -31,14 +31,14 @@ namespace DragonFiesta.World.Game.Character
 
         public bool IsOnInstance { get => Map is IInstanceMap; }
 
-        public WorldServerMap Map { get => (AreaInfo.Map as WorldServerMap); }
+        public new WorldServerMap Map { get => (AreaInfo.Map as WorldServerMap); }
 
         public WorldSession Session { get; set; }
 
         public override bool IsConnected => (Session != null && Session.IsConnected);
 
 
-        public FriendCollection Friends { get; private set; }
+        public new FriendCollection Friends { get; private set; }
 
         public WorldCharacter() : base()
         {

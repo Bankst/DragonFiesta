@@ -40,8 +40,8 @@ namespace DragonFiesta.Login.InternNetwork
 
         protected override void DisposeInternal()
         {
-            World.Dispose();
-            World = null;
+	        World?.Dispose();
+	        World = null;
 
             base.DisposeInternal();
         }

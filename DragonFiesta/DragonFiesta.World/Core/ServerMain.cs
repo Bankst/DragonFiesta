@@ -26,7 +26,7 @@ namespace DragonFiesta.World
 
         public override void Shutdown()
         {
-            InternConnector.Instance.Dispose();
+            InternLoginConnector.Instance.Dispose();
             InternZoneServer.Instance.Stop();
             WorldServer.Instance.Stop();
             base.Shutdown();
@@ -34,41 +34,37 @@ namespace DragonFiesta.World
             //SendEnter();//Exit readkey from console...
         }
 
-        public override bool LoadBaseServerModule()
-        {
-            //Here bevor starts Provider
-            return base.LoadBaseServerModule();
-        }
-
 	    public static bool LoadGameServer() => InternalInstance.LoadGameServerModules();
-
-	    private static void WaitForLogin()
-	    {
-		    while (!PortChecker.IsPortOpen(
-			    WorldConfiguration.Instance.ConnectToInfo.ConnectIP,
-			    WorldConfiguration.Instance.ConnectToInfo.ConnectPort,
-			    250
-			    ))
-		    {							    
-		    }
-	    }
-
+		
 		public static bool Initialize()
         {
             InternalInstance = new ServerMain();
             InternalInstance.WriteConsoleLogo();
-            //System.Threading.Thread.Sleep(5000); // TODO: Find better way to delay start based on Login Server status. Maybe 250ms pings?
+            //System.Threading.Thread.Sleep(2500); // TODO: Find better way to delay start based on Login Server status. Maybe 250ms pings?
 
             if (!WorldConfiguration.Initialize())
             {
                 throw new StartupException("Failed to load WorldConfiguration");
             }
 
-            ThreadPool.Start(WorldConfiguration.Instance.WorkTaskThreadCount);
+	        EngineLog.Write(EngineLogLevel.Startup, "Checking if Login is online");
+	        if (!PortChecker.IsPortOpen(
+				WorldConfiguration.Instance.ConnectToInfo.ConnectIP,
+				WorldConfiguration.Instance.ConnectToInfo.ConnectPort, 250))
+	        {
+		        EngineLog.Write(EngineLogLevel.Startup, "Login offline, waiting...");
+		        PortChecker.WaitForPort(
+			        WorldConfiguration.Instance.ConnectToInfo.ConnectIP,
+			        WorldConfiguration.Instance.ConnectToInfo.ConnectPort);
+		        EngineLog.Write(EngineLogLevel.Startup, "World online, starting");
+			} else EngineLog.Write(EngineLogLevel.Startup, "Login online, starting");
+
+
+			ThreadPool.Start(WorldConfiguration.Instance.WorkTaskThreadCount);
 
             ThreadPool.AddUpdateAbleServer(ServerTaskManager.InitialInstance());
 
-	        if (!EntityFactory.TestWorldEntity(WorldConfiguration.Instance.WorldDatabaseSettings))
+	        if (!EDM.TestWorldEntity(WorldConfiguration.Instance.WorldDatabaseSettings))
 	        {
 				throw new StartupException("Failed to load World EntityModel");
 	        }
@@ -93,7 +89,6 @@ namespace DragonFiesta.World
                 throw new StartupException("Failed to add Database Monitor");
             }
 
-	       // WaitForLogin();
 			return true;
         }
     }

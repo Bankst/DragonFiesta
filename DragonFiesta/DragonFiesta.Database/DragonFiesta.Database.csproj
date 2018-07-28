@@ -87,8 +87,6 @@
       <DependentUpon>World.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EDM.cs" />
-    <Compile Include="Models\EDMCharacter.cs" />
-    <Compile Include="Models\EntityFactory.cs" />
     <Compile Include="Models\GoldSpammer.cs">
       <DependentUpon>World.tt</DependentUpon>
     </Compile>

@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Characters;
 
@@ -40,6 +41,30 @@ namespace DragonFiesta.Game.Characters.Data
         {
             Dispose();
         }
+
+	    public virtual bool RefreshFromEntity(DBCharacter character)
+	    {
+		    try
+		    {
+			    CharacterID = character.ID;
+			    Name = character.Name;
+			    Slot = character.Slot;
+			    Class = (ClassId) character.Class;
+			    Level = character.Level;
+			    Money = (ulong) character.Money;
+			    IsMale = character.IsMale;
+			    FriendPoints = (ushort) character.FriendPoints;
+
+			    ExpForNextLevel = CharacterDataProviderBase.GetEXPForNextLevel(Level);
+
+			    return true;
+		    }
+		    catch (Exception ex)
+		    {
+			    GameLog.Write(ex, $"Failed Load CharacterInfos ID : {CharacterID}");
+			    return false;
+			}
+	    }
 
         public virtual bool RefreshFromSQL(SQLResult pRes, int i)
         {

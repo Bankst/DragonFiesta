@@ -44,7 +44,7 @@ namespace DragonFiesta.Zone.Game.Character
 
 	    public bool IsOnThisZone => (IsConnected && Map is LocalMap);
 
-        public byte Level
+        public new byte Level
         {
             get => Info.Level;
             set => Info.Level = value;
@@ -61,7 +61,7 @@ namespace DragonFiesta.Zone.Game.Character
 
         public ushort MapObjectId { get; set; }
 
-        public IMap Map { get => AreaInfo.Map; set => AreaInfo.Map = value; }
+        public new IMap Map { get => AreaInfo.Map; set => AreaInfo.Map = value; }
 
         private MapSector _mapSector;
 

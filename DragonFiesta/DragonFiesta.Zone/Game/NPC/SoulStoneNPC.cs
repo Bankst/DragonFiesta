@@ -21,6 +21,8 @@ namespace DragonFiesta.Zone.Game.NPC
 		        packet.Write<uint>(character.Info.LevelParameter.StoneSP);
 		        packet.Write<uint>(character.Info.MaxSPStones);
 		        packet.Write<uint>(character.Info.LevelParameter.PriceSPStone);
+
+				character.Session.SendPacket(packet);
 			}
         }
 

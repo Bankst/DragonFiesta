@@ -41,30 +41,30 @@ namespace DragonFiesta.Zone.Core
             Environment.Exit(0);
           
         }
-        public static bool LoadGameServer()
-        {
-            if (InternalInstance.LoadGameServerModules())
-            {
-                return true;
-            }
-            return true;
-        }
+        public static bool LoadGameServer() => InternalInstance.LoadGameServerModules();
 
 
-	    public static bool Initialize(byte ZoneId = 0)
+	    public static bool Initialize(byte zoneId = 0)
 	    {
 		    InternalInstance = new ServerMain();
 		    InternalInstance.WriteConsoleLogo();
 
-			if (!ZoneConfiguration.Initialize(ZoneId))
+			if (!ZoneConfiguration.Initialize(zoneId))
             {
                 throw new StartupException("Invalid Load ZoneConfiguration");
             }
 
-		    if (!PortChecker.IsPortOpen(
+			EngineLog.Write(EngineLogLevel.Startup, "Checking if World is online");
+			if (!PortChecker.IsPortOpen(
 			    ZoneConfiguration.Instance.WorldConnectInfo.ConnectIP,
 			    ZoneConfiguration.Instance.WorldConnectInfo.ConnectPort, 250))
-		    { System.Threading.Thread.Sleep(10000); }
+		    {
+			    EngineLog.Write(EngineLogLevel.Startup, "World offline, waiting...");
+			    PortChecker.WaitForPort(
+				    ZoneConfiguration.Instance.WorldConnectInfo.ConnectIP,
+				    ZoneConfiguration.Instance.WorldConnectInfo.ConnectPort);
+			    EngineLog.Write(EngineLogLevel.Startup, "World online, starting");
+			} else EngineLog.Write(EngineLogLevel.Startup, "World online, starting");
 
 			ThreadPool.Start(ZoneConfiguration.Instance.WorkThreadCount);
 

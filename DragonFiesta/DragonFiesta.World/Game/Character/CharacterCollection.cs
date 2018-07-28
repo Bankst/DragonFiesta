@@ -1,4 +1,5 @@
-﻿using DragonFiesta.Database.SQL;
+﻿using DragonFiesta.Database.Models;
+using DragonFiesta.Database.SQL;
 using DragonFiesta.Game.Characters;
 using DragonFiesta.Networking.Helpers;
 using DragonFiesta.World.Network;
@@ -16,7 +17,20 @@ namespace DragonFiesta.World.Game.Character
 
         public bool Refresh()
         {
-            SQLResult Result = DB.Select(DatabaseType.World, $"SELECT * FROM Characters WHERE AccountID = { Session.UserAccount.ID } ");
+	        using (var we = EDM.GetWorldEntity())
+	        {
+		        lock (ThreadLocker)
+		        {
+			        foreach (var character in we.DBCharacters)
+			        {
+						if (!WorldCharacterManager.Instance.GetCharacterFromEntity(character.ID, out WorldCharacter mCharacter, out CharacterErrors result))
+				        {
+							_SH04Helpers.SendCharacterError(Session, result);
+				        }
+			        }
+		        }
+	        }
+				SQLResult Result = DB.Select(DatabaseType.World, $"SELECT * FROM Characters WHERE AccountID = { Session.UserAccount.ID } ");
             lock (ThreadLocker)
             {
                 for (int i = 0; i < Result.Count; i++)

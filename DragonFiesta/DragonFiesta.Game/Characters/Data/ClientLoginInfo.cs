@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 
 #endregion
@@ -16,6 +17,23 @@ namespace DragonFiesta.Game.Characters.Data
         public virtual bool IsOnline { get; set; }
 
         public virtual int AccountID { get; set; }
+
+	    public virtual bool RefreshFromEntity(DBCharacter character)
+	    {
+		    try
+		    {
+			    AccountID = character.AccountID;
+			    LastLogin = character.LastLogin;
+			    IsOnline = character.IsOnline;
+			    IsFirstLogin = character.IsFirstLogin;
+			    return true;
+		    }
+		    catch (Exception ex)
+		    {
+				GameLog.Write(ex, "Failed Load ClientLoginInfo.");
+			    return false;
+		    }
+	    }
 
         public virtual bool RefreshFromSQL(SQLResult pRes, int i)
         {

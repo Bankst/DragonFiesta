@@ -27,7 +27,6 @@ namespace DragonFiesta.Zone.Game.Character
         public ushort MaxHPStones { get; set; }
         public ushort MaxSPStones { get; set; }
 
-
         public ushort HPStones
         {
             get => _hpStones;

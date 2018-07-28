@@ -1,5 +1,7 @@
 ﻿#region
 
+using System;
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Maps;
 
@@ -36,17 +38,14 @@ namespace DragonFiesta.Game.Characters.Data
             }
         }
 
-        public CharacterAreaInfo()
-        {
+	    public CharacterAreaInfo()
+	    {
 
-        }
+	    }
+
         public CharacterAreaInfo(MapInfo mapInfo)
         {
             this.MapInfo = mapInfo;
         }
-        public override bool RefreshFromSQL(SQLResult pRes, int i)
-        {
-            return base.RefreshFromSQL(pRes, i);
-        }
-    }
+	}
 }

@@ -43,7 +43,7 @@ namespace DragonFiesta.World.InternNetwork
 
         protected override void DisposeInternal()
         {
-            Zone.Dispose();
+            Zone?.Dispose();
             Zone = null;
 
             base.DisposeInternal();
