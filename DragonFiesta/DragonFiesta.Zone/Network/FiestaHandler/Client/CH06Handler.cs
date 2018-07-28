@@ -97,55 +97,6 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Client
                 sender.SendPacket(mPacket);
             }
 
-            using (var mPacket = new FiestaPacket(4, 58))
-            {
-                mPacket.WriteHexAsBytes("A7 13 1C 00 01 01 3A 01 06 5E 43 D3 4E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00");
-                sender.SendPacket(mPacket);
-            }
-            using (var mPacket = new FiestaPacket(4, 59))
-            {
-                mPacket.WriteHexAsBytes("A7 13 1C 00 03 00 2A 00 03 00 00 00 83 EA 80 79 01 4E 00 00 00 00 84 EA A6 79 01 4E 00 00 00 00 85 EA AF 79 01 4E 00 00 00 00");
-                sender.SendPacket(mPacket);
-            }
-
-            using (var mPacket = new FiestaPacket(4, 206))
-            {
-                mPacket.WriteHexAsBytes("A7 13 1C 00 00 00");
-                sender.SendPacket(mPacket);
-            }
-            using (var mPacket = new FiestaPacket(4, 215))
-            {
-                mPacket.WriteHexAsBytes("A7 13 1C 00 00 00");
-                sender.SendPacket(mPacket);
-            }
-
-            using (var mPacket = new FiestaPacket(4, 61))
-            {
-                mPacket.WriteHexAsBytes("01 03 19 00 A7 13 1C 00 19 00 C8 19 00 00 00 00 00 20 00 00 00 00 DC 19 00 00 00 00 00 00 00 00 00 00 F0 19 00 00 00 00 00 00 00 00 00 00 49 71 00 00 00 00 00 00 00 00 00 00 16 72 00 00 00 00 00 00 00 00 00 00 19 72 00 00 00 00 00 00 00 00 00 00 F6 72 00 00 00 00 00 00 00 00 00 00 1C 73 00 00 00 00 00 00 00 00 00 00 1D 73 00 00 00 00 00 00 00 00 00 00 1E 73 00 00 00 00 00 00 00 00 00 00 20 73 00 00 00 00 00 00 00 00 00 00 45 73 00 00 00 00 00 00 00 00 00 00 4A 73 00 00 00 00 00 00 00 00 00 00 4B 73 00 00 00 00 00 00 00 00 00 00 4C 73 00 00 00 00 00 00 00 00 00 00 AD 73 00 00 00 00 00 00 00 00 00 00 AE 73 00 00 00 00 00 00 00 00 00 00 CC 73 00 00 00 00 00 00 00 00 00 00 CD 73 00 00 00 00 00 00 00 00 00 00 31 74 00 00 00 00 00 00 00 00 00 00 32 74 00 00 00 00 00 00 00 00 00 00 54 74 00 00 00 00 00 00 00 00 00 00 55 74 00 00 00 00 00 00 00 00 00 00 56 74 00 00 00 00 00 00 00 00 00 00 8F 74 00 00 00 00 00 00 00 00 00 00");
-                sender.SendPacket(mPacket);
-            }
-            using (var mPacket = new FiestaPacket(4, 62))
-            {
-                mPacket.WriteHexAsBytes("00 00");
-                sender.SendPacket(mPacket);
-            }
-
-            using (var mPacket = new FiestaPacket(4, 73))
-            {
-                mPacket.WriteHexAsBytes("00 00 00 00 00 00");
-                sender.SendPacket(mPacket);
-            }
-            using (var mPacket = new FiestaPacket(4, 74))
-            {
-                mPacket.WriteHexAsBytes("00 00");
-                sender.SendPacket(mPacket);
-            }
-            using (var mPacket = new FiestaPacket(4, 72))
-            {
-                mPacket.WriteHexAsBytes("FF FF FF FF");
-                sender.SendPacket(mPacket);
-            }
-
             using (var mPacket = new FiestaPacket(4, 222))
             {
                 mPacket.WriteHexAsBytes("00 00 00 00 00 00 00 00 10 27 00 00 00 00 00 00");
