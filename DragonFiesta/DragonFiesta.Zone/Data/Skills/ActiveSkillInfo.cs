@@ -61,11 +61,11 @@ namespace DragonFiesta.Zone.Data.Skills
 
         public uint SkillTargetState { get; }
 
-        public uint CastTime { get; }
+        public TimeSpan CastTime { get; }
 
         public uint DlyTime { get; }
 
-        public uint DlyGroupName { get; }
+        public uint DlyGroupNum { get; }
 
         public uint DlyTimeGroup { get; }
 
@@ -83,7 +83,7 @@ namespace DragonFiesta.Zone.Data.Skills
 
         public uint MaxMA { get; }
 
-        public uint MaxMARAte { get; }
+        public uint MaxMARate { get; }
 
         public uint AC { get; }
 
@@ -172,7 +172,80 @@ namespace DragonFiesta.Zone.Data.Skills
             Grade = pResult.Read<uint>(i, "Grade");
             Step = pResult.Read<uint>(i, "Step");
             MaxStep = pResult.Read<uint>(i, "MaxStep");
+            DemandType = pResult.Read<uint>(i, "DemandType");
+            DemandSk = pResult.Read<string>(i, "DemandSk");
+            UseItem = pResult.Read<ushort>(i, "UseItem");
+            ItemNumber = pResult.Read<uint>(i, "ItemNumber");
+            ItemOption = pResult.Read<uint>(i, "ItemOption");
+            DemandItem1 = pResult.Read<ushort>(i, "DemandItem1");
+            DemandItem2 = pResult.Read<ushort>(i, "DemandItem2");
+            SP = pResult.Read<uint>(i, "SP");
+            SPRate = pResult.Read<uint>(i, "SPRate");
+            HP = pResult.Read<uint>(i, "HP");
+            HPRate = pResult.Read<uint>(i, "HPRate");
+            LP = pResult.Read<uint>(i, "LP");
+            Range = pResult.Read<uint>(i, "Range");
+            First = pResult.Read<uint>(i, "First");
+            Last = pResult.Read<uint>(i, "Last");
+            IsMovingSkill = pResult.Read<byte>(i, "IsMovingSkill");
+            UsableDegree = pResult.Read<ushort>(i, "UsableDegree");
+            DirectionRotate = pResult.Read<ushort>(i, "DirectionRotate");
+            SkillDegree = pResult.Read<ushort>(i, "SkillDegree");
+            SkillTargetState = pResult.Read<uint>(i, "SkillTargetState");
+            CastTime = TimeSpan.FromMilliseconds(pResult.Read<uint>(i, "CastTime"));
+            DlyTime = pResult.Read<uint>(i, "DlyTime");
+            DlyGroupNum = pResult.Read<uint>(i, "DlyGroupNum");
+            DlyTimeGroup = pResult.Read<uint>(i, "DlyTimeGroup");
+            MinWC = pResult.Read<uint>(i, "MinWC");
+            MinWCRate = pResult.Read<uint>(i, "MinWCRate");
+            MaxWC = pResult.Read<uint>(i, "MaxWC");
+            MaxWCRate = pResult.Read<uint>(i, "MaxWCRate");
+            MinMA = pResult.Read<uint>(i, "MinMA");
+            MinMARate = pResult.Read<uint>(i, "MinMARate");
+            MaxMA = pResult.Read<uint>(i, "MaxMA");
+            MaxMARate = pResult.Read<uint>(i, "MaxMARate");
+            AC = pResult.Read<uint>(i, "AC");
+            MR = pResult.Read<uint>(i, "MR");
+            Area = pResult.Read<uint>(i, "Area");
+            TargetNumber = pResult.Read<uint>(i, "TargetNumber");
+            UseClass = pResult.Read<uint>(i, "UseClass");
+            StaNameA = pResult.Read<string>(i, "StaNameA");
+            StaStrengthA = pResult.Read<uint>(i, "StaStrengthA");
+            StaSucRateA = pResult.Read<uint>(i, "StaSucRateA");
+            StaNameB = pResult.Read<string>(i, "StaNameB");
+            StaStrengthB = pResult.Read<uint>(i, "StaStrengthB");
+            StaSucRateB = pResult.Read<uint>(i, "StaSucRateB");
+            StaNameC = pResult.Read<string>(i, "StaNameC");
+            StaStrengthC = pResult.Read<uint>(i, "StaStrengthC");
+            StaSucRateC = pResult.Read<uint>(i, "StaSucRateC");
+            StaNameD = pResult.Read<string>(i, "StaNameD");
+            StaStrengthD = pResult.Read<uint>(i, "StaStrengthD");
+            StaSucRateD = pResult.Read<uint>(i, "StaSucRateD");
+            NIMPT = pResult.Read<uint>(i, "nIMPT");
+            NT0 = pResult.Read<uint>(i, "nT0");
+            NT1 = pResult.Read<uint>(i, "nT1");
+            NT2 = pResult.Read<uint>(i, "nT2");
+            NT3 = pResult.Read<uint>(i, "nT3");
+            EffectType = pResult.Read<uint>(i, "EffectType");
+            SpecialIndexA = pResult.Read<uint>(i, "SpecialIndexA");
+            SpecialValueA = pResult.Read<uint>(i, "SpecialValueA");
+            SpecialIndexB = pResult.Read<uint>(i, "SpecialIndexB");
+            SpecialValueB = pResult.Read<uint>(i, "SpecialValueB");
+            SpecialIndexC = pResult.Read<uint>(i, "SpecialIndexC");
+            SpecialValueC = pResult.Read<uint>(i, "SpecialValueC");
+            SpecialIndexD = pResult.Read<uint>(i, "SpecialIndexD");
+            SpecialValueD = pResult.Read<uint>(i, "SpecialValueD");
+            SpecialIndexE = pResult.Read<uint>(i, "SpecialIndexE");
+            SpecialValueE = pResult.Read<uint>(i, "SpecialValueE");
+            SkillClassifierA = pResult.Read<string>(i, "SkillClassifierA");
+            SkillClassifierB = pResult.Read<string>(i, "SkillClassifierB");
+            SkillClassifierC = pResult.Read<string>(i, "SkillClassifierC");
+            CannotInside = pResult.Read<byte>(i, "CannotInside");
+            DemandSoul = pResult.Read<byte>(i, "DemandSoul");
+            HitID = pResult.Read<ushort>(i, "HitID");
         }
+
+        #warning Finish ActiveSkill Stuff
 
         #region SQL
         /*
