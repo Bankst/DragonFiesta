@@ -176,7 +176,7 @@ namespace DragonFiesta.World.Game.Command
 
 				            if (Params[2].Length > 16) // TODO: Make this configurable
 				            {
-					            ZoneChat.CharacterNote(character, "Invalid Password Lenght the max Lenght is 16");
+					            ZoneChat.CharacterNote(character, "Invalid Password Length the max Length is 16");
 					            return;
 				            }
 				            response.Account.Password = Params[2];

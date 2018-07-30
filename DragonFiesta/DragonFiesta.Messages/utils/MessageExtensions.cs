@@ -57,7 +57,7 @@ namespace DragonFiesta.Messages
 
                     byte[] BodySize = BitConverter.GetBytes(bytes.Length);
 
-                    //LenghtBytes
+                    //LengthBytes
                     newData[0] = BodySize[0];
                     newData[1] = BodySize[1];
                     newData[3] = BodySize[2];

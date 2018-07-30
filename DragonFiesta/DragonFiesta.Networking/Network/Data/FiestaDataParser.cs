@@ -16,27 +16,27 @@ namespace DragonFiesta.Networking.Network
 
         public override void ParseNext(byte[] ReadBuffer, ref int Offset, int ReadLength)
         {
-            int Lenght = ReadLength;
+            int Length = ReadLength;
 
-            while (CanReadNextPacket(ReadBuffer, Offset, Lenght))
+            while (CanReadNextPacket(ReadBuffer, Offset, Length))
             {
-                ReadNextPacket(ReadBuffer, ref Offset, ref Lenght);
+                ReadNextPacket(ReadBuffer, ref Offset, ref Length);
             }
         }
 
-        private bool CanReadNextPacket(byte[] ReadBuffer, int ReadOffset, int Lenght)
+        private bool CanReadNextPacket(byte[] ReadBuffer, int ReadOffset, int Length)
         {
-            if (Lenght == 0)
+            if (Length == 0)
                 return false;
             int headerSize = GetHeaderSize(ReadBuffer, ReadOffset);
-            if (Lenght <= headerSize)
+            if (Length <= headerSize)
                 return false;
             ushort bodySize = GetSizeOfNextPacket(ReadBuffer, ReadOffset);
             int packetSize = headerSize + bodySize;
-            return Lenght >= packetSize;
+            return Length >= packetSize;
         }
 
-        private void ReadNextPacket(byte[] buffer, ref int offset, ref int ReadLenght)
+        private void ReadNextPacket(byte[] buffer, ref int offset, ref int ReadLength)
         {
             int headerSize = GetHeaderSize(buffer, offset);
             int bodySize = GetSizeOfNextPacket(buffer, offset);
@@ -50,7 +50,7 @@ namespace DragonFiesta.Networking.Network
                 0,
                 bodySize);
 
-            ReadLenght -= packetSize;
+            ReadLength -= packetSize;
 
             offset += packetSize;
 

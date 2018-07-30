@@ -23,7 +23,7 @@
 
         public const ushort CMSG_USER_GER_LOGIN_REQ = 56;
 
-        public const ushort CMSG_LOGIN_REQUEST_NA = 90;
+        public const ushort CMSG_USER_US_LOGIN_REQ = 90;
 
         public const ushort CMSG_USER_CLIENT_VERSION_CHECK_REQ = 101;
 

@@ -12,37 +12,37 @@ namespace DragonFiesta.Networking.Packet
 
         public MemoryStream Stream { get; private set; }
 
-        public PacketBase()
+	    protected PacketBase()
         {
             Stream = new MemoryStream();
         }
 
-        public PacketBase(byte[] Buffer)
+	    protected PacketBase(byte[] buffer)
         {
-            Stream = new MemoryStream(Buffer);
+            Stream = new MemoryStream(buffer);
         }
 
         public byte[] GetBuffer() => Stream.ToArray();
 
         #region IDisposable Support
 
-        private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
+        private bool _disposedValue = false; // Used to detect redundant calls.
 
-        protected virtual void Dispose(bool disposing)
+		protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
-                    // TODO: verwalteten Zustand (verwaltete Objekte) entsorgen.
-                }
+					// TODO: Dispose managed state (managed objects).
+				}
 
-                disposedValue = true;
+				_disposedValue = true;
             }
         }
 
-        // Dieser Code wird hinzugefügt, um das Dispose-Muster richtig zu implementieren.
-        public void Dispose()
+		// This code is added to properly implement the Dispose pattern.
+		public void Dispose()
         {
             Dispose(true);
         }

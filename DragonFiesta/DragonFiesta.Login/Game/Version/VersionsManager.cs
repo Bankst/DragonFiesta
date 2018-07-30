@@ -23,15 +23,15 @@ namespace DragonFiesta.Login.Game.Authentication
             VersionsByHash = new ConcurrentDictionary<string, Version>();
             VersionsByDate = new ConcurrentDictionary<DateTime, Version>();
 
-            SQLResult pResult = DB.Select(DatabaseType.Login, "SELECT * FROM Versions");
+            var pResult = DB.Select(DatabaseType.Login, "SELECT * FROM Versions");
 
             DatabaseLog.WriteProgressBar(">> Load Versions");
 
-            using (ProgressBar mBar = new ProgressBar((pResult.Count)))
+            using (var mBar = new ProgressBar((pResult.Count)))
             {
-                for (int i = 0; i < pResult.Count; i++)
+                for (var i = 0; i < pResult.Count; i++)
                 {
-                    Version mVersion = new Version(pResult, i);
+                    var mVersion = new Version(pResult, i);
                     if (!VersionsByHash.TryAdd(mVersion.mHash.ToUpper(), mVersion)
                         || !VersionsByDate.TryAdd(mVersion.Date, mVersion))
                     {
@@ -43,34 +43,34 @@ namespace DragonFiesta.Login.Game.Authentication
             }
         }
 
-        public static bool AddVersion(string Hash, DateTime Date)
+        public static bool AddVersion(string hash, DateTime date)
         {
-            Version NewVesion = new Version()
+            var newVersion = new Version()
             {
-                mHash = Hash,
-                Date = Date,
+                mHash = hash,
+                Date = date,
             };
 
-            if (!VersionsByHash.TryAdd(NewVesion.mHash.ToUpper(), NewVesion) || !VersionsByDate.TryAdd(NewVesion.Date, NewVesion))
+            if (!VersionsByHash.TryAdd(newVersion.mHash.ToUpper(), newVersion) || !VersionsByDate.TryAdd(newVersion.Date, newVersion))
                 return false;
 
-            string SQL = "INSERT INTO Versions (ClientDate, ClientHash) VALUES (@Date,@Hash)";
+            const string cmd = "INSERT INTO Versions (ClientDate, ClientHash) VALUES (@Date,@Hash)";
 
-            DB.RunSQL(DatabaseType.Login, SQL,
-                new SqlParameter("@Date", NewVesion.Date),
-                new SqlParameter("@Hash", Hash.ToUpper()));
+            DB.RunSQL(DatabaseType.Login, cmd,
+                new SqlParameter("@Date", newVersion.Date),
+                new SqlParameter("@Hash", hash.ToUpper()));
 
             return true;
         }
 
-        public static bool GetVersionByHash(string hash, out Version Version)
+        public static bool GetVersionByHash(string hash, out Version version)
         {
-            return VersionsByHash.TryGetValue(hash.ToUpper(), out Version);
+            return VersionsByHash.TryGetValue(hash.ToUpper(), out version);
         }
 
-        public static bool GetVersionByDate(DateTime Dt, out Version Version)
+        public static bool GetVersionByDate(DateTime dt, out Version version)
         {
-            return VersionsByDate.TryGetValue(Dt, out Version);
+            return VersionsByDate.TryGetValue(dt, out version);
         }
     }
 }

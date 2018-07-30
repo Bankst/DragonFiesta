@@ -20,31 +20,32 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
 		[PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.NA)]
 		public static void Version_NA(LoginSession sender, FiestaPacket packet)
 		{
-			if (!packet.ReadString(out string version, 32))
+			var allowed = false;
+
+			if (!packet.ReadString(out var version, 32))
 			{
 				sender.Dispose();
 				return;
 			}
 
-			if (ServerMainDebug.TriggerVersion &&
-				!VersionsManager.GetVersionByHash(version, out Version v) &&
-				VersionsManager.AddVersion(version, DateTime.Now))
+			if (!VersionsManager.GetVersionByHash(version, out _))
 			{
-				GameLog.Write(GameLogLevel.Debug, "Triggered NA Version {0}", version);
-				SH3Handler.BinVersionAllowed(sender, false);
-				return;
+				if (ServerMainDebug.TriggerVersion)
+				{
+					GameLog.Write(GameLogLevel.Debug, "Triggered NA Version {0}", version);
+					allowed = VersionsManager.AddVersion(version, DateTime.Now);
+				}
+				else
+				{
+					SH3Handler.BinVersionAllowed(sender, false);
+				}
+			}
+			else
+			{
+				allowed = LoginManager.Instance.Add(sender);
 			}
 
-			if (!VersionsManager.GetVersionByHash(version, out Version pVersion))
-			{
-				SH3Handler.BinVersionAllowed(sender, false);
-				return;
-			}
-
-			if (LoginManager.Instance.Add(sender))
-			{
-				SH3Handler.BinVersionAllowed(sender, true);
-			}
+			SH3Handler.BinVersionAllowed(sender, allowed);
 		}
 
 
@@ -54,14 +55,14 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
         [PacketHandler(Handler03Type.CMSG_USER_CLIENT_VERSION_CHECK_REQ, ClientRegion.DE)]
         public static void Version_EU(LoginSession sender, FiestaPacket packet)
         {
-            if (!packet.ReadString(out string version, 32))
+            if (!packet.ReadString(out var version, 32))
             {
                 sender.Dispose();
                 return;
             }
 
             if (ServerMainDebug.TriggerVersion &&
-                !VersionsManager.GetVersionByHash(version, out Version v) &&
+                !VersionsManager.GetVersionByHash(version, out var v) &&
                 VersionsManager.AddVersion(version, DateTime.Now))
             {
                 GameLog.Write(GameLogLevel.Debug, "Triggered NA Version {0}", version);
@@ -69,7 +70,7 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
                 return;
             }
 
-            if (!VersionsManager.GetVersionByHash(version, out Version pVersion))
+            if (!VersionsManager.GetVersionByHash(version, out var pVersion))
             {
                 SH3Handler.BinVersionAllowed(sender, false);
                 return;
@@ -81,32 +82,32 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
             }
         }
 
-        [PacketHandler(Handler03Type.CMSG_LOGIN_REQUEST_NA, ClientRegion.NA)]
+        [PacketHandler(Handler03Type.CMSG_USER_US_LOGIN_REQ, ClientRegion.NA)]
         public static void AuthLogin_NA(LoginSession pSession, FiestaPacket packet)
         {
-			if (!packet.ReadEncodeString(out string AccountName, 260) ||
-					!packet.ReadEncodeString(out string Md5Password, 36) ||
-					!packet.ReadEncodeString(out string Orginal, 20))
+			if (!packet.ReadEncodeString(out var accountName, 260) ||
+					!packet.ReadEncodeString(out var md5Password, 36) ||
+					!packet.ReadEncodeString(out var orginal, 20))
 			{
 				return;
             }
 
-            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessionId, out AuthLogin Login))
+            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessionId, out var login))
             {
                 SH03Helpers.SendLoginError(pSession, LoginGameError.TIMEOUT);
                 return;
             }
 
-            LoginGameError AuthResult = Login.AuthAccount(pSession, AccountName, Md5Password.ToUpper());
+            var authResult = login.AuthAccount(pSession, accountName, md5Password.ToUpper());
 
-            if (AuthResult == LoginGameError.None)
+            if (authResult == LoginGameError.None)
             {
                 pSession.GameStates.Authenticated = true;
                 SH3Handler.SendWorldList(pSession, false);
             }
             else
             {
-                SH03Helpers.SendLoginError(pSession, AuthResult);
+                SH03Helpers.SendLoginError(pSession, authResult);
             }
         }
 
@@ -116,92 +117,92 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
         [PacketHandler(Handler03Type.CMSG_USER_GER_LOGIN_REQ, ClientRegion.DE)]
         public static void AuthLogin_EU(LoginSession pSession, FiestaPacket packet)
         {
-            if (!packet.ReadString(out string username, 18)
-            || !packet.ReadString(out string password, 16))
+            if (!packet.ReadString(out var username, 18)
+            || !packet.ReadString(out var password, 16))
             {
                 return;
             }
 
-            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessionId, out AuthLogin Login))
+            if (!LoginManager.Instance.TryGetLogin(pSession.BaseStateInfo.SessionId, out var login))
             {
                 pSession.Dispose();
                 return;
             }
 
-            LoginGameError AuthResult = Login.AuthAccount(pSession, username, MD5Password.CalculateMD5Hash(password));
+            var authResult = login.AuthAccount(pSession, username, MD5Password.CalculateMD5Hash(password));
 
-            if (AuthResult == LoginGameError.None)
+            if (authResult == LoginGameError.None)
             {
                 pSession.GameStates.Authenticated = true;
                 SH3Handler.SendWorldList(pSession, false);
             }
             else
             {
-                SH03Helpers.SendLoginError(pSession, AuthResult);
+                SH03Helpers.SendLoginError(pSession, authResult);
             }
         }
 
         [PacketHandler(Handler03Type.CMSG_USER_WORLDSELECT_REQ)]
-        public static void CMG_WORLD_SELECT(LoginSession Session, FiestaPacket packet)
+        public static void CMG_WORLD_SELECT(LoginSession session, FiestaPacket packet)
         {
-            if (!packet.Read(out byte WorldID))
+            if (!packet.Read(out byte worldID))
             {
-                Session.Dispose();
+                session.Dispose();
                 return;
             }
 
-            if (!WorldManager.Instance.GetWorldByID(WorldID, out World MyWorld))
+            if (!WorldManager.Instance.GetWorldByID(worldID, out var myWorld))
             {
-                SH3Handler.WorldServerIP(Session, null);
+                SH3Handler.WorldServerIP(session, null);
                 return;
             }
 
-            if (Session.GameStates.Region != MyWorld.Info.Region)
+            if (session.GameStates.Region != myWorld.Info.Region)
             {
-                SH03Helpers.SendLoginError(Session, LoginGameError.WRONG_REGION);
+                SH03Helpers.SendLoginError(session, LoginGameError.WRONG_REGION);
                 return;
             }
 
-            if (MyWorld.Status != WorldStatus.Full && MyWorld.Status != WorldStatus.Offline &&
-                MyWorld.Status != WorldStatus.Maintenance && MyWorld.Status != WorldStatus.Reserved
-               || Session.UserAccount.RoleID >= 1 && MyWorld.Status == WorldStatus.Reserved
-               || Session.UserAccount.RoleID >= 1 && MyWorld.Status == WorldStatus.Full) // TestServer Exlusive Login For GM :D
+            if (myWorld.Status != WorldStatus.Full && myWorld.Status != WorldStatus.Offline &&
+                myWorld.Status != WorldStatus.Maintenance && myWorld.Status != WorldStatus.Reserved
+               || session.UserAccount.RoleID >= 1 && myWorld.Status == WorldStatus.Reserved
+               || session.UserAccount.RoleID >= 1 && myWorld.Status == WorldStatus.Full) // TestServer Exlusive Login For GM :D
             {
 
-                ServerTransferMethods.SendAddWorldTransfer(MyWorld, Session.UserAccount, Session.GetIP(), (Msg) =>
+                ServerTransferMethods.SendAddWorldTransfer(myWorld, session.UserAccount, session.GetIP(), (msg) =>
                 {
 
-                    if (Msg is AddWorldServerTransfer transfer)
+                    if (msg is AddWorldServerTransfer transfer)
                     {
                         if (transfer.Added)
                         {
-                            SH3Handler.WorldServerIP(Session, MyWorld, WorldStatus.OK);
-                            Session.GameStates.IsTransferring = true;
+                            SH3Handler.WorldServerIP(session, myWorld, WorldStatus.OK);
+                            session.GameStates.IsTransferring = true;
 
                         }
                         else
                         {
-                            SH3Handler.WorldServerIP(Session, null, MyWorld.Status);
+                            SH3Handler.WorldServerIP(session, null, myWorld.Status);
                         }
                     }
                 });
             }
             else
             {
-                SH3Handler.WorldServerIP(Session, null, MyWorld.Status);
+                SH3Handler.WorldServerIP(session, null, myWorld.Status);
             }
         }
 
         [PacketHandler(Handler03Type.CMSG_USER_LOGIN_WITH_OTP_REQ)]
         public static void Get_Login_Transfer(LoginSession pSession, FiestaPacket packet)
         {
-            if (!packet.ReadString(out string guidString, 32) || !Guid.TryParseExact(guidString, "N", out Guid gui))
+            if (!packet.ReadString(out var guidString, 32) || !Guid.TryParseExact(guidString, "N", out var gui))
             {
                 pSession.Dispose();
                 return;
             }
 
-            if (!LoginTransferManager.FinishTransfer(gui, out LoginServerTransfer mTransfer))
+            if (!LoginTransferManager.FinishTransfer(gui, out var mTransfer))
             {
                 //TODO Send Error
                 pSession.Dispose();
@@ -238,13 +239,15 @@ namespace DragonFiesta.Login.Network.FiestaHandler.Client
         [PacketHandler(Handler03Type.CMSG_USER_XTRAP_REQ)]
         public static void SER_XTRAP_REQ(LoginSession sender, FiestaPacket packet)
         {
-            if (!packet.Read(out byte XtrapHashLenght) ||
-                !packet.ReadString(out string XtrapVersionsHash, XtrapHashLenght))
-            {
-                return;
-            }
+	        if (packet.Read(out byte xtrapHashLength) &&
+	            packet.ReadString(out var xtrapVersionsHash, xtrapHashLength)) return;
+	        using (var smsg = new FiestaPacket(Handler03Type._Header, Handler03Type.SMSG_USER_XTRAP_ACK))
+	        {
+		        smsg.Write<byte>(true);
+				sender.SendPacket(smsg);
+	        }
 
-            //SH3Handler.BinVersionAllowed(sender, false);
+	        //SH3Handler.BinVersionAllowed(sender, false);
 
             //SH3Handler.VersionAllowed(sender, false);
         }
