@@ -97,6 +97,7 @@
     <Compile Include="HandlerTypes\Handler10Type.cs" />
     <Compile Include="HandlerTypes\Handler11Type.cs" />
     <Compile Include="HandlerTypes\Handler13Type.cs" />
+    <Compile Include="HandlerTypes\Handler16Type.cs" />
     <Compile Include="HandlerTypes\Handler17Type.cs" />
     <Compile Include="HandlerTypes\Handler23Type.cs" />
     <Compile Include="HandlerTypes\Handler24Type.cs" />

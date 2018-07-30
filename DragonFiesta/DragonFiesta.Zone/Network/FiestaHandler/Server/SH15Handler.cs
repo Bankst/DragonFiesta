@@ -1,5 +1,4 @@
-﻿using System;
-using DragonFiesta.Networking.HandlerTypes;
+﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Zone.Game;
 
 namespace DragonFiesta.Zone.Network.FiestaHandler.Server

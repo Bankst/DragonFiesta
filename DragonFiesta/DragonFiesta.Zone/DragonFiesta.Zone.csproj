@@ -245,6 +245,7 @@
     <Compile Include="Network\FiestaHandler\Client\CH08Handler.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH09Handler.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH15Handler.cs" />
+    <Compile Include="Network\FiestaHandler\Client\CH49Handler.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH20Handler.cs" />
     <Compile Include="Network\FiestaHandler\Client\CH21Handler.cs" />
     <Compile Include="Network\FiestaHandler\Server\SH02Handler.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Network\FiestaHandler\Server\SH17Handler.cs" />
     <Compile Include="Network\FiestaHandler\Server\SH09Handler.cs" />
     <Compile Include="Network\FiestaHandler\Server\SH18Handler..cs" />
+    <Compile Include="Network\FiestaHandler\Server\SH49Handler.cs" />
     <Compile Include="Network\FiestaHandler\Server\SH20Handler.cs" />
     <Compile Include="Network\FiestaHandler\Server\SH21Handler.cs" />
     <Compile Include="Network\Helpers\Enum\ZoneGameErrors.cs" />

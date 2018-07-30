@@ -5,6 +5,8 @@
         public new const byte _Header = 47;
 
         //SMSG
+        public const ushort SMSG_GAMBLE_COIN_CHANGE_CMD = 4;
+
         public const ushort SMSG_GAMBLE_EXCHANGECOIN_CHANGE_CMD = 5;
 
 
@@ -14,8 +16,6 @@
         public const ushort NC_GAMBLE_GAMBLEHOUSE_EXIT_REQ = 2;
 
         public const ushort NC_GAMBLE_GAMBLEHOUSE_EXIT_ACK = 3;
-
-        public const ushort NC_GAMBLE_COIN_CHANGE_CMD = 4;
 
         public const ushort NC_GAMBLE_COIN_DB_ADD_REQ = 6;
 

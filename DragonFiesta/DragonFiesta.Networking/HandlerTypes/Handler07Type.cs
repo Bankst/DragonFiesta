@@ -4,6 +4,9 @@
     {
         public new const byte _Header = 7;
 
+        //CMSG
+        public const ushort CMSG_BRIEFINFO_INFORM_CMD = 1;
+
 
         //SMSG
         public const ushort SMSG_BRIEFINFO_UNEQUIP_CMD = 4;
@@ -28,8 +31,6 @@
 
 
         //NC
-        public const ushort NC_BRIEFINFO_INFORM_CMD = 1;
-
         public const ushort NC_BRIEFINFO_CHANGEDECORATE_CMD = 2;
 
         public const ushort NC_BRIEFINFO_CHANGEUPGRADE_CMD = 3;

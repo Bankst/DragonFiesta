@@ -60,6 +60,8 @@
 
         public const ushort SMSG_CHAR_STAT_INCPOINTSUC_ACK = 95;
 
+        public const ushort SMSG_CHAR_FAMECHANGE_CMD = 111;
+
         public const ushort SMSG_CHAR_GUILD_ACADEMY_CMD = 151;
 
         public const ushort SMSG_CHAR_CLIENT_QUEST_READ_CMD = 206;
@@ -245,8 +247,6 @@
         public const ushort NC_CHAR_PLAYERBANNED_RNG = 108;
 
         public const ushort NC_CHAR_SOMEONEGUILDCHANGE_CMD = 110;
-
-        public const ushort NC_CHAR_FAMECHANGE_CMD = 111;
 
         public const ushort NC_CHAR_FAMESAVE_CMD = 112;
 

@@ -4,6 +4,20 @@
     {
         public new const byte _Header = 49;
 
+        //CMSG
+        public const ushort CMSG_COLLECT_CARDREGIST_REQ = 8;
+
+        public const ushort CMSG_COLLECT_BOOKMARK_REGIST_REQ = 12;
+
+
+        //SMSG
+        public const ushort SMSG_COLLECT_CARDOPEN_CMD = 7;
+
+        public const ushort SMSG_COLLECT_CARDREGIST_ACK = 11;
+
+        public const ushort SMSG_COLLECT_BOOKMARK_REGIST_ACK = 15;
+
+
         //NC
         public const ushort NC_COLLECT_PEEPING_REQ = 1;
 
@@ -17,23 +31,13 @@
 
         public const ushort NC_COLLECT_PEEPING_COLLECT_BOOKMARK_ACK = 6;
 
-        public const ushort NC_COLLECT_CARDOPEN_CMD = 7;
-
-        public const ushort NC_COLLECT_CARDREGIST_REQ = 8;
-
         public const ushort NC_COLLECT_REGIST_REQ = 9;
 
         public const ushort NC_COLLECT_REGIST_ACK = 10;
 
-        public const ushort NC_COLLECT_CARDREGIST_ACK = 11;
-
-        public const ushort NC_COLLECT_BOOKMARK_REGIST_REQ = 12;
-
         public const ushort NC_COLLECT_BOOKMARK_REGIST_DB_REQ = 13;
 
         public const ushort NC_COLLECT_BOOKMARK_REGIST_DB_ACK = 14;
-
-        public const ushort NC_COLLECT_BOOKMARK_REGIST_ACK = 15;
 
         public const ushort NC_COLLECT_REWARD_REQ = 16;
 

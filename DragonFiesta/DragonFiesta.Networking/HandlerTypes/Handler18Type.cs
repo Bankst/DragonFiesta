@@ -10,6 +10,8 @@
 
         public const ushort SMSG_SKILL_EMPOWPOINT_CMD = 16;
 
+        public const ushort SMSG_SKILL_COOLTIME_CMD = 33;
+
 
         //NC
         public const ushort NC_SKILL_SKILLTEACH_REQ = 1;
@@ -55,8 +57,6 @@
         public const ushort NC_SKILL_SOMEONEREVIVE_CMD = 31;
 
         public const ushort NC_SKILL_PASSIVESKILL_LEARN_CMD = 32;
-
-        public const ushort NC_SKILL_COOLTIME_CMD = 33;
 
         public const ushort NC_SKILL_PRODUCTFIELD_REQ = 34;
 

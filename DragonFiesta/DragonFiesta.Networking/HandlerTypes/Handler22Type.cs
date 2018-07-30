@@ -6,10 +6,14 @@
 
 
         //CMSG
+        public const ushort CMSG_KQ_STATUS_REQ = 3;
+
         public const ushort CMSG_KQ_LIST_REFRESH_REQ = 27;
 
 
         //SMSG
+        public const ushort SMSG_KQ_STATUS_ACK = 4;
+
         public const ushort SMSG_KQ_LIST_TIME_ACK = 28;
 
         public const ushort SMSG_KQ_LIST_ADD_ACK = 29;
@@ -31,10 +35,6 @@
         public const ushort NC_KQ_LIST_REQ = 1;
 
         public const ushort NC_KQ_LIST_ACK = 2;
-
-        public const ushort NC_KQ_STATUS_REQ = 3;
-
-        public const ushort NC_KQ_STATUS_ACK = 4;
 
         public const ushort NC_KQ_JOIN_REQ = 5;
 

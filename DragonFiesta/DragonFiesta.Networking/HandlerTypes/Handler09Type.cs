@@ -41,13 +41,15 @@
 
         public const ushort SMSG_BAT_SKILLBASH_CAST_SUC_ACK = 53;
 
+        public const ushort SMSG_BAT_FAMEGAIN_CMD = 70;
+
         public const ushort SMSG_BAT_SWING_START_CMD = 71;
 
         public const ushort SMSG_BAT_SWING_DAMAGE_CMD = 72;
         
         public const ushort SMSG_BAT_PKINPKFIELD_WMS_CMD = 74;
 
-        //public const ushort SMSG_BAT_REALLYKILL_CMD = 74;        
+        public const ushort SMSG_BAT_REALLYKILL_CMD = 74;        
         
         public const ushort SMSG_BAT_SKILLBASH_HIT_OBJ_START_CMD = 78;
 
@@ -168,8 +170,6 @@
         public const ushort NC_BAT_SKILLBASH_CASTABORT_REQ = 68;
 
         public const ushort NC_BAT_SKILLBASH_CASTABORT_ACK = 69;
-
-        public const ushort NC_BAT_FAMEGAIN_CMD = 70;
 
         public const ushort NC_BAT_SOMEONESWING_DAMAGE_CMD = 73;
 

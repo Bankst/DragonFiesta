@@ -8,6 +8,8 @@
         //CMSG
         public const ushort CMSG_ACT_CHAT_REQ = 1;
 
+        public const ushort CMSG_ACT_CHANGEMODE_REQ = 8;
+
         public const ushort CMSG_ACT_NPCCLICK_CMD = 10;
 
         public const ushort CMSG_ACT_ENDOFTRADE_CMD = 11;
@@ -61,6 +63,8 @@
 
         public const ushort SMSG_ACT_SOMEONESHOUT_CMD = 31;
 
+        public const ushort SMSG_ACT_SOMEONEEMOTICON_CMD = 33;
+
         public const ushort SMSG_ACT_SOMEONEJUMP_CMD = 37;
 
         public const ushort SMSG_ACT_PITCHTENT_ACK = 40;
@@ -89,6 +93,8 @@
 
         public const ushort SMSG_ACT_CREATECASTBAR = 71;
 
+        public const ushort SMSG_ACT_CANCELCASTBAR = 72;
+
         public const ushort SMSG_ACT_REINFORCE_STOP_CMD = 74;
 
 
@@ -103,15 +109,11 @@
 
         public const ushort NC_ACT_MOVEFAIL_ACK = 7;
 
-        public const ushort NC_ACT_CHANGEMODE_REQ = 8;
-
         public const ushort NC_ACT_NOTICE_REQ = 16;
 
         public const ushort NC_ACT_PARTYCHAT_ACK = 22;
 
         public const ushort NC_ACT_EMOTICON_CMD = 32;
-
-        public const ushort NC_ACT_SOMEONEEMOTICON_CMD = 33;
 
         public const ushort NC_ACT_EMOTICONSTOP_CMD = 34;
 
@@ -154,8 +156,6 @@
         public const ushort NC_ACT_RIDE_FEEDING_REQ = 68;
 
         public const ushort NC_ACT_RIDE_FEEDING_ACK = 69;
-
-        public const ushort NC_ACT_CANCELCASTBAR = 72;
 
         public const ushort NC_ACT_REINFORCE_RUN_CMD = 73;
 

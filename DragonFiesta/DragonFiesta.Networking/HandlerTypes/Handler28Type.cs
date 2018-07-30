@@ -26,6 +26,8 @@
 
         public const ushort CMSG_CHAR_OPTION_SET_KEYMAPPING_CMD = 22;
 
+        public const ushort CMSG_CHAR_OPTION_IMPROVE_SET_SHORTCUTDATA_REQ = 55;
+
         public const ushort CMSG_CHAR_OPTION_IMPROVE_SET_KEYMAP_REQ = 57;
 
         public const ushort CMSG_CHAR_OPTION_IMPROVE_SET_GAMEOPTION_REQ = 59;
@@ -51,6 +53,8 @@
         public const ushort SMSG_CHAR_OPTION_IMPROVE_GET_KEYMAP_CMD = 51;
 
         public const ushort SMSG_CHAR_OPTION_IMPROVE_GET_GAMEOPTION_CMD = 52;
+
+        public const ushort SMSG_CHAR_OPTION_IMPROVE_SET_SHORTCUTDATA_ACK = 56;
 
         public const ushort SMSG_CHAR_OPTION_IMPROVE_INIT_KEYMAP_ACK = 68;
 
@@ -129,10 +133,6 @@
         public const ushort NC_CHAR_OPTION_IMPROVE_GET_ETC3_CMD = 53;
 
         public const ushort NC_CHAR_OPTION_IMPROVE_GET_ETC4_CMD = 54;
-
-        public const ushort NC_CHAR_OPTION_IMPROVE_SET_SHORTCUTDATA_REQ = 55;
-
-        public const ushort NC_CHAR_OPTION_IMPROVE_SET_SHORTCUTDATA_ACK = 56;
 
         public const ushort NC_CHAR_OPTION_IMPROVE_SET_KEYMAP_ACK = 58;
     
