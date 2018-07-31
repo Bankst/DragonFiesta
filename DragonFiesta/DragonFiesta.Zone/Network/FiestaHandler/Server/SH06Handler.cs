@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Providers.Maps;
+using DragonFiesta.Zone.Game.Maps.Interface;
 using DragonFiesta.Zone.Game.Zone;
 using DragonFiesta.Zone.Network.Helpers;
 
@@ -43,6 +44,24 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
             {
                 SH06Helper.WriteDetailedInfoExtra(pSession.Character, pPacket);
                 pSession.SendPacket(pPacket);
+            }
+        }
+
+        public static void SendTownPortalAck(ZoneSession session)
+        {
+            using (var packet = new FiestaPacket(Handler06Type._Header, Handler06Type.SMSG_MAP_TOWNPORTAL_ACK))
+            {
+                packet.Write<ushort>(ZoneGameErrors.Unk3);
+                session.SendPacket(packet);
+            }
+        }
+
+        public static void MapLogoutCmd(ZoneSession session, IMapObject mapObject)
+        {
+            using (var packet = new FiestaPacket(Handler06Type._Header, Handler06Type.SMSG_MAP_LOGOUT_CMD))
+            {
+                packet.Write<ushort>(mapObject);
+                session.SendPacket(packet);
             }
         }
     }

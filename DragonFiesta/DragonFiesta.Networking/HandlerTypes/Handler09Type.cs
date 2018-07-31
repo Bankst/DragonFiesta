@@ -41,6 +41,10 @@
 
         public const ushort SMSG_BAT_SKILLBASH_CAST_SUC_ACK = 53;
 
+        public const ushort SMSG_BAT_DOTDAMAGE_CMD = 60;
+
+        public const ushort SMSG_BAT_CEASE_FIRE_CMD = 61;
+
         public const ushort SMSG_BAT_FAMEGAIN_CMD = 70;
 
         public const ushort SMSG_BAT_SWING_START_CMD = 71;
@@ -154,10 +158,6 @@
         public const ushort NC_BAT_SKILLBASH_HITTED_CMD = 58;
 
         public const ushort NC_BAT_SOMEONESKILLBASH_HIT_CMD = 59;
-
-        public const ushort NC_BAT_DOTDAMAGE_CMD = 60;
-
-        public const ushort NC_BAT_CEASE_FIRE_CMD = 61;
 
         public const ushort NC_BAT_ASSIST_REQ = 62;
 
