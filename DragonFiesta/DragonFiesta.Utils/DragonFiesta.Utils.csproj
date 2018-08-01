@@ -196,6 +196,7 @@
     <Compile Include="Extensions\SecureWriteCollection.cs" />
     <Compile Include="Threading\ThreadPool.cs" />
     <Compile Include="Error\StartupException.cs" />
+    <Compile Include="Utils\RandomString.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

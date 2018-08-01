@@ -11,9 +11,11 @@ namespace DragonFiesta.Login.Game.Worlds
         public WorldConnectionInfo ConnectionInfo { get; set; }
         public WorldInfo Info { get; private set; }
 
-        public bool IsConnected { get { return (Session != null && Session.IsReady); } }
+        public bool IsConnected => (Session != null && Session.IsReady);
 
-        public bool IsReady { get { return IsConnected && _IsReady; } set { _IsReady = value; } }
+	    public bool IsReady { get => IsConnected && _isReady;
+		    set => _isReady = value;
+	    }
 
         public WorldStatus Status
         {
@@ -31,43 +33,39 @@ namespace DragonFiesta.Login.Game.Worlds
                 if (Info.IsTestServer)
                     return WorldStatus.Reserved;
 
-
-                int total = OnlinePlayers * 100 / ConnectionInfo.MaxPlayers;
+                var total = OnlinePlayers * 100 / ConnectionInfo.MaxPlayers;
 
                 if (total < 25)
                 {
                     return WorldStatus.Low;
                 }
-                else if (total < 50)
-                {
-                    return WorldStatus.Medium;
-                }
-                else if (total >= 100)
-                {
-                    return WorldStatus.Full;
-                }
 
-                return WorldStatus.Hight;
+	            if (total < 50)
+	            {
+		            return WorldStatus.Medium;
+	            }
+
+	            return total >= 100 ? WorldStatus.Full : WorldStatus.High;
             }
         }
 
-        private bool _IsReady;
+        private bool _isReady;
 
         public InternWorldSession Session { get; set; }
 
-        public World(WorldInfo Info)
+        public World(WorldInfo info)
         {
-            this.Info = Info;
+            this.Info = info;
         }
 
         public void WriteInfo(FiestaPacket pPacket)
         {
             pPacket.Write<byte>(Info.WorldID);
             pPacket.WriteString(Info.WorldName, 16);
-            pPacket.Write<byte>(Status == WorldStatus.Reserved ? WorldStatus.Maintenance : Status == WorldStatus.Full ? WorldStatus.Hight : Status);
+            pPacket.Write<byte>(Status == WorldStatus.Reserved ? WorldStatus.Maintenance : Status == WorldStatus.Full ? WorldStatus.High : Status);
         }
 
-        public void SendMessage(IMessage pMessage, bool AddCallback = true)
+        public void SendMessage(IMessage pMessage, bool addCallback = true)
         {
             Session.SendMessage(pMessage);
         }
@@ -77,7 +75,7 @@ namespace DragonFiesta.Login.Game.Worlds
 
             ConnectionInfo = null;
             Session = null;
-            _IsReady = false;
+            _isReady = false;
         }
     }
 }

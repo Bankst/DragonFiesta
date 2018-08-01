@@ -11,6 +11,6 @@
         OK = 6,
         Low = 7,
         Medium = 9,
-        Hight = 10,
+        High = 10,
     }
 }
