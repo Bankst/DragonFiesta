@@ -34,11 +34,7 @@ namespace DragonFiesta.World.Game.Character
 	    {
 		    using (var worldEntity = EDM.GetWorldEntity())
 		    {
-			    foreach (var character in worldEntity.DBCharacters)
-			    {
-				    character.IsOnline = false;
-			    }
-			    worldEntity.SaveChanges();
+			    worldEntity.Database.ExecuteSqlCommand("UPDATE Characters SET IsOnline='0'");
 		    }
 	    }
 

@@ -10,191 +10,191 @@ namespace DragonFiesta.World.Network.FiestaHandler.Server
 {
     public static class SH21Handler
     {
-    
-        public static void WriteFriendInfo(WorldCharacter MyFriend, FiestaPacket Packet)
+		/*
+        public static void WriteFriendInfo(WorldCharacter myFriend, FiestaPacket packet)
         {
-            Packet.Write<byte>(MyFriend.LoginInfo.IsOnline ? 0x01 : 0x02);
-            Packet.Write<byte>(MyFriend.LoginInfo.LastLogin.Month << 4);
-            Packet.Write<byte>(MyFriend.LoginInfo.LastLogin.Day);
-            Packet.Write<byte>(15);
-            Packet.WriteString(MyFriend.Info.Name, 20);
-            Packet.Write<byte>(MyFriend.Info.Class);
-            Packet.Write<byte>(MyFriend.Info.Level);
-            Packet.Write<bool>(0);  //IsInGroup
-            Packet.Write<byte>(1);  //flag
-            Packet.WriteString(MyFriend.AreaInfo.MapInfo.Index, 12);
-            Packet.Fill(32, 0x00);  //statustitel
+            packet.Write<byte>(myFriend.LoginInfo.IsOnline ? 0x01 : 0x02);
+            packet.Write<byte>(myFriend.LoginInfo.LastLogin.Month << 4);
+            packet.Write<byte>(myFriend.LoginInfo.LastLogin.Day);
+            packet.Write<byte>(15);
+            packet.WriteString(myFriend.Info.Name, 20);
+            packet.Write<byte>(myFriend.Info.Class);
+            packet.Write<byte>(myFriend.Info.Level);
+            packet.Write<bool>(0);  //IsInGroup
+            packet.Write<byte>(1);  //flag
+            packet.WriteString(myFriend.AreaInfo.MapInfo.Index, 12);
+            packet.Fill(32, 0x00);  //statustitel
         }
 
-        public static void SendFrendPointDiff(WorldSession Session, ushort GivedPoints)
+        public static void SendFrendPointDiff(WorldSession session, ushort givedPoints)
         {
             using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_GET_DIFF_FRIEND_POINT_CMD))
             {
-                pack.Write<ushort>(GivedPoints);
-                Session.SendPacket(pack);
+                pack.Write<ushort>(givedPoints);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFindFrendList(WorldSession Session, IEnumerable<WorldCharacter> List)
+        public static void SendFindFrendList(WorldSession session, IEnumerable<WorldCharacter> list)
         {
             using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_FIND_FRIENDS_ACK))
             {
                 pack.Write<ushort>(14016);  //Succes Error code
-                pack.Write<ushort>(List.Count());
+                pack.Write<ushort>(list.Count());
 
-                foreach (var Char in List)
+                foreach (var Char in list)
                 {
                     WriteFriendInfo(Char, pack);
                 }
-                Session.SendPacket(pack);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendList(WorldCharacter Character)
+        public static void SendFriendList(WorldCharacter character)
         {
 
             using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_LIST_CMD))
             {
-                pack.Write<byte>(Character.Friends.Count);
+                pack.Write<byte>(character.Friends.Count);
 
-                for (int i = 0; i < Character.Friends.Count; i++)
+                for (int i = 0; i < character.Friends.Count; i++)
                 {
-                    WriteFriendInfo(Character.Friends[i].MyFriend, pack);
+                    WriteFriendInfo(character.Friends[i].MyFriend, pack);
                 }
-                Character.Session.SendPacket(pack);
+                character.Session.SendPacket(pack);
             }
         }
 
-        public static void BroadcastFriendLoggedOut(WorldCharacter Character) =>
+        public static void BroadcastFriendLoggedOut(WorldCharacter character) =>
 
-            Character.Friends.FriendAction((frend) =>
+            character.Friends.FriendAction(friend =>
             {
-                SendFriendLoggedOut(frend.MyFriend.Session, Character);
-            }, true);
+                SendFriendLoggedOut(friend.MyFriend.Session, character);
+            });
 
-        public static void BroadcastFriendLoggedIn(WorldCharacter Character) =>
+        public static void BroadcastFriendLoggedIn(WorldCharacter character) =>
 
-            Character.Friends.FriendAction((frend) =>
+            character.Friends.FriendAction(frend =>
             {
-                SendFriendLoggedIn(frend.MyFriend.Session, Character);
-            }, true);
+                SendFriendLoggedIn(frend.MyFriend.Session, character);
+            });
 
-
-        public static void SendFriendLoggedIn(WorldSession Session, WorldCharacter Character)
+        public static void SendFriendLoggedIn(WorldSession session, WorldCharacter character)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_LOGIN_CMD))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_LOGIN_CMD))
             {
-                Pack.WriteString(Character.Info.Name, 20);
-                Pack.WriteString(Character.AreaInfo.MapInfo.Index, 12);
-                Session.SendPacket(Pack);
+                pack.WriteString(character.Info.Name, 20);
+                pack.WriteString(character.AreaInfo.MapInfo.Index, 12);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendLoggedOut(WorldSession Session,WorldCharacter Character)
+        public static void SendFriendLoggedOut(WorldSession session,WorldCharacter character)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_LOGOUT_CMD))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_LOGOUT_CMD))
             {
-                Pack.WriteString(Character.Info.Name, 20);
-                Session.SendPacket(Pack);
+                pack.WriteString(character.Info.Name, 20);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendUpdateLevel(WorldCharacter Character, byte NewLevel)
+        public static void SendFriendUpdateLevel(WorldCharacter character, byte newLevel)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_LEVEL_CMD))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_LEVEL_CMD))
             {
-                Pack.WriteString(Character.Info.Name, 20);
-                Pack.Write<byte>(NewLevel);
-                Character.Friends.Broadcast(Pack);
+                pack.WriteString(character.Info.Name, 20);
+                pack.Write<byte>(newLevel);
+                character.Friends.Broadcast(pack);
             }
         }
 
-        public static void SendFriendUpdateMap(WorldCharacter Character, MapInfo NewMap)
+        public static void SendFriendUpdateMap(WorldCharacter character, MapInfo newMap)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_MAP_CMD))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_MAP_CMD))
             {
-                Pack.WriteString(Character.Info.Name, 20);
-                Pack.WriteString(NewMap.Index, 12);
-                Character.Friends.Broadcast(Pack);
+                pack.WriteString(character.Info.Name, 20);
+                pack.WriteString(newMap.Index, 12);
+                character.Friends.Broadcast(pack);
             }
         }
 
-        public static void SendFrendChangeClass(WorldCharacter Character,ClassId NewClass)
+        public static void SendFrendChangeClass(WorldCharacter character,ClassId newClass)
         {
             using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_CLASS_CHANGE_CMD))
             {
-                pack.WriteString(Character.Info.Name, 20);
-                pack.Write<byte>(Character.Info.Class);
-                Character.Friends.Broadcast(pack);
+                pack.WriteString(character.Info.Name, 20);
+                pack.Write<byte>(character.Info.Class);
+                character.Friends.Broadcast(pack);
             }
         }
 
-        public static void SendFriendInviteRefuse(WorldSession Session, string ReciverName)
+        public static void SendFriendInviteRefuse(WorldSession session, string reciverName)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_REFUSE_CMD))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_REFUSE_CMD))
             {
-                Pack.WriteString(ReciverName, 20);
-                Session.SendPacket(Pack);
+                pack.WriteString(reciverName, 20);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendInviteRequest(WorldSession Session, string ReciverName, string SenderName)
+        public static void SendFriendInviteRequest(WorldSession session, string reciverName, string senderName)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_SET_CONFIRM_REQ))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_SET_CONFIRM_REQ))
             {
-                Pack.WriteString(ReciverName, 20);
-                Pack.WriteString(SenderName, 20);
-                Session.SendPacket(Pack);
+                pack.WriteString(reciverName, 20);
+                pack.WriteString(senderName, 20);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendInviteResponse(WorldSession session, string ReciverName, FriendInviteResponse response)
+        public static void SendFriendInviteResponse(WorldSession session, string reciverName, FriendInviteResponse response)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_SET_ACK))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_SET_ACK))
             {
-                Pack.WriteString(session.Character.Info.Name, 20);
-                Pack.WriteString(ReciverName, 20);
-                Pack.Write<ushort>(response);
-                session.SendPacket(Pack);
+                pack.WriteString(session.Character.Info.Name, 20);
+                pack.WriteString(reciverName, 20);
+                pack.Write<ushort>(response);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendExtraInfo(WorldSession Session, WorldCharacter Frend)
+        public static void SendFriendExtraInfo(WorldSession session, WorldCharacter frend)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_ADD_CMD))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_ADD_CMD))
             {
-                WriteFriendInfo(Frend, Pack);
-                Session.SendPacket(Pack);
+                WriteFriendInfo(frend, pack);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendDeleteResponse(WorldSession Session, string ReciverName, FriendDeleteResponse response)
+        public static void SendFriendDeleteResponse(WorldSession session, string reciverName, FriendDeleteResponse response)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_DEL_ACK))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_DEL_ACK))
             {
-                Pack.WriteString(Session.Character.Info.Name, 20);
-                Pack.WriteString(ReciverName, 20);
-                Pack.Write<ushort>(response);
-                Session.SendPacket(Pack);
+                pack.WriteString(session.Character.Info.Name, 20);
+                pack.WriteString(reciverName, 20);
+                pack.Write<ushort>(response);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFriendDeletedYou(WorldSession Session, string SenderName)
+        public static void SendFriendDeletedYou(WorldSession session, string senderName)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_DEL_CMD))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_DEL_CMD))
             {
-                Pack.WriteString(SenderName, 20);
-                Session.SendPacket(Pack);
+                pack.WriteString(senderName, 20);
+                session.SendPacket(pack);
             }
         }
 
-        public static void SendFrendPoints(WorldCharacter Character)
+        public static void SendFrendPoints(WorldCharacter character)
         {
-            using (var Pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_POINT_ACK))
+            using (var pack = new FiestaPacket(Handler21Type._Header, Handler21Type.SMSG_FRIEND_POINT_ACK))
             {
-                Pack.Write<ushort>(Character.Info.FriendPoints);
-                Character.Session.SendPacket(Pack);
+                pack.Write<ushort>(character.Info.FriendPoints);
+                character.Session.SendPacket(pack);
             }
         }
-    }
+	*/
+	}
 }

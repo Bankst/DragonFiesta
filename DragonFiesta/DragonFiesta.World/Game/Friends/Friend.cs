@@ -1,16 +1,15 @@
 ﻿using DragonFiesta.World.Game.Character;
 using System;
 using System.Threading;
+using DragonFiesta.Database.Models;
 
 namespace DragonFiesta.World.Game.Friends
 {
-    public class Friend : IDisposable
+    public class Friend : DBFriend, IDisposable
     {
 
         public WorldCharacter Owner { get;  set; }
         public WorldCharacter MyFriend { get; private set; }
-
-        public DateTime RegisterDate { get; private set; }
 
         public bool IsDisposed { get { return (IsDisposedInt > 0); } }
         private int IsDisposedInt;

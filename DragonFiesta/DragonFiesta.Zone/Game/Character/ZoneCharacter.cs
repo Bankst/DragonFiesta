@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Game.Characters;
 using DragonFiesta.Game.Stats;
@@ -8,12 +9,12 @@ using DragonFiesta.Providers.Characters;
 using DragonFiesta.Providers.Maps;
 using DragonFiesta.Utils.Config;
 using DragonFiesta.Utils.Logging;
-using DragonFiesta.Zone.Game.Maps.Event;
-using DragonFiesta.Zone.Game.Maps.Object;
-using DragonFiesta.Zone.Game.Maps.Interface;
 using DragonFiesta.Zone.Data.Character;
 using DragonFiesta.Zone.Game.Chat;
 using DragonFiesta.Zone.Game.Maps;
+using DragonFiesta.Zone.Game.Maps.Event;
+using DragonFiesta.Zone.Game.Maps.Interface;
+using DragonFiesta.Zone.Game.Maps.Object;
 using DragonFiesta.Zone.Game.Maps.Types;
 using DragonFiesta.Zone.Game.Stats;
 using DragonFiesta.Zone.InternNetwork.InternHandler.Server.Character;
@@ -24,7 +25,7 @@ using DragonFiesta.Zone.Network.Helpers;
 
 namespace DragonFiesta.Zone.Game.Character
 {
-    public class ZoneCharacter : CharacterBase, ILivingObject
+	public class ZoneCharacter : CharacterBase, ILivingObject
     {
         #region Property
 
@@ -49,7 +50,6 @@ namespace DragonFiesta.Zone.Game.Character
             get => Info.Level;
             set => Info.Level = value;
         }
-
 
         public override bool IsGM => LoginInfo.RoleId > 0;
 
@@ -111,7 +111,6 @@ namespace DragonFiesta.Zone.Game.Character
             }
         }
 
-
         private int _isDisposedInt;
 
         #endregion Property
@@ -133,11 +132,7 @@ namespace DragonFiesta.Zone.Game.Character
 
 			InRange = new InRangeCollection(this);
             Selection = new CharacterObjectSelection(this);
-
         }
-
-
-
 
         #region MapObject
 
@@ -179,21 +174,18 @@ namespace DragonFiesta.Zone.Game.Character
             }
         }
 
-        public override bool RefreshCharacter(SQLResult pRes, int i, out CharacterErrors result)
+        public override bool RefreshCharacter(DBCharacter character, out CharacterErrors result)
         {
-            if (!base.RefreshCharacter(pRes, i, out result))
+            if (!base.RefreshCharacter(character, out result))
                 return false;
 
             LivingStats.Load(
-                pRes.Read<uint>(i, "HP"),
-                pRes.Read<uint>(i, "SP"),
-                pRes.Read<uint>(i, "LP"));
+                (uint) character.HP,
+                (uint) character.SP,
+				(uint) character.LP);
 
             return true;
         }
-
-
-
 
         public void Broadcast(FiestaPacket packet) => InRange.Broadcast(packet);
 
@@ -215,7 +207,7 @@ namespace DragonFiesta.Zone.Game.Character
                 base.Dispose();
             }
         }
-
+		
         public override bool Save()
         {
             try
@@ -283,13 +275,12 @@ namespace DragonFiesta.Zone.Game.Character
             packet.Write<ushort>(UpdateCounter);
         }
 
-
         public void ChangeMap(ushort newMapId, ushort instanceId, uint spawnX = 0, uint spawnY = 0)
         {
 
             if (!MapDataProvider.GetMapInfoByID(newMapId, out var newMap))
             {
-                ZoneChat.CharacterNote(this, $"Map not Found in Database");
+                ZoneChat.CharacterNote(this, "Map not Found in Database");
                 return;
             }
 
@@ -331,9 +322,9 @@ namespace DragonFiesta.Zone.Game.Character
             base.DisposeInternal();
 
         }
+
         #region Event
-
-
+		
         private void LivingStats_OnLPChanged(object sender, LivingObjectInterActiveStatsChangedEventArgs e)
         {
             if (IsConnected
@@ -355,7 +346,6 @@ namespace DragonFiesta.Zone.Game.Character
                 SH09Handler.SendHPUpdate(this);
         }
 
-
         public void Move(Position newPosition, bool isRun, bool isStop)
         {
             lock (ThreadLocker)
@@ -368,6 +358,7 @@ namespace DragonFiesta.Zone.Game.Character
 	            OnMove.Invoke(this, args);
             }
         }
+
         private void InvokeUpdateCounterChanged()
         {
 	        var args = new UpdateCounterChangeEventArgs(this, _updateCounter);
@@ -376,6 +367,7 @@ namespace DragonFiesta.Zone.Game.Character
 		        t.Invoke(this, args);
 	        }
         }
+
         private void InvokeOnDispose()
         {
 	        if (_onDisposeHandlers.Count <= 0) return;
@@ -405,11 +397,11 @@ namespace DragonFiesta.Zone.Game.Character
 		        t.Invoke(this, args);
 	        }
         }
+
         public override bool LevelUP(ushort mobID = ushort.MaxValue, bool finalizeLevelUp = true)
         {
             if (!base.LevelUP(mobID, false))
                 return false;
-
 
             if (!CharacterDataProvider.GetLevelParameters(Info.Class, Info.Level, out var parameters))
             {
@@ -417,9 +409,6 @@ namespace DragonFiesta.Zone.Game.Character
                 return false;
             }
 
-           
-      
-           
             Stats.UpdateAll();
             //update hp + sp to 100%
             LivingStats.HP = (uint)Stats.FullStats.MaxHP;
@@ -450,9 +439,7 @@ namespace DragonFiesta.Zone.Game.Character
 
             if (finalizeLevelUp)
                 CharacterMethods.SendCharacterLevelChanged(Info.CharacterID, Level);
-
-
-
+			
             return true;
         }
 
@@ -480,6 +467,4 @@ namespace DragonFiesta.Zone.Game.Character
     }
 
     #endregion
-
-    
 }

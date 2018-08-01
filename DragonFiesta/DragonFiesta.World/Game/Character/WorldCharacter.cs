@@ -16,9 +16,6 @@ namespace DragonFiesta.World.Game.Character
 {
 	public class WorldCharacter : CharacterBase
     {
-
-
-
         public Action ZoneTransferCallback { get; set; }
 
         public new WorldClientLoginInfo LoginInfo { get => base.LoginInfo as WorldClientLoginInfo; }
@@ -29,93 +26,89 @@ namespace DragonFiesta.World.Game.Character
 
         public WorldCharacter_Options Options { get; private set; }
 
-        public bool IsOnInstance { get => Map is IInstanceMap; }
+        public bool IsOnInstance => Map is IInstanceMap;
 
-        public new WorldServerMap Map { get => (AreaInfo.Map as WorldServerMap); }
+	    public new WorldServerMap Map => (AreaInfo.Map as WorldServerMap);
 
-        public WorldSession Session { get; set; }
+	    public WorldSession Session { get; set; }
 
         public override bool IsConnected => (Session != null && Session.IsConnected);
 
-
-        public new FriendCollection Friends { get; private set; }
+	    // TODO: Rewrite FriendCollection
+		//public new FriendCollection Friends { get; private set; }
 
         public WorldCharacter() : base()
         {
             base.LoginInfo = new WorldClientLoginInfo(this);
             base.Info = new WorldCharacterInfo(this);
             Options = new WorldCharacter_Options(this);
-            Friends = new FriendCollection(this);
-        }
 
+	        // TODO: Rewrite FriendCollection
+			//Friends = new FriendCollection(this);
+		}
 
-        public void SetFriendPoint(ushort NewFriendPoint)
-            => CharacterMethods.SendSetFriendPoint(this, NewFriendPoint);
+		public void SetFriendPoint(ushort newFriendPoint)
+            => CharacterMethods.SendSetFriendPoint(this, newFriendPoint);
 
-        public bool ChangeMap(ushort mapId, ushort InstanceId, uint SpawnX = 0, uint SpawnY = 0)
-        {
-
-
-            if (!MapDataProvider.GetFieldInfosByMapID(mapId, out FieldInfo Info))
+        public bool ChangeMap(ushort mapId, ushort instanceId, uint spawnX = 0, uint spawnY = 0)
+		{
+            if (!MapDataProvider.GetFieldInfosByMapID(mapId, out FieldInfo info))
             {
                 ZoneChat.CharacterNote(this, $"FieldInfo {mapId} not found!");
                 return false;
             }
 
-            if (!MapManager.GetMap(Info, InstanceId, out WorldServerMap NewMap))
+            if (!MapManager.GetMap(info, instanceId, out WorldServerMap newMap))
             {
-                ZoneChat.CharacterNote(this, $"Map {mapId} Instance {InstanceId} not found!");
+                ZoneChat.CharacterNote(this, $"Map {mapId} Instance {instanceId} not found!");
                 return false;
             }
 
-            SpawnX = (SpawnX == 0 ? NewMap.Info.RegenMap.Regen.X : SpawnX);
-            SpawnY = (SpawnY == 0 ? NewMap.Info.RegenMap.Regen.Y : SpawnY);
+            spawnX = (spawnX == 0 ? newMap.Info.RegenMap.Regen.X : spawnX);
+            spawnY = (spawnY == 0 ? newMap.Info.RegenMap.Regen.Y : spawnY);
 
-            WorldMapTransfer Transfer = new WorldMapTransfer
+            WorldMapTransfer transfer = new WorldMapTransfer
             {
                 Character = this,
-                Map = NewMap,
+                Map = newMap,
             };
 
-
-
-            if (Map.Info.ZoneID != NewMap.ZoneId)
+            if (Map.Info.ZoneID != newMap.ZoneId)
             {
-                ZoneTransferMessage TransferMsg = new ZoneTransferMessage
+                ZoneTransferMessage transferMsg = new ZoneTransferMessage
                 {
                     Id = Guid.NewGuid(),
                     CharacterId = this.Info.CharacterID,
-                    InstanceId = InstanceId,
-                    MapId = NewMap.MapId,
-                    SpawnPosition = new Position(SpawnX, SpawnY),
+                    InstanceId = instanceId,
+                    MapId = newMap.MapId,
+                    SpawnPosition = new Position(spawnX, spawnY),
                     WorldSessionId = Session.BaseStateInfo.SessionId,
                     Callback = ZoneTransfer_Response.HandleZoneTransfer_Response
                 };
                 ZoneTransferCallback = () =>
                {
                    //change Client 
-                   if (!WorldServerTransferManager.AddTransfer(Transfer))
+                   if (!WorldServerTransferManager.AddTransfer(transfer))
                    {
                        Session.Dispose();
                        return;
                    }
 
-
                    CharacterMethods.BroadcastCharacterChangeMap(
                        this.Info.CharacterID,
-                       Info.MapInfo.ID,
-                       new Position(SpawnX, SpawnY),
-                       InstanceId);
+                       info.MapInfo.ID,
+                       new Position(spawnX, spawnY),
+                       instanceId);
 
-                   WorldCharacterManager.Instance.CharacterChangeMap(this, NewMap);
+                   WorldCharacterManager.Instance.CharacterChangeMap(this, newMap);
                };
 
                 //send Request to zone
-                NewMap.Zone.Send(TransferMsg);
+                newMap.Zone.Send(transferMsg);
             }
             else
             {
-                if (!WorldServerTransferManager.AddTransfer(Transfer))
+                if (!WorldServerTransferManager.AddTransfer(transfer))
                 {
                     Session.Dispose();
                     return false;
@@ -123,43 +116,34 @@ namespace DragonFiesta.World.Game.Character
 
                 CharacterMethods.BroadcastCharacterChangeMap(
                     this.Info.CharacterID,
-                    Info.MapInfo.ID,
-                    new Position(SpawnX, SpawnY),
-                    InstanceId);
+                    info.MapInfo.ID,
+                    new Position(spawnX, spawnY),
+                    instanceId);
 
-                WorldCharacterManager.Instance.CharacterChangeMap(this, NewMap);
+                WorldCharacterManager.Instance.CharacterChangeMap(this, newMap);
             }
 
             return true;
         }
 
-        public override bool FinalizeLoad(out CharacterErrors Result)
+        public override bool FinalizeLoad(out CharacterErrors result)
         {
-            if (!Friends.Refresh())
+			/*
+            if (!Friends.RefreshEntity())
             {
-                Result = CharacterErrors.ErrorInFriendInfo;
+                result = CharacterErrors.ErrorInFriendInfo;
                 return false;
             }
+			*/
 
             if (!Options.Refresh())
             {
-                Result = CharacterErrors.ErrorInOptions;
+                result = CharacterErrors.ErrorInOptions;
                 return false;
             }
 
-            return base.FinalizeLoad(out Result);
+            return base.FinalizeLoad(out result);
         }
-
-       
-        public override bool RefreshCharacter(SQLResult pRes, int i, out CharacterErrors Result)
-        {
-            if (!base.RefreshCharacter(pRes, i, out Result))
-                return false;
-
-           
-            return true;
-        }
-
 
         public override bool Save()
         {
@@ -175,10 +159,6 @@ namespace DragonFiesta.World.Game.Character
                     cmd.SetParameter("@pFace", Style.Face.ID);
                     cmd.ExecuteNonQuery();
                 }
-
-             
-
-
                 return true;
             }
             catch (Exception ex)
@@ -188,7 +168,7 @@ namespace DragonFiesta.World.Game.Character
             }
         }
 
-        public override bool GiveEXP(uint Amount, ushort MobId = ushort.MaxValue)
+        public override bool GiveEXP(uint amount, ushort mobId = ushort.MaxValue)
         {
             throw new NotImplementedException();
         }
@@ -198,15 +178,17 @@ namespace DragonFiesta.World.Game.Character
             //here invoke dispose
             base.DisposeInternal();
 
+			// TODO: Rewrite FriendCollection
+			/*
+	        if (Friends != null)
+	        {
+		        Friends.Dispose();
+		        Friends = null;
+			}
+			*/
 
-            Friends.Dispose();
-            Friends = null;
-
-            ZoneTransferCallback = null;
+			ZoneTransferCallback = null;
             Session = null;
-
-
         }
-
     }
 }

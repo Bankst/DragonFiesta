@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading;
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.World.Game.Friends
@@ -11,68 +13,105 @@ namespace DragonFiesta.World.Game.Friends
     {
         private WorldCharacter Owner { get; set; }
 
-        public int Count { get { return List.Count; } }
+        public int Count { get { return _list.Count; } }
 
-        public bool IsDisposed { get { return (IsDisposedInt > 0); } }
-        private int IsDisposedInt;
+        public bool IsDisposed { get { return (_isDisposedInt > 0); } }
+        private int _isDisposedInt;
 
-        private SecureCollection<Friend> List;
-        private ConcurrentDictionary<int, Friend> FriendsByCharacterID;
+        private SecureCollection<Friend> _list;
+        private ConcurrentDictionary<int, Friend> _friendsByCharacterID;
 
-        private object ThreadLocker;
+        private object _threadLocker;
 
-        public FriendCollection(WorldCharacter Owner)
+        public FriendCollection(WorldCharacter owner)
         {
-            this.Owner = Owner;
-            List = new SecureCollection<Friend>();
-            FriendsByCharacterID = new ConcurrentDictionary<int, Friend>();
-            ThreadLocker = new object();
+            this.Owner = owner;
+            _list = new SecureCollection<Friend>();
+            _friendsByCharacterID = new ConcurrentDictionary<int, Friend>();
+            _threadLocker = new object();
         }
 
 
         public void Dispose()
         {
-            if (Interlocked.CompareExchange(ref IsDisposedInt, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) == 0)
             {
                 Owner = null;
-                FriendAction((f) => f.Dispose(), false);
-                List.Dispose();
-                List = null;
-                FriendsByCharacterID.Clear();
-                FriendsByCharacterID = null;
+                FriendAction(f => f.Dispose(), false);
+                _list.Dispose();
+                _list = null;
+                _friendsByCharacterID.Clear();
+                _friendsByCharacterID = null;
 
             }
         }
+
         public void Clear()
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
                 FriendAction((f) => f.Dispose());
-                List.Clear();
-                FriendsByCharacterID.Clear();
+                _list.Clear();
+                _friendsByCharacterID.Clear();
             }
         }
+
+	    public bool RefreshEntity()
+	    {
+		    Clear();
+
+		    lock (_threadLocker)
+		    {
+			    try
+			    {
+				    using (var worldEntity = EDM.GetWorldEntity())
+				    {
+					    var result = worldEntity.DBFriends.Where(fr => fr.OwnerID == Owner.Info.CharacterID);
+
+					    foreach (var dbFriend in result)
+					    {
+						    if (!WorldCharacterManager.Instance.GetCharacterByCharacterID(dbFriend.FriendID,
+							    out var character, false))
+						    {
+							    return false;
+						    }
+
+						    var friend = new Friend(Owner, character, dbFriend.RegisterDate);
+
+						    if (!Add(friend)) return false;
+					    }
+				    }
+			    }
+			    catch (Exception)
+			    {
+				    return false;
+			    }
+		    }
+
+		    return true;
+	    }
+
         public bool Refresh()
         {
             Clear();
 
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
                 try
                 {
-                    SQLResult Result = DB.Select(DatabaseType.World, "SELECT * FROM Friends WHERE OwnerID = @pOwnerID", new SqlParameter("@pOwnerID", Owner.Info.CharacterID));
+                    SQLResult result = DB.Select(DatabaseType.World, "SELECT * FROM Friends WHERE OwnerID = @pOwnerID", new SqlParameter("@pOwnerID", Owner.Info.CharacterID));
 
                     //here todo fix stack overflow...
-                    for (int i = 0; i < Result.Count; i++)
+                    for (var i = 0; i < result.Count; i++)
                     {
-                        if (!WorldCharacterManager.Instance.GetCharacterByCharacterID(Result.Read<int>(i, "FriendId"), out WorldCharacter Character, false))
+                        if (!WorldCharacterManager.Instance.GetCharacterByCharacterID(result.Read<int>(i, "FriendId"), out var character, false))
                         {
                             return false;
                         }
 
-                        var Frend = new Friend(Owner, Character, Result.Read<DateTime>(i, "RegisterDate"));
+                        var frend = new Friend(Owner, character, result.Read<DateTime>(i, "RegisterDate"));
 
-                        if (!Add(Frend))
+                        if (!Add(frend))
                             return false;
                     }
                 }
@@ -85,73 +124,60 @@ namespace DragonFiesta.World.Game.Friends
             return true;
         }
 
-        public Friend this[int Index]
+        public Friend this[int index] => _list[index];
+
+	    public bool Contains(int characterID)
         {
-            get { return List[Index]; }
-        }
-        public bool Contains(int CharacterID)
-        {
-            return FriendsByCharacterID.ContainsKey(CharacterID);
+            return _friendsByCharacterID.ContainsKey(characterID);
         }
 
-        public bool Contains(WorldCharacter Character)
+        public bool Contains(WorldCharacter character)
         {
-            return Contains(Character.Info.CharacterID);
+            return Contains(character.Info.CharacterID);
         }
 
-        public bool Add(Friend Friend)
+        public bool Add(Friend friend)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                if (FriendsByCharacterID.TryAdd(Friend.MyFriend.Info.CharacterID, Friend))
-                {
-                    List.Add(Friend);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool Remove(Friend Friend)
-        {
-            lock (ThreadLocker)
-            {
-                if (FriendsByCharacterID.TryRemove(Friend.MyFriend.Info.CharacterID, out Friend))
-                {
-                    List.Remove(Friend);
-                    Friend.Dispose();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool RemoveByCharacterID(int CharacterID)
-        {
-            lock (ThreadLocker)
-            {
-                Friend friend;
-                if (FriendsByCharacterID.TryGetValue(CharacterID, out friend))
-                {
-                    return Remove(friend);
-                }
-                return false;
+	            if (!_friendsByCharacterID.TryAdd(friend.MyFriend.Info.CharacterID, friend)) return false;
+	            _list.Add(friend);
+	            return true;
             }
         }
 
-        public void FriendAction(Action<Friend> Action, bool OnlyConnected = true)
+        public bool Remove(Friend friend)
         {
-            lock (ThreadLocker)
+            lock (_threadLocker)
             {
-                for (int i = 0; i < List.Count; i++)
+	            if (!_friendsByCharacterID.TryRemove(friend.MyFriend.Info.CharacterID, out friend)) return false;
+	            _list.Remove(friend);
+	            friend.Dispose();
+	            return true;
+            }
+        }
+
+        public bool RemoveByCharacterID(int characterID)
+        {
+            lock (_threadLocker)
+            {
+	            return _friendsByCharacterID.TryGetValue(characterID, out var friend) && Remove(friend);
+            }
+        }
+
+        public void FriendAction(Action<Friend> action, bool onlyConnected = true)
+        {
+            lock (_threadLocker)
+            {
+                for (var i = 0; i < _list.Count; i++)
                 {
                     try
                     {
-                        var friend = List[i];
+                        var friend = _list[i];
 
-                        if (OnlyConnected && !friend.MyFriend.IsConnected)
+                        if (onlyConnected && !friend.MyFriend.IsConnected)
                             continue;
-                        Action.Invoke(friend);
+                        action.Invoke(friend);
                     }
                     catch (Exception)
                     {
@@ -161,9 +187,9 @@ namespace DragonFiesta.World.Game.Friends
             }
         }
 
-        public void Broadcast(FiestaPacket Packet)
+        public void Broadcast(FiestaPacket packet)
         {
-            FriendAction((f) => f.MyFriend.Session.SendPacket(Packet), true);
+            FriendAction((f) => f.MyFriend.Session.SendPacket(packet), true);
         }
 
     }

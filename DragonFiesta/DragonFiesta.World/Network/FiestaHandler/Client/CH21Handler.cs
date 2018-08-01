@@ -10,6 +10,7 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
     [PacketHandlerClass(Handler21Type._Header)]
     public static class CH21Handler
     {
+		/*
         [PacketHandler(Handler21Type.CMSG_FRIEND_POINT_REQ)]
         public static void CMSG_FRIEND_POINT_REQ(WorldSession sender, FiestaPacket packet)
         {
@@ -137,5 +138,6 @@ namespace DragonFiesta.World.Network.FiestaHandler.Client
 
             SH21Handler.SendFriendInviteRequest(ReciverCharacter.Session, ReciverName, SenderName);
         }
+		*/
     }
 }

@@ -8,10 +8,10 @@ using DragonFiesta.Utils.Logging;
 
 namespace DragonFiesta.World.Game.Friends
 {
-    [GameServerModule(ServerType.World, GameInitalStage.Friend)]
+//    [GameServerModule(ServerType.World, GameInitalStage.Friend)]
     public class FriendManager
     {
-
+		/*
         private static object ThreadLocker;
 
         [InitializerMethod]
@@ -40,19 +40,19 @@ namespace DragonFiesta.World.Game.Friends
         {
             if (args.Character.Friends.Count > 0)
             {
-                args.Character.Friends.FriendAction((frend) =>
+                args.Character.Friends.FriendAction(friend =>
                 {
-                    if(!RemoveFriendFromDatabase(args.Character,frend.MyFriend))
+                    if(!RemoveFriendFromDatabase(args.Character,friend.MyFriend))
                     {
                         GameLog.Write(GameLogLevel.Warning, "Character Friend Deletion fail...");
                         return;
                     }
 
                     //check if friend is online, if so send 'deleted you' packet
-                    if (frend.MyFriend.LoginInfo.IsOnline
-                        && frend.MyFriend.Session.Ingame)
+                    if (friend.MyFriend.LoginInfo.IsOnline
+                        && friend.MyFriend.Session.Ingame)
                     {
-                        SH21Handler.SendFriendDeletedYou(frend.MyFriend.Session, args.Character.Info.Name);
+                        SH21Handler.SendFriendDeletedYou(friend.MyFriend.Session, args.Character.Info.Name);
                     }
 
                 }, false);
@@ -63,7 +63,8 @@ namespace DragonFiesta.World.Game.Friends
         {
             if (args.Character.Friends.Count > 0)
             {
-                SH21Handler.SendFrendChangeClass(args.Character, args.NewClass);
+	            // TODO: Rewrite FriendCollection
+	            //SH21Handler.SendFrendChangeClass(args.Character, args.NewClass);
             }
         }
 
@@ -71,24 +72,24 @@ namespace DragonFiesta.World.Game.Friends
         {
             if (args.Character.Friends.Count > 0)
             {
-                //Send friend list to client
-                SH21Handler.SendFriendList(args.Character);
+				//Send friend list to client
+				// TODO: Rewrite FriendCollection
+				//SH21Handler.SendFriendList(args.Character);
 
             }
         }
 
         private static void Instance_OnCharacterLevelChanged(object sender, CharacterLevelChangedEventArgs<WorldCharacter> e)
         {
-
             if (e.Character.Friends.Count > 0)
             {
-                SH21Handler.SendFriendUpdateLevel(e.Character, e.NewLevel);
+	            // TODO: Rewrite FriendCollection
+				//SH21Handler.SendFriendUpdateLevel(e.Character, e.NewLevel);
             }
         }
 
         private static void Instance_OnCharacterMapChanged(object sender, CharacterMapEventArgs<WorldCharacter, IMap> e)
         {
-
             if (e.Character.Friends.Count > 0)
             {
                 SH21Handler.SendFriendUpdateMap(e.Character, e.Map.MapInfo);
@@ -100,18 +101,16 @@ namespace DragonFiesta.World.Game.Friends
             if (e.Character.Friends.Count > 0)
             {
                 //send loggedout...
-                SH21Handler.BroadcastFriendLoggedOut(e.Character);
+//                SH21Handler.BroadcastFriendLoggedOut(e.Character);
             }
         }
 
         private static void Instance_OnCharacterLogin(object sender, CharacterEventArgs<WorldCharacter> arg)
         {
-
             if (arg.Character.Friends.Count > 0)
             {
-
                 //Tell another character online..
-                SH21Handler.BroadcastFriendLoggedIn(arg.Character);
+//                SH21Handler.BroadcastFriendLoggedIn(arg.Character);
             }
         }
 
@@ -127,8 +126,7 @@ namespace DragonFiesta.World.Game.Friends
                     SH21Handler.SendFriendInviteResponse(Receiver.Session, Sender.Info.Name, FriendInviteResponse.DatabaseError);
                     return;
                 }
-
-
+				
                 //add friend to sender
                 var senderFriend = new Friend(Sender, Receiver, RegisterDate);
                 Sender.Friends.Add(senderFriend);
@@ -137,8 +135,7 @@ namespace DragonFiesta.World.Game.Friends
                 SH21Handler.SendFriendInviteResponse(Sender.Session, Receiver.Info.Name, FriendInviteResponse.Success);
                 SH21Handler.SendFriendExtraInfo(Sender.Session, senderFriend.MyFriend);
                 SH21Handler.SendFriendLoggedIn(Sender.Session, Receiver);
-
-
+				
                 //add friend to receiver
                 var receiverFriend = new Friend(Receiver, Sender, RegisterDate);
                 Receiver.Friends.Add(receiverFriend);
@@ -146,7 +143,6 @@ namespace DragonFiesta.World.Game.Friends
                 SH21Handler.SendFriendInviteResponse(Receiver.Session, Sender.Info.Name, FriendInviteResponse.Success);
                 SH21Handler.SendFriendExtraInfo(Receiver.Session, receiverFriend.MyFriend);
                 SH21Handler.SendFriendLoggedIn(Receiver.Session, Sender);
-
             }
             catch (Exception ex)
             {
@@ -157,7 +153,6 @@ namespace DragonFiesta.World.Game.Friends
   
         public static void RemoveFriend(WorldCharacter Sender, WorldCharacter Reciever)
         {
-
             //remove from db and friend list
             if (!RemoveFriendFromDatabase(Sender, Reciever))
             {
@@ -192,7 +187,6 @@ namespace DragonFiesta.World.Game.Friends
 
                     using (var cmd = DB.GetDatabaseClient(DatabaseType.World))
                     {
-
                         cmd.CreateStoredProcedure("dbo.Friend_Insert");
 
                         cmd.SetParameter("@pOwnerID", Sender.Info.CharacterID);
@@ -252,5 +246,6 @@ namespace DragonFiesta.World.Game.Friends
                 return false;
             }
         }
+		*/
     }
 }

@@ -8,7 +8,7 @@ using System;
 public enum CharacterErrors
 {
     LoadOK,
-
+	ClientIllegallyManipulated = 325,
     ErrorInCharacterInfo = 1410,
     ErrorInAppearance = 1411,
     ErrorInOptions = 1412,
