@@ -16,4 +16,5 @@
     Sync,
     Command,
     Network,
+    CollectCard,
 }

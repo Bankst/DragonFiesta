@@ -1,10 +1,9 @@
 ﻿using DragonFiesta.Networking.HandlerTypes;
 using DragonFiesta.Zone.Data.NPC;
-using DragonFiesta.Zone.Game.Character;
 
 namespace DragonFiesta.Zone.Game.NPC
 {
-	public class SkillNPC : ItemNPCBase
+    public class SkillNPC : ItemNPCBase
 	{
 		public SkillNPC(NPCInfo info) : base(info)
 		{

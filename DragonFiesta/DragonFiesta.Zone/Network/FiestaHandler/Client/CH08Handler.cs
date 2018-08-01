@@ -1,12 +1,9 @@
 ﻿using DragonFiesta.Networking.HandlerTypes;
-using DragonFiesta.Zone.Game.Maps.Interface;
 using DragonFiesta.Zone.Game.Maps.Types;
 using DragonFiesta.Zone.Game.NPC;
 using DragonFiesta.Zone.Network.FiestaHandler.Server;
 using System;
 using DragonFiesta.Utils.Logging;
-using DragonFiesta.Zone.Data.NPC;
-using DragonFiesta.Zone.Game.Maps;
 
 namespace DragonFiesta.Zone.Network.FiestaHandler.Client
 {

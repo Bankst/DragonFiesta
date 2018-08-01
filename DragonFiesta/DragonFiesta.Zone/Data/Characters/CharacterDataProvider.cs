@@ -2,7 +2,6 @@
 using DragonFiesta.Zone.Data.Stats;
 using System.Collections.Concurrent;
 using DragonFiesta.Database.SQL;
-using DragonFiesta.Providers.Items;
 using DragonFiesta.Zone.Data.Characters;
 
 namespace DragonFiesta.Zone.Data.Character

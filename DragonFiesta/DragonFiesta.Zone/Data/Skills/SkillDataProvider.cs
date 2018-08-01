@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Data.Skills
 {

@@ -115,6 +115,13 @@
     <Compile Include="Data\Buffs\SubAbStateInfo.cs" />
     <Compile Include="Data\Characters\CharacterDataProvider.cs" />
     <Compile Include="Data\Characters\CharacterLevelParameter.cs" />
+    <Compile Include="Data\CollectCard\CollectCardProvider.cs" />
+    <Compile Include="Data\CollectCard\CollectCardTitle.cs" />
+    <Compile Include="Data\CollectCard\CollectCardStarRate.cs" />
+    <Compile Include="Data\CollectCard\CollectCardReward.cs" />
+    <Compile Include="Data\CollectCard\CollectCardMobGroup.cs" />
+    <Compile Include="Data\CollectCard\CollectCardDropRate.cs" />
+    <Compile Include="Data\CollectCard\CollectCard.cs" />
     <Compile Include="Data\Friends\FriendDataProvider.cs" />
     <Compile Include="Data\Friends\FriendPointReward.cs" />
     <Compile Include="Data\Items\ZoneItemDataProvider.cs" />

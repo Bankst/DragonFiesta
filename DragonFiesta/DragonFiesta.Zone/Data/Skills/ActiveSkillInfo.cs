@@ -1,8 +1,4 @@
-﻿using DragonFiesta.Zone.Data.Buffs;
-using DragonFiesta.Providers.Characters;
-using System;
-using System.Collections.Generic;
-using DragonFiesta.Database.SQL;
+﻿using System;
 using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Zone.Data.Skills

@@ -1,6 +1,4 @@
-﻿using DragonFiesta.Networking.HandlerTypes;
-
-namespace DragonFiesta.Zone.Network.FiestaHandler.Server
+﻿namespace DragonFiesta.Zone.Network.FiestaHandler.Server
 {
     public class SH17Handler
     {
