@@ -51,7 +51,7 @@ namespace DragonFiesta.Zone.Data.CollectCard
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -73,7 +73,7 @@ namespace DragonFiesta.Zone.Data.CollectCard
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardDropRateSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardDropRateSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -95,7 +95,7 @@ namespace DragonFiesta.Zone.Data.CollectCard
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardMobGroupSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardMobGroupSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -117,7 +117,7 @@ namespace DragonFiesta.Zone.Data.CollectCard
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardRewardSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardRewardSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -139,7 +139,7 @@ namespace DragonFiesta.Zone.Data.CollectCard
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardStarRateSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardStarRateSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -161,7 +161,7 @@ namespace DragonFiesta.Zone.Data.CollectCard
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardTitleSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {CollectCardTitleSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
     }

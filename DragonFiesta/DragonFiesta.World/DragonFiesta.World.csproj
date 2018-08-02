@@ -105,6 +105,7 @@
     <Compile Include="Config\WorldServerInfo.cs" />
     <Compile Include="Data\AttendReward\AttendReward.cs" />
     <Compile Include="Data\AttendReward\AttendRewardProvider.cs" />
+    <Compile Include="Data\AttendReward\AttendSchedule.cs" />
     <Compile Include="Data\Characters\CharacterDataProvider.cs" />
     <Compile Include="Data\Settings\GameSettingDataProvider.cs" />
     <Compile Include="Data\Settings\KeyMapOptions.cs" />

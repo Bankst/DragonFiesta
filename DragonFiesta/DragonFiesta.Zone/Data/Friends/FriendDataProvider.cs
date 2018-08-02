@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using DragonFiesta.Database.SQL;
 
@@ -13,13 +14,13 @@ namespace DragonFiesta.Zone.Data.Friends
         [InitializerMethod]
         public static bool InitialFriendDataProvider()
         {
-
             LoadFriendPointsRewards();
             return true;
         }
 
         private static void LoadFriendPointsRewards()
         {
+            var watch = Stopwatch.StartNew();
             FriendPointRewards = new SecureCollection<FriendPointReward>();
 
             SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM FriendPointRewards");
@@ -37,8 +38,8 @@ namespace DragonFiesta.Zone.Data.Friends
                         continue;
                     }
                 }
-
-                DatabaseLog.WriteProgressBar(">> Loaded {0} FriendPointRewards", FriendPointRewards.Count);
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {FriendPointRewards.Count} rows from database in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

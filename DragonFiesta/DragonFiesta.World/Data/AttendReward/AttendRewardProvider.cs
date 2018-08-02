@@ -9,11 +9,14 @@ namespace DragonFiesta.World.Data.AttendReward
     {
         protected static ConcurrentDictionary<byte, AttendReward> AttendRewardByID;
         protected static SecureCollection<AttendReward> AttendRewardSC;
+        protected static SecureCollection<AttendSchedule> AttendScheduleSC;
+
 
         [InitializerMethod]
         public static bool Initialize()
         {
             LoadAttendReward();
+            LoadAttendSchedule();
             return true;
         }
 
@@ -41,7 +44,29 @@ namespace DragonFiesta.World.Data.AttendReward
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {AttendRewardSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {AttendRewardSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+            }
+        }
+
+        public static void LoadAttendSchedule()
+        {
+            var watch = Stopwatch.StartNew();
+            AttendScheduleSC = new SecureCollection<AttendSchedule>();
+
+            var pResult = SHNManager.Load(SHNType.AttendSchedule);
+            DatabaseLog.WriteProgressBar(">> Load AttendSchedule");
+
+            using (var mBar = new ProgressBar(pResult.Count))
+            {
+                for (var i = 0; i < pResult.Count; i++)
+                {
+                    //using activator...
+                    var info = new AttendSchedule(pResult, i);
+                    AttendScheduleSC.Add(info);
+                    mBar.Step();
+                }
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {AttendScheduleSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
     }

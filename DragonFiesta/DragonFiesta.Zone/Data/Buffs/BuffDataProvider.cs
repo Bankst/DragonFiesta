@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Zone.Data.Buffs
@@ -72,7 +73,7 @@ namespace DragonFiesta.Zone.Data.Buffs
 
                     list.Add(info);
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} SubAbState Infos", SubAbStatesByID.Count);
+                DatabaseLog.WriteProgressBar($">> Loaded {SubAbStatesByID.Count} rows from database");
             }
         }
 
@@ -104,7 +105,7 @@ namespace DragonFiesta.Zone.Data.Buffs
                         continue;
                     }
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} Abstate Infos", AbStatesByID.Count);
+                DatabaseLog.WriteProgressBar($">> Loaded {AbStatesByID.Count} rows from database");
             }
         }
 
@@ -142,7 +143,7 @@ namespace DragonFiesta.Zone.Data.Buffs
                     {
                         if (!SubAbStatesByID.TryGetValue(subIndex, out List<SubAbStateInfo> subStates))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find sub abstate '{0}' for abstate (ID: {1})", subIndex, info.ID);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Can't find sub abstate '{subIndex}' for abstate (ID: {info.ID})");
                         }
                         else
                         {
@@ -160,7 +161,7 @@ namespace DragonFiesta.Zone.Data.Buffs
                     {
                         if (!AbStatesByID.TryGetValue(mainAbStateIndex, out AbStateInfo mainAbState))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find main abstate '{0}' for abstate (ID: {2})", mainAbStateIndex, info.ID);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Can't find main abstate '{mainAbStateIndex}' for abstate (ID: {info.ID})");
 
                             continue;
                         }
@@ -169,11 +170,11 @@ namespace DragonFiesta.Zone.Data.Buffs
                     count++;
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Finalize Loaded {0} AbStateInfos", count);
+                DatabaseLog.WriteProgressBar($">> Finalize Loaded {count} AbStateInfos");
             }
             //get rest exp buff
             if (!GetAbStateInfoByID(RestEXP_ID, out AbStateInfo abState))
-                throw new InvalidOperationException(String.Format("Can't find 'Rest EXP' buff (ID: {0}).", RestEXP_ID));
+                throw new InvalidOperationException(String.Format($"Can't find 'Rest EXP' buff (ID: {RestEXP_ID})."));
             RestEXP = abState;
             abState.SubAbStates.TryAdd(0, new SubAbStateInfo(ushort.MaxValue, 0, 0, 0, TimeSpan.Zero));
         }

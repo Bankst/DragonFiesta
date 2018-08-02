@@ -3,6 +3,7 @@ using DragonFiesta.Zone.Data.Stats;
 using System.Collections.Concurrent;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Zone.Data.Characters;
+using System.Diagnostics;
 
 namespace DragonFiesta.Zone.Data.Character
 {
@@ -19,12 +20,12 @@ namespace DragonFiesta.Zone.Data.Character
             LoadCharacterFreeStats();
             LoadCharacterParameters();
             LoadExpTable();
-
             return true;
         }
 
         private static void LoadCharacterFreeStats()
         {
+            var watch = Stopwatch.StartNew();
             _characterFreeStatsByLevel = new ConcurrentDictionary<byte, FreeStatData>();
 
             var result = DB.Select(DatabaseType.Data, "SELECT * FROM FreeStates");
@@ -43,12 +44,14 @@ namespace DragonFiesta.Zone.Data.Character
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} FreeStats", _characterFreeStatsByLevel.Count);
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {_characterFreeStatsByLevel.Count} rows from database in in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
         private static void LoadCharacterParameters()
         {
+            var watch = Stopwatch.StartNew();
             _characterStatParameters = new ConcurrentDictionary<ClassId, ConcurrentDictionary<byte, CharacterLevelParameter>>();
 
             DatabaseLog.WriteProgressBar(">> Load CharacterParameters");
@@ -94,13 +97,11 @@ namespace DragonFiesta.Zone.Data.Character
                     statsCounter++;
 
                 }
-
-                DatabaseLog.WriteProgressBar(">> Loaded {0} CharacterParameters", statsCounter);
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {statsCounter} rows from database in in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
 
         }
-
-
 
         public static bool GetFreeStat(byte level, out FreeStatData data) => _characterFreeStatsByLevel.TryGetValue(level, out data);
         public static bool GetLevelParameters(ClassId Class, byte level, out CharacterLevelParameter Params)
