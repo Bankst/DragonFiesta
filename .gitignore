@@ -32,3 +32,10 @@
 /DragonFiesta/packages/
 /DragonFiesta/Database/obj/Debug
 /DragonFiesta/Database/Properties
+/DragonFiesta/DragonFiesta.Database/bin/Debug
+/DragonFiesta/DragonFiesta.Database/obj/Debug/DragonFiesta.Database.csproj.CoreCompileInputs.cache
+/DragonFiesta/DragonFiesta.Database/obj/Debug/DragonFiesta.Database.csprojAssemblyReference.cache
+/DragonFiesta/DragonFiesta.Database/obj/Debug/build.force
+/DragonFiesta/DragonFiesta.Database/obj/Debug/DragonFiesta.Database.dll
+/DragonFiesta/DragonFiesta.Database/obj/Debug/DragonFiesta.Database.pdb
+/DragonFiesta/DragonFiesta.Database/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
