@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using DragonFiesta.Database.SQL;
 
 namespace DragonFiesta.Login.Game.Authentication
@@ -20,6 +21,7 @@ namespace DragonFiesta.Login.Game.Authentication
 
         public static void LoadVersions()
         {
+            var watch = Stopwatch.StartNew();
             VersionsByHash = new ConcurrentDictionary<string, Version>();
             VersionsByDate = new ConcurrentDictionary<DateTime, Version>();
 
@@ -39,7 +41,8 @@ namespace DragonFiesta.Login.Game.Authentication
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} Versions", VersionsByHash.Count);
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {VersionsByHash.Count} Versions from Database in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

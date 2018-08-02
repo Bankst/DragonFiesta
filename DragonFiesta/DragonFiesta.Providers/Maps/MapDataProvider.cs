@@ -30,7 +30,7 @@ namespace DragonFiesta.Providers.Maps
 
         private static void LoadLevelCondition()
         {
-			var watch = System.Diagnostics.Stopwatch.StartNew();
+			var watch = Stopwatch.StartNew();
             var count = 0;
 			var pResult = SHNManager.Load(SHNType.FieldLvCondition);
             DatabaseLog.WriteProgressBar(">> Load Level Condition");
@@ -45,7 +45,7 @@ namespace DragonFiesta.Providers.Maps
 	                count++;
                 }
 				watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {count} Level Condition in {(double)watch.ElapsedMilliseconds / 1000}");
+                DatabaseLog.WriteProgressBar($">> Loaded {count} Level Condition from SHN in {(double)watch.ElapsedMilliseconds / 1000}");
             }
         }
 
@@ -80,7 +80,7 @@ namespace DragonFiesta.Providers.Maps
 		            mBar.Step();
 	            }
 	            watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos in {(double) watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
             }
 
             if (!GetMapInfoByID(GameConfiguration.Instance.DefaultSpawnMapId, out var defaultMap))
@@ -137,7 +137,7 @@ namespace DragonFiesta.Providers.Maps
                 }
 
 	            watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {FieldInfos.Count} Field Infos in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {FieldInfos.Count} Field Infos from Database in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

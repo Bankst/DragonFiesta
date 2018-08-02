@@ -1,6 +1,7 @@
 ﻿using DragonFiesta.Utils.Config;
 using System.Collections.Concurrent;
 using DragonFiesta.Database.SQL;
+using System.Diagnostics;
 
 namespace DragonFiesta.Providers.Characters
 {
@@ -10,6 +11,7 @@ namespace DragonFiesta.Providers.Characters
 		
         protected static void LoadExpTable()
         {
+            var watch = Stopwatch.StartNew();
             _expTable = new ConcurrentDictionary<byte, ulong>();
 
             DatabaseLog.WriteProgressBar(">> Load ExpTable");
@@ -27,7 +29,8 @@ namespace DragonFiesta.Providers.Characters
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar(">> Loaded {0} Exps", _expTable.Count);
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {_expTable.Count} Exps from Database in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 		

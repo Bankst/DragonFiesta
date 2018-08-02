@@ -46,7 +46,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
 				watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
             //get default minihouse
 
@@ -82,7 +82,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace DragonFiesta.Providers.Items
 			BelongTypeInfoSC = new SecureCollection<BelongTypeInfo>();
 
 			var pResult = SHNManager.Load(SHNType.BelongTypeInfo);
-			DatabaseLog.WriteProgressBar(">> Load BelongTypeInfo SHN");
+			DatabaseLog.WriteProgressBar(">> Load BelongTypeInfo");
 			using (var mBar = new ProgressBar(pResult.Count))
 			{
 				for (var i = 0; i < pResult.Count; i++)
@@ -103,7 +103,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace DragonFiesta.Providers.Items
 			var watch = Stopwatch.StartNew();
 			UpgradeInfosByID = new ConcurrentDictionary<ushort, List<ItemUpgradeInfo>>();
 			var pResult = SHNManager.Load(SHNType.UpgradeInfo);
-			DatabaseLog.WriteProgressBar(">> Load ItemUpgradeInfo SHN");
+			DatabaseLog.WriteProgressBar(">> Load ItemUpgradeInfo");
 			using (var mBar = new ProgressBar(pResult.Count))
 			{
 				for (var i = 0; i < pResult.Count; i++)
@@ -127,7 +127,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfosByID.Count} rows in {(double)watch.ElapsedMilliseconds / 1000}s");
+				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace DragonFiesta.Providers.Items
 		    var watch = Stopwatch.StartNew();
 			GradeItemOptionSC = new SecureCollection<GradeItemOption>();
 		    var pResult = SHNManager.Load(SHNType.GradeItemOption);
-			DatabaseLog.WriteProgressBar(">> Load GradeItemOption SHN");
+			DatabaseLog.WriteProgressBar(">> Load GradeItemOption");
 		    using (var mBar = new ProgressBar(pResult.Count))
 		    {
 			    for (var i = 0; i < pResult.Count; i++)
@@ -146,7 +146,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 			    }
 			    watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {GradeItemOptionSC.Count} rows in {(double) watch.ElapsedMilliseconds / 1000}s");
+				DatabaseLog.WriteProgressBar($">> Loaded {GradeItemOptionSC.Count} rows from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
 		    }
 	    }
 
@@ -166,7 +166,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($"<< Loaded {UseClassTypeInfosSC.Count} rows ins {(double) watch.ElapsedMilliseconds / 1000}s");
+                DatabaseLog.WriteProgressBar($"<< Loaded {UseClassTypeInfosSC.Count} rows from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

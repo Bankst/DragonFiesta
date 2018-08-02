@@ -1,9 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
-using DragonFiesta.Database.SQL;
 using DragonFiesta.Providers.Text.TXT;
 using DragonFiesta.Utils.IO.TXT;
 
@@ -43,7 +40,8 @@ namespace DragonFiesta.Providers.Text
 
 	    private static void FillTextData()
 	    {
-		    var textCount = _scriptData.Count;
+            var watch = Stopwatch.StartNew();
+            var textCount = _scriptData.Count;
 			_textDataById = new ConcurrentDictionary<uint, TextData>();
 			DatabaseLog.WriteProgressBar(">> Fill TextData from loaded ShineTables");
 		    using (var mBar = new ProgressBar(textCount))
@@ -60,7 +58,8 @@ namespace DragonFiesta.Providers.Text
 					mBar.Step();
 			    }
 			}
-		    DatabaseLog.WriteProgressBar($"Loaded {_textDataById.Count} rows");
+            watch.Stop();
+            DatabaseLog.WriteProgressBar($">> Loaded {_textDataById.Count} rows from .txt Files in {(double)watch.ElapsedMilliseconds / 1000}s");
 		}
 
 	    private static void LoadScript()
@@ -85,7 +84,7 @@ namespace DragonFiesta.Providers.Text
 				}
 		    }
 		    watch.Stop();
-			DatabaseLog.WriteProgressBar($"Loaded {_scriptData.Count} rows from Script.txt in {(double) watch.ElapsedMilliseconds / 1000}s");
+			DatabaseLog.WriteProgressBar($">> Loaded {_scriptData.Count} rows from Script.txt in {(double) watch.ElapsedMilliseconds / 1000}s");
 		}
     }
 }

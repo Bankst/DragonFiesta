@@ -1,5 +1,6 @@
 ﻿using DragonFiesta.Utils.IO.SHN;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace DragonFiesta.Providers.Characters
 {
@@ -22,6 +23,7 @@ namespace DragonFiesta.Providers.Characters
 
         private static void LoadFaceInfos()
         {
+            var watch = Stopwatch.StartNew();
             FaceInfosByID = new ConcurrentDictionary<byte, FaceInfo>();
 
             SHNResult pResult = SHNManager.Load(SHNType.FaceInfo);
@@ -39,16 +41,17 @@ namespace DragonFiesta.Providers.Characters
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar($">> Loaded {FaceInfosByID.Count} FaceInfos");
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {FaceInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
         private static void LoadHairInfos()
         {
+            var watch = Stopwatch.StartNew();
             HairInfosByID = new ConcurrentDictionary<byte, HairInfo>();
 
             SHNResult pResult = SHNManager.Load(SHNType.HairInfo);
-
             DatabaseLog.WriteProgressBar(">> Load HairInfos");
 
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
@@ -63,16 +66,17 @@ namespace DragonFiesta.Providers.Characters
                     }
                     mBar.Step();
                 }
-                DatabaseLog.WriteProgressBar($">> Loaded {HairInfosByID.Count} HairInfos");
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {HairInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
         private static void LoadHairColorsInfos()
         {
+            var watch = Stopwatch.StartNew();
             HairColorInfosByID = new ConcurrentDictionary<byte, HairColorInfo>();
 
             SHNResult pResult = SHNManager.Load(SHNType.HairColorInfo);
-
             DatabaseLog.WriteProgressBar(">> Load HairColorInfos");
 
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
@@ -87,8 +91,8 @@ namespace DragonFiesta.Providers.Characters
                     }
                     mBar.Step();
                 }
-
-                DatabaseLog.WriteProgressBar($">> Loaded {HairColorInfosByID.Count} HairColorInfos");
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {HairColorInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using DragonFiesta.Database.SQL;
+using System.Diagnostics;
 
 namespace DragonFiesta.Login.Game.Worlds
 {
@@ -89,6 +90,7 @@ namespace DragonFiesta.Login.Game.Worlds
         {
             try
             {
+                var watch = Stopwatch.StartNew();
                 SQLResult pResult = DB.Select(DatabaseType.Login, "SELECT * FROM WorldList");
                 DatabaseLog.WriteProgressBar(">> Load World Infos");
                 using (ProgressBar mBar = new ProgressBar((pResult.Count)))
@@ -104,7 +106,8 @@ namespace DragonFiesta.Login.Game.Worlds
                         }
                         mBar.Step();
                     }
-                    DatabaseLog.WriteProgressBar(">> Loaded {0} Worlds", WorldByIDs.Count);
+                    watch.Stop();
+                    DatabaseLog.WriteProgressBar($">> Loaded {WorldByIDs.Count} Worlds from Database in {(double)watch.ElapsedMilliseconds / 1000}s");
                 }
             }
             catch (Exception ex)
@@ -113,6 +116,5 @@ namespace DragonFiesta.Login.Game.Worlds
             }
         }
         #endregion
-
     }
 }

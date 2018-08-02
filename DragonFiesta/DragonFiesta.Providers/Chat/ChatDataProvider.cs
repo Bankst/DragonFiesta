@@ -28,8 +28,7 @@ namespace DragonFiesta.Providers.Chat
 			BadNames = new SecureCollection<string>();
 
             SHNResult pResult = SHNManager.Load(SHNType.BadNameFilter);
-
-            DatabaseLog.WriteProgressBar(">> Load BadNameFilter SHN");
+            DatabaseLog.WriteProgressBar(">> Load BadNameFilter");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -43,7 +42,7 @@ namespace DragonFiesta.Providers.Chat
                     mBar.Step();
                 }
 	            watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {BadNames.Count} BadNames in {(double)watch.ElapsedMilliseconds/1000}s");
+                DatabaseLog.WriteProgressBar($">> Loaded {BadNames.Count} BadNames from SHN in {(double)watch.ElapsedMilliseconds/1000}s");
             }
         }
 

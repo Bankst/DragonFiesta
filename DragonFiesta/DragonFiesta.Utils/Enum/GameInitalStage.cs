@@ -11,10 +11,11 @@
     NPC,
 	Friend,
     GameSettings,
+    CollectCard,
+    AttendReward,
     ZoneLogic,
     Logic,
     Sync,
     Command,
     Network,
-    CollectCard,
 }
