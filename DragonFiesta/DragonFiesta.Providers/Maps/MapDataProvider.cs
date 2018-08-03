@@ -33,7 +33,7 @@ namespace DragonFiesta.Providers.Maps
 			var watch = Stopwatch.StartNew();
             var count = 0;
 			var pResult = SHNManager.Load(SHNType.FieldLvCondition);
-            DatabaseLog.WriteProgressBar(">> Load Level Condition");
+            DataLog.WriteProgressBar(">> Load Level Condition");
             using (var mBar = new ProgressBar(pResult.Count))
             {
                 for (var i = 0; i < pResult.Count; i++)
@@ -45,7 +45,7 @@ namespace DragonFiesta.Providers.Maps
 	                count++;
                 }
 				watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {count} Level Condition from SHN in {(double)watch.ElapsedMilliseconds / 1000}");
+                DataLog.WriteProgressBar($">> Loaded {count} Level Condition from SHN in {(double)watch.ElapsedMilliseconds / 1000}");
             }
         }
 
@@ -56,7 +56,7 @@ namespace DragonFiesta.Providers.Maps
             _mapInfosByID = new ConcurrentDictionary<ushort, MapInfo>();
             _mapInfosByIndex = new ConcurrentDictionary<string, MapInfo>();
             var pResult = SHNManager.Load(SHNType.MapInfo);
-            DatabaseLog.WriteProgressBar(">> Load MapInfos");
+            DataLog.WriteProgressBar(">> Load MapInfos");
             using (var mBar = new ProgressBar(pResult.Count))
             {
 	            for (var i = 0; i < pResult.Count; i++)
@@ -64,13 +64,13 @@ namespace DragonFiesta.Providers.Maps
 		            var info = new MapInfo(pResult, i);
 		            if (!_mapInfosByID.TryAdd(info.ID, info))
 		            {
-			            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate map id found: {info.ID}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate map id found: {info.ID}");
 			            continue;
 		            }
 
 		            if (!_mapInfosByIndex.TryAdd(info.Index, info))
 		            {
-			            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate map index found: {info.Index}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate map index found: {info.Index}");
 			            //reset
 			            _mapInfosByID.TryRemove(info.ID, out info);
 			            continue;
@@ -80,7 +80,7 @@ namespace DragonFiesta.Providers.Maps
 		            mBar.Step();
 	            }
 	            watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {MapInfos.Count} Map Infos from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
             }
 
             if (!GetMapInfoByID(GameConfiguration.Instance.DefaultSpawnMapId, out var defaultMap))
@@ -100,7 +100,7 @@ namespace DragonFiesta.Providers.Maps
             _fieldInfosByMapID = new ConcurrentDictionary<ushort, FieldInfo>();
 
             var pResult = DB.Select(DatabaseType.Data, "SELECT * FROM FieldInfos");
-            DatabaseLog.WriteProgressBar(">> Load Field Infos");
+            DataLog.WriteProgressBar(">> Load Field Infos");
             using (var mBar = new ProgressBar(pResult.Count))
             {
                 for (var i = 0; i < pResult.Count; i++)
@@ -111,7 +111,7 @@ namespace DragonFiesta.Providers.Maps
                     //load map
                     if (!_mapInfosByID.TryGetValue(mapClientId, out var map))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find map field info. Map ID: '{0}'", mapClientId);
+                        DataLog.Write(DataLogLevel.Warning, "Can't find map field info. Map ID: '{0}'", mapClientId);
                         continue;
                     }
                     var info = new FieldInfo(pResult, i)
@@ -121,7 +121,7 @@ namespace DragonFiesta.Providers.Maps
                     //load regen map
                     if (!_mapInfosByID.TryGetValue(pResult.Read<ushort>(i, "RegenCity"), out var regenMap))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find regen map. Map ID: '{0}'", mapClientId);
+                        DataLog.Write(DataLogLevel.Warning, "Can't find regen map. Map ID: '{0}'", mapClientId);
                         continue;
                     }
 
@@ -129,7 +129,7 @@ namespace DragonFiesta.Providers.Maps
 
                     if (!_fieldInfosByMapID.TryAdd(info.MapInfo.ID, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate field found. Map ID: {0}", mapClientId);
+                        DataLog.Write(DataLogLevel.Warning, "Duplicate field found. Map ID: {0}", mapClientId);
                         continue;
                     }
 
@@ -137,7 +137,7 @@ namespace DragonFiesta.Providers.Maps
                 }
 
 	            watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {FieldInfos.Count} Field Infos from Database in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {FieldInfos.Count} Field Infos from Database in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

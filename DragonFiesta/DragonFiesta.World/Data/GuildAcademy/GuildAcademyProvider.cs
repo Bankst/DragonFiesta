@@ -25,7 +25,7 @@ namespace DragonFiesta.World.Data.GuildAcademy
             GuildAcademyRankSC = new SecureCollection<GuildAcademyRank>();
 
             var pResult = SHNManager.Load(SHNType.GuildAcademyRank);
-            DatabaseLog.WriteProgressBar(">> Load GuildAcademyRank");
+            DataLog.WriteProgressBar(">> Load GuildAcademyRank");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -37,7 +37,7 @@ namespace DragonFiesta.World.Data.GuildAcademy
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {GuildAcademyRankSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {GuildAcademyRankSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -47,7 +47,7 @@ namespace DragonFiesta.World.Data.GuildAcademy
             GuildAcademyLevelUpSC = new SecureCollection<GuildAcademyLevelUp>();
 
             var pResult = SHNManager.Load(SHNType.GuildAcademyLevelUp);
-            DatabaseLog.WriteProgressBar(">> Load GuildAcademyLevelUp");
+            DataLog.WriteProgressBar(">> Load GuildAcademyLevelUp");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -59,7 +59,7 @@ namespace DragonFiesta.World.Data.GuildAcademy
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {GuildAcademyLevelUpSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {GuildAcademyLevelUpSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -69,7 +69,7 @@ namespace DragonFiesta.World.Data.GuildAcademy
             GuildAcademySC = new SecureCollection<GuildAcademy>();
 
             var pResult = SHNManager.Load(SHNType.GuildAcademy);
-            DatabaseLog.WriteProgressBar(">> Load GuildAcademy");
+            DataLog.WriteProgressBar(">> Load GuildAcademy");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -81,7 +81,7 @@ namespace DragonFiesta.World.Data.GuildAcademy
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {GuildAcademySC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {GuildAcademySC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
     }

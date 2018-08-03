@@ -29,7 +29,7 @@ namespace DragonFiesta.Providers.Items
             ItemInfoByID = new ConcurrentDictionary<ushort, ItemInfo>();
 
 			var pResult = SHNManager.Load(SHNType.ItemInfo);
-            DatabaseLog.WriteProgressBar(">> Load ItemInfo");
+            DataLog.WriteProgressBar(">> Load ItemInfo");
             using (var mBar = new ProgressBar(pResult.Count))
             {
                 for (var i = 0; i < pResult.Count; i++)
@@ -39,14 +39,14 @@ namespace DragonFiesta.Providers.Items
 
                     if (!ItemInfoByID.TryAdd(info.ID, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate item id found. ID: {info.ID}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate item id found. ID: {info.ID}");
                         continue;
                     }
 					ItemInfoSC.Add(info);
                     mBar.Step();
                 }
 				watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {ItemInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
             //get default minihouse
 
@@ -65,7 +65,7 @@ namespace DragonFiesta.Providers.Items
 			ItemInfoServerByID = new ConcurrentDictionary<ushort, ItemInfoServer>();
 
 			var pResult = SHNManager.Load(SHNType.ItemInfoServer);
-			DatabaseLog.WriteProgressBar(">> Load ItemInfoServer");
+            DataLog.WriteProgressBar(">> Load ItemInfoServer");
 			using (var mBar = new ProgressBar(pResult.Count))
 			{
 				for (var i = 0; i < pResult.Count; i++)
@@ -75,14 +75,14 @@ namespace DragonFiesta.Providers.Items
 
 					if (!ItemInfoServerByID.TryAdd(info.ID, info))
 					{
-						DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate item id found. ID: {info.ID}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate item id found. ID: {info.ID}");
 						continue;
 					}
 					ItemInfoServerSC.Add(info);
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {ItemInfoServerSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace DragonFiesta.Providers.Items
 			BelongTypeInfoSC = new SecureCollection<BelongTypeInfo>();
 
 			var pResult = SHNManager.Load(SHNType.BelongTypeInfo);
-			DatabaseLog.WriteProgressBar(">> Load BelongTypeInfo");
+            DataLog.WriteProgressBar(">> Load BelongTypeInfo");
 			using (var mBar = new ProgressBar(pResult.Count))
 			{
 				for (var i = 0; i < pResult.Count; i++)
@@ -103,7 +103,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {BelongTypeInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace DragonFiesta.Providers.Items
 			var watch = Stopwatch.StartNew();
 			UpgradeInfosByID = new ConcurrentDictionary<ushort, List<ItemUpgradeInfo>>();
 			var pResult = SHNManager.Load(SHNType.UpgradeInfo);
-			DatabaseLog.WriteProgressBar(">> Load ItemUpgradeInfo");
+            DataLog.WriteProgressBar(">> Load ItemUpgradeInfo");
 			using (var mBar = new ProgressBar(pResult.Count))
 			{
 				for (var i = 0; i < pResult.Count; i++)
@@ -127,7 +127,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 				}
 				watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {UpgradeInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {UpgradeInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace DragonFiesta.Providers.Items
 		    var watch = Stopwatch.StartNew();
 			GradeItemOptionSC = new SecureCollection<GradeItemOption>();
 		    var pResult = SHNManager.Load(SHNType.GradeItemOption);
-			DatabaseLog.WriteProgressBar(">> Load GradeItemOption");
+            DataLog.WriteProgressBar(">> Load GradeItemOption");
 		    using (var mBar = new ProgressBar(pResult.Count))
 		    {
 			    for (var i = 0; i < pResult.Count; i++)
@@ -146,7 +146,7 @@ namespace DragonFiesta.Providers.Items
 					mBar.Step();
 			    }
 			    watch.Stop();
-				DatabaseLog.WriteProgressBar($">> Loaded {GradeItemOptionSC.Count} rows from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {GradeItemOptionSC.Count} rows from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
 		    }
 	    }
 
@@ -155,7 +155,7 @@ namespace DragonFiesta.Providers.Items
             var watch = Stopwatch.StartNew();
             UseClassTypeInfosSC = new SecureCollection<UseClassTypeInfo>();
             var pResult = SHNManager.Load(SHNType.UseClassTypeInfo);
-            DatabaseLog.WriteProgressBar("<< Load UseClassTypeInfo");
+            DataLog.WriteProgressBar("<< Load UseClassTypeInfo");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -166,7 +166,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($"<< Loaded {UseClassTypeInfosSC.Count} rows from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($"<< Loaded {UseClassTypeInfosSC.Count} rows from SHN in {(double) watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -174,7 +174,7 @@ namespace DragonFiesta.Providers.Items
 	    {
 			var watch = Stopwatch.StartNew();
 			ItemBaseInfosByID = new ConcurrentDictionary<ushort, ItemBaseInfo>();
-			DatabaseLog.WriteProgressBar(">> Fill ItemBaseInfos from loaded SHNs");
+            DataLog.WriteProgressBar(">> Fill ItemBaseInfos from loaded SHNs");
 			using (var mBar = new ProgressBar(ItemInfoSC.Count))
 			{
 				for (var i = 0; i < ItemInfoSC.Count; i++)
@@ -182,20 +182,20 @@ namespace DragonFiesta.Providers.Items
 					var itemInfo = ItemInfoSC.ElementAt(i);
 					if (!GetUpgradeInfosByID(itemInfo.BasicUpInx, out var upgradeInfosList))
 					{
-						DatabaseLog.Write(DatabaseLogLevel.Debug, $"Bad UpgradeInfos for item ID: {itemInfo.ID}");
+                        DataLog.Write(DataLogLevel.Debug, $"Bad UpgradeInfos for item ID: {itemInfo.ID}");
 					}
 
 					var btInfo = BelongTypeInfoSC.FirstOrDefault(x => x.BT_Inx == itemInfo.BT_Inx);
 					if (btInfo == null)
 					{
-						DatabaseLog.Write(DatabaseLogLevel.Warning, $"Bad BelongTypeInfo for item ID: {itemInfo.ID}");
+                        DataLog.Write(DataLogLevel.Warning, $"Bad BelongTypeInfo for item ID: {itemInfo.ID}");
 						continue;
 					}
 
 					var gioInfo = GradeItemOptionSC.FirstOrDefault(x => x.ItemIndex == itemInfo.InxName);
 					if (gioInfo == null)
 					{
-						DatabaseLog.Write(DatabaseLogLevel.Debug,
+                        DataLog.Write(DataLogLevel.Debug,
 							$"Bad or No GradeItemOption for item ID: {itemInfo.ID}");
 					}
 
@@ -203,13 +203,13 @@ namespace DragonFiesta.Providers.Items
 
                     if (useClassInfo == null)
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Debug, $"Bad UseClassTypeInfo for item ID; {itemInfo.ID}");
+                        DataLog.Write(DataLogLevel.Debug, $"Bad UseClassTypeInfo for item ID; {itemInfo.ID}");
                     }
 
 					var info = new ItemBaseInfo(itemInfo, upgradeInfosList, btInfo, gioInfo);
 					if (!ItemBaseInfosByID.TryAdd(itemInfo.ID, info))
 					{
-						DatabaseLog.Write(DatabaseLogLevel.Warning,
+                        DataLog.Write(DataLogLevel.Warning,
 							$"Create ItemBaseInfo failed for item ID: {itemInfo.ID}");
 					}
 					mBar.Step();

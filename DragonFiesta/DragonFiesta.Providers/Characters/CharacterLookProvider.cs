@@ -27,7 +27,7 @@ namespace DragonFiesta.Providers.Characters
             FaceInfosByID = new ConcurrentDictionary<byte, FaceInfo>();
 
             SHNResult pResult = SHNManager.Load(SHNType.FaceInfo);
-            DatabaseLog.WriteProgressBar(">> Load FaceInfos");
+            DataLog.WriteProgressBar(">> Load FaceInfos");
 
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
@@ -37,12 +37,12 @@ namespace DragonFiesta.Providers.Characters
 
                     if (!FaceInfosByID.TryAdd(info.ID, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate face id found. ID: {info.ID}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate face id found. ID: {info.ID}");
                     }
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {FaceInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {FaceInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -52,7 +52,7 @@ namespace DragonFiesta.Providers.Characters
             HairInfosByID = new ConcurrentDictionary<byte, HairInfo>();
 
             SHNResult pResult = SHNManager.Load(SHNType.HairInfo);
-            DatabaseLog.WriteProgressBar(">> Load HairInfos");
+            DataLog.WriteProgressBar(">> Load HairInfos");
 
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
@@ -62,12 +62,12 @@ namespace DragonFiesta.Providers.Characters
 
                     if (!HairInfosByID.TryAdd(info.ID, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate hair id found. ID: {info.ID}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate hair id found. ID: {info.ID}");
                     }
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {HairInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {HairInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -77,7 +77,7 @@ namespace DragonFiesta.Providers.Characters
             HairColorInfosByID = new ConcurrentDictionary<byte, HairColorInfo>();
 
             SHNResult pResult = SHNManager.Load(SHNType.HairColorInfo);
-            DatabaseLog.WriteProgressBar(">> Load HairColorInfos");
+            DataLog.WriteProgressBar(">> Load HairColorInfos");
 
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
@@ -87,12 +87,12 @@ namespace DragonFiesta.Providers.Characters
 
                     if (!HairColorInfosByID.TryAdd(info.ID, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate hair color id found. ID: {info.ID}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate hair color id found. ID: {info.ID}");
                     }
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {HairColorInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {HairColorInfosByID.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 

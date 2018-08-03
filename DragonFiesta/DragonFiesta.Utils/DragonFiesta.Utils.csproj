@@ -108,6 +108,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IO\TXT\TXTType.cs" />
+    <Compile Include="Logging\DataLogLevel.cs" />
+    <Compile Include="Logging\DataLog.cs" />
     <Compile Include="Logging\ProgressBar.cs" />
     <Compile Include="ServerTask\ExpireAbleManager.cs" />
     <Compile Include="ServerTask\ExpireGuidManager.cs" />

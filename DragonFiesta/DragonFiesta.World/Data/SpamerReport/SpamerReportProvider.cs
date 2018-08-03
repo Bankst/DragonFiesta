@@ -21,7 +21,7 @@ namespace DragonFiesta.World.Data.SpamerReport
             SpamerReportSC = new SecureCollection<SpamerReport>();
 
             var pResult = SHNManager.Load(SHNType.SpamerReport);
-            DatabaseLog.WriteProgressBar(">> Load SpamerReport");
+            DataLog.WriteProgressBar(">> Load SpamerReport");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -33,7 +33,7 @@ namespace DragonFiesta.World.Data.SpamerReport
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {SpamerReportSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {SpamerReportSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
     }

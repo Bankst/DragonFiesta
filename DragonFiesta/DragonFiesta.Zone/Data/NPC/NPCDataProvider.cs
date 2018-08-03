@@ -115,7 +115,7 @@ namespace DragonFiesta.Zone.Data.NPC
 					}
 				}
 
-				DatabaseLog.Write(DatabaseLogLevel.Startup, $"Loaded NPC {currentInfo.MobInfo.Index} with {currentInfo.Items.Count} items in shop");
+                DataLog.Write(DataLogLevel.Startup, $"Loaded NPC {currentInfo.MobInfo.Index} with {currentInfo.Items.Count} items in shop");
 				return true;
 			}
 			catch(Exception)

@@ -43,7 +43,7 @@ namespace DragonFiesta.Providers.Text
             var watch = Stopwatch.StartNew();
             var textCount = _scriptData.Count;
 			_textDataById = new ConcurrentDictionary<uint, TextData>();
-			DatabaseLog.WriteProgressBar(">> Fill TextData");
+            DataLog.WriteProgressBar(">> Fill TextData");
 		    using (var mBar = new ProgressBar(textCount))
 		    {
 			    for (var i = 0; i < _scriptData.Count; i++)
@@ -52,13 +52,13 @@ namespace DragonFiesta.Providers.Text
 				    var tData = new TextData((uint)i, sData.ScrString);
 				    if (!_textDataById.TryAdd((uint)i, tData))
 				    {
-					    DatabaseLog.Write(DatabaseLogLevel.Warning, $"Failed add TextData from Script.txt at ID: {i}");
+                        DataLog.Write(DataLogLevel.Warning, $"Failed add TextData from Script.txt at ID: {i}");
 					    continue;
 				    }
 					mBar.Step();
 			    }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {_textDataById.Count} rows from .txt Files in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {_textDataById.Count} rows from .txt Files in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
 		}
 
@@ -68,7 +68,7 @@ namespace DragonFiesta.Providers.Text
 
 		    _scriptData = new SecureCollection<ScriptTXT>();
 			var tResult = TXTManager.LoadSingle(TXTType.Script, "Script");
-			DatabaseLog.WriteProgressBar(">> Load Script TXT");
+            DataLog.WriteProgressBar(">> Load Script TXT");
 
 		    using (var tTable = tResult[0])
 		    {
@@ -81,7 +81,7 @@ namespace DragonFiesta.Providers.Text
 					    mBar.Step();
 					}
                     watch.Stop();
-                    DatabaseLog.WriteProgressBar($">> Loaded {_scriptData.Count} rows from Script.txt in {(double)watch.ElapsedMilliseconds / 1000}s");
+                    DataLog.WriteProgressBar($">> Loaded {_scriptData.Count} rows from Script.txt in {(double)watch.ElapsedMilliseconds / 1000}s");
                 }
 		    }
 		}

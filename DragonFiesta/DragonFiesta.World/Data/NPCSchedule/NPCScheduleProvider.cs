@@ -24,7 +24,7 @@ namespace DragonFiesta.World.Data.NPCSchedule
             NPCScheduleByInx = new ConcurrentDictionary<string, NPCSchedule>();
 
             var pResult = SHNManager.Load(SHNType.NpcSchedule);
-            DatabaseLog.WriteProgressBar(">> Load NPCSchedule");
+            DataLog.WriteProgressBar(">> Load NPCSchedule");
             using (var mBar = new ProgressBar(pResult.Count))
             {
                 for (var i = 0; i < pResult.Count; i++)
@@ -34,14 +34,14 @@ namespace DragonFiesta.World.Data.NPCSchedule
 
                     if (!NPCScheduleByInx.TryAdd(info.Mob_Inx, info))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate MobInx found. MobInx: {info.Mob_Inx}");
+                        DataLog.Write(DataLogLevel.Warning, $"Duplicate MobInx found. MobInx: {info.Mob_Inx}");
                         continue;
                     }
                     NPCScheduleSC.Add(info);
                     mBar.Step();
                 }
                 watch.Stop();
-                DatabaseLog.WriteProgressBar($">> Loaded {NPCScheduleSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {NPCScheduleSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
     }
