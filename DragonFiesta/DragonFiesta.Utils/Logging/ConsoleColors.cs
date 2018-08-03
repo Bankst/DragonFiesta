@@ -14,6 +14,14 @@ namespace DragonFiesta.Utils.Logging
             { (byte)GameLogLevel.Exception,ConsoleColor.Red  },
         };
 
+        private static Dictionary<byte, ConsoleColor> DataColors = new Dictionary<byte, ConsoleColor>
+        {
+            { (byte)DatabaseLogLevel.Debug,ConsoleColor.DarkYellow },
+            { (byte)DatabaseLogLevel.Startup,ConsoleColor.Green },
+            { (byte)DatabaseLogLevel.Warning,ConsoleColor.Yellow },
+            { (byte)DatabaseLogLevel.Error,ConsoleColor.DarkRed },
+        };
+
         private static Dictionary<byte, ConsoleColor> DatabaseColors = new Dictionary<byte, ConsoleColor>
         {
             { (byte)DatabaseLogLevel.Debug,ConsoleColor.DarkYellow },
@@ -54,6 +62,9 @@ namespace DragonFiesta.Utils.Logging
             {
                 case "CommandLog":
                     return CommandColors.TryGetValue(LogLevel, out pColor);
+
+                case "DataLog":
+                    return DataColors.TryGetValue(LogLevel, out pColor);
 
                 case "DatabaseLog":
                     return DatabaseColors.TryGetValue(LogLevel, out pColor);

@@ -180,6 +180,7 @@ namespace DragonFiesta.Providers.Items
 				for (var i = 0; i < ItemInfoSC.Count; i++)
 				{
 					var itemInfo = ItemInfoSC.ElementAt(i);
+                    
 					if (!GetUpgradeInfosByID(itemInfo.BasicUpInx, out var upgradeInfosList))
 					{
                         DataLog.Write(DataLogLevel.Debug, $"Bad UpgradeInfos for item ID: {itemInfo.ID}");
@@ -193,7 +194,8 @@ namespace DragonFiesta.Providers.Items
 					}
 
 					var gioInfo = GradeItemOptionSC.FirstOrDefault(x => x.ItemIndex == itemInfo.InxName);
-					if (gioInfo == null)
+                    
+                    if (gioInfo == null)
 					{
                         DataLog.Write(DataLogLevel.Debug,
 							$"Bad or No GradeItemOption for item ID: {itemInfo.ID}");

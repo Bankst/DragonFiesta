@@ -17,6 +17,8 @@
     GBHouse,
     SpamerReport,
     GuildAcademy,
+    GuildTournament,
+    Guild,
     ZoneLogic,
     Logic,
     Sync,

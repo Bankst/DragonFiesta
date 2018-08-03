@@ -113,6 +113,8 @@
     <Compile Include="Maps\FieldLvCondition.cs" />
     <Compile Include="Maps\MapInfo.cs" />
     <Compile Include="Maps\MapType.cs" />
+    <Compile Include="NPCSchedule\NPCSchedule.cs" />
+    <Compile Include="NPCSchedule\NPCScheduleProvider.cs" />
     <Compile Include="Text\TextData.cs" />
     <Compile Include="Text\TextDataEntry.cs" />
     <Compile Include="Text\TextDataProvider.cs" />

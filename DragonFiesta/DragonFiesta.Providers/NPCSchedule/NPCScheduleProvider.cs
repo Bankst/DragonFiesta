@@ -2,9 +2,10 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
-namespace DragonFiesta.World.Data.NPCSchedule
+namespace DragonFiesta.Providers
 {
     [GameServerModule(ServerType.World, GameInitalStage.NPCSchedule)]
+    [GameServerModule(ServerType.Zone, GameInitalStage.NPCSchedule)]
     public class NPCScheduleProvider
     {
         protected static ConcurrentDictionary<string, NPCSchedule> NPCScheduleByInx;

@@ -1,5 +1,4 @@
 ﻿using DragonFiesta.Utils.Logging;
-using System;
 
 public sealed class DataLog : FileLog
 {

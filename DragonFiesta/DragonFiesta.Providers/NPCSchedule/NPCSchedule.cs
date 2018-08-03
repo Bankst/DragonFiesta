@@ -1,6 +1,6 @@
 ﻿using DragonFiesta.Utils.IO.SHN;
 
-namespace DragonFiesta.World.Data.NPCSchedule
+namespace DragonFiesta.Providers
 {
     public class NPCSchedule
     {
