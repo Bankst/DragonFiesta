@@ -43,7 +43,7 @@ namespace DragonFiesta.Providers.Text
             var watch = Stopwatch.StartNew();
             var textCount = _scriptData.Count;
 			_textDataById = new ConcurrentDictionary<uint, TextData>();
-			DatabaseLog.WriteProgressBar(">> Fill TextData from loaded ShineTables");
+			DatabaseLog.WriteProgressBar(">> Fill TextData");
 		    using (var mBar = new ProgressBar(textCount))
 		    {
 			    for (var i = 0; i < _scriptData.Count; i++)
@@ -57,9 +57,9 @@ namespace DragonFiesta.Providers.Text
 				    }
 					mBar.Step();
 			    }
-			}
-            watch.Stop();
-            DatabaseLog.WriteProgressBar($">> Loaded {_textDataById.Count} rows from .txt Files in {(double)watch.ElapsedMilliseconds / 1000}s");
+                watch.Stop();
+                DatabaseLog.WriteProgressBar($">> Loaded {_textDataById.Count} rows from .txt Files in {(double)watch.ElapsedMilliseconds / 1000}s");
+            }
 		}
 
 	    private static void LoadScript()
@@ -78,13 +78,12 @@ namespace DragonFiesta.Providers.Text
 				    for (var i = 0; i < tTable.Count; i++)
 				    {
 					    _scriptData.Add(new ScriptTXT(i, tTable));
-
 					    mBar.Step();
 					}
-				}
+                    watch.Stop();
+                    DatabaseLog.WriteProgressBar($">> Loaded {_scriptData.Count} rows from Script.txt in {(double)watch.ElapsedMilliseconds / 1000}s");
+                }
 		    }
-		    watch.Stop();
-			DatabaseLog.WriteProgressBar($">> Loaded {_scriptData.Count} rows from Script.txt in {(double) watch.ElapsedMilliseconds / 1000}s");
 		}
     }
 }

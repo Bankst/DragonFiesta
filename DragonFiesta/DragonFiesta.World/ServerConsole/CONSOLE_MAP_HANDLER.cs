@@ -2,7 +2,6 @@
 using DragonFiesta.World.Game.Maps;
 using DragonFiesta.World.Game.Zone;
 using DragonFiesta.World.InternNetwork.InternHandler.Server.Maps;
-using System.Collections.Generic;
 
 namespace DragonFiesta.World.ServerConsole
 {

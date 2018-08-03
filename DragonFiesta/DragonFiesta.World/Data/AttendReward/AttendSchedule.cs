@@ -16,7 +16,7 @@ namespace DragonFiesta.World.Data.AttendReward
 
         public ushort AS_JoinKeepTime { get; }
 
-        public ushort AS_CkeckTerm { get; }
+        public ushort AS_CheckTerm { get; }
 
         public AttendSchedule(SHNResult pResult, int i)
         {
@@ -26,7 +26,7 @@ namespace DragonFiesta.World.Data.AttendReward
             AS_StartHour = pResult.Read<byte>(i, "AS_StartHour");
             AS_StartMinute = pResult.Read<byte>(i, "AS_StartMinute");
             AS_JoinKeepTime = pResult.Read<ushort>(i, "AS_JoinKeepTime");
-            AS_CkeckTerm = pResult.Read<ushort>(i, "AS_CkeckTerm");
+            AS_CheckTerm = pResult.Read<ushort>(i, "AS_CheckTerm");
         }
     }
 }
