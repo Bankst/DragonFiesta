@@ -66,7 +66,36 @@ namespace DragonFiesta.World.Data.KingdomQuest
 
         public KingdomQuest(SHNResult pResult, int i)
         {
-
+            ID = pResult.Read<short>(i, "ID");
+            Title = pResult.Read<string>(i, "Title");
+            LimitTime = pResult.Read<ushort>(i, "LimitTime");
+            ST_Year = pResult.Read<byte>(i, "ST_Year");
+            ST_Month = pResult.Read<byte>(i, "ST_Month");
+            ST_Day = pResult.Read<byte>(i, "ST_Day");
+            ST_Hour = pResult.Read<byte>(i, "ST_Hour");
+            ST_Minute = pResult.Read<byte>(i, "ST_Minute");
+            ST_Second = pResult.Read<byte>(i, "ST_Second");
+            StartWaitTime = pResult.Read<ushort>(i, "StartWaitTime");
+            NextStartMode = pResult.Read<byte>(i, "NextStartMode");
+            NextStartDeleyMin = pResult.Read<ushort>(i, "NextStartDeleyMin");
+            RepeatMode = pResult.Read<byte>(i, "RepeatMode");
+            RepeatCount = pResult.Read<ushort>(i, "RepeatCount");
+            MinLevel = pResult.Read<byte>(i, "MinLevel");
+            MaxLevel = pResult.Read<byte>(i, "MaxLevel");
+            MinPlayers = pResult.Read<byte>(i, "MinPlayers");
+            MaxPlayers = pResult.Read<byte>(i, "MaxPlayers");
+            PlayerRepeatMode = pResult.Read<byte>(i, "PlayerRepeatMode");
+            PlayerRepeatCount = pResult.Read<ushort>(i, "PlayerRepeatCount");
+            PlayerRevivalCount = pResult.Read<byte>(i, "PlayerRevivalCount");
+            DemandQuest = pResult.Read<ushort>(i, "DemandQuest");
+            DemandItem = pResult.Read<ushort>(i, "DemandItem");
+            DemandMobKill = pResult.Read<byte>(i, "DemandMobKill");
+            RewardIndex = pResult.Read<uint>(i, "RewardIndex");
+            MapLink = pResult.Read<short>(i, "MapLink");
+            SciptLanguage = pResult.Read<string>(i, "SciptLanguage");
+            InitValue = pResult.Read<string>(i, "InitValue");
+            UseClass = pResult.Read<uint>(i, "UseClass");
+            DemandGender = pResult.Read<sbyte>(i, "DemandGender");
         }
     }
 }

@@ -19,6 +19,8 @@
     GuildAcademy,
     GuildTournament,
     Guild,
+    KingdomQuest,
+    MsgWorldManager,
     ZoneLogic,
     Logic,
     Sync,
