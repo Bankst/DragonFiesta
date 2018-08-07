@@ -92,7 +92,7 @@ namespace DragonFiesta.World.Data.KingdomQuest
             DemandMobKill = pResult.Read<byte>(i, "DemandMobKill");
             RewardIndex = pResult.Read<uint>(i, "RewardIndex");
             MapLink = pResult.Read<short>(i, "MapLink");
-            SciptLanguage = pResult.Read<string>(i, "SciptLanguage");
+            SciptLanguage = pResult.Read<string>(i, "ScriptLanguage");
             InitValue = pResult.Read<string>(i, "InitValue");
             UseClass = pResult.Read<uint>(i, "UseClass");
             DemandGender = pResult.Read<sbyte>(i, "DemandGender");

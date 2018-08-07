@@ -77,13 +77,24 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
 
             using (var packet = new FiestaPacket(Handler08Type._Header, (isShout ? Handler08Type.SMSG_ACT_SOMEONESHOUT_CMD : Handler08Type.SMSG_ACT_SOMEONECHAT_CMD)))
             {
-				packet.Write<byte>(0); // ItemLinkDataCount ????
+                var ItemLinkDataCount = 0;
+
+                packet.Write<byte>(0); // ItemLinkDataCount
+
+
+#warning TODO Add ItemLinkDataCount
+
+                if (ItemLinkDataCount == 1)
+                {
+                    packet.Write<ushort>(0);
+                }
+
                 packet.Write<ushort>(session.Character.Selection.SelectedObject.MapObjectId);
-				packet.Write<byte>(message.Length);
-	            packet.Write<byte>(0); // GMColor ????
-	            packet.Write<byte>(0); // ChatWin ????
-	            packet.Write<byte>(isShout);
-				packet.WriteString(message, message.Length);
+                packet.Write<byte>(message.Length);
+                packet.Write<byte>(0); // GMColor ????
+                packet.Write<byte>(0); // ChatWin ????
+                packet.Write<byte>(isShout);
+                packet.WriteString(message, message.Length);
                 session.SendPacket(packet);
             }
         }

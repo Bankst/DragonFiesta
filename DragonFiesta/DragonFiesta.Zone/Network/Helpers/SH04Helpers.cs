@@ -79,6 +79,11 @@ namespace DragonFiesta.Zone.Network.Helpers
 
             switch (character.State)
             {
+                case CharacterState.Dead:
+                    _SH04Helpers.WriteEquipment(character, packet);
+                    _SH04Helpers.WriteRefinement(character, packet);
+                    break;
+                    
                 case CharacterState.Player:
                     _SH04Helpers.WriteEquipment(character, packet);
                     _SH04Helpers.WriteRefinement(character, packet);
