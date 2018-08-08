@@ -143,6 +143,7 @@
     <Compile Include="Data\NPC\NPCInfo.cs" />
     <Compile Include="Data\NPC\NPCItem.cs" />
     <Compile Include="Data\NPC\NPCRole.cs" />
+    <Compile Include="Data\Riding\Riding.cs" />
     <Compile Include="Data\Skills\ActiveSkillAbState.cs" />
     <Compile Include="Data\Skills\ActiveSkillActionInfo.cs" />
     <Compile Include="Data\Skills\ActiveSkillActionType.cs" />
