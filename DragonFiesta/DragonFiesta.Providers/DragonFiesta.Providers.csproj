@@ -86,6 +86,9 @@
     <Compile Include="Characters\HairInfo.cs" />
     <Compile Include="Characters\WhoEquip.cs" />
     <Compile Include="Chat\ChatDataProvider.cs" />
+    <Compile Include="Items\SHN\ItemMerchantInfo.cs" />
+    <Compile Include="Items\SHN\ItemServerEquipTypeInfo.cs" />
+    <Compile Include="Items\SHN\ItemShop.cs" />
     <Compile Include="Items\Type\AuctionGroupType.cs" />
     <Compile Include="Items\Type\ItemFuncEnum.cs" />
     <Compile Include="Items\SHN\GradeItemOption.cs" />

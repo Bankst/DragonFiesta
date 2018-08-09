@@ -61,6 +61,25 @@ namespace DragonFiesta.Zone.Data.Riding
             BodyType = pResult.Read<string>(i, "BodyType");
             Shape = pResult.Read<string>(i, "Shape");
             UseTime = pResult.Read<ushort>(i, "UseTime");
+            FeedType = pResult.Read<string>(i, "FeedType");
+            Texture = pResult.Read<string>(i, "Texture");
+            FeedGauge = pResult.Read<ushort>(i, "FeedGauge");
+            HGauge = pResult.Read<ushort>(i, "HGauge");
+            InitHGauge = pResult.Read<ushort>(i, "InitHGauge");
+            Tick = pResult.Read<ushort>(i, "Tick");
+            UGauge = pResult.Read<ushort>(i, "UGauge");
+            RunSpeed = pResult.Read<ushort>(i, "RunSpeed");
+            FootSpeed = pResult.Read<ushort>(i, "FootSpeed");
+            CastingTime = pResult.Read<ushort>(i, "CastingTime");
+            CoolTime = pResult.Read<uint>(i, "CoolTime");
+            IconFileN = pResult.Read<string>(i, "IconFileN");
+            IconIndex = pResult.Read<ushort>(i, "IconIndex");
+            IconFileN = pResult.Read<string>(i, "IconFileN");
+            ImageN = pResult.Read<string>(i, "ImageN");
+            ImageH = pResult.Read<string>(i, "ImageH");
+            ImageE = pResult.Read<string>(i, "ImageE");
+            DummyA = pResult.Read<string>(i, "DummyA");
+            DummyB = pResult.Read<string>(i, "DummyB");
         }
     }
 }
