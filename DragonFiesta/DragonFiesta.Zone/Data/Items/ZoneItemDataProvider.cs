@@ -14,7 +14,10 @@ namespace DragonFiesta.Zone.Data.Items
 			LoadUpgradeInfo();
 			LoadGradeItemOption();
             LoadUseClassTypeInfo();
-			FillItemBaseInfos();
+            LoadItemMerchantInfo();
+            LoadItemServerEquipTypeInfo();
+            LoadItemShop();
+            FillItemBaseInfos();
 			return true;
 		}
 	}

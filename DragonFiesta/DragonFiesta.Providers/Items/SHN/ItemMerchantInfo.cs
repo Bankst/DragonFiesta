@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items.SHN
 {
-    class ItemMerchantInfo
+    public class ItemMerchantInfo
     {
+        public string Map { get; }
+
+        public byte Sub { get; }
+
+        public ItemMerchantInfo(SHNResult pResult, int i)
+        {
+            Map = pResult.Read<string>(i, "Map");
+            Sub = pResult.Read<byte>(i, "Sub");
+        }
     }
 }

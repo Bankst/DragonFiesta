@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Providers.Items.SHN
 {
-    class ItemShop
+    public class ItemShop
     {
+        public uint goodsNo { get; }
+
+        public string InxName { get; }
+
+        public uint Lot { get; }
+
+        public ItemShop(SHNResult pResult, int i)
+        {
+            goodsNo = pResult.Read<uint>(i, "goodsNo");
+            InxName = pResult.Read<string>(i, "InxName");
+            Lot = pResult.Read<uint>(i, "Lot");
+        }
     }
 }

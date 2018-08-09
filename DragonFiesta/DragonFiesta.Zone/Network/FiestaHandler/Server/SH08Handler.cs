@@ -77,18 +77,7 @@ namespace DragonFiesta.Zone.Network.FiestaHandler.Server
 
             using (var packet = new FiestaPacket(Handler08Type._Header, (isShout ? Handler08Type.SMSG_ACT_SOMEONESHOUT_CMD : Handler08Type.SMSG_ACT_SOMEONECHAT_CMD)))
             {
-                var ItemLinkDataCount = 0;
-
                 packet.Write<byte>(0); // ItemLinkDataCount
-
-
-#warning TODO Add ItemLinkDataCount
-
-                if (ItemLinkDataCount == 1)
-                {
-                    packet.Write<ushort>(0);
-                }
-
                 packet.Write<ushort>(session.Character.Selection.SelectedObject.MapObjectId);
                 packet.Write<byte>(message.Length);
                 packet.Write<byte>(0); // GMColor ????
