@@ -25,6 +25,7 @@
     StateField,
     Gather,
     Produce,
+    LC,
     ZoneLogic,
     Logic,
     Sync,

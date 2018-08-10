@@ -127,8 +127,10 @@
     <Compile Include="Data\Gather\GatherProvider.cs" />
     <Compile Include="Data\Gather\Gather.cs" />
     <Compile Include="Data\Items\ZoneItemDataProvider.cs" />
+    <Compile Include="Data\KingdomQuest\KingdomQuestProvider.cs" />
     <Compile Include="Data\KingdomQuest\KingdomQuestRew.cs" />
     <Compile Include="Data\LC\LCGroupRate.cs" />
+    <Compile Include="Data\LC\LCProvider.cs" />
     <Compile Include="Data\LC\LCReward.cs" />
     <Compile Include="Data\Maps\BlockInfo.cs" />
     <Compile Include="Data\Maps\MapDataProvider.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="Data\Menu\MenuDataEntrys.cs" />
     <Compile Include="Data\MiniHouse\MiniHouseEndure.cs" />
     <Compile Include="Data\MiniHouse\MiniHouseObjAni.cs" />
+    <Compile Include="Data\MiniHouse\MiniHouseProvider.cs" />
     <Compile Include="Data\Mob\MobChatType.cs" />
     <Compile Include="Data\Mob\MobChatInfo.cs" />
     <Compile Include="Data\Mob\MobChatMessageInfo.cs" />

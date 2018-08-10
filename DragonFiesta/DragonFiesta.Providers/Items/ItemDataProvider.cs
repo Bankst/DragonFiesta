@@ -158,7 +158,7 @@ namespace DragonFiesta.Providers.Items
             var watch = Stopwatch.StartNew();
             UseClassTypeInfosSC = new SecureCollection<UseClassTypeInfo>();
             var pResult = SHNManager.Load(SHNType.UseClassTypeInfo);
-            DataLog.WriteProgressBar("<< Load UseClassTypeInfo");
+            DataLog.WriteProgressBar(">> Load UseClassTypeInfo");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -169,7 +169,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
                 watch.Stop();
-                DataLog.WriteProgressBar($"<< Loaded {UseClassTypeInfosSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {UseClassTypeInfosSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -180,7 +180,7 @@ namespace DragonFiesta.Providers.Items
             ItemMerchantInfoSC = new SecureCollection<ItemMerchantInfo>();
 
             var pResult = SHNManager.Load(SHNType.ItemMerchantInfo);
-            DataLog.WriteProgressBar("<< Load ItemMerchantInfo");
+            DataLog.WriteProgressBar(">> Load ItemMerchantInfo");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -191,7 +191,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
                 watch.Stop();
-                DataLog.WriteProgressBar($"<< Loaded {ItemMerchantInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {ItemMerchantInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -201,7 +201,7 @@ namespace DragonFiesta.Providers.Items
             ItemServerEquipTypeInfoSC = new SecureCollection<ItemServerEquipTypeInfo>();
 
             var pResult = SHNManager.Load(SHNType.ItemServerEquipTypeInfo);
-            DataLog.WriteProgressBar("<< Load ItemServerEquipTypeInfo");
+            DataLog.WriteProgressBar(">> Load ItemServerEquipTypeInfo");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -212,7 +212,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
                 watch.Stop();
-                DataLog.WriteProgressBar($"<< Loaded {ItemServerEquipTypeInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {ItemServerEquipTypeInfoSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
 
@@ -222,7 +222,7 @@ namespace DragonFiesta.Providers.Items
             ItemShopSC = new SecureCollection<ItemShop>();
 
             var pResult = SHNManager.Load(SHNType.ItemShop);
-            DataLog.WriteProgressBar("<< Load ItemShop");
+            DataLog.WriteProgressBar(">> Load ItemShop");
 
             using (var mBar = new ProgressBar(pResult.Count))
             {
@@ -233,7 +233,7 @@ namespace DragonFiesta.Providers.Items
                     mBar.Step();
                 }
                 watch.Stop();
-                DataLog.WriteProgressBar($"<< Loaded {ItemShopSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+                DataLog.WriteProgressBar($">> Loaded {ItemShopSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
 
         }
@@ -253,7 +253,7 @@ namespace DragonFiesta.Providers.Items
                     {
                         if (itemInfo.BasicUpInx == 9999)
                         {
-                            // nothing lmao idk what 9999 is..
+                            // Not need this in Logs.. is for non-upgradeable items
                         }
                         else
                         {
