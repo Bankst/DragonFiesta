@@ -26,6 +26,7 @@
     Gather,
     Produce,
     LC,
+    MiniHouse,
     ZoneLogic,
     Logic,
     Sync,
