@@ -11,6 +11,7 @@ namespace DragonFiesta.Zone.Data.MiniHouse
         protected static SecureCollection<MiniHouse> MiniHouseSC;
         protected static SecureCollection<MiniHouseEndure> MiniHouseEndureSC;
         protected static SecureCollection<MiniHouseObjAni> MiniHouseObjAniSC;
+        protected static SecureCollection<MiniHouseFurnitureObjEffect> MiniHouseFurnitureObjEffectSC;
 
         [InitializerMethod]
         public static bool Initialize()
@@ -18,6 +19,7 @@ namespace DragonFiesta.Zone.Data.MiniHouse
             LoadMiniHouse();
             LoadMiniHouseEndure();
             LoadMiniHouseObjAni();
+            LoadMiniHouseFurnitureObjEffect();
             return true;
         }
 
@@ -88,6 +90,27 @@ namespace DragonFiesta.Zone.Data.MiniHouse
                 }
                 watch.Stop();
                 DataLog.WriteProgressBar($">> Loaded {MiniHouseObjAniSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
+            }
+        }
+
+        public static void LoadMiniHouseFurnitureObjEffect()
+        {
+            var watch = Stopwatch.StartNew();
+            MiniHouseFurnitureObjEffectSC = new SecureCollection<MiniHouseFurnitureObjEffect>();
+
+            var pResult = SHNManager.Load(SHNType.MiniHouseFurnitureObjEffect);
+            DataLog.WriteProgressBar(">> Load MiniHouseFurnitureObjEffect");
+            using (var mBar = new ProgressBar(pResult.Count))
+            {
+                for (var i = 0; i < pResult.Count; i++)
+                {
+                    //using activator...
+                    var info = new MiniHouseFurnitureObjEffect(pResult, i);
+                    MiniHouseFurnitureObjEffectSC.Add(info);
+                    mBar.Step();
+                }
+                watch.Stop();
+                DataLog.WriteProgressBar($">> Loaded {MiniHouseFurnitureObjEffectSC.Count} rows from SHN in {(double)watch.ElapsedMilliseconds / 1000}s");
             }
         }
     }

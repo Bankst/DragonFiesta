@@ -140,6 +140,7 @@
     <Compile Include="Data\MiniHouse\MiniHouse.cs" />
     <Compile Include="Data\MiniHouse\MiniHouseEndure.cs" />
     <Compile Include="Data\MiniHouse\MiniHouseFurniture.cs" />
+    <Compile Include="Data\MiniHouse\MiniHouseFurnitureObjEffect.cs" />
     <Compile Include="Data\MiniHouse\MiniHouseObjAni.cs" />
     <Compile Include="Data\MiniHouse\MiniHouseProvider.cs" />
     <Compile Include="Data\Mob\MobChatType.cs" />
