@@ -109,7 +109,6 @@
     <Compile Include="Config\ZoneConfiguration.cs" />
     <Compile Include="Config\ZoneServerInfo.cs" />
     <Compile Include="Data\Buffs\AbStateInfo.cs" />
-    <Compile Include="Data\Buffs\BuffDataProvider.cs" />
     <Compile Include="Data\Buffs\SubAbStateAction.cs" />
     <Compile Include="Data\Buffs\SubAbStateActionType.cs" />
     <Compile Include="Data\Buffs\SubAbStateInfo.cs" />

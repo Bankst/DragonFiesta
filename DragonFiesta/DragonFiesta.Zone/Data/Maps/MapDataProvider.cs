@@ -16,11 +16,12 @@ namespace DragonFiesta.Zone.Data.Maps
         public static new bool Initialize()
         {
             if (!MapDataProvider.Initialize())
+            {
                 return false;
+            }
 
             LoadBlockInfos();
             LoadTownPortalInfos();
-
             return true;
         }
 
@@ -29,12 +30,12 @@ namespace DragonFiesta.Zone.Data.Maps
             TownPortalInfosByID = new ConcurrentDictionary<byte, TownPortalInfo>();
             SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM TownPortals");
             DatabaseLog.WriteProgressBar(">> Load town portal infos");
+
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
                 for (int i = 0; i < pResult.Count; i++)
                 {
                     var info = new TownPortalInfo(pResult, i);
-
                     mBar.Step();
 
                     if (!TownPortalInfosByID.TryAdd(info.Index, info))
@@ -53,7 +54,7 @@ namespace DragonFiesta.Zone.Data.Maps
             BlockInfosByMapID = new ConcurrentDictionary<ushort, BlockInfo>();
             SQLResult pResult = DB.Select(DatabaseType.Data, "SELECT * FROM BlockInfos");
             int filecounter = 0;
-            DatabaseLog.WriteProgressBar(">> Load BlockInfos ");
+            DatabaseLog.WriteProgressBar(">> Load BlockInfos");
             using (ProgressBar mBar = new ProgressBar(pResult.Count))
             {
                 for (int i = 0; i < pResult.Count; i++)
@@ -65,17 +66,18 @@ namespace DragonFiesta.Zone.Data.Maps
                     MapInfo inf;
                     if (!GetMapInfoByID(MapID, out inf))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find block info  from mapid '{0}'", MapID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Can't find block info  from mapid '{MapID}'");
                         continue;
                     }
 
                     if (LoadBlock)
                     {
                         string filename = pResult.Read<string>(i, "BlockFileName");
-                        var blockName = String.Format("BlockInfo\\{0}.shbd", filename);
+                        var blockName = String.Format($"Shine\\BlockInfo\\{filename}.shbd");
+
                         if (!File.Exists(blockName))
                         {
-                            DatabaseLog.Write(DatabaseLogLevel.Warning, "Can't find block info for map '{0}'. Map will NOT be loaded.", inf.Index);
+                            DatabaseLog.Write(DatabaseLogLevel.Warning, $"Can't find block info for map '{inf.Index}'. Map will NOT be loaded.");
                             MapInfos.Remove(inf);
                             continue;
                         }
@@ -91,20 +93,21 @@ namespace DragonFiesta.Zone.Data.Maps
                     mBar.Step();
                     if (!BlockInfosByMapID.TryAdd(inf.ID, blockInfo))
                     {
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, "Duplicate block info found. Map ID: {0}", inf.ID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"Duplicate block info found. Map ID: {inf.ID}");
                         continue;
                     }
                 }
+
                 foreach (var m in MapInfos)
                 {
                     if (!BlockInfosByMapID.ContainsKey(m.ID))
                     {
                         MapInfos.Remove(m);
-                        DatabaseLog.Write(DatabaseLogLevel.Warning, " map '{0} has not Blockinfo '. Map will NOT be loaded.", m.ID);
+                        DatabaseLog.Write(DatabaseLogLevel.Warning, $"map '{m.ID} has not Blockinfo '. Map will NOT be loaded.");
                     }
                 }
 
-                DatabaseLog.WriteProgressBar(">>  Loaded {0} blocks with {1} files ", BlockInfosByMapID.Count, filecounter);
+                DatabaseLog.WriteProgressBar($">> Loaded {BlockInfosByMapID.Count} blocks with {filecounter} files");
             }
         }
 

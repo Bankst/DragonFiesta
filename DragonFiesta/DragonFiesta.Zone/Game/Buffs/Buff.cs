@@ -10,6 +10,7 @@ namespace DragonFiesta.Zone.Game.Buffs
 {
     public class Buff : iExpireAble
     {
+        
         public long ID { get; set; }
 
         public ILivingObject Owner { get; private set; }
@@ -26,6 +27,21 @@ namespace DragonFiesta.Zone.Game.Buffs
         private int IsDisposedInt;
         private object ThreadLocker;
 
+        public void OnExpire(GameTime gameTime)
+        {
+            /*
+            if (Owner.BuffList.Remove(this))
+            {
+                Dispose();
+            }*/
+            
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            //Update BuffTime?
+        }
+        /*
         public Buff(ILivingObject Owner, AbStateInfo AbStateInfo, uint Strength)
         {
             this.Owner = Owner;
@@ -239,19 +255,6 @@ namespace DragonFiesta.Zone.Game.Buffs
             return (BuffAction != null);
         }
 
-        public void OnExpire(GameTime gameTime)
-        {
-            /*
-            if (Owner.BuffList.Remove(this))
-            {
-                Dispose();
-            }
-            */
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            //Update BuffTime?
+    */
         }
     }
-}

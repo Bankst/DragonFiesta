@@ -4,13 +4,13 @@ namespace DragonFiesta.Providers.Items.SHN
 {
     public class BelongTypeInfo
 	{
-		public byte BT_Inx { get; private set; }
-		public bool PutOnBelonged { get; private set; }
-		public bool NoDrop { get; private set; }
-		public bool NoSell { get; private set; }
-		public bool NoStorage { get; private set; }
-		public bool NoTrade { get; private set; }
-		public bool NoDelete { get; private set; }
+		public byte BT_Inx { get; }
+		public bool PutOnBelonged { get; }
+		public bool NoDrop { get; }
+		public bool NoSell { get; }
+		public bool NoStorage { get; }
+		public bool NoTrade { get; }
+		public bool NoDelete { get; }
 
 		public BelongTypeInfo(SHNResult pResult, int row)
 		{

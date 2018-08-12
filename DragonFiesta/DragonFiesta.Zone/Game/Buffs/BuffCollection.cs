@@ -10,6 +10,7 @@ namespace DragonFiesta.Zone.Game.Buffs
 {
     public class BuffCollection
     {
+        /*
         public ILivingObject Owner { get; private set; }
         public int Count { get { return BuffList.Count; } }
         public bool IsDisposed { get { return (IsDisposedInt > 0); } }
@@ -177,6 +178,6 @@ namespace DragonFiesta.Zone.Game.Buffs
             Buff = null;
             return true;
         }
-
+        */
     }
 }

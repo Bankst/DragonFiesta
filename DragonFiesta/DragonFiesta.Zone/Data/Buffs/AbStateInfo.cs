@@ -1,30 +1,40 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using DragonFiesta.Database.SQL;
+using DragonFiesta.Utils.IO.SHN;
 
 namespace DragonFiesta.Zone.Data.Buffs
 {
     public sealed class AbStateInfo
     {
-        public ushort ID { get; private set; }
-        public uint AbStateIndex { get; private set; }
-        public byte Grade { get; private set; }
-        public List<AbStateInfo> PartyStates { get; private set; }
-        public double PartyRange { get; private set; }
-        public ConcurrentDictionary<uint, SubAbStateInfo> SubAbStates { get; private set; }
-        public bool IsSave { get; private set; }
-        public string mnin { get; set; }
-        public AbStateInfo MainAbState { get; set; }
+        public ushort ID { get; }
 
-        public AbStateInfo(SQLResult pResult, int rIndex)
+        public string InxName { get; }
+
+        public uint AbStateIndex { get; }
+
+        public uint KeepTimeRatio { get; }
+
+        public byte KeepTimePower { get; }
+
+        public byte StateGrade { get; }
+
+
+
+
+
+
+
+
+
+
+        public AbStateInfo(SHNResult pResult, int row)
         {
-            ID = pResult.Read<ushort>(rIndex, "ID");
-            AbStateIndex = pResult.Read<uint>(rIndex, "AbStateIndex");
-            Grade = pResult.Read<byte>(rIndex, "StateGrade");
-            PartyStates = new List<AbStateInfo>();
-            PartyRange = pResult.Read<uint>(rIndex, "PartyRange");
-            SubAbStates = new ConcurrentDictionary<uint, SubAbStateInfo>();
-            IsSave = pResult.Read<bool>(rIndex, "IsSave");
+            ID = pResult.Read<ushort>(row, "ID");
+            InxName = pResult.Read<string>(row, "InxName");
+            AbStateIndex = pResult.Read<uint>(row, "AbStateIndex");
+            KeepTimeRatio = pResult.Read<uint>(row, "KeepTimeRatio");
+            KeepTimePower = pResult.Read<byte>(row, "KeepTimePower");
+            StateGrade = pResult.Read<byte>(row, "StateGrade");
         }
     }
 }
