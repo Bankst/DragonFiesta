@@ -16,7 +16,7 @@ namespace DragonFiesta.Game.Characters.Data
 
         public Position Position { get; set; }
 
-	    public virtual bool RefreshFromEntity(DBCharacter character)
+	    public virtual bool RefreshFromEntity(CharacterBase character)
 	    {
 			Position = new Position
 			{

@@ -305,7 +305,7 @@
           <Property Name="AccountID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Slot" Type="Byte" Nullable="false" />
-          <Property Name="Map" Type="Int16" />
+          <Property Name="Map" Type="Int16" Nullable="false" />
           <Property Name="PositionX" Type="Int32" Nullable="false" />
           <Property Name="PositionY" Type="Int32" Nullable="false" />
           <Property Name="Rotation" Type="Byte" Nullable="false" />

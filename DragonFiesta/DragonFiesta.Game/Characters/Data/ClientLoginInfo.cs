@@ -18,7 +18,7 @@ namespace DragonFiesta.Game.Characters.Data
 
         public virtual int AccountID { get; set; }
 
-	    public virtual bool RefreshFromEntity(DBCharacter character)
+	    public virtual bool RefreshFromEntity(CharacterBase character)
 	    {
 		    try
 		    {

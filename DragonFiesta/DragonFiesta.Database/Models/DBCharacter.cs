@@ -25,7 +25,7 @@ namespace DragonFiesta.Database.Models
         public int AccountID { get; set; }
         public string Name { get; set; }
         public byte Slot { get; set; }
-        public Nullable<short> Map { get; set; }
+        public short Map { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
         public byte Rotation { get; set; }

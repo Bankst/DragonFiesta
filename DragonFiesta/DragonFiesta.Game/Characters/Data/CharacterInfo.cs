@@ -42,18 +42,18 @@ namespace DragonFiesta.Game.Characters.Data
             Dispose();
         }
 
-	    public virtual bool RefreshFromEntity(DBCharacter character)
+	    public virtual bool RefreshFromEntity(CharacterBase character) // TODO: Rewrite to pull from entity, not CharacterBase
 	    {
 		    try
 		    {
 			    CharacterID = character.ID;
 			    Name = character.Name;
 			    Slot = character.Slot;
-			    Class = (ClassId) character.Class;
+			    Class = character.Class;
 			    Level = character.Level;
-			    Money = (ulong) character.Money;
+			    Money = character.Money;
 			    IsMale = character.IsMale;
-			    FriendPoints = (ushort) character.FriendPoints;
+			    FriendPoints = character.FriendPoints;
 
 			    ExpForNextLevel = CharacterDataProviderBase.GetEXPForNextLevel(Level);
 

@@ -1,5 +1,4 @@
 ﻿using DragonFiesta.Database.Models;
-using DragonFiesta.Database.SQL;
 using DragonFiesta.Game.Characters;
 using DragonFiesta.Networking.Helpers;
 using DragonFiesta.World.Network;
@@ -10,9 +9,9 @@ namespace DragonFiesta.World.Game.Character
     {
         public WorldSession Session { get; private set; }
 
-        public CharacterCollection(WorldSession Session) : base()
+        public CharacterCollection(WorldSession session)
         {
-            this.Session = Session;
+            Session = session;
         }
 
         public bool Refresh()
@@ -23,65 +22,50 @@ namespace DragonFiesta.World.Game.Character
 		        {
 			        foreach (var character in we.DBCharacters)
 			        {
-						if (!WorldCharacterManager.Instance.GetCharacterFromEntity(character.ID, out WorldCharacter mCharacter, out CharacterErrors result))
+						if (!WorldCharacterManager.Instance.GetCharacterByCharacterID(character.ID, out var mCharacter, out var result))
 				        {
 							_SH04Helpers.SendCharacterError(Session, result);
 				        }
-			        }
+
+				        Add(mCharacter);
+					}
 		        }
 	        }
-				SQLResult Result = DB.Select(DatabaseType.World, $"SELECT * FROM Characters WHERE AccountID = { Session.UserAccount.ID } ");
-            lock (ThreadLocker)
-            {
-                for (int i = 0; i < Result.Count; i++)
-                {
-                    if (!WorldCharacterManager.Instance.GetCharacterFromSQL(Result, i, out WorldCharacter mCharacter, out CharacterErrors LoadResult))
-                    {
-                        _SH04Helpers.SendCharacterError(Session, LoadResult);
-                        return false;
-                    }
-
-                    Add(mCharacter);
-                }
-            }
             return true;
         }
 
-        protected override void FinalizeCharacterAdd(WorldCharacter Character)
+        protected override void FinalizeCharacterAdd(WorldCharacter character)
         {
-            if (CharactersByID.TryAdd(Character.Info.CharacterID, Character)
-         && CharactersByName.TryAdd(Character.Info.Name, Character)
-         && CharactersBySlot.TryAdd(Character.Info.Slot, Character))
+            if (CharactersByID.TryAdd(character.Info.CharacterID, character)
+         && CharactersByName.TryAdd(character.Info.Name, character)
+         && CharactersBySlot.TryAdd(character.Info.Slot, character))
             {
-                Character.Info.OnNameChanged += On_Character_NameChanged;
+                character.Info.OnNameChanged += On_Character_NameChanged;
             }
         }
 
-        protected override void FinalizeCharacterRemove(WorldCharacter Character)
+        protected override void FinalizeCharacterRemove(WorldCharacter character)
         {
-            Character.Info.OnNameChanged -= On_Character_NameChanged;
-            CharactersByID.TryRemove(Character.Info.CharacterID, out Character);
-            CharactersByName.TryRemove(Character.Info.Name, out Character);
-            CharactersBySlot.TryRemove(Character.Info.Slot, out Character);
+            character.Info.OnNameChanged -= On_Character_NameChanged;
+            CharactersByID.TryRemove(character.Info.CharacterID, out character);
+            CharactersByName.TryRemove(character.Info.Name, out character);
+            CharactersBySlot.TryRemove(character.Info.Slot, out character);
         }
 
         private void On_Character_NameChanged(object sender, WorldCharacterNameChangedEventArgs args)
         {
             lock (ThreadLocker)
             {
-                if (args.OldName != null
-                    && args.OldName != args.Character.Info.Name)
-                {
-                    if (WorldCharacterManager.Instance.ChangeCharacterNameById(args.Character, args.Character.Info.Name))
-                    {
-                        CharactersByName.TryRemove(args.OldName, out WorldCharacter pChar);
-                        CharactersByName.TryAdd(args.Character.Info.Name, args.Character);
-                    }
-                    else
-                    {
-                        args.Character.Info.Name = args.OldName;
-                    }
-                }
+	            if (args.OldName == null || args.OldName == args.Character.Info.Name) return;
+	            if (WorldCharacterManager.Instance.ChangeCharacterNameById(args.Character, args.Character.Info.Name))
+	            {
+		            CharactersByName.TryRemove(args.OldName, out var pChar);
+		            CharactersByName.TryAdd(args.Character.Info.Name, args.Character);
+	            }
+	            else
+	            {
+		            args.Character.Info.Name = args.OldName;
+	            }
             }
         }
 
@@ -92,7 +76,5 @@ namespace DragonFiesta.World.Game.Character
 
             Session = null;
         }
-
-
     }
 }

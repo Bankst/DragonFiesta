@@ -26,7 +26,7 @@ namespace DragonFiesta.Game.Stats
         public StatsHolder FullStats { get; private set; }
 
         public SecureWriteCollection<iStatsChanger> StatsChangers { get; private set; }
-        public bool IsDisposed => (_isDisposedInt > 0);
+        public bool IsDisposed => _isDisposedInt > 0;
 	    private int _isDisposedInt;
         private Func<iStatsChanger, bool> _statsChangerFuncAdd;
         private Func<iStatsChanger, bool> _statsChangerFuncRemove;
@@ -84,7 +84,7 @@ namespace DragonFiesta.Game.Stats
 
             if (FullStats.IncreaseCastingTime > 0)
             {
-                time -= (startCastingTimeMs / 100d * FullStats.IncreaseCastingTime);
+                time -= startCastingTimeMs / 100d * FullStats.IncreaseCastingTime;
             }
             return time;
         }
@@ -165,7 +165,7 @@ namespace DragonFiesta.Game.Stats
                 FullStats.Str = NormalStats.Str;
                 FullStats.WeaponDamage.Min = NormalStats.WeaponDamage.Min;
                 FullStats.WeaponDamage.Max = NormalStats.WeaponDamage.Max;
-                StatsChangerAction((sc) =>
+                StatsChangerAction(sc =>
                 {
                     FullStats.Str += sc.Stats.Str;
                     FullStats.WeaponDamage.Min += (short)(sc.Stats.Str + sc.Stats.WeaponDamage.Min);
@@ -188,7 +188,7 @@ namespace DragonFiesta.Game.Stats
                 FullStats.Dex = NormalStats.Dex;
                 FullStats.Aim = NormalStats.Aim;
                 FullStats.Evasion = NormalStats.Evasion;
-                StatsChangerAction((sc) =>
+                StatsChangerAction(sc =>
                 {
                     FullStats.Dex += sc.Stats.Dex;
                     FullStats.Aim += (short)(sc.Stats.Dex + sc.Stats.Aim);
@@ -205,17 +205,17 @@ namespace DragonFiesta.Game.Stats
             {
                 // Normal stats
                 NormalStats.End = BaseStats.End;
-                NormalStats.MaxHP = (BaseStats.End * 5) + BaseStats.MaxHP;
+                NormalStats.MaxHP = BaseStats.End * 5 + BaseStats.MaxHP;
                 NormalStats.WeaponDefense = (short)(BaseStats.End + BaseStats.WeaponDefense);
                 // Full stats
                 FullStats.End = NormalStats.End;
                 FullStats.MaxHP = NormalStats.MaxHP;
                 FullStats.WeaponDefense = NormalStats.WeaponDefense;
 
-                StatsChangerAction((sc) =>
+                StatsChangerAction(sc =>
                 {
                     FullStats.End += sc.Stats.End;
-                    FullStats.MaxHP += (sc.Stats.End * 5) + sc.Stats.MaxHP;
+                    FullStats.MaxHP += sc.Stats.End * 5 + sc.Stats.MaxHP;
                     FullStats.WeaponDefense += (short)(sc.Stats.End + sc.Stats.WeaponDefense);
                 });
                 //increase end by percent
@@ -243,7 +243,7 @@ namespace DragonFiesta.Game.Stats
                 FullStats.Int = NormalStats.Int;
                 FullStats.MagicDamage.Min = NormalStats.MagicDamage.Min;
                 FullStats.MagicDamage.Max = NormalStats.MagicDamage.Max;
-                StatsChangerAction((sc) =>
+                StatsChangerAction(sc =>
                 {
                     FullStats.Int += sc.Stats.Int;
                     FullStats.MagicDamage.Min += (short)(sc.Stats.Int + sc.Stats.MagicDamage.Min);
@@ -267,16 +267,16 @@ namespace DragonFiesta.Game.Stats
             {
                 // Normal stats
                 NormalStats.Spr = BaseStats.Spr;
-                NormalStats.MaxSP = (BaseStats.Spr * 5) + BaseStats.MaxSP;
+                NormalStats.MaxSP = BaseStats.Spr * 5 + BaseStats.MaxSP;
                 NormalStats.MagicDefense = (short)(BaseStats.Spr + BaseStats.MagicDefense);
                 // Full stats
                 FullStats.Spr = NormalStats.Spr;
                 FullStats.MaxSP = NormalStats.MaxSP;
                 FullStats.MagicDefense = NormalStats.MagicDefense;
-                StatsChangerAction((sc) =>
+                StatsChangerAction(sc =>
                 {
                     FullStats.Spr += sc.Stats.Spr;
-                    FullStats.MaxSP += (sc.Stats.Spr * 5) + sc.Stats.MaxSP;
+                    FullStats.MaxSP += sc.Stats.Spr * 5 + sc.Stats.MaxSP;
                     FullStats.MagicDefense += (short)(sc.Stats.Spr + sc.Stats.MagicDefense);
                 });
                 //increase spr by percent
@@ -300,7 +300,7 @@ namespace DragonFiesta.Game.Stats
                 FullStats.WalkSpeed = NormalStats.WalkSpeed;
                 FullStats.RunSpeed = NormalStats.RunSpeed;
                 FullStats.IncreaseSpeedPercent = NormalStats.IncreaseSpeedPercent;
-                StatsChangerAction((sc) =>
+                StatsChangerAction(sc =>
                 {
                     FullStats.WalkSpeed += sc.Stats.WalkSpeed;
                     FullStats.RunSpeed += sc.Stats.RunSpeed;
@@ -320,7 +320,7 @@ namespace DragonFiesta.Game.Stats
                 NormalStats.IncreaseCastingTime = BaseStats.IncreaseCastingTime;
                 // Full stats
                 FullStats.IncreaseCastingTime = NormalStats.IncreaseCastingTime;
-                StatsChangerAction((sc) =>
+                StatsChangerAction(sc =>
                 {
                     FullStats.IncreaseCastingTime += sc.Stats.IncreaseCastingTime;
                 });

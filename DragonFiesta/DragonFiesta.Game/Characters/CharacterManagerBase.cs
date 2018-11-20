@@ -74,7 +74,7 @@ namespace DragonFiesta.Game.Characters
             ThreadLocker = new object();
         }
 
-	    private bool LoadCharacterFromEntityByID(int Id, out TCharacterType character, out CharacterErrors result)
+	    private bool LoadCharacterFromEntityByID(int id, out TCharacterType character, out CharacterErrors result)
 	    {
 		    result = CharacterErrors.ErrorInCharacterInfo;
 		    character = default(TCharacterType);
@@ -82,7 +82,7 @@ namespace DragonFiesta.Game.Characters
 		    {
 			    try
 			    {
-				    character = worldEntity.DBCharacters.First(ch => ch.ID == Id) as TCharacterType;
+				    character = worldEntity.DBCharacters.First(ch => ch.ID == id) as TCharacterType;
 				    result = CharacterErrors.LoadOK;
 				    return true;
 			    }
@@ -95,8 +95,7 @@ namespace DragonFiesta.Game.Characters
 		    }
 	    }
 
-	    private bool LoadCharacterFromEntityByName(string name, out TCharacterType character,
-		    out CharacterErrors result)
+	    private bool LoadCharacterFromEntityByName(string name, out TCharacterType character, out CharacterErrors result)
 	    {
 		    result = CharacterErrors.ErrorInCharacterInfo;
 		    character = default(TCharacterType);
@@ -115,6 +114,8 @@ namespace DragonFiesta.Game.Characters
 				}
 			}
 	    }
+
+		/*
 
         private bool LoadCharacterFromDatabase(string where, out TCharacterType character, out CharacterErrors result, params SqlParameter[] parameters)
         {
@@ -136,32 +137,38 @@ namespace DragonFiesta.Game.Characters
             }
         }
 
+			*/
 
-	    public bool GetCharacterFromEntity(int id, out TCharacterType character, out CharacterErrors result)
+	    public bool GetCharacterByCharacterID(int id, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
 	    {
-		    character = null;
 		    result = CharacterErrors.ErrorInCharacterInfo;
 		    try
 		    {
 			    lock (ThreadLocker)
 			    {
-				    if (CharactersByCharacterID.TryGetValue(id, out character)) return true;
-
-				    using (var worldEntity = EDM.GetWorldEntity())
+				    if (CharactersByCharacterID.TryGetValue(id, out character))
 				    {
-						character = new TCharacterType();
-					    var charById = worldEntity.DBCharacters.First(ch => ch.ID == id);
-						return character.RefreshCharacter(charById, out result) && AddCharacter(character, out result);
+					    if (refreshCharacter) return RefreshCharacterEntity(character, out result);
+					    result = CharacterErrors.LoadOK;
+					    return true;
 				    }
+
+				    character = new TCharacterType();
+				    var idLoad = character.LoadBaseWithID(id, out result);
+				    var refresh = character.RefreshCharacter(out result);
+				    var add = AddCharacter(character, out result);
+				    return idLoad && refresh && add;
 			    }
 		    }
 			catch (Exception ex)
 			{
+				character = null;
 				EngineLog.Write(ex, "Error loading character from database: ");
 				return false;
 			}
 		}
 
+		/*
 		public bool GetCharacterFromSQL(SQLResult pRes, int i, out TCharacterType character, out CharacterErrors result)
         {
             character = null;
@@ -181,13 +188,13 @@ namespace DragonFiesta.Game.Characters
                 EngineLog.Write(ex, "Error loading character from database: ");
                 return false;
             }
-        }
+		}
 
+		/*
         public bool GetCharacterByCharacterID(int id, out TCharacterType character, bool refreshCharacter = false)
         {
             return GetCharacterByCharacterID(id, out character, out _, refreshCharacter);
         }
-
         public bool GetCharacterByCharacterID(int id, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
         {
             lock (ThreadLocker)
@@ -206,15 +213,19 @@ namespace DragonFiesta.Game.Characters
                 return LoadCharacterFromDatabase("ID = @pID", out character, out result, new SqlParameter("@pID", id));
             }
         }
+	    */
 
-	    public bool GetCharacterByNameEntity(string name, out TCharacterType character,
-		    bool refreshCharacter = false)
+		public bool GetCharacterByCharacterID(int id, out TCharacterType character, bool refreshcharacter = false)
+		{
+			return GetCharacterByCharacterID(id, out character, out _, refreshcharacter);
+		}
+
+		public bool GetCharacterByName(string name, out TCharacterType character, bool refreshCharacter = false)
 	    {
-		    return GetCharacterByNameEntity(name, out character, out _, refreshCharacter);
+		    return GetCharacterByName(name, out character, out _, refreshCharacter);
 	    }
 
-	    public bool GetCharacterByNameEntity(string name, out TCharacterType character, out CharacterErrors result,
-		    bool refreshCharacter = false)
+	    public bool GetCharacterByName(string name, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
 	    {
 		    lock (ThreadLocker)
 		    {
@@ -235,32 +246,7 @@ namespace DragonFiesta.Game.Characters
 			}
 	    }
 
-	    public bool GetCharacterByName(string name, out TCharacterType character, bool refreshCharacter = false)
-        {
-            return GetCharacterByName(name, out character, out _, refreshCharacter);
-        }
-
-        public bool GetCharacterByName(string name, out TCharacterType character, out CharacterErrors result, bool refreshCharacter = false)
-        {
-            lock (ThreadLocker)
-            {
-                if (CharactersByName.TryGetValue(name, out character))
-                {
-                    if (refreshCharacter)
-                    {
-                        return RefreshCharacter(character, out result);
-                    }
-
-                    result = CharacterErrors.LoadOK;
-
-                    return true;
-                }
-
-                return LoadCharacterFromDatabase("Name = @pName", out character, out result, new SqlParameter("@pName", name));
-            }
-        }
-
-        public bool GetLoggedInCharacterByAccountId(long id, out TCharacterType character, bool refreshCharacter = false)
+	    public bool GetLoggedInCharacterByAccountId(long id, out TCharacterType character, bool refreshCharacter = false)
         {
             return GetLoggedInCharacterByAccountId(id, out character, out _, refreshCharacter);
         }
@@ -341,15 +327,7 @@ namespace DragonFiesta.Game.Characters
 		    {
 			    lock (ThreadLocker)
 			    {
-				    using (var we = EDM.GetWorldEntity())
-				    {
-					    var entityChar = we.DBCharacters.First(ch => ch.ID == character.ID);
-
-					    if (entityChar != null) return character.RefreshCharacter((CharacterBase)entityChar, out result);
-
-					    result = CharacterErrors.ErrorInCharacterInfo;
-					    return false;
-					}
+				    return character.RefreshCharacter(out result);
 			    }
 		    }
 		    catch (Exception ex)

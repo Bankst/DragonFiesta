@@ -40,7 +40,6 @@ namespace DragonFiesta.World
         {
             InternalInstance = new ServerMain();
             InternalInstance.WriteConsoleLogo();
-            //System.Threading.Thread.Sleep(2500); // TODO: Find better way to delay start based on Login Server status. Maybe 250ms pings?
 
             if (!WorldConfiguration.Initialize())
             {

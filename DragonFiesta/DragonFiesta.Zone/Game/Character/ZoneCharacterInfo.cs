@@ -65,12 +65,10 @@ namespace DragonFiesta.Zone.Game.Character
             {
                 base.Money = value;
 
-                if (Character.IsConnected)
-                {
-                    SH04Handler.SendUpdateMoney(Character);
+	            if (!Character.IsConnected) return;
+	            SH04Handler.SendUpdateMoney(Character);
 
-                    CharacterMethods.SendCharacterUpdateMoney(Character);
-                }
+	            CharacterMethods.SendCharacterUpdateMoney(Character);
             }
         }
 
@@ -93,7 +91,7 @@ namespace DragonFiesta.Zone.Game.Character
 
         public override bool RefreshFromSQL(SQLResult pRes, int i)
         {
-            if (!base.RefreshFromSQL(pRes, i))
+            if (!base.RefreshFromEntity(Character))
                 return false;
 
 
@@ -106,13 +104,12 @@ namespace DragonFiesta.Zone.Game.Character
 	        MaxHPStones = parameter.MaxHPStones;
 	        MaxSPStones = parameter.MaxSPStones;
 
-	        HPStones = pRes.Read<ushort>(i, "HPStones");
-	        SPStones = pRes.Read<ushort>(i, "SPStones");
-
+	        HPStones = Character.HPStones;
+	        SPStones = Character.SPStones;
 
 	        FreeStats = new CharacterFreeStatsInfo(Character);
 
-	        if (!FreeStats.FreeStatsInfo(pRes, i))
+	        if (!FreeStats.FreeStatsInfo())
 		        return false;
 
 
@@ -120,13 +117,13 @@ namespace DragonFiesta.Zone.Game.Character
 
 	        Stats.UpdateAll();
 
-	        KillPoints = pRes.Read<uint>(i, "KillPoints");
+	        KillPoints = Character.KillPoints;
 
-	        EXP = pRes.Read<ulong>(i, "EXP");
+	        EXP = Character.EXP;
 
-	        Fame = pRes.Read<uint>(i, "Fame");
+	        Fame = Character.Fame;
 
-	        SkillPoints = pRes.Read<byte>(i, "SkillPoints");
+	        SkillPoints = Character.SkillPoints;
 
 	        return true;
 

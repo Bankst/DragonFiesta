@@ -3,6 +3,7 @@ using DragonFiesta.Zone.Config;
 using DragonFiesta.Zone.Network;
 using DragonFiesta.Zone.ServerConsole.Title;
 using System;
+using DragonFiesta.Database.Models;
 using DragonFiesta.Database.SQL;
 using DragonFiesta.Utils.Utils;
 
@@ -70,7 +71,12 @@ namespace DragonFiesta.Zone.Core
 
             ThreadPool.AddUpdateAbleServer(ServerTaskManager.InitialInstance());
 
-            if (!DB.AddManager(DatabaseType.World, ZoneConfiguration.Instance.WorldDatabaseSettings))
+		    if (!EDM.TestWorldEntity(ZoneConfiguration.Instance.WorldDatabaseSettings))
+		    {
+			    throw new StartupException("Failed to load World EntityModel");
+		    }
+
+			if (!DB.AddManager(DatabaseType.World, ZoneConfiguration.Instance.WorldDatabaseSettings))
             {
                 throw new StartupException("Invalid Add World DatabaseManager");
             }

@@ -17,23 +17,23 @@ namespace DragonFiesta.Game.Characters.Data
 
         public FaceInfo Face { get; set; }
 
-	    public bool RefreshFromEntity(DBCharacter dbCharacter)
+	    public bool RefreshFromEntity(CharacterBase character)
 	    {
-		    var hairID = dbCharacter.Hair;
+		    var hairID = character.Hair;
 		    if (!CharacterLookProvider.GetHairInfoByID(hairID, out var pHair))
 		    {
 			    GameLog.Write(GameLogLevel.Warning, $"Can't find hair with ID '{hairID}' for characters");
 			    return false;
 		    }
 
-			var hairColorID = dbCharacter.HairColor;
+			var hairColorID = character.HairColor;
 		    if (!CharacterLookProvider.GetHairColorInfoByID(hairColorID, out var pHairColor))
 		    {
 			    GameLog.Write(GameLogLevel.Warning, $"Can't find hair color with ID '{hairColorID}' for chracters");
 			    return false;
 		    }
 
-			var faceID = dbCharacter.Face;
+			var faceID = character.Face;
 		    if (!CharacterLookProvider.GetFaceInfoByID(faceID, out var pFace))
 		    {
 			    GameLog.Write(GameLogLevel.Warning, $"Can't find face with ID '{faceID}' for a characters");

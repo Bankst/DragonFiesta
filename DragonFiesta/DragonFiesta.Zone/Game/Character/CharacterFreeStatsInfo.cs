@@ -29,6 +29,27 @@ namespace DragonFiesta.Zone.Game.Character
             this.Owner = Owner;
         }
 
+	    public bool FreeStatsInfo()
+	    {
+		    try
+		    {
+			    StatPoints_STR = Owner.FreeStat_Str;
+			    StatPoints_END = Owner.FreeStat_End;
+			    StatPoints_DEX = Owner.FreeStat_Dex;
+			    StatPoints_INT = Owner.FreeStat_Int;
+			    StatPoints_SPR = Owner.FreeStat_Spr;
+
+			    FreeStat_Points = Owner.FreeStat_Points;
+
+			    return true;
+		    }
+		    catch (Exception ex)
+		    {
+			    DatabaseLog.Write(ex, "Failed Load CharacterFreeStats");
+			    return false;
+		    }
+		}
+
         public bool FreeStatsInfo(SQLResult pRes, int i)
         {
             try

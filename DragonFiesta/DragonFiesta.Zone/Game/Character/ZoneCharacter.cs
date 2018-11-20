@@ -174,15 +174,15 @@ namespace DragonFiesta.Zone.Game.Character
             }
         }
 
-        public override bool RefreshCharacter(DBCharacter character, out CharacterErrors result)
+        public override bool RefreshCharacter(out CharacterErrors result)
         {
-            if (!base.RefreshCharacter(character, out result))
+            if (!base.RefreshCharacter(out result))
                 return false;
-
+			
             LivingStats.Load(
-                (uint) character.HP,
-                (uint) character.SP,
-				(uint) character.LP);
+                (uint) HP,
+                (uint) SP,
+				(uint) LP);
 
             return true;
         }
@@ -398,9 +398,9 @@ namespace DragonFiesta.Zone.Game.Character
 	        }
         }
 
-        public override bool LevelUP(ushort mobID = ushort.MaxValue, bool finalizeLevelUp = true)
+        public override bool LevelUp(ushort mobID = ushort.MaxValue, bool finalizeLevelUp = true)
         {
-            if (!base.LevelUP(mobID, false))
+            if (!base.LevelUp(mobID, false))
                 return false;
 
             if (!CharacterDataProvider.GetLevelParameters(Info.Class, Info.Level, out var parameters))
