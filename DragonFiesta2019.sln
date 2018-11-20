@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginServer", "DragonFiesta2019\LoginServer.csproj", "{DE3C5EC5-860D-4BC1-840D-B1859A39FD3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginServer", "LoginServer\LoginServer.csproj", "{DE3C5EC5-860D-4BC1-840D-B1859A39FD3A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1B6AECAC-22D1-4864-93FC-DC311E6705E7} = {1B6AECAC-22D1-4864-93FC-DC311E6705E7}
 	EndProjectSection
