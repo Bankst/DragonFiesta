@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using DFEngine.Logging;
-using DFEngine.Network.Protocols.Misc;
+using DFEngine.Network.Protocols;
 using DFEngine.Utils;
 
 namespace DFEngine.Network

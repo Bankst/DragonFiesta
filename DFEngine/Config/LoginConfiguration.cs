@@ -10,7 +10,6 @@ namespace DFEngine.Config
 		public string ClientVersion { get; set; } = "";
 		public int ClientRegion { get; set; } = 1; // NA
 
-
 		public static LoginConfiguration Instance { get; set; }
 
 		public static bool Initialize(out string message)
@@ -57,6 +56,5 @@ namespace DFEngine.Config
 				return false;
 			}
 		}
-
 	}
 }

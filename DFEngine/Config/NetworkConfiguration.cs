@@ -5,8 +5,8 @@ namespace DFEngine.Config
 {
 	public class NetworkConfiguration : Configuration<NetworkConfiguration>
 	{
-		public LoginNetworkConfiguration LoginNetworkConfig { get; set; } = new LoginNetworkConfiguration();
-		public WorldNetworkConfiguration WorldNetworkConfig { get; set; } = new WorldNetworkConfiguration();
+		public LoginNetworkConfiguration LoginNetConfig { get; set; } = new LoginNetworkConfiguration();
+		public WorldNetworkConfiguration WorldNetConfig { get; set; } = new WorldNetworkConfiguration();
 
 		// TODO: Better method for multiple zones?
 		// getting a single ZoneNetworkConfiguration would be done with LINQ
