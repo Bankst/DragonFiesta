@@ -1,7 +1,9 @@
-﻿using System;
+﻿using DFEngine;
+using DFEngine.Config;
+using DFEngine.Logging;
 using DFEngine.Server;
 
-namespace DFEngine
+namespace LoginServer
 {
 	public class ServerMain : ServerMainBase
 	{
@@ -15,6 +17,17 @@ namespace DFEngine
 		{
 			InternalInstance = new ServerMain();
 			InternalInstance.WriteConsoleLogo();
+			EngineLog.Write(EngineLogLevel.Startup, "Starting LoginServer");
+
+			if (!NetworkConfiguration.Initialize(out var netConfigMsg))
+			{
+				throw new StartupException(netConfigMsg);
+			}
+
+			if (!LoginConfiguration.Initialize(out var loginConfigMsg))
+			{
+				throw new StartupException(loginConfigMsg);
+			}
 		}
 	}
 }

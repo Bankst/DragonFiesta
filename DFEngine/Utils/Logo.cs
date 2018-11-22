@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DFEngine
+namespace DFEngine.Utils
 {
 	internal class Logo
 	{

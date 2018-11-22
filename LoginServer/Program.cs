@@ -1,7 +1,6 @@
 ﻿using System;
-using DFEngine;
 
-namespace DragonFiesta2019
+namespace LoginServer
 {
 	internal class Program
 	{
