@@ -14,16 +14,16 @@ namespace DFEngine.Logging
         /// <summary>
         /// Returns the ID of the current log session.
         /// </summary>
-        public uint SessionID { get; private set; }
+        public uint SessionId { get; private set; }
 
         /// <summary>
         /// Returns the time when this log session was started.
         /// </summary>
         public DateTime SessionTime { get; private set; }
 
-        protected internal byte MFileLogLevel = byte.MaxValue;
+        protected internal byte MaxFileLogLevel = byte.MaxValue;
 
-        private ConcurrentDictionary<string, StreamWriter> _writers;
+        private readonly ConcurrentDictionary<string, StreamWriter> _writers;
 
         public FileLog(string directory) : base()
         {
@@ -45,46 +45,44 @@ namespace DFEngine.Logging
             {
                 var withoutEx = Path.GetFileNameWithoutExtension(file);
 
-                if (withoutEx.Contains("_"))
-                {
-                    var split = withoutEx.Split('_');
+	            if (!withoutEx.Contains("_")) continue;
+	            var split = withoutEx.Split('_');
 
-                    if (uint.TryParse(split[0], out uint id) && id >= SessionID)
-                    {
-                        SessionID = (id + 1);
-                    }
-                }
+	            if (uint.TryParse(split[0], out var id) && id >= SessionId)
+	            {
+		            SessionId = (id + 1);
+	            }
             }
 
             SessionTime = DateTime.Now;
         }
 
-        public void SetFileLogLevel(byte logLevel) => MFileLogLevel = logLevel;
+        public void SetFileLogLevel(byte logLevel) => MaxFileLogLevel = logLevel;
 
-        public void Write(string logName, dynamic logType, string message, params object[] args)
+        public void Write(LogType logType, dynamic logSubType, string message, params object[] args)
         {
             try
             {
                 lock (IOLocker)
                 {
-                    if (!_writers.TryGetValue(logName.ToLower(), out StreamWriter writer))
+                    if (!_writers.TryGetValue(logType.ToString().ToLower(), out var writer))
                     {
                         writer = new StreamWriter(
-                            $"{Directory}{SessionID}_{logName}_{SessionTime:MM_dd_yyyy}.txt")
+                            $"{Directory}{SessionId}_{logType}_{SessionTime:MM_dd_yyyy}.txt")
                         { AutoFlush = true };
-                        _writers.TryAdd(logName.ToLower(), writer);
+                        _writers.TryAdd(logType.ToString().ToLower(), writer);
                     }
 
-                    var msg = ($"[{DateTime.Now}][{LogTypeName}][{logType}] {string.Format(message, args)}");
+                    var msg = ($"[{DateTime.Now}][{LogTypeName.ToString()}][{logSubType}] {string.Format(message, args)}");
 
-                    if ((byte)logType <= MFileLogLevel)
+                    if ((byte)logSubType <= MaxFileLogLevel)
                     {
                         writer.WriteLine(msg);
                     }
 
-                    if ((byte)logType <= mConsoleLogLevel)
+                    if ((byte)logSubType <= ConsoleLogLevel)
                     {
-                        ConsoleWriteLine(logName, logType, msg);
+                        ConsoleWriteLine(logType, logSubType, msg);
                     }
                 }
             }

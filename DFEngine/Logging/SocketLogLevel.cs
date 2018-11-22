@@ -1,11 +1,10 @@
 ﻿namespace DFEngine.Logging
 {
-	public enum EngineLogLevel
+	public enum SocketLogLevel
 	{
 		Exception,
 		Warning,
 		Startup,
-		Info,
 		Debug,
 	}
 }

@@ -4,9 +4,9 @@ namespace DFEngine.Logging
 {
     public class ConsoleLogger
     {
-        protected internal byte mConsoleLogLevel = byte.MaxValue;
+        protected internal byte ConsoleLogLevel = byte.MaxValue;
 
-        protected virtual string LogTypeName { get; }
+        protected virtual LogType LogTypeName { get; }
 
         internal object IOLocker;
 
@@ -15,52 +15,43 @@ namespace DFEngine.Logging
             IOLocker = new object();
         }
 
-        public void SetConsoleLevel(byte LogLevel)
+        public void SetConsoleLevel(byte logLevel)
         {
-            mConsoleLogLevel = LogLevel;
+            ConsoleLogLevel = logLevel;
         }
 
-        public void ConsoleWriteLine(string LogTypeName, dynamic LogType, string Message)
+        public void ConsoleWriteLine(LogType logTypeName, dynamic logSubtype, string message)
         {
-            if ((byte)LogType <= mConsoleLogLevel)
-            {
-                lock (IOLocker)
-                {
-                    if (ConsoleColors.GetColor(LogTypeName, (byte)LogType, out ConsoleColor pColor))
-                    {
-                        Console.ForegroundColor = pColor;
-                        Console.WriteLine("\r" + Message);
-                        Console.ResetColor();
-                    }
-                }
-            }
+	        if ((byte) logSubtype > ConsoleLogLevel) return;
+	        lock (IOLocker)
+	        {
+		        if (!ConsoleColors.GetColor(logTypeName, (byte) logSubtype, out var pColor)) return;
+		        Console.ForegroundColor = pColor;
+		        Console.WriteLine("\r" + message);
+		        Console.ResetColor();
+	        }
         }
 
-        public void ConsoleWriteLine(string LogTypeName, dynamic LogType, string Message, params object[] args)
+        public void ConsoleWriteLine(LogType logTypeName, dynamic logSubtype, string message, params object[] args)
         {
-            if ((byte)LogType <= mConsoleLogLevel)
-            {
-                lock (IOLocker)
-                {
-                    if (ConsoleColors.GetColor(LogTypeName, (byte)LogType, out ConsoleColor pColor))
-                    {
-                        string msg = string.Format($"[{LogTypeName}][{LogType}] {string.Format(Message, args)}");
+	        if ((byte) logSubtype > ConsoleLogLevel) return;
+	        lock (IOLocker)
+	        {
+		        if (!ConsoleColors.GetColor(logTypeName, (byte) logSubtype, out var pColor)) return;
+		        var msg = string.Format($"[{logTypeName}][{logSubtype}] {string.Format(message, args)}");
 
-                        Console.ForegroundColor = pColor;
-                        Console.WriteLine(msg);
-                        Console.ResetColor();
-                    }
-                }
-            }
+		        Console.ForegroundColor = pColor;
+		        Console.WriteLine(msg);
+		        Console.ResetColor();
+	        }
         }
 
-        public void WriteConsoleProgressBar(string Text, params object[] args)
+        public void WriteConsoleProgressBar(string text, params object[] args)
         {
             lock (IOLocker)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                string ma = string.Format($"{Text} {args} \n");
-                Console.WriteLine(Text, args);
+                Console.WriteLine(text, args);
                 Console.ResetColor();
             }
         }

@@ -1,11 +1,11 @@
 ﻿namespace DFEngine.Logging
 {
-	public enum EngineLogLevel
+	public enum GameLogLevel : byte
 	{
 		Exception,
 		Warning,
+		Internal,
 		Startup,
-		Info,
 		Debug,
 	}
 }

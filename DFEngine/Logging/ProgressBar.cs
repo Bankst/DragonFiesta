@@ -1,103 +1,105 @@
 ﻿using System;
 
-public class ProgressBar : IDisposable
+namespace DFEngine.Logging
 {
-    public ProgressBar(int row_count)
-    {
-        if (row_count > 0)
-        {
-            Init(row_count);
-        }
-        else
-        {
-            Init(1);
-            Step();
-        }
-    }
+	public class ProgressBar : IDisposable
+	{
+		public ProgressBar(int rowCount)
+		{
+			if (rowCount > 0)
+			{
+				Init(rowCount);
+			}
+			else
+			{
+				Init(1);
+				Step();
+			}
+		}
 
-    public void Dispose()
-    {
-        if (!m_showOutput)
-        {
-            return;
-        }
+		public void Dispose()
+		{
+			if (!_mShowOutput)
+			{
+				return;
+			}
 
-        Console.Write("\n");
-        Console.Write("\n");
-        Console.Out.Flush();
-    }
+			Console.Write("\n");
+			Console.Write("\n");
+			Console.Out.Flush();
+		}
 
-    public void Step()
-    {
-        int i;
-        int n;
+		public void Step()
+		{
+			int i;
+			int n;
 
-        if (num_rec == 0)
-        {
-            return;
-        }
-        ++rec_no;
-        n = rec_no * indic_len / num_rec;
-        if (n != rec_pos)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
+			if (_numRec == 0)
+			{
+				return;
+			}
+			++_recNo;
+			n = _recNo * _indicLen / _numRec;
+			if (n == _recPos) return;
 
-            Console.Write("\r\x3D");
+			Console.ForegroundColor = ConsoleColor.Green;
 
-            for (i = 0; i < n; ++i)
-            {
-                Console.Write(full);
-            }
-            for (; i < indic_len; ++i)
-            {
-                Console.Write(empty);
-            }
-            float percent = n / (float)indic_len * 100;
+			Console.Write("\r\x3D");
 
-            Console.Write("\x3D {0:D}%  \r\x3D", (int)percent);
+			for (i = 0; i < n; ++i)
+			{
+				Console.Write(Full);
+			}
+			for (; i < _indicLen; ++i)
+			{
+				Console.Write(Empty);
+			}
+			var percent = n / (float)_indicLen * 100;
 
-            Console.Out.Flush();
+			Console.Write("\x3D {0:D}%  \r\x3D", (int)percent);
 
-            rec_pos = n;
+			Console.Out.Flush();
 
-            Console.ResetColor();
-        }
-    }
+			_recPos = n;
 
-    // avoid use inline version because linking problems with private static field
-    public static void SetOutputState(bool on)
-    {
-        m_showOutput = on;
-    }
+			Console.ResetColor();
+		}
 
-    private void Init(int row_count)
-    {
-        rec_no = 0;
-        rec_pos = 0;
-        indic_len = 50;
-        num_rec = row_count;
+		// avoid use inline version because linking problems with private static field
+		public static void SetOutputState(bool on)
+		{
+			_mShowOutput = on;
+		}
 
-        if (!m_showOutput)
-        {
-            return;
-        }
+		private void Init(int rowCount)
+		{
+			_recNo = 0;
+			_recPos = 0;
+			_indicLen = 50;
+			_numRec = rowCount;
 
-        Console.Write("\x3D");
+			if (!_mShowOutput)
+			{
+				return;
+			}
 
-        for (int i = 0; i < indic_len; ++i)
-        {
-            Console.Write(empty);
-        }
-        Console.Write("\x3D 0%%\r\x3D");
-        Console.Out.Flush();
-    }
+			Console.Write("\x3D");
 
-    private static bool m_showOutput = true; // not recommended change with existed active bar
-    private readonly string empty = " ";
-    private readonly string full = "\x3D";
+			for (var i = 0; i < _indicLen; ++i)
+			{
+				Console.Write(Empty);
+			}
+			Console.Write("\x3D 0%%\r\x3D");
+			Console.Out.Flush();
+		}
 
-    private int rec_no;
-    private int rec_pos;
-    private int num_rec;
-    private int indic_len;
+		private static bool _mShowOutput = true; // not recommended change with existed active bar
+		private const string Empty = " ";
+		private const string Full = "\x3D";
+
+		private int _recNo;
+		private int _recPos;
+		private int _numRec;
+		private int _indicLen;
+	}
 }

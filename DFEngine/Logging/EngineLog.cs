@@ -1,11 +1,10 @@
-﻿using DFEngine.Logging;
-using System;
+﻿using System;
 
 namespace DFEngine.Logging
 {
     public sealed class EngineLog : FileLog
     {
-        protected override string LogTypeName => "EngineLog";
+        protected override LogType LogTypeName => LogType.EngineLog;
 
         private EngineLog(string directory) : base(directory)
         {
@@ -14,20 +13,20 @@ namespace DFEngine.Logging
         private static EngineLog Instance => (_instance ?? (_instance = new EngineLog(@"Engine")));
         private static EngineLog _instance;
 
-        public static void SetupLevels(byte mConsolenLevel, byte mFileLogLevel)
+        public static void SetupLevels(byte mConsoleLevel, byte mFileLogLevel)
         {
-            Instance.SetConsoleLevel(mConsolenLevel);
+            Instance.SetConsoleLevel(mConsoleLevel);
             Instance.SetFileLogLevel(mFileLogLevel);
         }
 
         public static void WriteConsoleLine(EngineLogLevel type, string message, params object[] args)
         {
-            Instance.ConsoleWriteLine(Instance.ToString(), type, message, args);
+            Instance.ConsoleWriteLine(LogType.EngineLog, type, message, args);
         }
 
         public static void Write(EngineLogLevel type, string message, params object[] args)
         {
-            Instance.Write(Instance.ToString(), type, message, args);
+            Instance.Write(LogType.EngineLog, type, message, args);
         }
 
         public static void Write(Exception exception, string message, params object[] args)

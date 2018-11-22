@@ -1,11 +1,11 @@
 ﻿namespace DFEngine.Logging
 {
-	public enum EngineLogLevel
+	public enum DatabaseLogLevel
 	{
-		Exception,
+		DatabaseClientError,
+		Error,
 		Warning,
 		Startup,
-		Info,
 		Debug,
 	}
 }
