@@ -1,17 +1,18 @@
 ﻿using System;
+using System.ComponentModel;
 using DFEngine.Logging;
 
 namespace DFEngine.Config
 {
 	public class NetworkConfiguration : Configuration<NetworkConfiguration>
 	{
-		public LoginNetworkConfiguration LoginNetConfig { get; set; } = new LoginNetworkConfiguration();
-		public WorldNetworkConfiguration WorldNetConfig { get; set; } = new WorldNetworkConfiguration();
+		public LoginNetworkConfiguration LoginNetConfig { get; protected set; } = new LoginNetworkConfiguration();
+		public WorldNetworkConfiguration WorldNetConfig { get; protected set; } = new WorldNetworkConfiguration();
 
 		// TODO: Better method for multiple zones?
 		// getting a single ZoneNetworkConfiguration would be done with LINQ
 		// i.e.   ZoneNetworkConfiguration ZoneNetworkConfig = ZoneNetworkConfigs.First(x => x.ZoneID == 0);
-		public ZoneNetworkConfiguration[] ZoneNetworkConfigs { get; set; } = {
+		public ZoneNetworkConfiguration[] ZoneNetworkConfigs { get; protected set; } = {
 			new ZoneNetworkConfiguration()
 		};
 

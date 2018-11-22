@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace DFEngine.Config
 {
@@ -20,7 +22,7 @@ namespace DFEngine.Config
 		{
 			CreateDefaultFolder();
 			var path = Path.Combine(ConfigFolder, $"{configName ?? typeof(T).Name}.json");
-			
+
 			var writer = new JsonSerializer();
 			var file = new StreamWriter(path);
 			writer.Formatting = Formatting.Indented;
@@ -30,15 +32,20 @@ namespace DFEngine.Config
 
 		public static T ReadJson(string configName = null)
 		{
+			var settings = new JsonSerializerSettings
+			{
+				ContractResolver = new PrivateSetterContractResolver()
+			};
+
 			var path = Path.Combine(ConfigFolder, $"{configName ?? typeof(T).Name}.json");
 			if (!File.Exists(path)) return default(T);
 
-			var reader = new JsonSerializer();
-			var file = new StreamReader(path);
-			var jsReader = new JsonTextReader(file);
-			var ret = reader.Deserialize<T>(jsReader);
-			file.Close();
-			return ret;
+			using (var file = File.OpenText(path))
+			{
+				var text = file.ReadToEnd();
+				var obj = JsonConvert.DeserializeObject<T>(text, settings);
+				return obj;
+			}
 		}
 	}
 }
