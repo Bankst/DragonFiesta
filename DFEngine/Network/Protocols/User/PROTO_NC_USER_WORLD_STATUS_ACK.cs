@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DFEngine.Server;
 
-namespace DFEngine.Network.Protocols.User
+namespace DFEngine.Network.Protocols
 {
 	public class PROTO_NC_USER_WORLD_STATUS_ACK : NetworkMessage
     {

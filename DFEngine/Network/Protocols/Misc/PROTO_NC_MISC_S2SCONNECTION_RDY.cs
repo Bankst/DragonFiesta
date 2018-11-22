@@ -1,4 +1,4 @@
-﻿namespace DFEngine.Network.Protocols.Misc
+﻿namespace DFEngine.Network.Protocols
 {
     public sealed class PROTO_NC_MISC_S2SCONNECTION_RDY : NetworkMessage
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DFEngine.Network.Protocols.Misc
+namespace DFEngine.Network.Protocols
 {
 	public class PROTO_NC_MISC_GAMETIME_ACK : NetworkMessage
 	{

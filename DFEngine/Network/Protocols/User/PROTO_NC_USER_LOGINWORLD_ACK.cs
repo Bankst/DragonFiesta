@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DFEngine.Network.Protocols.User
+namespace DFEngine.Network.Protocols
 {
     public class PROTO_NC_USER_LOGINWORLD_ACK : NetworkMessage
     {

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DFEngine.Network.Protocols.Log
+namespace DFEngine.Network.Protocols
 {
 	public class PROTO_NC_LOG_USER_LOGIN : NetworkMessage
 	{

@@ -1,4 +1,4 @@
-﻿namespace DFEngine.Network.Protocols.User
+﻿namespace DFEngine.Network.Protocols
 {
     public class PROTO_NC_USER_CLIENT_RIGHTVERSION_CHECK_ACK : NetworkMessage
     {

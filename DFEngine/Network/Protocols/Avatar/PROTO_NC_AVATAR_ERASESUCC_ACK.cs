@@ -1,4 +1,4 @@
-﻿namespace DFEngine.Network.Protocols.Avatar
+﻿namespace DFEngine.Network.Protocols
 {
     public class PROTO_NC_AVATAR_ERASESUCC_ACK : NetworkMessage
     {

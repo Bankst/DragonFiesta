@@ -1,6 +1,6 @@
 ﻿using DFEngine.Content.GameObjects;
 
-namespace DFEngine.Network.Protocols.Log
+namespace DFEngine.Network.Protocols
 {
 	public class PROTO_NC_LOG_GAME_ADD : NetworkMessage
 	{

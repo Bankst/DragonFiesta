@@ -1,6 +1,6 @@
 ﻿using DFEngine.Server;
 
-namespace DFEngine.Network.Protocols.User
+namespace DFEngine.Network.Protocols
 {
     public class PROTO_NC_USER_WORLDSELECT_ACK : NetworkMessage
     {
