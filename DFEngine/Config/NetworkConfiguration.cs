@@ -16,6 +16,8 @@ namespace DFEngine.Config
 			new ZoneNetworkConfiguration()
 		};
 
+		public GameLogNetworkConfiguration GameLogNetConfig { get; protected set; } = new GameLogNetworkConfiguration();
+
 		public static NetworkConfiguration Instance { get; set; }
 		
 		public static bool Initialize(out string message)
@@ -79,10 +81,10 @@ namespace DFEngine.Config
 	{
 		public string ListenIP { get; protected set; } = "127.0.0.1";
 		public string ExternalIP { get; protected set; } = "127.0.0.1";
-		public int ListenPort { get; protected set; } = 9100;
+		public int ListenPort { get; protected set; } = 9110;
 		public int MaxConnections { get; protected set; } = 25;
 		public string S2SListenIP { get; protected set; } = "127.0.0.1";
-		public int S2SListenPort { get; protected set; } = 9101;
+		public int S2SListenPort { get; protected set; } = 9111;
 		public byte WorldID { get; protected set; } = 0;
 	}
 
@@ -90,10 +92,16 @@ namespace DFEngine.Config
 	{
 		public string ListenIP { get; protected set; } = "127.0.0.1";
 		public string ExternalIP { get; protected set; } = "127.0.0.1";
-		public int ListenPort { get; protected set; } = 9200;
+		public int ListenPort { get; protected set; } = 9210;
 		public int MaxConnections { get; protected set; } = 100;
 		public string S2SListenIP { get; protected set; } = "127.0.0.1";
-		public int S2SListenPort { get; protected set; } = 9201;
+		public int S2SListenPort { get; protected set; } = 9211;
 		public byte ZoneID { get; protected set; } = 0;
+	}
+
+	public class GameLogNetworkConfiguration
+	{
+		public string S2SListenIP { get; protected set; } = "127.0.0.1";
+		public int S2SListenPort { get; protected set; } = 9311;
 	}
 }

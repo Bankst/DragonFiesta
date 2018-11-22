@@ -23,7 +23,7 @@ namespace DFEngine.Network
 		/// <summary>
 		/// The connection's unique ID.
 		/// </summary>
-		public string GUID { get; set; }
+		public string Guid { get; set; }
 		/// <summary>
 		/// The world that the connection is transferring to.
 		/// </summary>
@@ -38,15 +38,15 @@ namespace DFEngine.Network
 		{
 			Account = account;
 			CreateTime = Time.Milliseconds;
-			GUID = guid;
+			Guid = guid;
 		}
 
 		/// <summary>
-		/// Returns the GUID of the transfer.
+		/// Returns the Guid of the transfer.
 		/// </summary>
 		public override string ToString()
 		{
-			return GUID;
+			return Guid;
 		}
 	}
 }

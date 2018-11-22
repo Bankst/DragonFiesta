@@ -21,13 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
