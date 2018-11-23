@@ -18,7 +18,7 @@ namespace LoginServer.Handlers
 		{
 			var versionKey = message.ReadString(64);
 
-			if (versionKey != LoginConfiguration.Instance.ClientVersion)
+			if (versionKey != LoginConfiguration.Instance.ClientVersion && ServerMain.LoginConfig.CheckVersion)
 			{
 				SocketLog.Write(SocketLogLevel.Exception, $"Wrong version key used - {versionKey}");
 

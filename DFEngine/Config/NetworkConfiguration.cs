@@ -72,7 +72,8 @@ namespace DFEngine.Config
 		public string ListenIP { get; protected set; } = "127.0.0.1";
 		public string ExternalIP { get; protected set; } = "127.0.0.1";
 		public int ListenPort { get; protected set; } = 9010;
-		public int MaxConnections { get; protected set; } = 10;
+		public int MaxClientConnections { get; protected set; } = 25;
+		public int MaxWorldConnections { get; protected set; } = 5;
 		public string S2SListenIP { get; protected set; } = "127.0.0.1";
 		public int S2SListenPort { get; protected set; } = 9011;
 	}

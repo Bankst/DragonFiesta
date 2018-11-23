@@ -6,6 +6,8 @@ namespace DFEngine.Logging
 {
     public class FileLog : ConsoleLogger
     {
+	    private readonly string BaseDirectory = "Logs";
+
         /// <summary>
         /// Returns the path where the logs will be saved.
         /// </summary>
@@ -27,7 +29,7 @@ namespace DFEngine.Logging
 
         public FileLog(string directory) : base()
         {
-            this.Directory = directory.ToEscapedString();
+            this.Directory = Path.Combine(BaseDirectory, directory.ToEscapedString());
 
             if (!System.IO.Directory.Exists(this.Directory))
             {

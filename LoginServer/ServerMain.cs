@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
@@ -13,6 +11,7 @@ using DFEngine.Network.Protocols;
 using DFEngine.Server;
 using DFEngine.Threading;
 using DFEngine.Utils;
+
 using LoginServer.Handlers;
 using LoginServer.Util.Console;
 
@@ -33,7 +32,7 @@ namespace LoginServer
 		internal static NetworkServer WorldServer = new NetworkServer(NetworkConnectionType.NCT_WORLDMANAGER);
 		internal static NetworkConnection GameLogServer = new NetworkConnection(NetworkConnectionType.NCT_DB_GAMELOG);
 
-		public LoginConsoleTitle Title { get; set; }
+		public static LoginConsoleTitle Title { get; set; }
 
 		public ServerMain() : base(ServerType.Login)
 		{
@@ -43,7 +42,7 @@ namespace LoginServer
 
 		public static void Initialize()
 		{
-			var stopwatch = new System.Diagnostics.Stopwatch();
+			var stopwatch = new Stopwatch();
 			stopwatch.Start();
 
 			InternalInstance = new ServerMain();
@@ -82,7 +81,11 @@ namespace LoginServer
 			// Networking
 			WorldServer.Listen(NetConfig.WorldNetConfig.S2SListenIP, (ushort)NetConfig.WorldNetConfig.S2SListenPort);
 			ClientServer.Listen(NetConfig.LoginNetConfig.ListenIP, (ushort)NetConfig.LoginNetConfig.ListenPort);
+			// TODO: gamelogserver
+			// GameLogServer.Connect(NetConfig.GameLogNetConfig.S2SListenIP, (ushort)NetConfig.GameLogNetConfig.S2SListenPort);
 
+			stopwatch.Stop();
+			EngineLog.Write(EngineLogLevel.Startup, $"Time taken to start: {stopwatch.ElapsedMilliseconds}ms");
 
 			// Main server loop
 			new Thread(() =>
@@ -94,9 +97,6 @@ namespace LoginServer
 				}
 
 			}).Start();
-
-			stopwatch.Stop();
-			EngineLog.Write(EngineLogLevel.Startup, $"Time taken to start: {stopwatch.ElapsedMilliseconds}ms");
 
 			// Console commands?
 		}
@@ -129,6 +129,8 @@ namespace LoginServer
 				new PROTO_NC_USER_LOGINFAIL_ACK(0x49).Send(transfer.Connection);
 				Transfers.RemoveSafe(transfer);
 			});
+
+			Title.Update();
 		}
 	}
 }

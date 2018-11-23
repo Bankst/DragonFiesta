@@ -41,21 +41,6 @@ namespace DFEngine.Database
 		}
 
 		/// <summary>
-		/// Creates a new instance of the <see cref="StoredProcedure"/> class.
-		/// </summary>
-		/// <param name="name">The name of the stored procedure.</param>
-		/// <param name="connection">The connection that the procedure is being ran on.</param>
-		public StoredProcedure(string name, DatabaseClient client)
-		{
-			this.name = name;
-
-			command = client.mConnection.CreateCommand();
-			command.CommandType = CommandType.StoredProcedure;
-
-			outputParameters = new Dictionary<string, object>();
-		}
-
-		/// <summary>
 		/// Adds an output parameter to the procedure.
 		/// </summary>
 		/// <typeparam name="T">The type of the value.</typeparam>
@@ -139,7 +124,7 @@ namespace DFEngine.Database
 		}
 
 		/// <summary>
-		/// Runs the command and returns an <see cref="OdbcDataReader"/> instance.
+		/// Runs the command and returns an <see cref="SqlDataReader"/> instance.
 		/// </summary>
 		public SqlDataReader RunReader()
 		{
@@ -154,22 +139,23 @@ namespace DFEngine.Database
 		/// </summary>
 		public void SetCommandText()
 		{
-			command.CommandText = $"{{call {name}";
+//			command.CommandText = $"{{call {name}";
+			command.CommandText = $"{name}";
 
-			if (command.Parameters.Count > 0)
-			{
-				command.CommandText += "(";
+//			if (command.Parameters.Count > 0)
+//			{
+//				command.CommandText += "(";
+//
+//				for (var i = 0; i < command.Parameters.Count; i++)
+//				{
+//					command.CommandText += "?, ";
+//				}
+//
+//				command.CommandText = command.CommandText.Substring(0, command.CommandText.LastIndexOf(", ", StringComparison.Ordinal));
+//				command.CommandText += ")";
+//			}
 
-				for (var i = 0; i < command.Parameters.Count; i++)
-				{
-					command.CommandText += "?, ";
-				}
-
-				command.CommandText = command.CommandText.Substring(0, command.CommandText.LastIndexOf(", ", StringComparison.Ordinal));
-				command.CommandText += ")";
-			}
-
-			command.CommandText += "}";
+//			command.CommandText += "}";
 		}
 
 		/// <summary>

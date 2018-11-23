@@ -9,7 +9,7 @@ namespace LoginServer.Services
 	{
 		internal static void Login(string userName, string password, out int userNo, out bool blocked, out bool canLogin)
 		{
-			using (var spo = new StoredProcedure("usp_User_loginGame", DB.GetDatabaseClient(DatabaseType.Account)))
+			using (var spo = new StoredProcedure("usp_User_loginGame", DB.GetDatabaseClient(DatabaseType.Account).mConnection))
 			{
 				spo.AddParameter("userID", userName, 20);
 				spo.AddParameter("userPW", password, 32);
@@ -17,13 +17,13 @@ namespace LoginServer.Services
 				spo.AddOutput<int>("userNo");
 				spo.AddOutput<byte>("authID");
 				spo.AddOutput<int>("block");
-				spo.AddOutput<int>("canLogin");
+				spo.AddOutput<int>("isLoginable");
 
 				spo.Run();
 
 				userNo = spo.GetOutput<int>("userNo");
 				blocked = spo.GetOutput<int>("block") == 1;
-				canLogin = spo.GetOutput<int>("canLogin") == 1;
+				canLogin = spo.GetOutput<int>("isLoginable") == 1;
 			}
 		}
 	}

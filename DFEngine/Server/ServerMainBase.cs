@@ -35,7 +35,7 @@ namespace DFEngine.Server
 
 		public void WriteConsoleLogo()
 		{
-			Logo.PrintLogo();
+			Logo.PrintLogo(ConsoleColor.DarkYellow);
 		}
 
 
