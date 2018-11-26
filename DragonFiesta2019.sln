@@ -10,6 +10,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoginServer", "LoginServer\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFEngine", "DFEngine\DFEngine.csproj", "{1B6AECAC-22D1-4864-93FC-DC311E6705E7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorldManagerServer", "WorldManagerServer\WorldManagerServer.csproj", "{8BF58E0A-A708-4E58-9A47-68BBBB4473A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Servers", "Servers", "{2A604EA1-E84E-4894-A94E-7BE4B5281FF6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{17688F2F-1AB6-4D4E-807D-17BDBE2A6698}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -24,9 +30,18 @@ Global
 		{1B6AECAC-22D1-4864-93FC-DC311E6705E7}.Debug|x64.Build.0 = Debug|x64
 		{1B6AECAC-22D1-4864-93FC-DC311E6705E7}.Release|x64.ActiveCfg = Release|x64
 		{1B6AECAC-22D1-4864-93FC-DC311E6705E7}.Release|x64.Build.0 = Release|x64
+		{8BF58E0A-A708-4E58-9A47-68BBBB4473A0}.Debug|x64.ActiveCfg = Debug|x64
+		{8BF58E0A-A708-4E58-9A47-68BBBB4473A0}.Debug|x64.Build.0 = Debug|x64
+		{8BF58E0A-A708-4E58-9A47-68BBBB4473A0}.Release|x64.ActiveCfg = Release|x64
+		{8BF58E0A-A708-4E58-9A47-68BBBB4473A0}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DE3C5EC5-860D-4BC1-840D-B1859A39FD3A} = {2A604EA1-E84E-4894-A94E-7BE4B5281FF6}
+		{1B6AECAC-22D1-4864-93FC-DC311E6705E7} = {17688F2F-1AB6-4D4E-807D-17BDBE2A6698}
+		{8BF58E0A-A708-4E58-9A47-68BBBB4473A0} = {2A604EA1-E84E-4894-A94E-7BE4B5281FF6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5F69ADD-EF41-48BF-9497-425130270CCA}

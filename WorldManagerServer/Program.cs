@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LoginServer
+namespace WorldManagerServer
 {
 	internal class Program
 	{
@@ -9,7 +9,6 @@ namespace LoginServer
 			// Attempt to size window for best log view
 			try { Console.SetWindowSize(140, 40); }
 			catch { }
-			
 			ServerMain.Initialize();
 		}
 	}
