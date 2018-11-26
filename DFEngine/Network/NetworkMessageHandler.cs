@@ -56,7 +56,7 @@ namespace DFEngine.Network
 				return;
 			}
 
-			SocketLog.Write(SocketLogLevel.Debug, $"[{connection}] Invoking handler: {message.Command}");
+			SocketLog.Write(SocketLogLevel.Debug, $"Calling handler for {message.Command}");
 
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();

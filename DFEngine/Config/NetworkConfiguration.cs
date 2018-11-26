@@ -46,7 +46,7 @@ namespace DFEngine.Config
 			catch (Exception ex)
 			{
 				EngineLog.Write(EngineLogLevel.Exception, "Failed to load Network config:\n {0}", ex);
-				message = $"Failed to load NetworkConfiguration: \n {ex.StackTrace}";
+				message = $"Failed to load NetworkConfiguration:\n {ex.StackTrace}";
 				return false;
 			}
 		}
@@ -83,7 +83,8 @@ namespace DFEngine.Config
 		public string ListenIP { get; protected set; } = "127.0.0.1";
 		public string ExternalIP { get; protected set; } = "127.0.0.1";
 		public int ListenPort { get; protected set; } = 9110;
-		public int MaxConnections { get; protected set; } = 25;
+		public int MaxClientConnections { get; protected set; } = 25;
+		public int MaxZoneConnections { get; protected set; } = 5;
 		public string S2SListenIP { get; protected set; } = "127.0.0.1";
 		public int S2SListenPort { get; protected set; } = 9111;
 		public byte WorldID { get; protected set; } = 0;
@@ -94,7 +95,7 @@ namespace DFEngine.Config
 		public string ListenIP { get; protected set; } = "127.0.0.1";
 		public string ExternalIP { get; protected set; } = "127.0.0.1";
 		public int ListenPort { get; protected set; } = 9210;
-		public int MaxConnections { get; protected set; } = 100;
+		public int MaxClientConnections { get; protected set; } = 200;
 		public string S2SListenIP { get; protected set; } = "127.0.0.1";
 		public int S2SListenPort { get; protected set; } = 9211;
 		public byte ZoneID { get; protected set; } = 0;

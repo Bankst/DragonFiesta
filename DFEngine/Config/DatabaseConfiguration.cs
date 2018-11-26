@@ -47,7 +47,7 @@ namespace DFEngine.Config
 			catch (Exception ex)
 			{
 				EngineLog.Write(EngineLogLevel.Exception, "Failed to load Database config:\n {0}", ex);
-				message = $"Failed to load DatabaseConfiguration: \n {ex.StackTrace}";
+				message = $"Failed to load DatabaseConfiguration:\n {ex.StackTrace}";
 				return false;
 			}
 		}

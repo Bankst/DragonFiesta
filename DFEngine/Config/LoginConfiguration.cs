@@ -38,7 +38,7 @@ namespace DFEngine.Config
 			catch (Exception ex)
 			{
 				EngineLog.Write(EngineLogLevel.Exception, "Failed to load Login config:\n {0}", ex);
-				message = $"Failed to load LoginConfiguration: \n {ex.StackTrace}";
+				message = $"Failed to load LoginConfiguration:\n {ex.StackTrace}";
 				return false;
 			}
 		}
