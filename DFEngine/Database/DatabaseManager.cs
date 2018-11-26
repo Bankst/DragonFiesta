@@ -13,14 +13,14 @@ namespace DFEngine.Database
 {
 	public class DatabaseManager : IServerTask, IDisposable
 	{
-		private readonly Dictionary<int, DatabaseClient> _mClients = new Dictionary<int, DatabaseClient>();
-		private int _mStarvationCounter;
+		private readonly Dictionary<int, DatabaseClient> _clients = new Dictionary<int, DatabaseClient>();
+		private int _starvationCounter;
 
-		private int _mClientIdGenerator;
-		private readonly object _mSyncRoot;
+		private int _clientIdGenerator;
+		private readonly object _syncRoot;
 
-		private DatabaseServer _mServer;
-		private Database _mDatabase;
+		private DatabaseServer _server;
+		private Database _database;
 		private int _isDisposedInt;
 
 		GameTime IServerTask.LastUpdate { get; set; }
@@ -30,11 +30,11 @@ namespace DFEngine.Database
 		public void Dispose()
 		{
 			if (Interlocked.CompareExchange(ref _isDisposedInt, 1, 0) != 0) return;
-			_mServer = null;
-			_mDatabase = null;
+			_server = null;
+			_database = null;
 		}
 
-		public int ClientCount => _mClients.Count;
+		public int ClientCount => _clients.Count;
 
 
 		public DatabaseManager()
@@ -43,11 +43,11 @@ namespace DFEngine.Database
 
 		internal DatabaseManager(DatabaseServer pServer, Database pDatabase)
 		{
-			_mServer = pServer;
-			_mDatabase = pDatabase;
+			_server = pServer;
+			_database = pDatabase;
 
-			_mSyncRoot = new object();
-			Interval = (ServerTaskTimes)(_mDatabase.ClientLifeTime * 1000 / 2);
+			_syncRoot = new object();
+			Interval = (ServerTaskTimes)(_database.ClientLifeTime * 1000 / 2);
 		}
 
 		#region Util Function
@@ -56,14 +56,14 @@ namespace DFEngine.Database
 		{
 			var cb = new SqlConnectionStringBuilder()
 			{
-				DataSource = _mServer.Host,
-				UserID = _mServer.User,
-				Password = _mServer.Password,
-				InitialCatalog = _mDatabase.Name,
+				DataSource = _server.Host,
+				UserID = _server.User,
+				Password = _server.Password,
+				InitialCatalog = _database.Name,
 				MultipleActiveResultSets = true,
 				IntegratedSecurity = false,
-				MinPoolSize = _mDatabase.MinPoolSize,
-				MaxPoolSize = _mDatabase.MaxPoolSize,
+				MinPoolSize = _database.MinPoolSize,
+				MaxPoolSize = _database.MaxPoolSize,
 			}.ToString();
 
 			return cb;
@@ -97,14 +97,14 @@ namespace DFEngine.Database
 
 		public void PokeAllAwaiting()
 		{
-			Monitor.PulseAll(_mSyncRoot);
+			Monitor.PulseAll(_syncRoot);
 		}
 
 		private int GenerateClientId()
 		{
-			lock (_mSyncRoot)
+			lock (_syncRoot)
 			{
-				return _mClientIdGenerator++;
+				return _clientIdGenerator++;
 			}
 		}
 
@@ -120,14 +120,14 @@ namespace DFEngine.Database
 		{
 			if (_isDisposedInt == 1) return false;
 
-			if (ClientCount <= _mDatabase.MinPoolSize) return true;
-			lock (_mSyncRoot)
+			if (ClientCount <= _database.MinPoolSize) return true;
+			lock (_syncRoot)
 			{
 				var toDisconnect = new List<int>();
 
-				foreach (var client in _mClients.Values)
+				foreach (var client in _clients.Values)
 				{
-					if (client.Available && client.TimeInactive >= _mDatabase.ClientLifeTime)
+					if (client.Available && client.TimeInactive >= _database.ClientLifeTime)
 					{
 						toDisconnect.Add(client.Id);
 					}
@@ -135,15 +135,15 @@ namespace DFEngine.Database
 
 				foreach (var disconnectId in toDisconnect)
 				{
-					_mClients[disconnectId].Close();
-					_mClients.Remove(disconnectId);
+					_clients[disconnectId].Close();
+					_clients.Remove(disconnectId);
 				}
 
 				if (toDisconnect.Count > 0)
 				{
 					DatabaseLog.Write(DatabaseLogLevel.Debug, $"(Sql)Disconnected {toDisconnect.Count} inactive client(s).");
 				}
-				Monitor.PulseAll(_mSyncRoot);
+				Monitor.PulseAll(_syncRoot);
 			}
 			return true;
 		}
@@ -152,7 +152,7 @@ namespace DFEngine.Database
 		{
 			int diff;
 
-			lock (_mSyncRoot)
+			lock (_syncRoot)
 			{
 				diff = clientAmount - ClientCount;
 
@@ -161,7 +161,7 @@ namespace DFEngine.Database
 					for (var i = 0; i < diff; i++)
 					{
 						var newId = GenerateClientId();
-						_mClients.Add(newId, CreateClient(newId));
+						_clients.Add(newId, CreateClient(newId));
 					}
 				}
 				else
@@ -169,20 +169,20 @@ namespace DFEngine.Database
 					var toDestroy = -diff;
 					var destroyed = 0;
 
-					foreach (var client in _mClients.Values)
+					foreach (var client in _clients.Values)
 					{
 						if (!client.Available)
 						{
 							continue;
 						}
 
-						if (destroyed >= toDestroy || ClientCount <= _mDatabase.MinPoolSize)
+						if (destroyed >= toDestroy || ClientCount <= _database.MinPoolSize)
 						{
 							break;
 						}
 
 						client.Close();
-						_mClients.Remove(client.Id);
+						_clients.Remove(client.Id);
 						destroyed++;
 					}
 				}
@@ -194,9 +194,9 @@ namespace DFEngine.Database
 
 		public DatabaseClient GetClient()
 		{
-			lock (_mSyncRoot)
+			lock (_syncRoot)
 			{
-				foreach (var client in _mClients.Values)
+				foreach (var client in _clients.Values)
 				{
 					if (!client.Available)
 					{
@@ -217,19 +217,19 @@ namespace DFEngine.Database
 					return client;
 				}
 
-				if (_mDatabase.MaxPoolSize <= 0 || ClientCount < _mDatabase.MaxPoolSize) // Max pool size ignored if set to 0 or lower
+				if (_database.MaxPoolSize <= 0 || ClientCount < _database.MaxPoolSize) // Max pool size ignored if set to 0 or lower
 				{
 					SetClientAmount(ClientCount + 1, "out of assignable clients in GetClient()");
 					return GetClient();
 				}
 
-				_mStarvationCounter++;
+				_starvationCounter++;
 
 				DatabaseLog.Write(DatabaseLogLevel.Warning,
-					$"(Sql) Client starvation; out of assignable clients/maximum pool size reached. Consider increasing the `mysql.pool.max` configuration value. Starvation count is {_mStarvationCounter}.");
+					$"(Sql) Client starvation; out of assignable clients/maximum pool size reached. Consider increasing the `mysql.pool.max` configuration value. Starvation count is {_starvationCounter}.");
 
 				// Wait until an available client returns
-				Monitor.Wait(_mSyncRoot);
+				Monitor.Wait(_syncRoot);
 				return GetClient();
 			}
 		}
@@ -247,7 +247,7 @@ namespace DFEngine.Database
 				{
 					sqlCommand = new SqlCommand(sqlString.ToString());
 					sqlCommand.Parameters.AddRange(parameters);
-					mClient.mCommand = sqlCommand;
+					mClient.Command = sqlCommand;
 
 					return mClient.ExecuteNonQuery();
 				}

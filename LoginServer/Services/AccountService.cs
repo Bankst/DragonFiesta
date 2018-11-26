@@ -6,7 +6,7 @@ namespace LoginServer.Services
 	{
 		internal static void Login(string userName, string password, out int userNo, out bool blocked, out bool canLogin)
 		{
-			using (var spo = new StoredProcedure("usp_User_loginGame", DB.GetDatabaseClient(DatabaseType.Account).mConnection))
+			using (var spo = new StoredProcedure("usp_User_loginGame", DB.GetDatabaseClient(DatabaseType.Account).Connection))
 			{
 				spo.AddParameter("userID", userName, 20);
 				spo.AddParameter("userPW", password, 32);

@@ -14,10 +14,10 @@ namespace DFEngine.Database
 	{
 		#region Fields
 
-		private double mLastActivity;
-		public SqlConnection mConnection { get; private set; }
-		public SqlCommand mCommand;
-		private DatabaseManager mManager;
+		private double _lastActivity;
+		public SqlConnection Connection { get; private set; }
+		public SqlCommand Command;
+		private DatabaseManager _manager;
 
 		#endregion Fields
 
@@ -27,7 +27,7 @@ namespace DFEngine.Database
 
 		public bool Available { get; set; }
 
-		public double TimeInactive => UnixTimestamp.GetCurrent() - mLastActivity;
+		public double TimeInactive => UnixTimestamp.GetCurrent() - _lastActivity;
 
 		#endregion Properties
 
@@ -38,13 +38,13 @@ namespace DFEngine.Database
 		/// </summary>
 		/// <param name="id">The identifier of this database client as an unsigned 32 bit integer.</param>
 		/// <param name="conn">The <see cref="SqlConnection"/> to use</param>
-		/// <param name="pManager">The instance of the DatabaseManager that manages the database proxy of this database client.</param>
-		internal DatabaseClient(int id, SqlConnection conn, DatabaseManager pManager)
+		/// <param name="manager">The instance of the DatabaseManager that manages the database proxy of this database client.</param>
+		internal DatabaseClient(int id, SqlConnection conn, DatabaseManager manager)
 		{
 			this.Id = id;
-			mConnection = conn;
-			mCommand = mConnection.CreateCommand();
-			mManager = pManager;
+			Connection = conn;
+			Command = Connection.CreateCommand();
+			_manager = manager;
 			Available = true;
 			UpdateLastActivity();
 		}
@@ -64,38 +64,38 @@ namespace DFEngine.Database
 
 		public void Close()
 		{
-			mConnection.Close();
-			mCommand.Dispose();
+			Connection.Close();
+			Command.Dispose();
 
-			mConnection = null;
-			mCommand = null;
+			Connection = null;
+			Command = null;
 		}
 
 		private void UpdateLastActivity()
 		{
-			mLastActivity = UnixTimestamp.GetCurrent();
+			_lastActivity = UnixTimestamp.GetCurrent();
 		}
 
 		public void ResetCommand()
 		{
-			mCommand.CommandText = null;
+			Command.CommandText = null;
 
 			ClearParameters();
 		}
 
 		public void ClearParameters()
 		{
-			mCommand.Parameters.Clear();
+			Command.Parameters.Clear();
 		}
 
 		public void SetParameter(string Key, object Value)
 		{
-			mCommand.Parameters.Add(new SqlParameter(Key, Value));
+			Command.Parameters.Add(new SqlParameter(Key, Value));
 		}
 
 		public SqlParameter SetParameter(string Key, SqlDbType pType, ParameterDirection direction)
 		{
-			var idParam = mCommand.Parameters.Add(new SqlParameter(Key, pType)
+			var idParam = Command.Parameters.Add(new SqlParameter(Key, pType)
 			{
 				Direction = direction,
 			});
@@ -104,18 +104,18 @@ namespace DFEngine.Database
 
 		public void CreateStoredProcedure(string CommandText)
 		{
-			SqlCommand cmd = mConnection.CreateCommand();
+			SqlCommand cmd = Connection.CreateCommand();
 
 			cmd.CommandType = CommandType.StoredProcedure;
 			cmd.CommandText = CommandText;
-			mCommand = cmd;
+			Command = cmd;
 		}
 
 		public int ExecuteNonQuery()
 		{
-			mCommand.Connection = mConnection;
+			Command.Connection = Connection;
 
-			int Effects = mCommand.ExecuteNonQuery();
+			int Effects = Command.ExecuteNonQuery();
 
 			ResetCommand();
 
@@ -124,8 +124,8 @@ namespace DFEngine.Database
 
 		public object ExecuteScalar()
 		{
-			mCommand.Connection = mConnection;
-			object result = mCommand.ExecuteScalar();
+			Command.Connection = Connection;
+			object result = Command.ExecuteScalar();
 			ResetCommand();
 
 			return result;
@@ -133,13 +133,13 @@ namespace DFEngine.Database
 
 		public SqlDataReader ExecuteReader(SqlCommand cmd)
 		{
-			cmd.Connection = mConnection;
+			cmd.Connection = Connection;
 			return cmd.ExecuteReader();
 		}
 
 		public bool CheckConnection()
 		{
-			return mConnection.State == ConnectionState.Open;
+			return Connection.State == ConnectionState.Open;
 		}
 	}
 }

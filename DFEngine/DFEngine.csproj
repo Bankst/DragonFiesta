@@ -28,6 +28,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ported.VisualBasic">
+      <HintPath>Ported.VisualBasic.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
