@@ -21,18 +21,22 @@ namespace LoginServer
 	{
 		public new static ServerMain InternalInstance { get; private set; }
 
+		// Global Objects
 		internal static Dictionary<string, Account> CachedAccounts = new Dictionary<string, Account>();
 		internal static List<NetworkTransfer> Transfers = new List<NetworkTransfer>();
 		internal static List<World> Worlds = new List<World>();
+		internal static LoginConsoleTitle Title { get; set; }
+
+		// Configuration
 		internal static NetworkConfiguration NetConfig;
 		internal static DatabaseConfiguration DbConfig;
 		internal static LoginConfiguration LoginConfig;
 
+		// Networking
 		internal static NetworkServer ClientServer = new NetworkServer(NetworkConnectionType.NCT_CLIENT);
 		internal static NetworkServer WorldServer = new NetworkServer(NetworkConnectionType.NCT_WORLDMANAGER);
 		internal static NetworkConnection GameLogServer = new NetworkConnection(NetworkConnectionType.NCT_DB_GAMELOG);
 
-		public static LoginConsoleTitle Title { get; set; }
 
 		public ServerMain() : base(ServerType.Login)
 		{
@@ -79,7 +83,7 @@ namespace LoginServer
 			StoreHandlers();
 
 			// Networking
-			WorldServer.Listen(NetConfig.WorldNetConfig.S2SListenIP, (ushort)NetConfig.WorldNetConfig.S2SListenPort);
+			WorldServer.Listen(NetConfig.LoginNetConfig.S2SListenIP, (ushort)NetConfig.LoginNetConfig.S2SListenPort);
 			ClientServer.Listen(NetConfig.LoginNetConfig.ListenIP, (ushort)NetConfig.LoginNetConfig.ListenPort);
 			// TODO: gamelogserver
 			// GameLogServer.Connect(NetConfig.GameLogNetConfig.S2SListenIP, (ushort)NetConfig.GameLogNetConfig.S2SListenPort);
@@ -122,7 +126,7 @@ namespace LoginServer
 		{
 			Worlds.FilteredAction(world => !world.Connection.IsConnected, world => { world.Status = 0x00; });
 
-			// Remove transfers that have been waiting for more that 5 seconds.
+			// Remove transfers that have been waiting for more than allowed timeout.
 			var timeouts = Transfers.Filter(t => now - t.CreateTime >= (int)MessageRequestTimeOuts.LOGIN_TRANSFER_ACCOUNT);
 			timeouts.ForBackwards(transfer =>
 			{
