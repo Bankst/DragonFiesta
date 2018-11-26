@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using DFEngine.Logging;
 using DFEngine.Utils;
 
 namespace DFEngine.Server
@@ -34,14 +35,13 @@ namespace DFEngine.Server
 
 		public void WriteConsoleLogo()
 		{
-			Logo.PrintLogo();
+			Logo.PrintLogo(ConsoleColor.DarkYellow);
 		}
 
 
-		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			// TODO
-			// EngineLog.Write(EngineLogLevel.Exception, e.ExceptionObject.ToString());
+			EngineLog.Write(EngineLogLevel.Exception, e.ExceptionObject.ToString());
 		}
 	}
 }

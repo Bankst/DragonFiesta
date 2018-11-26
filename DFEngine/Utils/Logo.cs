@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DFEngine
+namespace DFEngine.Utils
 {
 	internal class Logo
 	{
@@ -49,7 +47,7 @@ namespace DFEngine
 			@"****************************************************************************************************"
 		};
 
-	public static void PrintLogo(LogoType logoType = LogoType.New2)
+	public static void PrintLogo(ConsoleColor color, LogoType logoType = LogoType.New2)
 	{
 		string[] toPrint;
 		switch (logoType)
@@ -70,7 +68,7 @@ namespace DFEngine
 				break;
 		}
 
-		Console.ForegroundColor = ConsoleColor.DarkYellow;
+		Console.ForegroundColor = color;
 		foreach (var line in toPrint)
 		{
 			Console.WriteLine(line);
