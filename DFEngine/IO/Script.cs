@@ -24,7 +24,7 @@ namespace DFEngine.IO
 		{
 			if (!File.Exists(path))
 			{
-				throw new FileNotFoundException("Could not fine the file specified.", path);
+				throw new FileNotFoundException("Could not find the file specified.", path);
 			}
 
 			_rows = new Dictionary<string, List<ScriptRow>>();

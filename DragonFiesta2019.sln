@@ -15,6 +15,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Servers", "Servers", "{2A604EA1-E84E-4894-A94E-7BE4B5281FF6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{17688F2F-1AB6-4D4E-807D-17BDBE2A6698}"
+	ProjectSection(SolutionItems) = preProject
+		DFEngine\Ported.VisualBasic.dll = DFEngine\Ported.VisualBasic.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
