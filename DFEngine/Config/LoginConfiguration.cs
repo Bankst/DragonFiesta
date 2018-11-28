@@ -12,49 +12,10 @@ namespace DFEngine.Config
 
 		public static LoginConfiguration Instance { get; set; }
 
-		public static bool Initialize(out string message)
+		public static bool Load(out string message)
 		{
-			message = "";
-			try
-			{
-				Instance = ReadJson();
-				if (Instance != null)
-				{
-					EngineLog.Write(EngineLogLevel.Startup, "Successfully read Login config.");
-					return true;
-				}
-
-				if (!Write(out var pConfig))
-				{
-					message = "Failed to create default LoginConfiguration.";
-					return false;
-				}
-				pConfig.WriteJson();
-
-				EngineLog.Write(EngineLogLevel.Startup, "Successfully created Login config.");
-				message = "No LoginConfiguration found! Please edit generated config.";
-				return false;
-			}
-			catch (Exception ex)
-			{
-				EngineLog.Write(EngineLogLevel.Exception, "Failed to load Login config:\n {0}", ex);
-				message = $"Failed to load LoginConfiguration:\n {ex.StackTrace}";
-				return false;
-			}
-		}
-
-		private static bool Write(out LoginConfiguration pConfig)
-		{
-			pConfig = null;
-			try
-			{
-				pConfig = new LoginConfiguration();
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
+			Instance = Initialize(out message);
+			return message == string.Empty;
 		}
 	}
 }

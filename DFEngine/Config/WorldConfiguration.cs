@@ -23,49 +23,10 @@ namespace DFEngine.Config
 
 		public static WorldConfiguration Instance { get; set; }
 
-		public static bool Initialize(out string message)
+		public static bool Load(out string message)
 		{
-			message = "";
-			try
-			{
-				Instance = ReadJson();
-				if (Instance != null)
-				{
-					EngineLog.Write(EngineLogLevel.Startup, "Successfully read World config.");
-					return true;
-				}
-
-				if (!Write(out var pConfig))
-				{
-					message = "Failed to create default WorldConfiguration.";
-					return false;
-				}
-				pConfig.WriteJson();
-
-				EngineLog.Write(EngineLogLevel.Startup, "Successfully created World config.");
-				message = "No WorldConfiguration found! Please edit generated config.";
-				return false;
-			}
-			catch (Exception ex)
-			{
-				EngineLog.Write(EngineLogLevel.Exception, "Failed to load World config:\n {0}", ex);
-				message = $"Failed to load WorldConfiguration:\n {ex.StackTrace}";
-				return false;
-			}
-		}
-
-		private static bool Write(out WorldConfiguration pConfig)
-		{
-			pConfig = null;
-			try
-			{
-				pConfig = new WorldConfiguration();
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
+			Instance = Initialize(out message);
+			return message == string.Empty;
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 
 using DFEngine;
+using DFEngine.Accounts;
 using DFEngine.Config;
 using DFEngine.Database;
 using DFEngine.Logging;
@@ -46,28 +47,28 @@ namespace LoginServer
 
 		public static void Initialize()
 		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-
 			InternalInstance = new ServerMain();
 			InternalInstance.WriteConsoleLogo();
 
 			EngineLog.Write(EngineLogLevel.Startup, "Starting LoginServer");
 
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+			
 			// Configuration
-			if (!NetworkConfiguration.Initialize(out var netConfigMsg))
+			if (!NetworkConfiguration.Load(out var netConfigMsg))
 			{
 				throw new StartupException(netConfigMsg);
 			}
 			NetConfig = NetworkConfiguration.Instance;
 
-			if (!DatabaseConfiguration.Initialize(out var dbConfigMsg))
+			if (!DatabaseConfiguration.Load(out var dbConfigMsg))
 			{
 				throw new StartupException(dbConfigMsg);
 			}
 			DbConfig = DatabaseConfiguration.Instance;
 
-			if (!LoginConfiguration.Initialize(out var loginConfigMsg))
+			if (!LoginConfiguration.Load(out var loginConfigMsg))
 			{
 				throw new StartupException(loginConfigMsg);
 			}

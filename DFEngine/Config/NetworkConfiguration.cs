@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using DFEngine.Logging;
 
 namespace DFEngine.Config
@@ -19,52 +20,12 @@ namespace DFEngine.Config
 		public GameLogNetworkConfiguration GameLogNetConfig { get; protected set; } = new GameLogNetworkConfiguration();
 
 		public static NetworkConfiguration Instance { get; set; }
-		
-		public static bool Initialize(out string message)
+
+		public static bool Load(out string message)
 		{
-			message = "";
-			try
-			{
-				Instance = ReadJson();
-				if (Instance != null)
-				{
-					EngineLog.Write(EngineLogLevel.Startup, "Successfully read Network config.");
-					return true;
-				}
-
-				if (!Write(out var pConfig))
-				{
-					message = "Failed to create default NetworkConfiguration.";
-					return false;
-				}
-				pConfig.WriteJson();
-
-				EngineLog.Write(EngineLogLevel.Startup, "Successfully created Network config.");
-				message = "No NetworkConfiguration found! Please edit generated config.";
-				return false;
-			}
-			catch (Exception ex)
-			{
-				EngineLog.Write(EngineLogLevel.Exception, "Failed to load Network config:\n {0}", ex);
-				message = $"Failed to load NetworkConfiguration:\n {ex.StackTrace}";
-				return false;
-			}
+			Instance = Initialize(out message);
+			return message == string.Empty;
 		}
-
-		private static bool Write(out NetworkConfiguration pConfig)
-		{
-			pConfig = null;
-			try
-			{
-				pConfig = new NetworkConfiguration();
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
-		}
-
 	}
 
 	public class LoginNetworkConfiguration
