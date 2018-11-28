@@ -24,14 +24,13 @@ namespace WorldManagerServer.Handlers
 				"Isya", // World Name TODO: Add this to WorldConfiguration/NetworkConfiguration
 				0, // ZoneNo TODO: do this programatically?
 				ServerMain.NetConfig.WorldNetConfig.ListenIP, // Client Listen IP
-				(ushort)ServerMain.NetConfig.WorldNetConfig.ListenPort // Client Listen Port
+				(ushort) ServerMain.NetConfig.WorldNetConfig.ListenPort // Client Listen Port
 			).Send(connection);
 		}
 
 		internal static void NC_MISC_S2SCONNECTION_ACK(NetworkMessage message, NetworkConnection connection)
 		{
-			Data.LoadSHNs();
-			Data.LoadShineTables();
+			// Originally loaded data here, now loading in ServerMain.Initialize()
 		}
 	}
 }

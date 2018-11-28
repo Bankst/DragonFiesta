@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DFEngine.Content.GameObjects;
 
-namespace DFEngine
+namespace DFEngine.Accounts
 {
 	/// <summary>
 	/// A class that represents players' account data.

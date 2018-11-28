@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using DFEngine.Accounts;
 using DFEngine.Logging;
 using DFEngine.Network.Protocols;
 using DFEngine.Utils;

@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DFEngine\DFEngine.csproj" />
-    <ProjectReference Include="..\WorldManagerServer\WorldManagerServer.csproj" />
   </ItemGroup>
 
 </Project>

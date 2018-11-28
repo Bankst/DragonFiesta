@@ -1,4 +1,6 @@
-﻿namespace DFEngine.Network.Protocols
+﻿using DFEngine.Accounts;
+
+namespace DFEngine.Network.Protocols
 {
     public class PROTO_NC_USER_WILLLOGIN_REQ : NetworkMessage
     {
