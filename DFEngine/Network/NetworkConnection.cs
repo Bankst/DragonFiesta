@@ -492,7 +492,7 @@ namespace DFEngine.Network
 			var message = new NetworkMessage(messageBuffer);
 			if (!NetworkMessageHandler.TryFetch(message.Command, out var handler) || handler == null)
 			{
-				SocketLog.Write(SocketLogLevel.Debug, "Unhandled message ", message);
+				SocketLog.Write(SocketLogLevel.Debug, $"Unhandled command: {message.Command}");
 			}
 
 			NetworkMessageHandler.Invoke(handler, message, this);

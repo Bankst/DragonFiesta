@@ -5,5 +5,6 @@
 		Login,
 		World,
 		Zone,
+		GameLog,
 	}
 }

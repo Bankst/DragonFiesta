@@ -1,10 +1,11 @@
 ﻿using System;
+using DFEngine.Server;
 
 namespace DFEngine.Logging
 {
 	public sealed class SocketLog : FileLog
 	{
-		protected override LogType LogTypeName => LogType.SocketLog;
+		protected override string LogTypeName => "SocketLog";
 
 		private SocketLog(string directory) : base(directory)
 		{
@@ -31,7 +32,7 @@ namespace DFEngine.Logging
 
 		public static void Write(Exception exception, string message, params object[] args)
 		{
-			Instance.WriteException(exception, SocketLogLevel.Exception, message, args);
+			Instance.WriteException(LogType.SocketLog, exception, SocketLogLevel.Exception, message, args);
 		}
 	}
 }

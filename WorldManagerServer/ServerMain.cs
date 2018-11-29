@@ -79,6 +79,10 @@ namespace WorldManagerServer
 			// Handlers
 			StoreHandlers();
 
+			// Data
+			WorldData.LoadSHNs();
+			WorldData.LoadShineTables();
+
 			// Networking
 			LoginServer.Connect(NetConfig.LoginNetConfig.S2SListenIP, (ushort)NetConfig.LoginNetConfig.S2SListenPort);
 			ZoneServer.Listen(NetConfig.WorldNetConfig.S2SListenIP, (ushort)NetConfig.WorldNetConfig.S2SListenPort);

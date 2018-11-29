@@ -1,16 +1,17 @@
 ﻿using System;
+using DFEngine.Server;
 
 namespace DFEngine.Logging
 {
 	public sealed class CommandLog : FileLog
 	{
-		protected override LogType LogTypeName => LogType.CommandLog;
+		protected override string LogTypeName => "CommandLog";
 
 		private CommandLog(string directory) : base(directory)
 		{
 		}
 
-		private static CommandLog Instance => (_instance ?? (_instance = new CommandLog(@"Command")));
+		private static CommandLog Instance => (_instance ?? (_instance = new CommandLog(@"CommandLog")));
 		private static CommandLog _instance;
 
 		public static void SetupLevels(byte mConsoleLevel, byte mFileLogLevel)
@@ -31,7 +32,7 @@ namespace DFEngine.Logging
 
 		public static void Write(Exception exception, string message, params object[] args)
 		{
-			Instance.WriteException(exception, CommandLogLevel.Error, message, args);
+			Instance.WriteException(LogType.CommandLog, exception, CommandLogLevel.Error, message, args);
 		}
 	}
 }
