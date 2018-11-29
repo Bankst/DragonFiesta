@@ -133,7 +133,7 @@ namespace WorldManagerServer.Services
 				}
 			}
 
-			if (Data.DefaultCharacterData.TryGetValue(@class, out var defaultValues))
+			if (WorldData.DefaultCharacterData.TryGetValue(@class, out var defaultValues))
 			{
 				using (var p_Char_CreateSetDefaultData = new StoredProcedure("p_Char_CreateSetDefaultData", DB.GetDatabaseClient(DatabaseType.Character).Connection))
 				{

@@ -10,6 +10,7 @@ using DFEngine.Network;
 using DFEngine.Server;
 using DFEngine.Threading;
 using DFEngine.Utils;
+
 using WorldManagerServer.Handlers;
 using WorldManagerServer.Util.Console;
 
@@ -47,6 +48,9 @@ namespace WorldManagerServer
 
 			EngineLog.Write(EngineLogLevel.Startup, "Starting WorldManagerServer");
 
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+
 			// Configuration
 			if (!NetworkConfiguration.Load(out var netConfigMsg))
 			{
@@ -82,6 +86,9 @@ namespace WorldManagerServer
 			// TODO: GameLogServer
 			// GameLogServer.Connect(NetConfig.GameLogNetConfig.S2SListenIP, (ushort)NetConfig.GameLogNetConfig.S2SListenPort);
 
+			stopwatch.Stop();
+			EngineLog.Write(EngineLogLevel.Startup, $"Time taken to start: {stopwatch.ElapsedMilliseconds}ms");
+
 			// Main server loop
 			new Thread(() =>
 			{
@@ -103,7 +110,12 @@ namespace WorldManagerServer
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_ACK, MiscHandlers.NC_MISC_S2SCONNECTION_ACK);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_GAMETIME_REQ, MiscHandlers.NC_MISC_GAMETIME_REQ);
 
-			
+			NetworkMessageHandler.Store(NetworkCommand.NC_USER_WILLLOGIN_REQ, UserHandlers.NC_USER_WILLLOGIN_REQ);
+			NetworkMessageHandler.Store(NetworkCommand.NC_USER_LOGINWORLD_REQ, UserHandlers.NC_USER_LOGINWORLD_REQ);
+			NetworkMessageHandler.Store(NetworkCommand.NC_USER_NORMALLOGOUT_CMD, UserHandlers.NC_USER_NORMALLOGOUT_CMD);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_AVATAR_CREATE_REQ, AvatarHandlers.NC_AVATAR_CREATE_REQ);
+			NetworkMessageHandler.Store(NetworkCommand.NC_AVATAR_ERASE_REQ, AvatarHandlers.NC_AVATAR_ERASE_REQ);
 		}
 
 		private static void Update(long now)

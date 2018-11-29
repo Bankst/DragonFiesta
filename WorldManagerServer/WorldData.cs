@@ -9,7 +9,7 @@ using DFEngine.IO.Definitions.SHN;
 
 namespace WorldManagerServer
 {
-	public static class Data
+	public static class WorldData
 	{
 		private static readonly string[] SHNList =
 		{

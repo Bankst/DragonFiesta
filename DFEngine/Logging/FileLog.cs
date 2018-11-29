@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Threading;
 
 namespace DFEngine.Logging
 {
@@ -64,7 +65,7 @@ namespace DFEngine.Logging
             {
 	            lock (IOLocker)
 	            {
-		            var filePath = $"{Directory}{SessionId}_{logType}_{SessionTime:MM_dd_yyyy}.txt";
+					var filePath = $"{Directory}{SessionId}_{logType}_{SessionTime:MM_dd_yyyy}.txt";
 		            var msg = $"[{DateTime.Now}][{LogTypeName.ToString()}][{logSubType}] {string.Format(message, args)}";
 
 		            if ((byte)logSubType <= ConsoleLogLevel)
@@ -72,13 +73,18 @@ namespace DFEngine.Logging
 			            ConsoleWriteLine(logType, logSubType, msg);
 		            }
 
-					using (var tw = TextWriter.Synchronized(File.AppendText(filePath)))
-					{
-						if ((byte)logSubType <= MaxFileLogLevel)
+		            using (var mutex = new Mutex(false, $"Writing {LogTypeName}"))
+		            {
+			            mutex.WaitOne();
+						using (var tw = TextWriter.Synchronized(File.AppendText(filePath)))
 						{
-							tw.WriteLine(msg);
+							if ((byte)logSubType <= MaxFileLogLevel)
+							{
+								tw.WriteLine(msg);
+							}
 						}
-					}
+			            mutex.ReleaseMutex();
+		            }
 				}
             }
             catch (Exception ex)
