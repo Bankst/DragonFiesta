@@ -120,6 +120,8 @@ namespace WorldManagerServer
 
 			NetworkMessageHandler.Store(NetworkCommand.NC_AVATAR_CREATE_REQ, AvatarHandlers.NC_AVATAR_CREATE_REQ);
 			NetworkMessageHandler.Store(NetworkCommand.NC_AVATAR_ERASE_REQ, AvatarHandlers.NC_AVATAR_ERASE_REQ);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_CHAR_LOGIN_REQ, CharacterHandlers.NC_CHAR_LOGIN_REQ);
 		}
 
 		private static void Update(long now)

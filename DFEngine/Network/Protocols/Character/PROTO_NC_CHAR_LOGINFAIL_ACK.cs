@@ -1,0 +1,10 @@
+﻿namespace DFEngine.Network.Protocols
+{
+	public class PROTO_NC_CHAR_LOGINFAIL_ACK : NetworkMessage
+	{
+		public PROTO_NC_CHAR_LOGINFAIL_ACK(int error) : base(NetworkCommand.NC_CHAR_LOGINFAIL_ACK)
+		{
+			Write(error);
+		}
+	}
+}
