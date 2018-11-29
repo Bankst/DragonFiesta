@@ -25,19 +25,16 @@ namespace DFEngine.Logging
 
         protected internal byte MaxFileLogLevel = byte.MaxValue;
 
-        private readonly ConcurrentDictionary<string, StreamWriter> _writers;
+		public FileLog(string directory)
+		{
+            Directory = Path.Combine(BaseDirectory, directory.ToEscapedString());
 
-        public FileLog(string directory) : base()
-        {
-            this.Directory = Path.Combine(BaseDirectory, directory.ToEscapedString());
-
-            if (!System.IO.Directory.Exists(this.Directory))
+            if (!System.IO.Directory.Exists(Directory))
             {
-                System.IO.Directory.CreateDirectory(this.Directory);
+                System.IO.Directory.CreateDirectory(Directory);
             }
 
             LoadSession();
-            _writers = new ConcurrentDictionary<string, StreamWriter>();
             IOLocker = new object();
         }
 
@@ -65,32 +62,28 @@ namespace DFEngine.Logging
         {
             try
             {
-                lock (IOLocker)
-                {
-                    if (!_writers.TryGetValue(logType.ToString().ToLower(), out var writer))
-                    {
-                        writer = new StreamWriter(
-                            $"{Directory}{SessionId}_{logType}_{SessionTime:MM_dd_yyyy}.txt")
-                        { AutoFlush = true };
-                        _writers.TryAdd(logType.ToString().ToLower(), writer);
-                    }
+	            lock (IOLocker)
+	            {
+		            var filePath = $"{Directory}{SessionId}_{logType}_{SessionTime:MM_dd_yyyy}.txt";
+		            var msg = $"[{DateTime.Now}][{LogTypeName.ToString()}][{logSubType}] {string.Format(message, args)}";
 
-                    var msg = ($"[{DateTime.Now}][{LogTypeName.ToString()}][{logSubType}] {string.Format(message, args)}");
+		            if ((byte)logSubType <= ConsoleLogLevel)
+		            {
+			            ConsoleWriteLine(logType, logSubType, msg);
+		            }
 
-                    if ((byte)logSubType <= MaxFileLogLevel)
-                    {
-                        writer.WriteLine(msg);
-                    }
-
-                    if ((byte)logSubType <= ConsoleLogLevel)
-                    {
-                        ConsoleWriteLine(logType, logSubType, msg);
-                    }
-                }
+					using (var tw = TextWriter.Synchronized(File.AppendText(filePath)))
+					{
+						if ((byte)logSubType <= MaxFileLogLevel)
+						{
+							tw.WriteLine(msg);
+						}
+					}
+				}
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+                ConsoleWriteLine(LogType.EngineLog, EngineLogLevel.Exception, $"Exception while writing log:\n {ex}");
             }
         }
 
