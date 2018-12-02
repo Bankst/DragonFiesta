@@ -3,6 +3,7 @@ using DFEngine.Logging;
 using DFEngine.Network;
 using DFEngine.Network.Protocols;
 using DFEngine.Server;
+using WorldManagerServer.Services;
 
 namespace WorldManagerServer.Handlers
 {

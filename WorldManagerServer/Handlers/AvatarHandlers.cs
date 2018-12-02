@@ -41,7 +41,7 @@ namespace WorldManagerServer.Handlers
 				return;
 			}
 
-			if (WorldData.HairInfo[hair]?.Grade != 0 || WorldData.HairColorInfo[hairColor]?.Grade != 0 || WorldData.FaceInfo[face]?.Grade != 0)
+			if (WorldData.HairInfo[hair]?.Grade > 1 || WorldData.HairColorInfo[hairColor]?.Grade > 1 || WorldData.FaceInfo[face]?.Grade > 1)
 			{
 				new PROTO_NC_AVATAR_CREATEFAIL_ACK(0x82).Send(connection);
 				return;

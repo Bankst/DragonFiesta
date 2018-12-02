@@ -2,5 +2,6 @@
 {
 	public class MapInfo
 	{
+		public string MapName { get; set; }
 	}
 }

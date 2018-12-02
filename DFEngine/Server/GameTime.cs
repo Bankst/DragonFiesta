@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Globalization;
+
 using DFEngine.Server;
 
-namespace DFEngine.Utils
+namespace DFEngine.Content.Game
 {
 	public class GameTime
 	{

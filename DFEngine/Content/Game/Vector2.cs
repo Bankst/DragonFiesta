@@ -1,4 +1,4 @@
-﻿namespace DFEngine.Utils
+﻿namespace DFEngine.Content.Game
 {
 	/// <summary>
 	/// Representation of 2D vectors and points.

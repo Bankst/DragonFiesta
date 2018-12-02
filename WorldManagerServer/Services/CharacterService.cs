@@ -5,7 +5,7 @@ using DFEngine.Logging;
 using DFEngine.Network;
 using DFEngine.Server;
 
-namespace WorldManagerServer.Handlers
+namespace WorldManagerServer.Services
 {
 	public class CharacterService
 	{
@@ -13,8 +13,6 @@ namespace WorldManagerServer.Handlers
 		{
 			zoneEndPoint = null;
 			error = 0;
-
-			charSlot = 5;
 
 			var charBySlot = connection.Account.Avatars.FirstOrDefault(a => a.Slot == charSlot);
 			if (charBySlot == null)

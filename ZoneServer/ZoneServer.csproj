@@ -25,4 +25,8 @@
     <ProjectReference Include="..\DFEngine\DFEngine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Handlers\" />
+  </ItemGroup>
+
 </Project>

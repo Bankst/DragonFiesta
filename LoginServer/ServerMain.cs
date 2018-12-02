@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
 
@@ -32,6 +33,9 @@ namespace LoginServer
 		internal static NetworkConfiguration NetConfig;
 		internal static DatabaseConfiguration DbConfig;
 		internal static LoginConfiguration LoginConfig;
+
+		// Database
+		internal static SqlConnection AccountDb;
 
 		// Networking
 		internal static NetworkServer ClientServer = new NetworkServer(NetworkConnectionType.NCT_CLIENT);
@@ -79,6 +83,7 @@ namespace LoginServer
 			{
 				throw new StartupException("Database connection failure! See above error.");
 			}
+			AccountDb = DB.GetDatabaseClient(DatabaseType.Account).Connection;
 
 			// Handlers
 			StoreHandlers();

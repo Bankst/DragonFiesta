@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DFEngine;
 using DFEngine.Config;
+using DFEngine.Database;
 using DFEngine.Logging;
 using DFEngine.Network;
 using DFEngine.Server;
@@ -23,7 +25,12 @@ namespace ZoneServer
 
 		// Configuration
 		internal static NetworkConfiguration NetConfig;
+		internal static DatabaseConfiguration DbConfig;
 		internal static ZoneNetworkConfiguration ZoneNetConfig;
+		internal static ZoneConfiguration ZoneConfig;
+
+		// Database
+		internal static SqlConnection CharDb;
 
 		// Networking
 		internal static NetworkServer ClientServer = new NetworkServer(NetworkConnectionType.NCT_CLIENT);
@@ -58,7 +65,24 @@ namespace ZoneServer
 			{
 				throw new StartupException("ZoneID Not found in config!");
 			}
-			
+
+			if (!DatabaseConfiguration.Load(out var dbConfigMsg))
+			{
+				throw new StartupException(dbConfigMsg);
+			}
+			DbConfig = DatabaseConfiguration.Instance;
+
+			if (!ZoneConfiguration.Load(out var zoneConfigMsg))
+			{
+				throw new StartupException(zoneConfigMsg);
+			}
+			ZoneConfig = ZoneConfiguration.Instance;
+
+			if (!DB.AddManager(DatabaseType.Character, DbConfig))
+			{
+				throw new StartupException("Database connection failure! See above error.");
+			}
+			CharDb = DB.GetDatabaseClient(DatabaseType.Character).Connection;
 		}
 	}
 }

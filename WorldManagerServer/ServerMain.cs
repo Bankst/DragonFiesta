@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
 
@@ -28,6 +29,9 @@ namespace WorldManagerServer
 		internal static NetworkConfiguration NetConfig;
 		internal static DatabaseConfiguration DbConfig;
 		internal static WorldConfiguration WorldConfig;
+
+		// Database
+		internal static SqlConnection CharDb;
 
 		// Networking
 		internal static NetworkServer ClientServer = new NetworkServer(NetworkConnectionType.NCT_CLIENT);
@@ -76,12 +80,14 @@ namespace WorldManagerServer
 				throw new StartupException("Database connection failure! See above error.");
 			}
 
+			CharDb = DB.GetDatabaseClient(DatabaseType.Character).Connection;
+
 			// Handlers
 			StoreHandlers();
 
 			// Data
 			WorldData.LoadSHNs();
-			WorldData.LoadShineTables();
+			WorldData.LoadScripts();
 
 			// Networking
 			LoginServer.Connect(NetConfig.LoginNetConfig.S2SListenIP, (ushort)NetConfig.LoginNetConfig.S2SListenPort);

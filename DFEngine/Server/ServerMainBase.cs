@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using DFEngine.Content.Game;
 using DFEngine.Logging;
 using DFEngine.Utils;
 

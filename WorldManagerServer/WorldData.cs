@@ -36,9 +36,9 @@ namespace WorldManagerServer
 			SHNFile.TryGetObjects("SingleData", out SingleData);
 		}
 
-		public static void LoadShineTables()
+		public static void LoadScripts()
 		{
-			/* Shine Table Data */
+			// DefaultCharacterData
 			using (var file = new Script(Path.Combine(ServerMain.WorldConfig.ShinePath, "DefaultCharacterData.txt")))
 			{
 				using (var reader = new ScriptReader(file["CHARACTER"]))
@@ -114,6 +114,8 @@ namespace WorldManagerServer
 					}
 				}
 			}
+
+			// Any other scripts
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using DFEngine.Content.Game;
 using DFEngine.Content.GameObjects;
 using DFEngine.Content.Items;
 using DFEngine.Content.Tutorial;
@@ -23,7 +23,7 @@ namespace WorldManagerServer.Services
 		{
 			var ret = new List<Avatar>();
 
-			using (var p_Char_GetListOfUserChar = new StoredProcedure("p_Char_GetListOfUserChar", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+			using (var p_Char_GetListOfUserChar = new StoredProcedure("p_Char_GetListOfUserChar", ServerMain.CharDb))
 			{
 				p_Char_GetListOfUserChar.AddParameter("nUserNo", userNo);
 
@@ -54,7 +54,7 @@ namespace WorldManagerServer.Services
 		{
 			avatar = new Avatar { CharNo = charNo };
 
-			using (var p_Char_GetLoginData = new StoredProcedure("p_Char_GetLoginData", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+			using (var p_Char_GetLoginData = new StoredProcedure("p_Char_GetLoginData", ServerMain.CharDb))
 			{
 				p_Char_GetLoginData.AddParameter("nCharNo", charNo);
 
@@ -96,7 +96,7 @@ namespace WorldManagerServer.Services
 
 		internal static bool IsNameInUse(string name)
 		{
-			using (var p_Char_Find = new StoredProcedure("p_Char_Find", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+			using (var p_Char_Find = new StoredProcedure("p_Char_Find", ServerMain.CharDb))
 			{
 				p_Char_Find.AddParameter("sID", name, 40);
 				p_Char_Find.AddOutput<int>("nCharNo");
@@ -110,7 +110,7 @@ namespace WorldManagerServer.Services
 			int charNo;
 			avatar = null;
 
-			using (var p_Char_Create = new StoredProcedure("p_Char_Create", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+			using (var p_Char_Create = new StoredProcedure("p_Char_Create", ServerMain.CharDb))
 			{
 				p_Char_Create.AddParameter("nUserNo", connection.Account.UserNo);
 				p_Char_Create.AddParameter("nCreateWorld", ServerMain.NetConfig.WorldNetConfig.WorldID);
@@ -135,7 +135,7 @@ namespace WorldManagerServer.Services
 
 			if (WorldData.DefaultCharacterData.TryGetValue(@class, out var defaultValues))
 			{
-				using (var p_Char_CreateSetDefaultData = new StoredProcedure("p_Char_CreateSetDefaultData", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+				using (var p_Char_CreateSetDefaultData = new StoredProcedure("p_Char_CreateSetDefaultData", ServerMain.CharDb))
 				{
 					p_Char_CreateSetDefaultData.AddParameter("nCharNo", charNo);
 					p_Char_CreateSetDefaultData.AddParameter("sLoginZone", defaultValues.MapIndx, 16);
@@ -158,7 +158,7 @@ namespace WorldManagerServer.Services
 					}
 				}
 
-				using (var p_Char_RedistributePointSet = new StoredProcedure("p_Char_RedistributePointSet", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+				using (var p_Char_RedistributePointSet = new StoredProcedure("p_Char_RedistributePointSet", ServerMain.CharDb))
 				{
 					p_Char_RedistributePointSet.AddParameter("nCharNo", charNo);
 					p_Char_RedistributePointSet.AddParameter("nSetPoint", defaultValues.Level);
@@ -170,7 +170,7 @@ namespace WorldManagerServer.Services
 				{
 					long itemKey;
 
-					using (var p_Item_Create = new StoredProcedure("p_Item_Create", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+					using (var p_Item_Create = new StoredProcedure("p_Item_Create", ServerMain.CharDb))
 					{
 						p_Item_Create.AddParameter("nOwner", charNo);
 						p_Item_Create.AddParameter("nStorageType", (byte)InventoryType.IT_INVENTORY);
@@ -182,7 +182,7 @@ namespace WorldManagerServer.Services
 						itemKey = p_Item_Create.Run().GetOutput<long>("nItemKey");
 					}
 
-					using (var p_Item_SetOption = new StoredProcedure("p_Item_SetOption", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+					using (var p_Item_SetOption = new StoredProcedure("p_Item_SetOption", ServerMain.CharDb))
 					{
 						p_Item_SetOption.AddParameter("nItemKey", itemKey);
 						p_Item_SetOption.AddParameter("nOptionType", 1);
@@ -194,7 +194,7 @@ namespace WorldManagerServer.Services
 
 				long houseKey;
 
-				using (var p_Item_Create = new StoredProcedure("p_Item_Create", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+				using (var p_Item_Create = new StoredProcedure("p_Item_Create", ServerMain.CharDb))
 				{
 					p_Item_Create.AddParameter("nOwner", charNo);
 					p_Item_Create.AddParameter("nStorageType", (byte)InventoryType.IT_MINIHOUSE);
@@ -206,7 +206,7 @@ namespace WorldManagerServer.Services
 					houseKey = p_Item_Create.Run().GetOutput<long>("nItemKey");
 				}
 
-				using (var p_Item_SetOption = new StoredProcedure("p_Item_SetOption", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+				using (var p_Item_SetOption = new StoredProcedure("p_Item_SetOption", ServerMain.CharDb))
 				{
 					p_Item_SetOption.AddParameter("nItemKey", houseKey);
 					p_Item_SetOption.AddParameter("nOptionType", 1);
@@ -217,7 +217,7 @@ namespace WorldManagerServer.Services
 
 				foreach (var quest in defaultValues.Quests)
 				{
-					using (var p_Quest_Add = new StoredProcedure("p_Quest_Add", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+					using (var p_Quest_Add = new StoredProcedure("p_Quest_Add", ServerMain.CharDb))
 					{
 						p_Quest_Add.AddParameter("nCharNo", charNo);
 						p_Quest_Add.AddParameter("nQuestNo", quest);
@@ -230,7 +230,7 @@ namespace WorldManagerServer.Services
 
 				foreach (var skill in defaultValues.Skills)
 				{
-					using (var p_Skill_Set = new StoredProcedure("p_Skill_Set", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+					using (var p_Skill_Set = new StoredProcedure("p_Skill_Set", ServerMain.CharDb))
 					{
 						p_Skill_Set.AddParameter("nCharNo", charNo);
 						p_Skill_Set.AddParameter("nSkillNo", Convert.ToInt32(skill));
@@ -265,7 +265,7 @@ namespace WorldManagerServer.Services
 					shortcutData = stream.ToArray();
 				}
 
-				using (var p_Char_SetOptShortCutData = new StoredProcedure("p_Char_SetOptShortCutData", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+				using (var p_Char_SetOptShortCutData = new StoredProcedure("p_Char_SetOptShortCutData", ServerMain.CharDb))
 				{
 					p_Char_SetOptShortCutData.AddParameter("nCharNo", charNo);
 					p_Char_SetOptShortCutData.AddParameter("sData", shortcutData, 1024);
@@ -284,7 +284,7 @@ namespace WorldManagerServer.Services
 		{
 			// TODO: Leave guild & guild academy.
 
-			using (var p_Char_Delete = new StoredProcedure("p_Char_Delete", DB.GetDatabaseClient(DatabaseType.Character).Connection))
+			using (var p_Char_Delete = new StoredProcedure("p_Char_Delete", ServerMain.CharDb))
 			{
 				p_Char_Delete.AddParameter("nCharNo", avatar.CharNo);
 				p_Char_Delete.AddOutput<int>("nRet");

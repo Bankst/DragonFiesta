@@ -1,6 +1,8 @@
-﻿using System;using DFEngine.Content.Items;
+﻿using System;
+
+using DFEngine.Content.Game;
+using DFEngine.Content.Items;
 using DFEngine.Content.Tutorial;
-using DFEngine.Utils;
 
 namespace DFEngine.Content.GameObjects
 {
