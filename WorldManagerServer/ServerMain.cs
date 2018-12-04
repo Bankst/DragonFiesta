@@ -123,6 +123,7 @@ namespace WorldManagerServer
 			NetworkMessageHandler.Store(NetworkCommand.NC_USER_WILLLOGIN_REQ, UserHandlers.NC_USER_WILLLOGIN_REQ);
 			NetworkMessageHandler.Store(NetworkCommand.NC_USER_LOGINWORLD_REQ, UserHandlers.NC_USER_LOGINWORLD_REQ);
 			NetworkMessageHandler.Store(NetworkCommand.NC_USER_NORMALLOGOUT_CMD, UserHandlers.NC_USER_NORMALLOGOUT_CMD);
+			NetworkMessageHandler.Store(NetworkCommand.NC_USER_WILL_WORLD_SELECT_REQ, UserHandlers.NC_USER_WILL_WORLD_SELECT_REQ);
 
 			NetworkMessageHandler.Store(NetworkCommand.NC_AVATAR_CREATE_REQ, AvatarHandlers.NC_AVATAR_CREATE_REQ);
 			NetworkMessageHandler.Store(NetworkCommand.NC_AVATAR_ERASE_REQ, AvatarHandlers.NC_AVATAR_ERASE_REQ);

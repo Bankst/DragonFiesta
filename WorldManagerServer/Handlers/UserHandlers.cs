@@ -44,7 +44,15 @@ namespace WorldManagerServer.Handlers
 
 		public static void NC_USER_NORMALLOGOUT_CMD(NetworkMessage message, NetworkConnection connection)
 		{
+			var logoutType = (LogoutType) message.ReadByte();
 			Object.Destroy(connection);
+		}
+
+		public static void NC_USER_WILL_WORLD_SELECT_REQ(NetworkMessage message, NetworkConnection connection)
+		{
+			var md5 = connection.Account.Username.ToMD5();
+			new PROTO_NC_LOCAL_ADDTRANSFER_CMD(md5).Send(ServerMain.LoginServer);
+			new PROTO_NC_USER_WILL_WORLD_SELECT_ACK(7768, md5).Send(connection);
 		}
 	}
 }
