@@ -29,5 +29,10 @@ namespace DFEngine.Content.GameObjects
 			Type = GameObjectType.CHARACTER;
 			Shape = new CharacterShape();
 		}
+
+		public void UpdateParameters()
+		{
+
+		}
 	}
 }

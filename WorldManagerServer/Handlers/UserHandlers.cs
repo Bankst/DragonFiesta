@@ -15,7 +15,7 @@ namespace WorldManagerServer.Handlers
 			var guid = message.ReadString(32);
 
 			var transfer = new NetworkTransfer(new Account(userNo, userName), guid);
-			ServerMain.Transfers.AddSafe(transfer);
+			WorldManagerServer.Transfers.AddSafe(transfer);
 
 			// We can check here for dual logins.
 
@@ -27,8 +27,8 @@ namespace WorldManagerServer.Handlers
 			var username = message.ReadString(256);
 			var guid = message.ReadString(32);
 
-			var transfer = ServerMain.Transfers.First(t => t.Guid == guid);
-			ServerMain.Transfers.RemoveSafe(transfer);
+			var transfer = WorldManagerServer.Transfers.First(t => t.Guid == guid);
+			WorldManagerServer.Transfers.RemoveSafe(transfer);
 
 			if (!transfer || transfer.Account.Username != username)
 			{
@@ -51,7 +51,7 @@ namespace WorldManagerServer.Handlers
 		public static void NC_USER_WILL_WORLD_SELECT_REQ(NetworkMessage message, NetworkConnection connection)
 		{
 			var md5 = connection.Account.Username.ToMD5();
-			new PROTO_NC_LOCAL_ADDTRANSFER_CMD(md5).Send(ServerMain.LoginServer);
+			new PROTO_NC_LOCAL_ADDTRANSFER_CMD(md5).Send(WorldManagerServer.LoginServer);
 			new PROTO_NC_USER_WILL_WORLD_SELECT_ACK(7768, md5).Send(connection);
 		}
 	}

@@ -1,4 +1,4 @@
-﻿using DFEngine.Definitions.SHN;
+﻿using DFEngine.IO.Definitions.SHN;
 
 namespace DFEngine.Content.Items
 {

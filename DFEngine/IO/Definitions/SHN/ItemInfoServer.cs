@@ -1,9 +1,7 @@
-﻿using DFEngine.Content.Items;
-
-namespace DFEngine.IO.Definitions.SHN
+﻿namespace DFEngine.IO.Definitions.SHN
 {
 	[Definition]
-	public class ItemInfo
+	public class ItemInfoServer
 	{
 		/// <summary>
 		/// The item's ID.
@@ -17,10 +15,6 @@ namespace DFEngine.IO.Definitions.SHN
 		/// <summary>
 		/// The item's full name.
 		/// </summary>
-		public string Name { get; private set; }
-		/// <summary>
-		/// The item's equip type.
-		/// </summary>
-		public ItemEquip Equip { get; private set; }
+		public string ItemSort_Index { get; private set; }
 	}
 }

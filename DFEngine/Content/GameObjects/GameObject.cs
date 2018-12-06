@@ -2,7 +2,7 @@
 
 namespace DFEngine.Content.GameObjects
 {
-	public class GameObject
+	public abstract class GameObject
 	{
 		public ushort Handle { get; set; }
 		public byte Level { get; set; }
@@ -10,10 +10,12 @@ namespace DFEngine.Content.GameObjects
 		public Stats Stats { get; set; }
 		public GameObjectType Type { get; set; }
 
-		public GameObject()
+		protected GameObject()
 		{
 			Position = new Position();
 			Stats = new Stats();
 		}
+
+
 	}
 }

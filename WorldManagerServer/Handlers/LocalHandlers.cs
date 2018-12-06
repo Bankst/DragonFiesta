@@ -10,8 +10,8 @@ namespace WorldManagerServer.Handlers
 		public static void NC_LOCAL_ADDTRANSFER_CMD(NetworkMessage message, NetworkConnection connection)
 		{
 			var validateNew = message.ReadString(64);
-			if (ServerMain.Transfers.Contains(validateNew))
-			ServerMain.Transfers.Add
+//			if (WorldManagerServer.Transfers.Contains(validateNew))
+//			WorldManagerServer.Transfers.Add
 		}
 	}
 }

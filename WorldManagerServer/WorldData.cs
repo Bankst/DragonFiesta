@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using DFEngine;
@@ -16,30 +17,36 @@ namespace WorldManagerServer
 			"HairInfo.shn",
 			"HairColorInfo.shn",
 			"FaceInfo.shn",
-			"SingleData.shn"
+			"SingleData.shn",
+			"ItemInfo.shn"
 		};
 
+		// Shine tables
 		internal static Dictionary<CharacterClass, DefaultCharacterData> DefaultCharacterData = new Dictionary<CharacterClass, DefaultCharacterData>();
+
+		// SHN Files
 		internal static ObjectCollection<FaceInfo> FaceInfo = new ObjectCollection<FaceInfo>();
 		internal static ObjectCollection<HairInfo> HairInfo = new ObjectCollection<HairInfo>();
 		internal static ObjectCollection<HairColorInfo> HairColorInfo = new ObjectCollection<HairColorInfo>();
 		internal static ObjectCollection<SingleData> SingleData = new ObjectCollection<SingleData>();
+		internal static ObjectCollection<ItemInfo> ItemInfo =  new ObjectCollection<ItemInfo>();
 
 		public static void LoadSHNs()
 		{
 			/* SHN File Data */
-			SHNFile.LoadFromFolder(ServerMain.WorldConfig.ShinePath, SHNList);
+			SHNFile.LoadFromFolder(WorldManagerServer.WorldConfig.ShinePath, SHNList);
 
 			SHNFile.TryGetObjects("HairInfo", out HairInfo);
 			SHNFile.TryGetObjects("HairColorInfo", out HairColorInfo);
 			SHNFile.TryGetObjects("FaceInfo", out FaceInfo);
 			SHNFile.TryGetObjects("SingleData", out SingleData);
+			SHNFile.TryGetObjects("ItemInfo", out ItemInfo);
 		}
 
 		public static void LoadScripts()
 		{
 			// DefaultCharacterData
-			using (var file = new Script(Path.Combine(ServerMain.WorldConfig.ShinePath, "DefaultCharacterData.txt")))
+			using (var file = new Script(Path.Combine(WorldManagerServer.WorldConfig.ShinePath, "DefaultCharacterData.txt")))
 			{
 				using (var reader = new ScriptReader(file["CHARACTER"]))
 				{

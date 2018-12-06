@@ -50,6 +50,13 @@ namespace DFEngine.IO
 		/// <returns>The object.</returns>
 		public T this[string identity] => !_objects.ContainsKey(identity) ? default(T) : _objects[identity];
 
+
+		/// <summary>
+		/// Returns a list of the objects values.
+		/// </summary>
+		/// <returns>The values.</returns>
+		public List<T> Values => new List<T>(_objects.Values);
+
 		/// <summary>
 		/// Adds an item to the collection if it's not already there.
 		/// </summary>

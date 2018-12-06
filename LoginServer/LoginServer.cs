@@ -19,9 +19,9 @@ using LoginServer.Util.Console;
 
 namespace LoginServer
 {
-	public class ServerMain : ServerMainBase
+	public class LoginServer : ServerMainBase
 	{
-		public new static ServerMain InternalInstance { get; private set; }
+		public new static LoginServer InternalInstance { get; private set; }
 
 		// Global Objects
 		internal static Dictionary<string, Account> CachedAccounts = new Dictionary<string, Account>();
@@ -43,7 +43,7 @@ namespace LoginServer
 		internal static NetworkConnection GameLogServer = new NetworkConnection(NetworkConnectionType.NCT_DB_GAMELOG);
 
 
-		public ServerMain() : base(ServerType.Login)
+		public LoginServer() : base(ServerType.Login)
 		{
 			Title = new LoginConsoleTitle();
 			Title.Update();
@@ -51,7 +51,7 @@ namespace LoginServer
 
 		public static void Initialize()
 		{
-			InternalInstance = new ServerMain();
+			InternalInstance = new LoginServer();
 			InternalInstance.WriteConsoleLogo();
 
 			EngineLog.Write(EngineLogLevel.Startup, "Starting LoginServer");

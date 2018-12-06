@@ -9,7 +9,7 @@ namespace WorldManagerServer
 			// Attempt to size window for best log view
 			try { Console.SetWindowSize(140, 40); }
 			catch { }
-			ServerMain.Initialize();
+			WorldManagerServer.Initialize();
 		}
 	}
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DFEngine.IO.Definitions.SHN
+﻿namespace DFEngine.IO.Definitions.SHN
 {
 	/// <summary>
 	/// Class that defines the file HairInfo.shn.

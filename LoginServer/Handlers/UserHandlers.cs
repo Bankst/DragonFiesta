@@ -18,7 +18,7 @@ namespace LoginServer.Handlers
 		{
 			var versionKey = message.ReadString(64);
 
-			if (versionKey != LoginConfiguration.Instance.ClientVersion && ServerMain.LoginConfig.CheckVersion)
+			if (versionKey != LoginConfiguration.Instance.ClientVersion && LoginServer.LoginConfig.CheckVersion)
 			{
 				SocketLog.Write(SocketLogLevel.Exception, $"Wrong version key used - {versionKey}");
 
@@ -41,7 +41,7 @@ namespace LoginServer.Handlers
 				SocketLog.Write(SocketLogLevel.Warning, $"[{connection}] Invalid credentials");
 
 				new PROTO_NC_USER_LOGINFAIL_ACK(0x45).Send(connection);
-				new PROTO_NC_LOG_USER_LOGINFAIL(userName, password, connection.GetRemoteIP, 0x45).Send(ServerMain.GameLogServer);
+				new PROTO_NC_LOG_USER_LOGINFAIL(userName, password, connection.GetRemoteIP, 0x45).Send(LoginServer.GameLogServer);
 				return;
 			}
 
@@ -50,7 +50,7 @@ namespace LoginServer.Handlers
 				SocketLog.Write(SocketLogLevel.Warning, $"[{connection}] Logging in while banned");
 
 				new PROTO_NC_USER_LOGINFAIL_ACK(0x47).Send(connection);
-				new PROTO_NC_LOG_USER_LOGINFAIL(userName, password, connection.GetRemoteIP, 0x47).Send(ServerMain.GameLogServer);
+				new PROTO_NC_LOG_USER_LOGINFAIL(userName, password, connection.GetRemoteIP, 0x47).Send(LoginServer.GameLogServer);
 				return;
 			}
 
@@ -59,12 +59,12 @@ namespace LoginServer.Handlers
 				SocketLog.Write(SocketLogLevel.Warning, $"[{connection}] Logging in during maintenance");
 
 				new PROTO_NC_USER_LOGINFAIL_ACK(0x48).Send(connection);
-				new PROTO_NC_LOG_USER_LOGINFAIL(userName, password, connection.GetRemoteIP, 0x48).Send(ServerMain.GameLogServer);
+				new PROTO_NC_LOG_USER_LOGINFAIL(userName, password, connection.GetRemoteIP, 0x48).Send(LoginServer.GameLogServer);
 				return;
 			}
 
 			connection.Account = new Account(userNo, userName);
-			new PROTO_NC_USER_LOGIN_ACK(ServerMain.Worlds).Send(connection);
+			new PROTO_NC_USER_LOGIN_ACK(LoginServer.Worlds).Send(connection);
 		}
 
 		internal static void NC_USER_XTRAP_REQ(NetworkMessage message, NetworkConnection connection)
@@ -77,18 +77,18 @@ namespace LoginServer.Handlers
 
 		internal static void NC_USER_WORLD_STATUS_REQ(NetworkMessage message, NetworkConnection connection)
 		{
-			new PROTO_NC_USER_WORLD_STATUS_ACK(ServerMain.Worlds).Send(connection);
+			new PROTO_NC_USER_WORLD_STATUS_ACK(LoginServer.Worlds).Send(connection);
 		}
 
 		internal static void NC_USER_WORLDSELECT_REQ(NetworkMessage message, NetworkConnection connection)
 		{
 			var worldNo = message.ReadByte();
-			var world = ServerMain.Worlds.First(w => w.Number == worldNo);
+			var world = LoginServer.Worlds.First(w => w.Number == worldNo);
 
 			if (world == null)
 			{
 				new PROTO_NC_USER_LOGINFAIL_ACK(0x42).Send(connection);
-				new PROTO_NC_LOG_USER_LOGINFAIL(connection.Account.Username, null, connection.GetRemoteIP, 0x42).Send(ServerMain.GameLogServer);
+				new PROTO_NC_LOG_USER_LOGINFAIL(connection.Account.Username, null, connection.GetRemoteIP, 0x42).Send(LoginServer.GameLogServer);
 				return;
 			}
 
@@ -98,9 +98,9 @@ namespace LoginServer.Handlers
 				World = world
 			};
 
-			ServerMain.Transfers.Add(transfer);
+			LoginServer.Transfers.Add(transfer);
 			new PROTO_NC_USER_WILLLOGIN_REQ(connection.Account, connection.Guid).Send(world.Connection);
-			new PROTO_NC_LOG_USER_LOGIN(connection.Account.UserNo, worldNo, connection.GetRemoteIP).Send(ServerMain.GameLogServer);
+			new PROTO_NC_LOG_USER_LOGIN(connection.Account.UserNo, worldNo, connection.GetRemoteIP).Send(LoginServer.GameLogServer);
 		}
 
 		internal static void NC_USER_NORMALLOGOUT_CMD(NetworkMessage message, NetworkConnection connection)
@@ -112,16 +112,16 @@ namespace LoginServer.Handlers
 		{
 			var guid = message.ReadString(32);
 
-			if (!ServerMain.CachedAccounts.TryGetValue(guid, out var account))
+			if (!LoginServer.CachedAccounts.TryGetValue(guid, out var account))
 			{
 				new PROTO_NC_USER_LOGINFAIL_ACK(0x49).Send(connection);
 				return;
 			}
 
-			ServerMain.CachedAccounts.Remove(guid);
+			LoginServer.CachedAccounts.Remove(guid);
 
 			connection.Account = account;
-			new PROTO_NC_USER_LOGIN_ACK(ServerMain.Worlds).Send(connection);
+			new PROTO_NC_USER_LOGIN_ACK(LoginServer.Worlds).Send(connection);
 		}
 
 		internal static void NC_USER_WILLLOGIN_ACK(NetworkMessage message, NetworkConnection connection)
@@ -129,8 +129,8 @@ namespace LoginServer.Handlers
 			var guid = message.ReadString(32);
 			var ok = message.ReadBoolean();
 
-			var transfer = ServerMain.Transfers.First(t => t.Guid == guid);
-			ServerMain.Transfers.RemoveSafe(transfer);
+			var transfer = LoginServer.Transfers.First(t => t.Guid == guid);
+			LoginServer.Transfers.RemoveSafe(transfer);
 
 			if (!ok || !transfer)
 			{
@@ -140,7 +140,7 @@ namespace LoginServer.Handlers
 				return;
 			}
 
-			ServerMain.CachedAccounts.AddSafe(guid, transfer.Account);
+			LoginServer.CachedAccounts.AddSafe(guid, transfer.Account);
 			new PROTO_NC_USER_WORLDSELECT_ACK(transfer.World, guid).Send(transfer.Connection);
 
 			Object.Destroy(transfer);

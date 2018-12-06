@@ -9,7 +9,7 @@ namespace WorldManagerServer.Services
 {
 	public class CharacterService
 	{
-		internal static bool CharLogin(NetworkConnection connection, int charSlot, out IPEndPoint zoneEndPoint, out int error)
+		internal static bool CharLogin(NetworkConnection connection, int charSlot, out IPEndPoint zoneEndPoint, out ushort error)
 		{
 			zoneEndPoint = null;
 			error = 0;
@@ -18,7 +18,7 @@ namespace WorldManagerServer.Services
 			if (charBySlot == null)
 			{
 				SocketLog.Write(SocketLogLevel.Warning, $"{connection.Account.Username} has no character in slot {charSlot}");
-				error = (int) ConnectionError.ThereIsNoCharacterInTheSlot;
+				error = (ushort) CharLoginError.NOCHAR_INSLOT;
 				return false;
 			}
 			var charMapIndx = charBySlot.MapIndx;
@@ -26,11 +26,11 @@ namespace WorldManagerServer.Services
 			// we need to find the ZoneID by the current character map, and use that. For now, set 0 for first zone.
 			var zoneId = 0;
 
-			var zoneConfig = ServerMain.NetConfig.ZoneNetworkConfigs.FirstOrDefault(z => z.ZoneID == zoneId);
+			var zoneConfig = WorldManagerServer.NetConfig.ZoneNetworkConfigs.FirstOrDefault(z => z.ZoneID == zoneId);
 			if (zoneConfig == null)
 			{
 				SocketLog.Write(SocketLogLevel.Exception, $"Zone ID {zoneId} config not found!");
-				error = (int) ConnectionError.MapUnderMaintenace;
+				error = (ushort) CharLoginError.MAP_UNDER_MAINT;
 				return false;
 			}
 

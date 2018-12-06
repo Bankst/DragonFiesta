@@ -19,7 +19,7 @@ namespace DFEngine.Worlds
 		public bool LinkIN { get; set; }
 		public bool LinkOUT { get; set; }
 		public bool IsSystemMap { get; set; }
-		public bool RegenCity { get; set; }
+		public string RegenCity { get; set; }
 		public bool CanRestart { get; set; }
 		public bool CanTrade { get; set; }
 		public bool CanMinihouse { get; set; }

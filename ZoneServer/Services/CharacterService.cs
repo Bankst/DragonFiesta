@@ -17,7 +17,7 @@ namespace ZoneServer.Services
 				Name = charName
 			};
 
-			using (var p_Char_GetCharNo = new StoredProcedure("p_Char_GetCharNo", ServerMain.CharDb))
+			using (var p_Char_GetCharNo = new StoredProcedure("p_Char_GetCharNo", ZoneServer.CharDb))
 			{
 				p_Char_GetCharNo.AddParameter("sID", charName, 40);
 				p_Char_GetCharNo.AddOutput<int>("nCharNo");
@@ -25,7 +25,7 @@ namespace ZoneServer.Services
 				character.CharNo = p_Char_GetCharNo.Run().GetOutput<int>("nCharNo");
 			}
 
-			using (var p_Char_GetUserNo = new StoredProcedure("p_Char_GetUserNo", ServerMain.CharDb))
+			using (var p_Char_GetUserNo = new StoredProcedure("p_Char_GetUserNo", ZoneServer.CharDb))
 			{
 				p_Char_GetUserNo.AddParameter("nCharNo", character.CharNo);
 				p_Char_GetUserNo.AddOutput<int>("nUserNo");
@@ -33,7 +33,7 @@ namespace ZoneServer.Services
 				character.UserNo = p_Char_GetUserNo.Run().GetOutput<int>("nUserNo");
 			}
 
-			using (var p_Char_GetAllData = new StoredProcedure("p_Char_GetAllData", ServerMain.CharDb))
+			using (var p_Char_GetAllData = new StoredProcedure("p_Char_GetAllData", ZoneServer.CharDb))
 			{
 				p_Char_GetAllData.AddParameter("nCharNo", character.CharNo);
 
@@ -87,7 +87,7 @@ namespace ZoneServer.Services
 				}
 			}
 
-			using (var p_Char_GetShape = new StoredProcedure("p_char_GetShape", ServerMain.CharDb))
+			using (var p_Char_GetShape = new StoredProcedure("p_char_GetShape", ZoneServer.CharDb))
 			{
 				p_Char_GetShape.AddParameter("nCharNo", character.CharNo);
 
@@ -110,6 +110,9 @@ namespace ZoneServer.Services
 					}
 				}
 			}
+
+			character.Handle = GameObjectAllocator.Allocate(GameObjectType.CHARACTER);
+			character.Stats.Update();
 
 			return true;
 		}

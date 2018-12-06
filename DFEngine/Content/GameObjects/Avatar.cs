@@ -73,6 +73,11 @@ namespace DFEngine.Content.GameObjects
 		/// </summary>
 		public byte TutorialStep { get; set; }
 
+		public byte[] WindowPosData { get; set; }
+		public byte[] ShortcutSizeData { get; set; }
+		public byte[] GameOptionData { get; set; }
+		public byte[] KeyMapData { get; set; }
+
 		/// <summary>
 		/// Creates a new instance of the <see cref="Avatar"/> class.
 		/// </summary>

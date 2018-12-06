@@ -17,13 +17,14 @@ using WorldManagerServer.Util.Console;
 
 namespace WorldManagerServer
 {
-	public class ServerMain : ServerMainBase
+	public class WorldManagerServer : ServerMainBase
 	{
-		public new static ServerMain InternalInstance { get; private set; }
+		public new static WorldManagerServer InternalInstance { get; private set; }
 
 		// Global objects
 		internal static List<NetworkTransfer> Transfers = new List<NetworkTransfer>();
 		internal static WorldConsoleTitle Title { get; set; }
+		internal static List<Zone> Zones = new List<Zone>();
 
 		// Configuration
 		internal static NetworkConfiguration NetConfig;
@@ -39,7 +40,7 @@ namespace WorldManagerServer
 		internal static NetworkConnection LoginServer = new NetworkConnection(NetworkConnectionType.NCT_LOGIN);
 		internal static NetworkConnection GameLogServer = new NetworkConnection(NetworkConnectionType.NCT_DB_GAMELOG);
 
-		public ServerMain() : base(ServerType.World)
+		public WorldManagerServer() : base(ServerType.World)
 		{
 			Title = new WorldConsoleTitle();
 			Title.Update();
@@ -47,7 +48,7 @@ namespace WorldManagerServer
 
 		public static void Initialize()
 		{
-			InternalInstance = new ServerMain();
+			InternalInstance = new WorldManagerServer();
 			InternalInstance.WriteConsoleLogo();
 
 			EngineLog.Write(EngineLogLevel.Startup, "Starting WorldManagerServer");
@@ -90,9 +91,9 @@ namespace WorldManagerServer
 			WorldData.LoadScripts();
 
 			// Networking
-			LoginServer.Connect(NetConfig.LoginNetConfig.S2SListenIP, (ushort)NetConfig.LoginNetConfig.S2SListenPort);
-			ZoneServer.Listen(NetConfig.WorldNetConfig.S2SListenIP, (ushort)NetConfig.WorldNetConfig.S2SListenPort);
-			ClientServer.Listen(NetConfig.WorldNetConfig.ListenIP, (ushort)NetConfig.WorldNetConfig.ListenPort);
+			LoginServer.Connect(NetConfig.LoginNetConfig.S2SListenIP, (ushort) NetConfig.LoginNetConfig.S2SListenPort);
+			ZoneServer.Listen(NetConfig.WorldNetConfig.S2SListenIP, (ushort) NetConfig.WorldNetConfig.S2SListenPort);
+			ClientServer.Listen(NetConfig.WorldNetConfig.ListenIP, (ushort) NetConfig.WorldNetConfig.ListenPort);
 			// TODO: GameLogServer
 			// GameLogServer.Connect(NetConfig.GameLogNetConfig.S2SListenIP, (ushort)NetConfig.GameLogNetConfig.S2SListenPort);
 
@@ -117,6 +118,7 @@ namespace WorldManagerServer
 		{
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_SEED_ACK, MiscHandlers.NC_MISC_SEED_ACK);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_RDY, MiscHandlers.NC_MISC_S2SCONNECTION_RDY);
+			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_REQ, MiscHandlers.NC_MISC_S2SCONNECTION_REQ);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_ACK, MiscHandlers.NC_MISC_S2SCONNECTION_ACK);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_GAMETIME_REQ, MiscHandlers.NC_MISC_GAMETIME_REQ);
 
