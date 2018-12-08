@@ -31,7 +31,7 @@ namespace ZoneServer
 		internal static NetworkConfiguration NetConfig;
 		internal static DatabaseConfiguration DbConfig;
 		internal static ZoneNetworkConfiguration ZoneNetConfig;
-		internal static ZoneConfiguration ZoneConfig;
+		internal static SingleZoneConfiguration ZoneConfig;
 
 		// Database
 		internal static SqlConnection CharDb;
@@ -78,12 +78,17 @@ namespace ZoneServer
 			}
 			DbConfig = DatabaseConfiguration.Instance;
 
+
 			if (!ZoneConfiguration.Load(out var zoneConfigMsg))
 			{
 				throw new StartupException(zoneConfigMsg);
 			}
-			ZoneConfig = ZoneConfiguration.Instance;
+			var tempZoneConfig = ZoneConfiguration.Instance;
 
+			if ((ZoneConfig = tempZoneConfig.Zones.FirstOrDefault(z => z.ZoneID == zoneId)) == null)
+			{
+				throw new StartupException("ZoneID Not found in config!");
+			}
 
 			// Database
 			if (!DB.AddManager(DatabaseType.Character, DbConfig))
@@ -97,7 +102,25 @@ namespace ZoneServer
 			StoreHandlers();
 
 			// Data
-			ZoneData.LoadShineTables();
+			if (!ZoneData.CalculateSHNChecksums())
+			{
+				throw new StartupException("Failed to calculate SHN Checksums! See above error.");
+			}
+
+			if (!ZoneData.LoadSHNs())
+			{
+				throw new StartupException("Failed to load SHNs! See above error.");
+			}
+
+			if (!ZoneData.LoadShineTables())
+			{
+				throw new StartupException("Failed to load Shine Tables! See above error.");
+			}
+
+			if (!ZoneData.LoadMaps())
+			{
+				throw new StartupException("Failed to load Maps! See above error.");
+			}
 
 			// Networking
 			WorldServer.Connect(NetConfig.WorldNetConfig.S2SListenIP, (ushort) NetConfig.WorldNetConfig.S2SListenPort);
@@ -125,6 +148,8 @@ namespace ZoneServer
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_SEED_ACK, MiscHandlers.NC_MISC_SEED_ACK);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_RDY, MiscHandlers.NC_MISC_S2SCONNECTION_RDY);;
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_ACK, MiscHandlers.NC_MISC_S2SCONNECTION_ACK);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_MAP_LOGIN_REQ, MapHandlers.NC_MAP_LOGIN_REQ);
 		}
 
 		private static void Update(long now)

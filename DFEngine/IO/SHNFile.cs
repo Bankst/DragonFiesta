@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using DFEngine.Logging;
@@ -49,6 +50,11 @@ namespace DFEngine.IO
 		/// data.
 		/// </summary>
 		private readonly DataTable _table;
+
+		/// <summary>
+		/// The number of fully loaded SHN files.
+		/// </summary>
+		public static int Count => FileObjects.Count;
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="SHNFile"/> class.
@@ -101,8 +107,14 @@ namespace DFEngine.IO
 				var collection = genericClass.MakeGenericType(definition);
 				var created = (dynamic)Activator.CreateInstance(collection);
 
+				var mutex = new Mutex(false, shortName);
+
+				mutex.WaitOne();
+
 				FileObjects.Remove(shortName);
 				FileObjects.Add(shortName, created);
+
+				mutex.ReleaseMutex();
 
 				using (var file = new SHNFile(fileName))
 				using (var reader = new DataTableReader(file._table))

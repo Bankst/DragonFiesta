@@ -5,13 +5,15 @@ using DFEngine.Content.Game;
 using DFEngine.Content.GameObjects;
 using DFEngine.Database;
 using DFEngine.Logging;
+using DFEngine.Server;
 
 namespace ZoneServer.Services
 {
 	public class CharacterService
 	{
-		public static bool TryLoadCharacter(string charName, out Character character)
+		public static bool TryLoadCharacter(string charName, out Character character, out ushort error)
 		{
+			error = (ushort)CharLoginError.FAILED_ZONESERVER; // default error
 			character = new Character()
 			{
 				Name = charName
@@ -51,24 +53,28 @@ namespace ZoneServer.Services
 					while (reader.Read())
 					{
 						character.Slot = reader.GetByte(1);
-						character.Level = (byte)reader.GetInt32(3);
+						character.Level = (byte)reader.GetInt16(3);
 						character.EXP = reader.GetInt64(4);
 						character.Stats.CurrentHP = reader.GetInt16(5);
 						character.Stats.CurrentSP = reader.GetInt16(6);
 						character.Stats.CurrentLP = reader.GetInt16(7);
 						character.Stats.CurrentHPStones = reader.GetInt16(9);
 						character.Stats.CurrentSPStones = reader.GetInt16(10);
+						character.Stats.CurrentPwrStones = reader.GetInt32(11);
+						character.Stats.CurrentGrdStones = reader.GetInt32(12);
 						character.Cen = reader.GetInt64(13);
 						character.Fame = reader.GetInt32(14);
+						character.Flags = reader.GetInt32(15);
 						character.AdminLevel = reader.GetByte(16);
 						character.Position = new Position
 						{
-							X = reader.GetDouble(18),
-							Y = reader.GetDouble(19),
-							D = reader.GetDouble(20)
+							X = reader.GetInt32(18),
+							Y = reader.GetInt32(19),
+							D = reader.GetByte(20)
 						};
 						character.PrisonMinutes = (ushort)reader.GetInt16(21);
 						character.KillPoints = reader.GetInt32(22);
+						character.PKYellowTime = reader.GetByte(23);
 						character.Stats.FreeSTR = reader.GetByte(24);
 						character.Stats.FreeEND = reader.GetByte(25);
 						character.Stats.FreeDEX = reader.GetByte(26);
@@ -79,6 +85,7 @@ namespace ZoneServer.Services
 						if (!MapService.TryFindInstance(reader.GetString(17), out var map))
 						{
 							DatabaseLog.Write(DatabaseLogLevel.Error, $"Failed to find map instance for character: character->{charName}, map->{reader.GetString(17)}");
+							error = (ushort) CharLoginError.MAP_UNDER_MAINT;
 							return false;
 						}
 
@@ -96,6 +103,7 @@ namespace ZoneServer.Services
 					if (!reader.HasRows)
 					{
 						DatabaseLog.Write(DatabaseLogLevel.Error, $"No character shape for character: {charName}");
+						error = (ushort)CharLoginError.ERROR_APPEARANCE;
 						return false;
 					}
 
@@ -112,8 +120,9 @@ namespace ZoneServer.Services
 			}
 
 			character.Handle = GameObjectAllocator.Allocate(GameObjectType.CHARACTER);
-			character.Stats.Update();
+			character.Parameters = ZoneData.ParamServer[character.Shape.Class][character.Level];
 
+			character.Stats.Update();
 			return true;
 		}
 	}

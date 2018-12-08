@@ -3,7 +3,7 @@
 using DFEngine.Content.GameObjects;
 using DFEngine.Network;
 using DFEngine.Network.Protocols;
-
+using DFEngine.Server;
 using WorldManagerServer.Services;
 
 namespace WorldManagerServer.Handlers
@@ -25,37 +25,42 @@ namespace WorldManagerServer.Handlers
 
 			if (CharacterShape.GetBaseClass(@class) == CharacterClass.CC_CRUSADER && !connection.Account.Avatars.Exists(x => x.Level >= WorldData.SingleData["ChrLevel_CanCreateSen"]?.SingleDataValue))
 			{
-				new PROTO_NC_AVATAR_CREATEFAIL_ACK(0x86).Send(connection);
+				new PROTO_NC_AVATAR_CREATEFAIL_ACK((ushort)CharCreateError.FAILED_CREATE).Send(connection);
 				return;
 			}
 
 			if (connection.Account.Avatars.Count >= 6)
 			{
-				new PROTO_NC_AVATAR_CREATEFAIL_ACK(0x85).Send(connection);
+				new PROTO_NC_AVATAR_CREATEFAIL_ACK((ushort)CharCreateError.ERROR_MAX_SLOT).Send(connection);
 				return;
 			}
 
 			if (AvatarService.IsNameInUse(name))
 			{
-				new PROTO_NC_AVATAR_CREATEFAIL_ACK(0x84).Send(connection);
+				new PROTO_NC_AVATAR_CREATEFAIL_ACK((ushort)CharCreateError.NAME_TAKEN).Send(connection);
 				return;
 			}
 
 			if (WorldData.HairInfo[hair]?.Grade > 1 || WorldData.HairColorInfo[hairColor]?.Grade > 1 || WorldData.FaceInfo[face]?.Grade > 1)
 			{
-				new PROTO_NC_AVATAR_CREATEFAIL_ACK(0x82).Send(connection);
+				new PROTO_NC_AVATAR_CREATEFAIL_ACK((ushort)CharCreateError.FAILED_CREATE).Send(connection);
 				return;
 			}
 
 			if (CharacterShape.GetBaseClass(@class) == CharacterClass.CC_NONE)
 			{
-				new PROTO_NC_AVATAR_CREATEFAIL_ACK(0x83).Send(connection);
+				new PROTO_NC_AVATAR_CREATEFAIL_ACK((ushort)CharCreateError.WRONG_CLASS).Send(connection);
 				return;
+			}
+
+			if (CharacterShape.GetBaseClass(@class) == CharacterClass.CC_CRUSADER && connection.Account.Avatars.Any(ava => !(ava.Level >= 60)))
+			{
+				new PROTO_NC_AVATAR_CREATEFAIL_ACK((ushort)CharCreateError.LV60_REQ).Send(connection);
 			}
 
 			if (!AvatarService.Create(connection, slot, name, race, @class, gender, hair, hairColor, face, out var newAvatar))
 			{
-				new PROTO_NC_AVATAR_CREATEFAIL_ACK(0x82).Send(connection);
+				new PROTO_NC_AVATAR_CREATEFAIL_ACK((ushort)CharCreateError.FAILED_CREATE).Send(connection);
 				return;
 			}
 

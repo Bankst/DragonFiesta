@@ -1,9 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using DFEngine.Logging;
-
-namespace DFEngine.Config
+﻿namespace DFEngine.Config
 {
 	public class NetworkConfiguration : Configuration<NetworkConfiguration>
 	{

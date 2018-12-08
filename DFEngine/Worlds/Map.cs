@@ -8,19 +8,16 @@ namespace DFEngine.Worlds
 	{
 
 		public int Handle { get; set; }
+
 		public List<GameObject> Objects { get; set; }
 		public MapInfo Info { get; set; }
 		public Field Field { get; set; }
-
-		public Map()
-		{
-			Objects = new List<GameObject>();
-		}
 
 		public Map(MapInfo info, Field field)
 		{
 			Info = info;
 			Field = field;
+			Objects = new List<GameObject>();
 		}
 	}
 }

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using DFEngine.Accounts;
+using DFEngine.Content.GameObjects;
 using DFEngine.Logging;
 using DFEngine.Network.Protocols;
 using DFEngine.Utils;
@@ -78,6 +79,16 @@ namespace DFEngine.Network
 		/// The connection's account.
 		/// </summary>
 		public Account Account { get; set; }
+
+		/// <summary>
+		/// The connection's avatar.
+		/// </summary>
+		public Avatar Avatar { get; set; }
+
+		/// <summary>
+		/// The connection's character.
+		/// </summary>
+		public Character Character { get; set; }
 
 		/// <summary>
 		/// The connection's unique dentifier.

@@ -3,6 +3,8 @@
 using DFEngine.Content.Game;
 using DFEngine.Content.Items;
 using DFEngine.Content.Tutorial;
+using DFEngine.Network;
+using DFEngine.Server;
 
 namespace DFEngine.Content.GameObjects
 {
@@ -12,6 +14,9 @@ namespace DFEngine.Content.GameObjects
 	/// </summary>
 	public class Avatar
 	{
+		public NetworkConnection Connection { get; set; }
+		public Zone Zone { get; set; }
+
 		/// <summary>
 		/// The character's unique ID.
 		/// </summary>
@@ -74,6 +79,7 @@ namespace DFEngine.Content.GameObjects
 		public byte TutorialStep { get; set; }
 
 		public byte[] WindowPosData { get; set; }
+		public byte[] ShortcutData { get; set; }
 		public byte[] ShortcutSizeData { get; set; }
 		public byte[] GameOptionData { get; set; }
 		public byte[] KeyMapData { get; set; }
@@ -85,6 +91,23 @@ namespace DFEngine.Content.GameObjects
 		{
 			Shape = new CharacterShape();
 			Equipment = new Equipment();
+		}
+
+		public void Login(NetworkConnection connection, Zone zone)
+		{
+			if (zone == null)
+			{
+				new PROTO_NC_CHAR_LOGINFAIL_ACK((ushort) CharLoginError.MAP_UNDER_MAINT).Send(connection);
+				return;
+			}
+
+			Connection = connection;
+			Zone = zone;
+
+			new PROTO_NC_CHAR_LOGIN_ACK(Zone).Send(connection);
+			new PROTO_NC_CHAR_OPTION_IMPROVE_GET_SHORTCUTDATA_CMD(ShortcutSizeData).Send(connection);
+			new PROTO_NC_CHAR_OPTION_IMPROVE_GET_KEYMAP_CMD(KeyMapData).Send(connection);
+			new PROTO_NC_CHAR_OPTION_IMPROVE_GET_GAMEOPTION_CMD(GameOptionData).Send(connection);
 		}
 	}
 }

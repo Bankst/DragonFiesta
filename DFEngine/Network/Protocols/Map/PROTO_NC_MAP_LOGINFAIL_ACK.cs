@@ -1,6 +1,6 @@
 ﻿using DFEngine.Network;
 
-namespace IgniteEngine.Protocols
+namespace DFEngine.Network.Protocols
 {
 	public class PROTO_NC_MAP_LOGINFAIL_ACK : NetworkMessage
 	{

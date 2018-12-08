@@ -1,4 +1,4 @@
-﻿namespace DFEngine.Network.Protocols
+﻿namespace DFEngine.Network
 {
 	public class PROTO_NC_CHAR_LOGINFAIL_ACK : NetworkMessage
 	{

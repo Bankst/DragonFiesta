@@ -13,7 +13,7 @@
 		/// <summary>
 		/// Creates a new instance of the <see cref="Equipment"/> class.
 		/// </summary>
-		public Equipment() : base(InventoryType.IT_EQUIPPED, BaseCapacity)
+		public Equipment() : base(InventoryType.EQUIPPED, BaseCapacity)
 		{
 		}
 

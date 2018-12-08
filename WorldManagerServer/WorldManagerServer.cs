@@ -131,6 +131,11 @@ namespace WorldManagerServer
 			NetworkMessageHandler.Store(NetworkCommand.NC_AVATAR_ERASE_REQ, AvatarHandlers.NC_AVATAR_ERASE_REQ);
 
 			NetworkMessageHandler.Store(NetworkCommand.NC_CHAR_LOGIN_REQ, CharacterHandlers.NC_CHAR_LOGIN_REQ);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_CHAR_OPTION_GET_SHORTCUTSIZE_REQ, CharOptionHandlers.NC_CHAR_OPTION_GET_SHORTCUTSIZE_REQ);
+			NetworkMessageHandler.Store(NetworkCommand.NC_CHAR_OPTION_GET_WINDOWPOS_REQ, CharOptionHandlers.NC_CHAR_OPTION_GET_WINDOWPOS_REQ);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_PRISON_GET_REQ, PrisonHandlers.NC_PRISON_GET_REQ);
 		}
 
 		private static void Update(long now)

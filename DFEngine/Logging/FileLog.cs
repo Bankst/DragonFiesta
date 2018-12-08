@@ -18,6 +18,8 @@ namespace DFEngine.Logging
         /// </summary>
         public string Directory { get; private set; }
 
+	    private readonly object _fileLock = new object();
+
 		protected internal byte MaxFileLogLevel = byte.MaxValue;
 
         public FileLog(string directory)
@@ -45,13 +47,15 @@ namespace DFEngine.Logging
 		            ConsoleWriteLine(logType, logSubType, msg);
 	            }
 
-
-				using (var tw = TextWriter.Synchronized(File.AppendText(filePath)))
-				{
-					if ((byte)logSubType <= MaxFileLogLevel)
-					{
-						tw.WriteLine(msg);
-					}
+	            lock (_fileLock)
+	            {
+		            using (var tw = TextWriter.Synchronized(File.AppendText(filePath)))
+		            {
+			            if ((byte)logSubType <= MaxFileLogLevel)
+			            {
+				            tw.WriteLine(msg);
+			            }
+		            }
 				}
 			}
             catch (Exception ex)

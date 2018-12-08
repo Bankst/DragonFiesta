@@ -81,12 +81,12 @@ namespace DFEngine.Config
 			}
 		}
 
-		public static bool Write(out Configuration<T> pConfig)
+		public static bool Write(out dynamic pConfig)
 		{
-			pConfig = null;
+			pConfig = default(T);
 			try
 			{
-				pConfig = new Configuration<T>();
+				pConfig = (T)Activator.CreateInstance(typeof(T));
 				return true;
 			}
 			catch

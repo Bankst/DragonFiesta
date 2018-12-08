@@ -39,5 +39,25 @@ namespace DFEngine.Content.Items
 		/// </summary>
 		/// <param name="slot">The item's position.</param>
 		public Item this[byte slot] => Items.First(i => i.Slot == slot);
+
+		public byte Flags
+		{
+			get
+			{
+				switch (Type)
+				{
+					case InventoryType.EQUIPPED:
+						return 115;
+					case InventoryType.CHAR_INVENTORY:
+						return 91;
+					case InventoryType.MINIHOUSE_SKIN:
+						return 63;
+					case InventoryType.ACTION_BOX:
+						return 61;
+					default:
+						return 0;
+				}
+			}
+		}
 	}
 }

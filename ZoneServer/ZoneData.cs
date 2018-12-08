@@ -5,11 +5,13 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using DFEngine;
 using DFEngine.Content.Game;
+using DFEngine.Content.GameObjects;
 using DFEngine.IO;
 using DFEngine.IO.Definitions;
 using DFEngine.IO.Definitions.SHN;
@@ -25,62 +27,98 @@ namespace ZoneServer
 		public static Dictionary<string, Field> Field = new Dictionary<string, Field>();
 
 		// SHN files
+		public static ObjectCollection<ClassName> ClassName = new ObjectCollection<ClassName>();
 		public static ObjectCollection<MapInfo> MapInfo = new ObjectCollection<MapInfo>();
 		public static ObjectCollection<ItemInfo> ItemInfo = new ObjectCollection<ItemInfo>();
-		public static ObjectCollection<ItemInfoServer> ItemInfoServer = new ObjectCollection<ItemInfoServer>();
+//		public static ObjectCollection<ItemInfoServer> ItemInfoServer = new ObjectCollection<ItemInfoServer>(); // TODO: Find definition
 		public static ObjectCollection<SingleData> SingleData = new ObjectCollection<SingleData>();
 
 		// Map stuff
 
 		// Other
 		public static Dictionary<SHN_DATA_FILE_INDEX, string> SHNChecksums = new Dictionary<SHN_DATA_FILE_INDEX, string>();
+		public static Dictionary<CharacterClass, Dictionary<int, Parameters>> ParamServer = new Dictionary<CharacterClass, Dictionary<int, Parameters>>();
+
+		private static readonly Stopwatch Stopwatch = new Stopwatch();
 
 		public static bool CalculateSHNChecksums()
 		{
+			Stopwatch.Reset();
+			Stopwatch.Start();
 			// Load SHN checksums
-			for (byte i = 0; i < (byte)SHN_DATA_FILE_INDEX.SHN_MaxCnt; i++)
+			try
 			{
-				var shnIndex = (SHN_DATA_FILE_INDEX)i;
-				var shnName = shnIndex.ToString().Replace("SHN_", "");
-				var shnFullPath = Path.Combine(ZoneServer.ZoneConfig.ShinePath, $"{shnName}.shn");
-
-				if (File.Exists(shnFullPath))
+				for (byte i = 0; i < (byte)SHN_DATA_FILE_INDEX.SHN_MaxCnt; i++)
 				{
-					using (var md5 = MD5.Create())
+					var shnIndex = (SHN_DATA_FILE_INDEX)i;
+					var shnName = shnIndex.ToString().Replace("SHN_", "");
+					var shnFullPath = Path.Combine(ZoneServer.ZoneConfig.ShinePath, $"{shnName}.shn");
+
+					if (File.Exists(shnFullPath))
 					{
-						var hash = Encoding.Default.GetString(md5.ComputeHash(File.ReadAllBytes(shnFullPath)));
-						SHNChecksums.Add(shnIndex, hash);
+						using (var md5 = MD5.Create())
+						{
+							var hash = Encoding.Default.GetString(md5.ComputeHash(File.ReadAllBytes(shnFullPath)));
+							SHNChecksums.Add(shnIndex, hash);
+						}
+					}
+					else
+					{
+						EngineLog.Write(EngineLogLevel.Warning, $"Missing SHN Checksum file {shnName}!");
 					}
 				}
-				else
-				{
-					EngineLog.Write(EngineLogLevel.Exception, $"Missing SHN file {shnName}!");
-					return false;
-				}
+			}
+			catch (Exception ex)
+			{
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Exception, $"Error calculating SHN checksums!\n {ex}");
+				return false;
 			}
 
+			Stopwatch.Stop();
+			EngineLog.Write(EngineLogLevel.Startup, $"Calculated SHN checksums in {Stopwatch.ElapsedMilliseconds}ms");
 			return true;
 		}
 
 		public static bool LoadSHNs()
 		{
-			// Just load all SHNs
-			SHNFile.LoadFromFolder(ZoneServer.ZoneConfig.ShinePath);
+			/* SHN File Data */
+			try
+			{
+				Stopwatch.Reset();
+				Stopwatch.Start();
+				SHNFile.LoadFromFolder(ZoneServer.ZoneConfig.ShinePath);
 
-			SHNFile.TryGetObjects("ItemInfo", out ItemInfo);
-			SHNFile.TryGetObjects("ItemInfoServer", out ItemInfoServer);
-			SHNFile.TryGetObjects("MapInfo", out MapInfo);
-			SHNFile.TryGetObjects("SingleData", out SingleData);
+				SHNFile.TryGetObjects("ClassName", out ClassName);
+				SHNFile.TryGetObjects("MapInfo", out MapInfo);
+				SHNFile.TryGetObjects("ItemInfo", out ItemInfo);
+//				SHNFile.TryGetObjects("ItemInfoServer", out ItemInfoServer); // TODO: Figure this out
+				SHNFile.TryGetObjects("SingleData", out SingleData);
 
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Startup, $"Loaded {SHNFile.Count} SHNs in {Stopwatch.ElapsedMilliseconds}ms");
+			}
+			catch (Exception ex)
+			{
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Exception, $"Error loading SHNs!\n {ex}");
+				return false;
+			}
+			return true;
+		}
+
+		public static bool LoadOther()
+		{
 			return true;
 		}
 
 		public static bool LoadShineTables()
 		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
+			// Field.txt
 			try
 			{
+				Stopwatch.Reset();
+				Stopwatch.Start();
 				using (var file = new ShineTable(Path.Combine(ZoneServer.ZoneConfig.ShinePath, "World", "Field.txt")))
 				using (var reader = new DataTableReader(file["FieldList"]))
 				{
@@ -150,31 +188,220 @@ namespace ZoneServer
 						}
 					}
 				}
-				stopwatch.Stop();
-				EngineLog.Write(EngineLogLevel.Startup, $"Loaded {Field.Count} Fields in {stopwatch.ElapsedMilliseconds}");
-				return true;
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Startup, $"Loaded {Field.Count} rows from Field.txt in {Stopwatch.ElapsedMilliseconds}ms");
 			}
 			catch (Exception ex)
 			{
-				stopwatch.Stop();
-				EngineLog.Write(EngineLogLevel.Exception, $"Error loading Fields! \n {ex}");
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Exception, $"Error loading Field.txt!\n {ex}");
 				return false;
 			}
+
+			//Class Params
+			try
+			{
+				Stopwatch.Reset();
+				Stopwatch.Start();
+
+				var loadedRows = 0;
+
+				foreach (var className in ClassName.Values)
+				{
+					var classID = (CharacterClass)className.ClassID;
+					var engName = className.acEngName;
+						
+					if (!ParamServer.ContainsKey(classID))
+					{
+						ParamServer.Add(classID, new Dictionary<int, Parameters>());
+					}
+
+					var param = ParamServer[classID];
+					var path = Path.Combine(ZoneServer.ZoneConfig.ShinePath, "World", $"Param{engName}Server.txt");
+
+					if (!File.Exists(path))
+					{
+						continue;
+					}
+
+
+					using (var file = new ShineTable(path))
+					using (var reader = new DataTableReader(file["Param"]))
+					{
+						if (!reader.HasRows)
+						{
+							continue;
+						}
+
+						while (reader.Read())
+						{
+							if (!param.ContainsKey(reader.GetInt32(0)))
+							{
+								param.Add(reader.GetInt32(0), new Parameters());
+							}
+
+							var parameters = param[reader.GetInt32(0)];
+
+							parameters.STR = reader.GetInt32(1);
+							parameters.END = reader.GetInt32(2);
+							parameters.INT = reader.GetInt32(3);
+							parameters.DEX = reader.GetInt32(5);
+							parameters.SPR = reader.GetInt32(6);
+							parameters.HPStoneHealth = reader.GetInt32(7);
+							parameters.MaxHPStones = reader.GetInt32(8);
+							parameters.HPStonePrice = reader.GetInt32(9);
+							parameters.SPStoneSpirit = reader.GetInt32(10);
+							parameters.MaxSPStones = reader.GetInt32(11);
+							parameters.SPStonePrice = reader.GetInt32(12);
+							parameters.IllnessResistance = reader.GetInt32(25);
+							parameters.DiseaseResistance = reader.GetInt32(26);
+							parameters.CurseResistance = reader.GetInt32(27);
+							parameters.StunResistance = reader.GetInt32(28);
+							parameters.MaxHP = reader.GetInt16(29);
+							parameters.MaxSP = reader.GetInt16(30);
+							parameters.SkillPoints = reader.GetInt32(32);
+
+							param[reader.GetInt32(0)] = parameters;
+
+							loadedRows++;
+						}
+					}
+				}
+
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Startup, $"Loaded {loadedRows} rows from {ParamServer.Count} ParamServer.txt(s) in {Stopwatch.ElapsedMilliseconds}ms");
+			}
+			catch (Exception ex)
+			{
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Exception, $"Error loading ParamServer.txt(s)!\n {ex}");
+				return false;
+			}
+
+			// Character Common
+			try
+			{
+				Stopwatch.Reset();
+				Stopwatch.Start();
+
+				var filePath = Path.Combine(ZoneServer.ZoneConfig.ShinePath, "World", "ChrCommon.txt");
+
+				Character.Global = new CharacterCommon();
+
+				using (var file = new ShineTable(filePath))
+				using (var common = new DataTableReader(file["Common"]))
+				using (var stats = new DataTableReader(file["StatTable"]))
+				{
+					if (common.HasRows)
+					{
+						while (common.Read())
+						{
+							var type = typeof(CharacterCommon);
+							var propertyInfo = type.GetProperty(common.GetString(0), BindingFlags.Public | BindingFlags.Instance);
+
+							propertyInfo?.SetValue(Character.Global, common.GetInt32(1));
+						}
+					}
+
+					if (stats.HasRows)
+					{
+						while (stats.Read())
+						{
+							if (Character.Global.NextEXP.ContainsKey(stats.GetByte(0)))
+							{
+								continue;
+							}
+
+							Character.Global.NextEXP.Add(stats.GetByte(0), Convert.ToInt64(stats.GetValue(1)));
+
+							if (Character.Global.EXPLostAtPVP.ContainsKey(stats.GetByte(0)))
+							{
+								continue;
+							}
+
+							Character.Global.EXPLostAtPVP.Add(stats.GetByte(0), Convert.ToInt64(stats.GetValue(30)));
+						}
+					}
+
+					Character.Global.AttackSpeed *= 100;
+				}
+
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Startup, $"Loaded {Character.Global.NextEXP.Count} rows from ChrCommon.txt in {Stopwatch.ElapsedMilliseconds}ms");
+			}
+			catch (Exception ex)
+			{
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Exception, $"Error loading ChrCommon.txt!\n {ex}");
+				return false;
+			}
+
+			return true;
 		}
 
 		public static bool LoadMaps()
 		{
 			// do mapload.txt?
-
-			var mapsToLoad = MapInfo.Values.Filter(map => Field.ContainsKey(map.MapName) && Field[map.MapName].ZoneNo == ZoneServer.ZoneId);
-			Parallel.ForEach(mapsToLoad, (info, state, i) =>
+			try
 			{
-				var field = Field[info.MapName];
-				if (field.IsSubLimit && !MapService.TryInstantiate(info, field, out var unused))
+				Stopwatch.Reset();
+				Stopwatch.Start();
+
+				var mapsToLoad = MapInfo.Values.Filter(map => Field.ContainsKey(map.MapName) && Field[map.MapName].ZoneNo == ZoneServer.ZoneId);
+
+				foreach (var mapInfo in mapsToLoad)
 				{
-					EngineLog.Write(EngineLogLevel.Exception, $"Failed to load map: {info.MapName}. Check above for errors.");
+					var field = Field[mapInfo.MapName];
+					if (!field.IsSubLimit && !MapService.TryInstantiate(mapInfo, field, out var unused))
+					{
+						EngineLog.Write(EngineLogLevel.Exception,
+							$"Failed to load map: {mapInfo.MapName}. Check above for errors.");
+					}
 				}
-			});
+				
+				var loadedMapCount = MapService.Instances.Count;
+
+				// some maps failed to load
+				if (mapsToLoad.Count > MapService.Instances.Count)
+				{
+					var failedMaps = mapsToLoad.Filter(map => !MapService.Instances.ContainsKey(map.MapName));
+
+					// attempt 3 times to load them again
+					var attemptCount = 3;
+					while (attemptCount > 0)
+					{
+						foreach (var failedMap in failedMaps)
+						{
+							var field = Field[failedMap.MapName];
+							if (!field.IsSubLimit && !MapService.TryInstantiate(failedMap, field, out var unused))
+							{
+								EngineLog.Write(EngineLogLevel.Exception, $"Failed to load map: {failedMap.MapName}. Check above for errors.");
+							}
+						}
+						// update failedMaps and loadedMapCount
+						failedMaps = mapsToLoad.Filter(map => !MapService.Instances.ContainsKey(map.MapName));
+						loadedMapCount = MapService.Instances.Count;
+						attemptCount--;
+					}
+
+					var failedMapsList = failedMaps.Select(info => info.MapName).ToArray();
+
+					EngineLog.Write(EngineLogLevel.Warning, $"Failed to load {mapsToLoad.Count - loadedMapCount} maps: {string.Join(", ", failedMapsList)}");
+				}
+
+				Stopwatch.Stop();
+				if (MapService.Instances.Count != mapsToLoad.Count)
+				{
+					EngineLog.Write(EngineLogLevel.Startup, $"Successfully loaded {loadedMapCount} maps in {Stopwatch.ElapsedMilliseconds}ms");
+				}
+			
+		}
+			catch (Exception ex)
+			{
+				Stopwatch.Stop();
+				EngineLog.Write(EngineLogLevel.Exception, $"Error loading Maps!\n {ex}");
+				return false;
+			}
 
 			return true;
 		}

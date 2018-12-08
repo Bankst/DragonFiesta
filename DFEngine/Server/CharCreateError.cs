@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DFEngine.Server
+﻿namespace DFEngine.Server
 {
-	public enum CreateCharacterFailedErrorCode : ushort
+	public enum CharCreateError : ushort
 	{
 		FAILED_CREATE = 130, // 0x0082
 		WRONG_CLASS = 131, // 0x0083
