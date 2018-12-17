@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DFEngine.Content.Items
+{
+	public enum ItemClass : byte
+	{
+		BYTELOT,
+		WORDLOT,
+		DWRDLOT,
+		QUESTITEM,
+		AMULET,
+		WEAPON,
+		ARMOR,
+		SHIELD,
+		BOOT,
+		FURNITURE,
+		DECORATION,
+		SKILLSCROLL,
+		RECALLSCROLL,
+		BINDITEM,
+		UPSOURCE,
+		ITEMCHEST,
+		WTLICENCE,
+		KQ,
+		HOUSESKIN,
+		UPRED,
+		UPBLUE,
+		KQSTEP,
+		FEED,
+		RIDING,
+		AMOUNT,
+		UPGOLD,
+		COSWEAPON,
+		ACTIONITEM,
+		GBCOIN,
+		CAPSULE,
+		CLOSEDCARD,
+		OPENCARD,
+		MONEY,
+		NOEFFECT,
+		ENCHANT,
+		ACTIVESKILL,
+		PUP,
+		COSSHIELD,
+		BRACELET,
+		MAX,
+	}
+}

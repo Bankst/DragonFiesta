@@ -19,7 +19,7 @@ namespace DFEngine.Content.Items
 		/// <summary>
 		/// The maximum number of items this inventory can store.
 		/// </summary>
-		private int capacity;
+		private int _capacity;
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="Inventory"/> class.
@@ -31,14 +31,14 @@ namespace DFEngine.Content.Items
 			Items = new List<Item>(capacity);
 			Type = type;
 
-			this.capacity = capacity;
+			_capacity = capacity;
 		}
 
 		/// <summary>
 		/// Returns the item at the specified inventory position.
 		/// </summary>
 		/// <param name="slot">The item's position.</param>
-		public Item this[byte slot] => Items.First(i => i.Slot == slot);
+		public Item this[byte slot] => Items.First(i => i.Slot == (ItemSlot)slot);
 
 		public byte Flags
 		{

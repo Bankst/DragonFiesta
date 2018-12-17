@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using DFEngine;
 using DFEngine.IO.Definitions.SHN;
 using DFEngine.Logging;

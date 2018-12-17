@@ -30,7 +30,7 @@ namespace ZoneServer
 		public static ObjectCollection<ClassName> ClassName = new ObjectCollection<ClassName>();
 		public static ObjectCollection<MapInfo> MapInfo = new ObjectCollection<MapInfo>();
 		public static ObjectCollection<ItemInfo> ItemInfo = new ObjectCollection<ItemInfo>();
-//		public static ObjectCollection<ItemInfoServer> ItemInfoServer = new ObjectCollection<ItemInfoServer>(); // TODO: Find definition
+		public static ObjectCollection<ItemInfoServer> ItemInfoServer = new ObjectCollection<ItemInfoServer>(); // TODO: Find definition
 		public static ObjectCollection<SingleData> SingleData = new ObjectCollection<SingleData>();
 
 		// Map stuff
@@ -92,7 +92,7 @@ namespace ZoneServer
 				SHNFile.TryGetObjects("ClassName", out ClassName);
 				SHNFile.TryGetObjects("MapInfo", out MapInfo);
 				SHNFile.TryGetObjects("ItemInfo", out ItemInfo);
-//				SHNFile.TryGetObjects("ItemInfoServer", out ItemInfoServer); // TODO: Figure this out
+				SHNFile.TryGetObjects("ItemInfoServer", out ItemInfoServer); // TODO: Figure this out
 				SHNFile.TryGetObjects("SingleData", out SingleData);
 
 				Stopwatch.Stop();

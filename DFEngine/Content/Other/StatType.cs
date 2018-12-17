@@ -1,0 +1,32 @@
+﻿namespace DFEngine.Content.Other
+{
+	public enum StatType
+	{
+		STR = 0,
+		END = 1,
+		DEX = 2,
+		INT = 3,
+		SPR = 5,
+		MINDMG = 6,
+		MAXDMG = 7,
+		DEF = 8,
+		AIM = 9,
+		EVASION = 10, // 0x0000000A
+		MINMDMG = 11, // 0x0000000B
+		MAXMDMG = 12, // 0x0000000C
+		MDEF = 13, // 0x0000000D
+		MAXHP = 16, // 0x00000010
+		MAXSP = 17, // 0x00000011
+		PLUSDMG = 18, // 0x00000012
+		PLUSDEF = 19, // 0x00000013
+		PLUSMDMG = 20, // 0x00000014
+		PLUSMDEF = 21, // 0x00000015
+		PLUSAIM = 22, // 0x00000016
+		PLUSEVASION = 23, // 0x00000017
+		CRITRATE = 24, // 0x00000018
+		BLOCKRATE = 25, // 0x00000019
+		PLUSMAXHP = 26, // 0x0000001A
+		PLUSMAXSP = 27, // 0x0000001B
+		MAXLP = 36, // 0x00000024
+	}
+}

@@ -60,6 +60,13 @@ namespace DFEngine
 			}
 		}
 
+		public static int GetUpperBound<T>(this List<T> source)
+		{
+			if (source.Count <= 0)
+				return -1;
+			return source.Count - 1;
+		}
+
 		/// <summary>
 		/// Performs an action on the filtered list of items in the list.
 		/// </summary>

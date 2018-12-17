@@ -211,7 +211,7 @@ namespace WorldManagerServer.Services
 						avatar.Equipment.Items.Add(new Item
 						{
 							Key = Convert.ToInt64(reader.GetValue(0)),
-							Slot = reader.GetByte(1),
+							Slot = (ItemSlot) reader.GetByte(1),
 							Info = info
 						});
 					}

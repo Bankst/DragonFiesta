@@ -84,6 +84,8 @@ namespace DFEngine.Content.GameObjects
 		public byte[] GameOptionData { get; set; }
 		public byte[] KeyMapData { get; set; }
 
+		public bool HasLoggedIn { get; set; }
+
 		/// <summary>
 		/// Creates a new instance of the <see cref="Avatar"/> class.
 		/// </summary>
@@ -108,6 +110,19 @@ namespace DFEngine.Content.GameObjects
 			new PROTO_NC_CHAR_OPTION_IMPROVE_GET_SHORTCUTDATA_CMD(ShortcutSizeData).Send(connection);
 			new PROTO_NC_CHAR_OPTION_IMPROVE_GET_KEYMAP_CMD(KeyMapData).Send(connection);
 			new PROTO_NC_CHAR_OPTION_IMPROVE_GET_GAMEOPTION_CMD(GameOptionData).Send(connection);
+		}
+
+		public void FinalizeLogin(string mapIndx, Zone zone)
+		{
+			MapIndx = mapIndx;
+			Zone = zone;
+
+			if (!HasLoggedIn)
+			{
+				HasLoggedIn = true;
+
+				new PROTO_NC_MAP_LINKEND_CLIENT_CMD().Send(Connection);
+			}
 		}
 	}
 }

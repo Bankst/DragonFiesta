@@ -12,11 +12,11 @@ namespace ZoneServer
 
 			if (args.Length == 1 && byte.TryParse(args[0], out var zoneId))
 			{
-				ZoneServer.Initialize(zoneId);
+				ZoneServer.Run(zoneId);
 			}
 			else
 			{
-				ZoneServer.Initialize();
+				ZoneServer.Run();
 			}
 		}
 	}

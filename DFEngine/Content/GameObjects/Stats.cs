@@ -1,4 +1,6 @@
-﻿namespace DFEngine.Content.GameObjects
+﻿using System;
+
+namespace DFEngine.Content.GameObjects
 {
 	public class Stats
 	{
@@ -22,6 +24,9 @@
 		public int CurrentMaxHP => BaseMaxHP + BonusMaxHP;
 		public int CurrentMaxSP => BaseMaxSP + BonusMaxSP;
 		public int CurrentMaxLP => BaseMaxLP + BonusMaxLP;
+
+		public int CurrentMinHP { get; set; }
+		public int CurrentMinSP { get; set; }
 
 		public int CurrentMaxHPStones => BaseMaxHPStones + BonusMaxHPStones;
 		public int CurrentMaxSPStones => BaseMaxSPStones + BonusMaxSPStones;
@@ -49,6 +54,11 @@
 		public int CurrentDiseaseResistance => BaseDiseaseResistance + BonusDiseaseResistance;
 		public int CurrentCurseResistance => BaseCurseResistance + BonusCurseResistance;
 		public int CurrentStunResistance => BaseStunResistance + BonusStunResistance;
+
+		public int CurrentWalkSpeed => BaseWalkSpeed + BonusWalkSpeed;
+		public int CurrentRunSpeed => BaseRunSpeed + BonusRunSpeed;
+
+		public int CurrentAttackSpeed => BaseAttackSpeed + BonusAttackSpeed;
 
 		// Base stats
 		public int BaseMaxHP { get; set; }
@@ -81,6 +91,11 @@
 		public int BaseCurseResistance { get; set; }
 		public int BaseStunResistance { get; set; }
 
+		public int BaseWalkSpeed { get; set; }
+		public int BaseRunSpeed { get; set; }
+
+		public int BaseAttackSpeed { get; set; }
+
 		// Bonus Stats
 		public int BonusMaxHP { get; set; }
 		public int BonusMaxSP { get; set; } 
@@ -107,10 +122,31 @@
 		public int BonusAim { get; set; }
 		public int BonusEvasion { get; set; }
 
+		public double BonusDefRate { get; set; }
+		public double BonusMDefRate { get; set; }
+		public double BonusDmgRate { get; set; }
+		public double BonusMDmgRate { get; set; }
+
 		public int BonusIllnessResistance { get; set; }
 		public int BonusDiseaseResistance { get; set; }
 		public int BonusCurseResistance { get; set; }
 		public int BonusStunResistance { get; set; }
+
+		public int BonusWalkSpeed { get; set; }
+		public int BonusRunSpeed { get; set; }
+
+		public int BonusAttackSpeed { get; set; }
+
+		public int BonusLPRegenRate { get; set; }
+
+		// Critical stats
+		public int CriticalMinDmg { get; set; }
+		public int CriticalMaxDmg { get; set; }
+		public int CriticalMinMDmg { get; set; }
+		public int CriticalMaxMDmg { get; set; }
+
+		public decimal CriticalRate { get; set; }
+		public decimal BlockRate { get; set; }
 
 		public Stats(GameObject obj)
 		{

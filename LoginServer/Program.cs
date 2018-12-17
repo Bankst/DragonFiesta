@@ -10,7 +10,7 @@ namespace LoginServer
 			try { Console.SetWindowSize(140, 40); }
 			catch { }
 			
-			LoginServer.Initialize();
+			LoginServer.Run();
 		}
 	}
 }

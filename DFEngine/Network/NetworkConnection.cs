@@ -138,6 +138,11 @@ namespace DFEngine.Network
 		public NetworkConnectionType Type { get; }
 
 		/// <summary>
+		/// Time since the connection's last heartbeat.
+		/// </summary>
+		public long LastPing { get; set; }
+
+		/// <summary>
 		/// List of buffers waiting to be sent.
 		/// </summary>
 		private volatile List<byte[]> awaitingBuffers;

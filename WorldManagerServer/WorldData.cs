@@ -36,7 +36,7 @@ namespace WorldManagerServer
 		internal static ObjectCollection<HairColorInfo> HairColorInfo = new ObjectCollection<HairColorInfo>();
 		internal static ObjectCollection<SingleData> SingleData = new ObjectCollection<SingleData>();
 		internal static ObjectCollection<ItemInfo> ItemInfo =  new ObjectCollection<ItemInfo>();
-		internal static ConcurrentDictionary<string, int> MapZones = new ConcurrentDictionary<string, int>();
+		internal static Dictionary<string, int> MapZones = new Dictionary<string, int>();
 
 		private static readonly Stopwatch Stopwatch = new Stopwatch();
 
@@ -56,7 +56,7 @@ namespace WorldManagerServer
 				SHNFile.TryGetObjects("ItemInfo", out ItemInfo);
 
 				Stopwatch.Stop();
-				EngineLog.Write(EngineLogLevel.Startup, $"Loaded {SHNList.Length} SHNs in {Stopwatch.ElapsedMilliseconds}ms");
+				EngineLog.Write(EngineLogLevel.Startup, $"Loaded {SHNFile.Count} SHNs in {Stopwatch.ElapsedMilliseconds}ms");
 			}
 			catch (Exception ex)
 			{

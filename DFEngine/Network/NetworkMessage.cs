@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using DFEngine.Content.GameObjects;
 
 namespace DFEngine.Network
 {
@@ -79,6 +82,19 @@ namespace DFEngine.Network
 			for (var i = 0; i < count; i++)
 			{
 				Write(value);
+			}
+		}
+
+		/// <summary>
+		/// The number of unread bytes in the message.
+		/// </summary>
+		public int RemainingBytes
+		{
+			get
+			{
+				var length = stream?.Length;
+				var position = stream?.Position;
+				return (int)((length.HasValue & position.HasValue ? length.GetValueOrDefault() - position.GetValueOrDefault() : new long?()) ?? 0L);
 			}
 		}
 
@@ -238,6 +254,41 @@ namespace DFEngine.Network
 			connection?.SendData(ToArray(connection));
 			Destroy(this);
 		}
+
+		public void Send(Character character)
+		{
+			Send(character?.Client);
+		}
+
+
+		public void Broadcast(GameObject from, params NetworkConnection[] except)
+		{
+			if (from == null)
+			{
+				return;
+			}
+
+			if (except == null)
+			{
+				except = new NetworkConnection[0];
+			}
+
+			Character character;
+			if ((character = from as Character) != null && !except.Contains(character.Client))
+			{
+				Send(character);
+			}
+			for (var upperBound = from.VisibleObjects.GetUpperBound(); upperBound >= 0; --upperBound)
+			{
+				var visibleCharacter = from.VisibleCharacters[upperBound];
+				if (!except.Contains(visibleCharacter.Client))
+				{
+					Send(visibleCharacter);
+				}
+					
+			}
+		}
+
 
 		/// <summary>
 		/// Returns a byte array representing the message.

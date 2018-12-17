@@ -1,28 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Threading;
 
 using DFEngine;
 using DFEngine.Accounts;
 using DFEngine.Config;
 using DFEngine.Database;
-using DFEngine.Logging;
 using DFEngine.Network;
 using DFEngine.Network.Protocols;
 using DFEngine.Server;
 using DFEngine.Threading;
-using DFEngine.Utils;
 
 using LoginServer.Handlers;
 using LoginServer.Util.Console;
 
 namespace LoginServer
 {
-	public class LoginServer : ServerMainBase
+	public class LoginServer : BaseApplication
 	{
-		public new static LoginServer InternalInstance { get; private set; }
-
 		// Global Objects
 		internal static Dictionary<string, Account> CachedAccounts = new Dictionary<string, Account>();
 		internal static List<NetworkTransfer> Transfers = new List<NetworkTransfer>();
@@ -30,8 +24,6 @@ namespace LoginServer
 		internal static LoginConsoleTitle Title { get; set; }
 
 		// Configuration
-		internal static NetworkConfiguration NetConfig;
-		internal static DatabaseConfiguration DbConfig;
 		internal static LoginConfiguration LoginConfig;
 
 		// Database
@@ -42,36 +34,18 @@ namespace LoginServer
 		internal static NetworkServer WorldServer = new NetworkServer(NetworkConnectionType.NCT_WORLDMANAGER);
 		internal static NetworkConnection GameLogServer = new NetworkConnection(NetworkConnectionType.NCT_DB_GAMELOG);
 
+		public static void Run()
+		{
+			InternalInstance = new LoginServer();
+			InternalInstance.Initialize(ServerType.Login);
+		}
 
-		public LoginServer() : base(ServerType.Login)
+		protected override void Start()
 		{
 			Title = new LoginConsoleTitle();
 			Title.Update();
-		}
 
-		public static void Initialize()
-		{
-			InternalInstance = new LoginServer();
-			InternalInstance.WriteConsoleLogo();
-
-			EngineLog.Write(EngineLogLevel.Startup, "Starting LoginServer");
-
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-			
 			// Configuration
-			if (!NetworkConfiguration.Load(out var netConfigMsg))
-			{
-				throw new StartupException(netConfigMsg);
-			}
-			NetConfig = NetworkConfiguration.Instance;
-
-			if (!DatabaseConfiguration.Load(out var dbConfigMsg))
-			{
-				throw new StartupException(dbConfigMsg);
-			}
-			DbConfig = DatabaseConfiguration.Instance;
-
 			if (!LoginConfiguration.Load(out var loginConfigMsg))
 			{
 				throw new StartupException(loginConfigMsg);
@@ -93,22 +67,6 @@ namespace LoginServer
 			ClientServer.Listen(NetConfig.LoginNetConfig.ListenIP, (ushort)NetConfig.LoginNetConfig.ListenPort);
 			// TODO: gamelogserver
 			// GameLogServer.Connect(NetConfig.GameLogNetConfig.S2SListenIP, (ushort)NetConfig.GameLogNetConfig.S2SListenPort);
-
-			stopwatch.Stop();
-			EngineLog.Write(EngineLogLevel.Startup, $"Time taken to start: {stopwatch.ElapsedMilliseconds}ms");
-
-			// Main server loop
-			new Thread(() =>
-			{
-				while (true)
-				{
-					Update(Time.Milliseconds);
-					Thread.Sleep(10);
-				}
-
-			}).Start();
-
-			// Console commands?
 		}
 
 
@@ -128,7 +86,7 @@ namespace LoginServer
 			NetworkMessageHandler.Store(NetworkCommand.NC_USER_WILLLOGIN_ACK, UserHandlers.NC_USER_WILLLOGIN_ACK);
 		}
 
-		private static void Update(long now)
+		protected override void Update(long now)
 		{
 			Worlds.FilteredAction(world => !world.Connection.IsConnected, world => { world.Status = 0x00; });
 

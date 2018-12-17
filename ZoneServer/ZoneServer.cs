@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
+
 using DFEngine;
 using DFEngine.Config;
 using DFEngine.Database;
@@ -12,15 +9,14 @@ using DFEngine.Logging;
 using DFEngine.Network;
 using DFEngine.Server;
 using DFEngine.Threading;
-using DFEngine.Utils;
+
 using ZoneServer.Handlers;
 using ZoneServer.Util.Console;
 
 namespace ZoneServer
 {
-	public class ZoneServer : ServerMainBase
+	public class ZoneServer : BaseApplication
 	{
-		public new static ZoneServer InternalInstance { get; private set; }
 		public static byte ZoneId { get; private set; }
 
 		// Global Objects
@@ -28,8 +24,6 @@ namespace ZoneServer
 		internal static ZoneConsoleTitle Title { get; set; }
 
 		// Configuration
-		internal static NetworkConfiguration NetConfig;
-		internal static DatabaseConfiguration DbConfig;
 		internal static ZoneNetworkConfiguration ZoneNetConfig;
 		internal static SingleZoneConfiguration ZoneConfig;
 
@@ -40,44 +34,26 @@ namespace ZoneServer
 		internal static NetworkServer ClientServer = new NetworkServer(NetworkConnectionType.NCT_CLIENT);
 		internal static NetworkConnection WorldServer = new NetworkConnection(NetworkConnectionType.NCT_WORLDMANAGER);
 		internal static NetworkConnection GameLogServer = new NetworkConnection(NetworkConnectionType.NCT_DB_GAMELOG);
-		
 
-		public ZoneServer() : base(ServerType.Zone)
+		public static void Run(byte zoneId = 0)
+		{
+			ZoneId = zoneId;
+			InternalInstance = new ZoneServer();
+			InternalInstance.Initialize(ServerType.Zone);
+		}
+
+		protected override void Start() // Default to zone 0
 		{
 			Title = new ZoneConsoleTitle();
 			Title.Update();
-		}
-
-		public static void Initialize(byte zoneId = 0) // Default to zone 0
-		{
-			ZoneId = zoneId;
-
-			InternalInstance = new ZoneServer();
-			InternalInstance.WriteConsoleLogo();
 
 			EngineLog.Write(EngineLogLevel.Startup, $"Starting Zone0{ZoneId}Server");
 
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-			
 			// Configuration
-			if (!NetworkConfiguration.Load(out var netConfigMsg))
-			{
-				throw new StartupException(netConfigMsg);
-			}
-			NetConfig = NetworkConfiguration.Instance;
-
-			if ((ZoneNetConfig = NetConfig.ZoneNetworkConfigs.FirstOrDefault(z => z.ZoneID == zoneId)) == null)
+			if ((ZoneNetConfig = NetConfig.ZoneNetworkConfigs.FirstOrDefault(z => z.ZoneID == ZoneId)) == null)
 			{
 				throw new StartupException("ZoneID Not found in config!");
 			}
-
-			if (!DatabaseConfiguration.Load(out var dbConfigMsg))
-			{
-				throw new StartupException(dbConfigMsg);
-			}
-			DbConfig = DatabaseConfiguration.Instance;
-
 
 			if (!ZoneConfiguration.Load(out var zoneConfigMsg))
 			{
@@ -85,7 +61,7 @@ namespace ZoneServer
 			}
 			var tempZoneConfig = ZoneConfiguration.Instance;
 
-			if ((ZoneConfig = tempZoneConfig.Zones.FirstOrDefault(z => z.ZoneID == zoneId)) == null)
+			if ((ZoneConfig = tempZoneConfig.Zones.FirstOrDefault(z => z.ZoneID == ZoneId)) == null)
 			{
 				throw new StartupException("ZoneID Not found in config!");
 			}
@@ -96,8 +72,7 @@ namespace ZoneServer
 				throw new StartupException("Database connection failure! See above error.");
 			}
 			CharDb = DB.GetDatabaseClient(DatabaseType.Character).Connection;
-
-
+			
 			// Handlers
 			StoreHandlers();
 
@@ -121,38 +96,35 @@ namespace ZoneServer
 			{
 				throw new StartupException("Failed to load Maps! See above error.");
 			}
-
+			
 			// Networking
 			WorldServer.Connect(NetConfig.WorldNetConfig.S2SListenIP, (ushort) NetConfig.WorldNetConfig.S2SListenPort);
 			ClientServer.Listen(ZoneNetConfig.ListenIP, (ushort) ZoneNetConfig.ListenPort);
 			// TODO: GameLogServer
 			// GameLogServer.Connect(NetConfig.GameLogNetConfig.S2SListenIP, (ushort)NetConfig.GameLogNetConfig.S2SListenPort);
-
-			stopwatch.Stop();
-			EngineLog.Write(EngineLogLevel.Startup, $"Time taken to start: {stopwatch.ElapsedMilliseconds}ms");
-
-			// Main server loop
-			new Thread(() =>
-			{
-				while (true)
-				{
-					Update(Time.Milliseconds);
-					Thread.Sleep(10);
-				}
-
-			}).Start();
 		}
 
 		private static void StoreHandlers()
 		{
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_SEED_ACK, MiscHandlers.NC_MISC_SEED_ACK);
-			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_RDY, MiscHandlers.NC_MISC_S2SCONNECTION_RDY);;
+			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_RDY, MiscHandlers.NC_MISC_S2SCONNECTION_RDY);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_ACK, MiscHandlers.NC_MISC_S2SCONNECTION_ACK);
 
+			NetworkMessageHandler.Store(NetworkCommand.NC_USER_NORMALLOGOUT_CMD, UserHandlers.NC_USER_NORMALLOGOUT_CMD);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_CHAR_LOGOUTREADY_CMD, CharacterHandlers.NC_CHAR_LOGOUTREADY_CMD);
+			NetworkMessageHandler.Store(NetworkCommand.NC_CHAR_LOGOUTCANCEL_CMD, CharacterHandlers.NC_CHAR_LOGOUTCANCEL_CMD);
+
 			NetworkMessageHandler.Store(NetworkCommand.NC_MAP_LOGIN_REQ, MapHandlers.NC_MAP_LOGIN_REQ);
+			NetworkMessageHandler.Store(NetworkCommand.NC_MAP_LOGINCOMPLETE_CMD, MapHandlers.NC_MAP_LOGINCOMPLETE_CMD);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_ACT_MOVERUN_CMD, ActionHandlers.NC_ACT_MOVERUN_CMD);
+			NetworkMessageHandler.Store(NetworkCommand.NC_ACT_MOVEWALK_CMD, ActionHandlers.NC_ACT_MOVEWALK_CMD);
+			NetworkMessageHandler.Store(NetworkCommand.NC_ACT_STOP_REQ, ActionHandlers.NC_ACT_STOP_REQ);
+			NetworkMessageHandler.Store(NetworkCommand.NC_ACT_CHAT_REQ, ActionHandlers.NC_ACT_CHAT_REQ);
 		}
 
-		private static void Update(long now)
+		protected override void Update(long now)
 		{
 			var mapTimeouts = Transfers.Filter(t => now - t.CreateTime >= (int)MessageRequestTimeOuts.ZONE_TRANSFER_MAP);
 			mapTimeouts.ForBackwards(Transfers.RemoveSafe);

@@ -15,6 +15,8 @@ namespace DFEngine.IO
 	/// </summary>
 	public class SHNFile : IDisposable
 	{
+		private static bool _useParallelism = false;
+
 		/// <summary>
 		/// Objects representing the contents of loaded SHN files.
 		/// </summary>
@@ -37,6 +39,7 @@ namespace DFEngine.IO
 			}
 
 			objects = (ObjectCollection<T>)FileObjects[name];
+			Count++;
 			return true;
 		}
 
@@ -54,7 +57,7 @@ namespace DFEngine.IO
 		/// <summary>
 		/// The number of fully loaded SHN files.
 		/// </summary>
-		public static int Count => FileObjects.Count;
+		public static int Count = 0;
 
 		/// <summary>
 		/// Creates a new instance of the <see cref="SHNFile"/> class.
@@ -97,34 +100,71 @@ namespace DFEngine.IO
 			}
 
 			var fileNames = files.Length > 0 ? files : Directory.GetFiles(directory, "*.shn");
-			Parallel.ForEach(fileNames, fileName =>
+
+			if (_useParallelism)
 			{
-				var shortName = Path.GetFileNameWithoutExtension(fileName);
-				var definition = fileDefinitions.FirstOrDefault(def => def.Name == shortName);
-
-				if (definition == null) return;
-				var genericClass = typeof(ObjectCollection<>);
-				var collection = genericClass.MakeGenericType(definition);
-				var created = (dynamic)Activator.CreateInstance(collection);
-
-				var mutex = new Mutex(false, shortName);
-
-				mutex.WaitOne();
-
-				FileObjects.Remove(shortName);
-				FileObjects.Add(shortName, created);
-
-				mutex.ReleaseMutex();
-
-				using (var file = new SHNFile(fileName))
-				using (var reader = new DataTableReader(file._table))
+				Parallel.ForEach(fileNames, fileName =>
 				{
-					while (reader.Read())
+					var shortName = Path.GetFileNameWithoutExtension(fileName);
+					var definition = fileDefinitions.FirstOrDefault(def => def.Name == shortName);
+
+					if (definition == null) return;
+					var genericClass = typeof(ObjectCollection<>);
+					var collection = genericClass.MakeGenericType(definition);
+					var created = (dynamic)Activator.CreateInstance(collection);
+
+					var mutex = new Mutex(false, shortName);
+
+					mutex.WaitOne();
+
+					FileObjects.Remove(shortName);
+					FileObjects.Add(shortName, created);
+
+					mutex.ReleaseMutex();
+
+					using (var file = new SHNFile(fileName))
+					using (var reader = new DataTableReader(file._table))
 					{
-						created.Add(reader);
+						while (reader.Read())
+						{
+							created.Add(reader);
+						}
+					}
+				});
+			}
+			else
+			{
+				foreach (var fileName in fileNames)
+				{
+					var shortName = Path.GetFileNameWithoutExtension(fileName);
+					var definition = fileDefinitions.FirstOrDefault(def => def.Name == shortName);
+
+					if (definition == null) continue;
+					var genericClass = typeof(ObjectCollection<>);
+					var collection = genericClass.MakeGenericType(definition);
+					var created = (dynamic)Activator.CreateInstance(collection);
+
+//					var mutex = new Mutex(false, shortName);
+
+//					mutex.WaitOne();
+
+					FileObjects.Remove(shortName);
+					FileObjects.Add(shortName, created);
+
+//					mutex.ReleaseMutex();
+
+					using (var file = new SHNFile(fileName))
+					using (var reader = new DataTableReader(file._table))
+					{
+						while (reader.Read())
+						{
+							created.Add(reader);
+						}
 					}
 				}
-			});
+			}
+
+			
 		}
 
 		/// <summary>

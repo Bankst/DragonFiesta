@@ -1,20 +1,24 @@
-﻿using System.Data;
-using System.Diagnostics;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using DFEngine;
 using DFEngine.Content.Game;
 using DFEngine.Content.GameObjects;
 using DFEngine.Database;
 using DFEngine.Logging;
+using DFEngine.Network;
 using DFEngine.Server;
+using DFEngine.Utils;
 
 namespace ZoneServer.Services
 {
 	public class CharacterService
 	{
+		public static List<Character> OnlineCharacters = new List<Character>();
+
 		public static bool TryLoadCharacter(string charName, out Character character, out ushort error)
 		{
 			error = (ushort)CharLoginError.FAILED_ZONESERVER; // default error
-			character = new Character()
+			character = new Character
 			{
 				Name = charName
 			};
@@ -124,6 +128,145 @@ namespace ZoneServer.Services
 
 			character.Stats.Update();
 			return true;
+		}
+
+		public static void Logout(Character character, LogoutType logoutType = LogoutType.EXIT)
+		{
+			GameLog.Write(GameLogLevel.Internal, $"{character.Name} requested {logoutType} logout.");
+
+			if (character.IsLoggedOut)
+			{
+				return;
+			}
+
+			OnlineCharacters.Remove(character);
+			SaveCharacter(character);
+			character.IsLoggedOut = true;
+			character.Client.Disconnect();
+		}
+
+		public static void SaveCharacter(Character character)
+		{
+			using (var p_Char_SaveLevelExpFame = new StoredProcedure("p_Char_SaveLevelExpFame", ZoneServer.CharDb))
+			{
+				p_Char_SaveLevelExpFame.AddParameter("nCharNo", character.CharNo);
+				p_Char_SaveLevelExpFame.AddParameter("nLevel", character.Level);
+				p_Char_SaveLevelExpFame.AddParameter("nExp", character.EXP);
+				p_Char_SaveLevelExpFame.AddParameter("nFame", character.Fame);
+				p_Char_SaveLevelExpFame.Run();
+			}
+
+			using (var p_Char_MoneySet = new StoredProcedure("p_Char_MoneySet", ZoneServer.CharDb))
+			{
+				p_Char_MoneySet.AddParameter("nCharNo", character.CharNo);
+				p_Char_MoneySet.AddParameter("nSetMoney", character.Cen);
+				p_Char_MoneySet.AddOutput<byte>("nRet");
+				p_Char_MoneySet.Run();
+			}
+
+			using (var p_User_MoneySet = new StoredProcedure("p_User_MoneySet", ZoneServer.CharDb))
+			{
+				p_User_MoneySet.AddParameter("nUserNo", character.UserNo);
+				p_User_MoneySet.AddParameter("nSetMoney", character.UserCen);
+				p_User_MoneySet.AddOutput<byte>("nRet");
+				p_User_MoneySet.Run();
+			}
+
+			using (var p_Char_SaveLocation = new StoredProcedure("p_Char_SaveLocation", ZoneServer.CharDb))
+			{
+				p_Char_SaveLocation.AddParameter("nCharNo", character.CharNo);
+				p_Char_SaveLocation.AddParameter("sLoginZone", character.Position.Map.Info.MapName, 16);
+				p_Char_SaveLocation.AddParameter("nLoginZoneX", character.Position.X);
+				p_Char_SaveLocation.AddParameter("nLoginZoneY", character.Position.Y);
+				p_Char_SaveLocation.AddParameter("nLoginZoneD", character.Position.D);
+				p_Char_SaveLocation.AddParameter("nKQHandle", 0);
+				p_Char_SaveLocation.AddParameter("sKQMap", "", 16);
+				p_Char_SaveLocation.AddParameter("nKQX", 0);
+				p_Char_SaveLocation.AddParameter("nKQY", 0);
+				p_Char_SaveLocation.Run();
+			}
+
+			using (var p_Char_SavePKCount = new StoredProcedure("p_Char_SavePKCount", ZoneServer.CharDb))
+			{
+				p_Char_SavePKCount.AddParameter("nCharNo", character.CharNo);
+				p_Char_SavePKCount.AddParameter("nPKCount", character.KillPoints);
+				p_Char_SavePKCount.Run();
+			}
+
+			using (var p_Char_SaveStat = new StoredProcedure("p_Char_SaveStat", ZoneServer.CharDb))
+			{
+				p_Char_SaveStat.AddParameter("nCharNo", character.CharNo);
+				p_Char_SaveStat.AddParameter("nHPS", character.Stats.CurrentHPStones);
+				p_Char_SaveStat.AddParameter("nSPS", character.Stats.CurrentSPStones);
+				p_Char_SaveStat.AddParameter("nHP", character.Stats.CurrentHP);
+				p_Char_SaveStat.AddParameter("nSP", character.Stats.CurrentSP);
+				p_Char_SaveStat.AddParameter("nLP", character.Stats.CurrentLP);
+				p_Char_SaveStat.Run();
+			}
+
+			using (var p_Char_RedistributePointSet = new StoredProcedure("p_Char_RedistributePointSet", ZoneServer.CharDb))
+			{
+				p_Char_RedistributePointSet.AddParameter("nCharNo", character.CharNo);
+				p_Char_RedistributePointSet.AddParameter("nSetPoint", character.StatPoints);
+				p_Char_RedistributePointSet.AddOutput<byte>("nRet");
+				p_Char_RedistributePointSet.Run();
+			}
+		}
+
+		public static void ChangeHP(Character character, int HP)
+		{
+			character.Stats.CurrentHP = Math.Max(HP, character.Stats.CurrentMinHP);
+			character.Stats.CurrentHP = Math.Min(HP, character.Stats.CurrentMaxHP);
+			character.NextMHHPTick = Time.Milliseconds + character.MiniHouse.MiniHouse.HPTick;
+			new PROTO_NC_BAT_HPCHANGE_CMD(character).Send(character);
+			character.ToSelectedBy(c => new PROTO_NC_BAT_TARGETINFO_CMD(0, character).Send((Character)c), true);
+			// TODO: Parties!
+			/*
+			if (character.PartyMember == null)
+				return;
+			character.PartyMember.CurrentHP = character.Stats.CurrentHP;
+			new PROTO_NC_PARTY_MEMBERINFORM_CMD((byte)1, character.PartyMember).Broadcast(character.Party, true, character.Position.Map, new PartyMember[1]
+			{
+				character.PartyMember
+			});
+			*/
+		}
+
+		public static void ChangeSP(Character character, int SP)
+		{
+			character.Stats.CurrentSP = Math.Max(SP, character.Stats.CurrentMinSP);
+			character.Stats.CurrentSP = Math.Min(SP, character.Stats.CurrentMaxSP);
+			character.NextMHSPTick = Time.Milliseconds + character.MiniHouse.MiniHouse.SPTick;
+			new PROTO_NC_BAT_SPCHANGE_CMD(character).Send(character);
+			character.ToSelectedBy(c => new PROTO_NC_BAT_TARGETINFO_CMD(0, character).Send((Character)c), true);
+			// TODO: Parties!
+			/*
+			if (character.PartyMember == null)
+				return;
+			character.PartyMember.CurrentSP = character.Stats.CurrentSP;
+			new PROTO_NC_PARTY_MEMBERINFORM_CMD((byte)1, character.PartyMember).Broadcast(character.Party, true, character.Position.Map, new PartyMember[1]
+			{
+				character.PartyMember
+			});
+			*/
+		}
+
+		internal static void ChangeLP(Character character, int LP)
+		{
+			character.Stats.CurrentLP = LP;
+			character.LastLPUpdate = Time.Milliseconds;
+			new PROTO_NC_BAT_LPCHANGE_CMD(character).Send(character);
+			character.ToSelectedBy(c => new PROTO_NC_BAT_TARGETINFO_CMD(0, character).Send((Character)c), true);
+			// TODO: Parties!
+			/*
+			if (character.PartyMember == null)
+				return;
+			character.PartyMember.CurrentLP = character.Stats.CurrentLP;
+			new PROTO_NC_PARTY_MEMBERINFORM_CMD((byte)1, character.PartyMember).Broadcast(character.Party, true, character.Position.Map, new PartyMember[1]
+			{
+				character.PartyMember
+			});
+			*/
 		}
 	}
 }

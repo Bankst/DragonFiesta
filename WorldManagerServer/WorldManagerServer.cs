@@ -17,18 +17,16 @@ using WorldManagerServer.Util.Console;
 
 namespace WorldManagerServer
 {
-	public class WorldManagerServer : ServerMainBase
+	public class WorldManagerServer : BaseApplication
 	{
-		public new static WorldManagerServer InternalInstance { get; private set; }
+		public static byte WorldId { get; private set; }
 
 		// Global objects
-		internal static List<NetworkTransfer> Transfers = new List<NetworkTransfer>();
 		internal static WorldConsoleTitle Title { get; set; }
+		internal static List<NetworkTransfer> Transfers = new List<NetworkTransfer>();
 		internal static List<Zone> Zones = new List<Zone>();
 
 		// Configuration
-		internal static NetworkConfiguration NetConfig;
-		internal static DatabaseConfiguration DbConfig;
 		internal static WorldConfiguration WorldConfig;
 
 		// Database
@@ -40,35 +38,20 @@ namespace WorldManagerServer
 		internal static NetworkConnection LoginServer = new NetworkConnection(NetworkConnectionType.NCT_LOGIN);
 		internal static NetworkConnection GameLogServer = new NetworkConnection(NetworkConnectionType.NCT_DB_GAMELOG);
 
-		public WorldManagerServer() : base(ServerType.World)
+
+		public static void Run(byte worldId = 0)
+		{
+			WorldId = worldId;
+			InternalInstance = new WorldManagerServer();
+			InternalInstance.Initialize(ServerType.World);
+		}
+
+		protected override void Start()
 		{
 			Title = new WorldConsoleTitle();
 			Title.Update();
-		}
-
-		public static void Initialize()
-		{
-			InternalInstance = new WorldManagerServer();
-			InternalInstance.WriteConsoleLogo();
-
-			EngineLog.Write(EngineLogLevel.Startup, "Starting WorldManagerServer");
-
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
 
 			// Configuration
-			if (!NetworkConfiguration.Load(out var netConfigMsg))
-			{
-				throw new StartupException(netConfigMsg);
-			}
-			NetConfig = NetworkConfiguration.Instance;
-
-			if (!DatabaseConfiguration.Load(out var dbConfigMsg))
-			{
-				throw new StartupException(dbConfigMsg);
-			}
-			DbConfig = DatabaseConfiguration.Instance;
-
 			if (!WorldConfiguration.Load(out var loginConfigMsg))
 			{
 				throw new StartupException(loginConfigMsg);
@@ -80,15 +63,21 @@ namespace WorldManagerServer
 			{
 				throw new StartupException("Database connection failure! See above error.");
 			}
-
 			CharDb = DB.GetDatabaseClient(DatabaseType.Character).Connection;
 
 			// Handlers
 			StoreHandlers();
 
 			// Data
-			WorldData.LoadSHNs();
-			WorldData.LoadScripts();
+			if (!WorldData.LoadSHNs())
+			{
+				throw new StartupException("Failed to load SHNs! See above error.");
+			}
+
+			if (!WorldData.LoadScripts())
+			{
+				throw new StartupException("Failed to load Scripts! See above error.");
+			}
 
 			// Networking
 			LoginServer.Connect(NetConfig.LoginNetConfig.S2SListenIP, (ushort) NetConfig.LoginNetConfig.S2SListenPort);
@@ -96,22 +85,6 @@ namespace WorldManagerServer
 			ClientServer.Listen(NetConfig.WorldNetConfig.ListenIP, (ushort) NetConfig.WorldNetConfig.ListenPort);
 			// TODO: GameLogServer
 			// GameLogServer.Connect(NetConfig.GameLogNetConfig.S2SListenIP, (ushort)NetConfig.GameLogNetConfig.S2SListenPort);
-
-			stopwatch.Stop();
-			EngineLog.Write(EngineLogLevel.Startup, $"Time taken to start: {stopwatch.ElapsedMilliseconds}ms");
-
-			// Main server loop
-			new Thread(() =>
-			{
-				while (true)
-				{
-					Update(Time.Milliseconds);
-					Thread.Sleep(10);
-				}
-
-			}).Start();
-
-			// Console commands?
 		}
 
 		private static void StoreHandlers()
@@ -136,9 +109,11 @@ namespace WorldManagerServer
 			NetworkMessageHandler.Store(NetworkCommand.NC_CHAR_OPTION_GET_WINDOWPOS_REQ, CharOptionHandlers.NC_CHAR_OPTION_GET_WINDOWPOS_REQ);
 
 			NetworkMessageHandler.Store(NetworkCommand.NC_PRISON_GET_REQ, PrisonHandlers.NC_PRISON_GET_REQ);
+
+			NetworkMessageHandler.Store(NetworkCommand.NC_MAP_LINKEND_CMD, MapHandlers.NC_MAP_LINKEND_CMD);
 		}
 
-		private static void Update(long now)
+		protected override void Update(long now)
 		{
 			// Remove map transfers that have been waiting for more than allowed timeout.
 			var mapTimeouts = Transfers.Filter(t => now - t.CreateTime >= (int)MessageRequestTimeOuts.ZONE_TRANSFER_MAP);

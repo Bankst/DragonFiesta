@@ -1,4 +1,6 @@
-﻿using DFEngine.IO.Definitions.SHN;
+﻿using DFEngine.Content.GameObjects;
+using DFEngine.Content.GameObjects.Movers;
+using DFEngine.IO.Definitions.SHN;
 
 namespace DFEngine.Content.Items
 {
@@ -18,10 +20,17 @@ namespace DFEngine.Content.Items
 		/// <summary>
 		/// The item's position in the inventory.
 		/// </summary>
-		public byte Slot { get; set; }
+		public ItemSlot Slot { get; set; }
 		/// <summary>
 		/// The upgrade tier of the item.
 		/// </summary>
 		public byte Upgrades { get; set; }
+
+		// ?
+		public Mover Mover { get; set; }
+
+		public bool CanEquip => Slot > 0U;
+
+		public Stats Stats { get; set; }
 	}
 }

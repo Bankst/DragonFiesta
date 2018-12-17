@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Runtime.Serialization;
 using DFEngine.Content.Game;
 using DFEngine.Content.GameObjects;
 using DFEngine.Content.Items;

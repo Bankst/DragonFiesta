@@ -23,5 +23,13 @@ namespace DFEngine
 
 			return neverIfNull && ret == 0 ? 1992027391 : ret;
 		}
+
+		public static int Shift(this DateTime value, bool neverIfNull = false)
+		{
+			int num = 0 | value.Minute << 25 | (value.Hour & 63) << 19 | (value.Day & 63) << 13 | (value.Month & 31) << 8 | (int)(byte)(value.Year - 2000);
+			if (!neverIfNull || num != 0)
+				return num;
+			return 1992027391;
+		}
 	}
 }

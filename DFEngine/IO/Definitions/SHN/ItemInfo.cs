@@ -22,5 +22,9 @@ namespace DFEngine.IO.Definitions.SHN
 		/// The item's equip type.
 		/// </summary>
 		public ItemEquip Equip { get; private set; }
+		/// <summary>
+		/// The item's class type.
+		/// </summary>
+		public ItemClass Class { get; private set; }
 	}
 }

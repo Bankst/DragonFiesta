@@ -1,5 +1,6 @@
 ﻿using DFEngine.Network;
 using DFEngine.Network.Protocols;
+using DFEngine.Utils;
 
 namespace ZoneServer.Handlers
 {
@@ -31,6 +32,11 @@ namespace ZoneServer.Handlers
 		{
 			var echoData = message.ReadByte();
 			var error = message.ReadUInt16();
+		}
+
+		internal static void NC_MISC_HEARTBEAT_ACK(NetworkMessage message, NetworkConnection connection)
+		{
+			connection.LastPing = Time.Milliseconds;
 		}
 	}
 }

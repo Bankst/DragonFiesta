@@ -1,5 +1,5 @@
 ﻿using System;
-
+using DFEngine;
 using DFEngine.IO.Definitions;
 using DFEngine.Logging;
 using DFEngine.Network;
@@ -52,8 +52,7 @@ namespace ZoneServer.Handlers
 				return;
 			}
 
-			SocketLog.Write(SocketLogLevel.Debug, $"{charName} is logging in");
-
+			// block check
 			if (character.Position.Map != null)
 			{
 
@@ -65,6 +64,21 @@ namespace ZoneServer.Handlers
 			client.Character = character;
 
 			character.Login();
+		}
+
+		public static void NC_MAP_LOGINCOMPLETE_CMD(NetworkMessage message, NetworkConnection client)
+		{
+			var duplicated = CharacterService.OnlineCharacters.Filter(chr => chr.CharNo == client.Character.CharNo && chr != client.Character);
+			duplicated.ForBackwards(character =>
+				{
+					EngineLog.Write(EngineLogLevel.Warning, $"Logging out a duplicate of {client.Character.Name}.");
+					CharacterService.Logout(character);
+				});
+
+			client.Character.FinalizeLogin();
+			new PROTO_NC_MAP_LINKEND_CMD(client.Handle, client.Character.MapIndx).Send(ZoneServer.WorldServer);
+
+			CharacterService.OnlineCharacters.Add(client.Character);
 		}
 	}
 }

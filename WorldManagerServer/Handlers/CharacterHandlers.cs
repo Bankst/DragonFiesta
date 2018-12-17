@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using DFEngine;
+﻿using DFEngine;
 using DFEngine.Logging;
 using DFEngine.Network;
-using DFEngine.Network.Protocols;
 using DFEngine.Server;
-using WorldManagerServer.Services;
 
 namespace WorldManagerServer.Handlers
 {
@@ -19,14 +16,16 @@ namespace WorldManagerServer.Handlers
 			{
 				SocketLog.Write(SocketLogLevel.Warning, $"{connection.Account.Username} has no character in slot {charSlot}");
 				new PROTO_NC_CHAR_LOGINFAIL_ACK((ushort) CharLoginError.NOCHAR_INSLOT).Send(connection);
+				return;
 			}
 
-			WorldData.MapZones.TryGetValue(avatar.MapIndx, out var zoneNo);
+			var zoneNo = WorldData.MapZones.GetSafe(avatar.MapIndx);
 			var zone = WorldManagerServer.Zones.First(z => z.Number == zoneNo);
 			if (zone == null)
 			{
 				SocketLog.Write(SocketLogLevel.Exception, $"No zone found for {avatar.MapIndx} for char {avatar.Name}!");
 				new PROTO_NC_CHAR_LOGINFAIL_ACK((ushort) CharLoginError.MAP_UNDER_MAINT).Send(connection);
+				return;
 			}
 
 			connection.Avatar = avatar;

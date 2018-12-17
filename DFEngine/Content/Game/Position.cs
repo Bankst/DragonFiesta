@@ -1,4 +1,7 @@
-﻿using DFEngine.Worlds;
+﻿using System.Collections.Generic;
+
+using DFEngine.Content.GameObjects;
+using DFEngine.Worlds;
 
 namespace DFEngine.Content.Game
 {
@@ -23,6 +26,11 @@ namespace DFEngine.Content.Game
 		{
 			D = d;
 			Map = map;
+		}
+
+		public List<GameObject> GetSurroundingObjects(int radius)
+		{
+			return new List<GameObject>(Map.Objects).Filter(obj => obj.Position != this && obj.Position.IsInCircle(X, Y, radius));
 		}
 	}
 }
