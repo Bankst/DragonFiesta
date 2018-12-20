@@ -1,4 +1,6 @@
-﻿using DFEngine.Content.GameObjects.MiniHouse;
+﻿using System;
+using DFEngine.Content.Game;
+using DFEngine.Content.GameObjects.MiniHouse;
 using DFEngine.Content.Items;
 using DFEngine.Logging;
 using DFEngine.Network;
@@ -135,6 +137,25 @@ namespace DFEngine.Content.GameObjects
 		public void CancelLogout()
 		{
 			IsLoggingOut = false;
+		}
+
+		public void Move(Vector2 from, Vector2 to, MoveType type)
+		{
+			switch (type)
+			{
+				case MoveType.MT_WALK:
+				case MoveType.MT_RUN:
+					IsWalking = type == MoveType.MT_WALK;
+					Behavior?.MoveTo(from, to);
+					break;
+				case MoveType.MT_REINFORCEMOVE:
+					Behavior?.MoveTo(from, to, 0D, true);
+					break;
+				case MoveType.MT_HALT:
+				case MoveType.MT_REINFORCEHALT:
+					Behavior?.Stop(to, type == MoveType.MT_REINFORCEHALT);
+					break;
+			}
 		}
 	}
 }

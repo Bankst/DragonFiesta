@@ -12,8 +12,8 @@ namespace DFEngine.Network
 	/// The callback type for a network message handler.
 	/// </summary>
 	/// <param name="message">The message being handled.</param>
-	/// <param name="connection">The connection that sent the message.</param>
-	public delegate void NetworkMessageHandlerMethod(NetworkMessage message, NetworkConnection connection);
+	/// <param name="client">The client that sent the message.</param>
+	public delegate void NetworkMessageHandlerMethod(NetworkMessage message, NetworkConnection client);
 
 	/// <summary>
 	/// Class to register handlers for network messages.

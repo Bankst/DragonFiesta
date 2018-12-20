@@ -1,11 +1,14 @@
 ﻿using System;
+
 using DFEngine;
 using DFEngine.IO.Definitions;
 using DFEngine.Logging;
 using DFEngine.Network;
 using DFEngine.Network.Protocols;
 using DFEngine.Server;
+using DFEngine.Utils;
 
+using ZoneServer.Engines;
 using ZoneServer.Services;
 
 namespace ZoneServer.Handlers
@@ -44,6 +47,9 @@ namespace ZoneServer.Handlers
 					}
 				}
 			}
+
+			client.LastPing = Time.Milliseconds;
+			NetEngine.AddPing(client);
 
 			if (!CharacterService.TryLoadCharacter(charName, out var character, out var error))
 			{

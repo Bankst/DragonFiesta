@@ -2,6 +2,8 @@
 using DFEngine.Accounts;
 using DFEngine.Network;
 using DFEngine.Network.Protocols;
+using DFEngine.Utils;
+using WorldManagerServer.Engines;
 using WorldManagerServer.Services;
 
 namespace WorldManagerServer.Handlers
@@ -39,12 +41,16 @@ namespace WorldManagerServer.Handlers
 			connection.Account = transfer.Account;
 			connection.Account.Avatars = AvatarService.LoadAll(connection.Account.UserNo);
 
+			connection.LastPing = Time.Milliseconds;
+			NetEngine.AddPing(connection);
+
 			new PROTO_NC_USER_LOGINWORLD_ACK(connection.Handle, connection.Account.Avatars).Send(connection);
 		}
 
 		public static void NC_USER_NORMALLOGOUT_CMD(NetworkMessage message, NetworkConnection connection)
 		{
 			var logoutType = (LogoutType) message.ReadByte();
+			NetEngine.RemovePing(connection);
 			Object.Destroy(connection);
 		}
 

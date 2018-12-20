@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DFEngine.Content.Game;
+﻿using DFEngine.Content.Game;
 using DFEngine.Content.GameObjects;
-using DFEngine.Content.Other;
 using DFEngine.Network;
-using ZoneServer.Logic;
 
 namespace ZoneServer.Handlers
 {
@@ -15,20 +10,22 @@ namespace ZoneServer.Handlers
 		{
 			var beginVector = new Vector2(message.ReadInt32(), message.ReadInt32());
 			var endVector = new Vector2(message.ReadInt32(), message.ReadInt32());
-			MoveLogic.Move(client.Character, beginVector, endVector, MoveState.MM_WALK);
+
+			client.Character.Move(beginVector, endVector, MoveType.MT_WALK);
 		}
 
 		internal static void NC_ACT_MOVERUN_CMD(NetworkMessage message, NetworkConnection client)
 		{
 			var beginVector = new Vector2(message.ReadInt32(), message.ReadInt32());
 			var endVector = new Vector2(message.ReadInt32(), message.ReadInt32());
-			MoveLogic.Move(client.Character, beginVector, endVector, MoveState.MM_RUN);
+
+			client.Character.Move(beginVector, endVector, MoveType.MT_RUN);
 		}
 
 		internal static void NC_ACT_STOP_REQ(NetworkMessage message, NetworkConnection client)
 		{
 			var endVector = new Vector2(message.ReadInt32(), message.ReadInt32());
-			client.Character.AI?.StopMovement(endVector);
+			client.Character.Move(client.Character.Position, endVector, MoveType.MT_HALT);
 		}
 
 		internal static void NC_ACT_CHAT_REQ(NetworkMessage message, NetworkConnection client)

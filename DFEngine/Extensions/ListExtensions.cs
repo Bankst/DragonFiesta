@@ -105,9 +105,9 @@ namespace DFEngine
 		{
 			lock (LockObject)
 			{
-				for (var i = 0; i < source.Count; i++)
+				foreach (var item in source)
 				{
-					action(source[i]);
+					action(item);
 				}
 			}
 		}
@@ -121,9 +121,9 @@ namespace DFEngine
 		{
 			lock (LockObject)
 			{
-				for (var i = source.Count - 1; i >= 0; i--)
+				foreach (var item in source.Reverse<T>())
 				{
-					action(source[i]);
+					action(item);
 				}
 			}
 		}
