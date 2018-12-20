@@ -94,6 +94,7 @@ namespace WorldManagerServer
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_REQ, MiscHandlers.NC_MISC_S2SCONNECTION_REQ);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_S2SCONNECTION_ACK, MiscHandlers.NC_MISC_S2SCONNECTION_ACK);
 			NetworkMessageHandler.Store(NetworkCommand.NC_MISC_GAMETIME_REQ, MiscHandlers.NC_MISC_GAMETIME_REQ);
+            NetworkMessageHandler.Store(NetworkCommand.NC_MISC_SERVER_TIME_NOTIFY_CMD, MiscHandlers.NC_MISC_SERVER_TIME_NOTIFY_CMD);
 
 			NetworkMessageHandler.Store(NetworkCommand.NC_USER_WILLLOGIN_REQ, UserHandlers.NC_USER_WILLLOGIN_REQ);
 			NetworkMessageHandler.Store(NetworkCommand.NC_USER_LOGINWORLD_REQ, UserHandlers.NC_USER_LOGINWORLD_REQ);
