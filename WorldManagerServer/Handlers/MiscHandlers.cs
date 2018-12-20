@@ -17,7 +17,13 @@ namespace WorldManagerServer.Handlers
 			new PROTO_NC_MISC_GAMETIME_ACK().Send(connection);
 		}
 
-		internal static void NC_MISC_S2SCONNECTION_RDY(NetworkMessage message, NetworkConnection connection)
+        internal static void NC_MISC_SERVER_TIME_NOTIFY_CMD(NetworkMessage message, NetworkConnection connection)
+        {
+            new PROTO_NC_MISC_SERVER_TIME_NOTIFY_CMD().Send(connection);
+        }
+
+
+        internal static void NC_MISC_S2SCONNECTION_RDY(NetworkMessage message, NetworkConnection connection)
 		{
 			new PROTO_NC_MISC_S2SCONNECTION_REQ(
 				NetworkConnectionType.NCT_WORLDMANAGER, // From 
