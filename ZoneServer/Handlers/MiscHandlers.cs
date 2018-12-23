@@ -1,5 +1,6 @@
 ﻿using DFEngine.Network;
 using DFEngine.Network.Protocols;
+using DFEngine.Server;
 using DFEngine.Utils;
 
 namespace ZoneServer.Handlers
@@ -20,7 +21,7 @@ namespace ZoneServer.Handlers
 			new PROTO_NC_MISC_S2SCONNECTION_REQ(
 				NetworkConnectionType.NCT_ZONE, // From 
 				connection.Type, // To
-				ZoneServer.NetConfig.WorldNetConfig.WorldID,
+				BaseApplication.NetConfig.WorldNetConfig.WorldID,
 				"ISYA", // World Name TODO: Add this to WorldConfiguration/NetworkConfiguration
 				ZoneServer.ZoneId, // ZoneNo
 				clientIP, // Client Listen IP

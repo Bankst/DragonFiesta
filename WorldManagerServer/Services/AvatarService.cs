@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DFEngine;
+
 using DFEngine.Content.Game;
 using DFEngine.Content.GameObjects;
 using DFEngine.Content.Items;
@@ -9,7 +9,7 @@ using DFEngine.Content.Tutorial;
 using DFEngine.Database;
 using DFEngine.Logging;
 using DFEngine.Network;
-using DFEngine.Utils;
+using DFEngine.Server;
 
 namespace WorldManagerServer.Services
 {
@@ -291,7 +291,7 @@ namespace WorldManagerServer.Services
 			using (var p_Char_Create = new StoredProcedure("p_Char_Create", WorldManagerServer.CharDb))
 			{
 				p_Char_Create.AddParameter("nUserNo", connection.Account.UserNo);
-				p_Char_Create.AddParameter("nCreateWorld", WorldManagerServer.NetConfig.WorldNetConfig.WorldID);
+				p_Char_Create.AddParameter("nCreateWorld", BaseApplication.NetConfig.WorldNetConfig.WorldID);
 				p_Char_Create.AddParameter("nAdminLevel", 0);
 				p_Char_Create.AddParameter("nSlotNo", slot);
 				p_Char_Create.AddParameter("sID", name, 40);

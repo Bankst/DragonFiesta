@@ -1,4 +1,5 @@
 ﻿using DFEngine.Config;
+using DFEngine.Server;
 using DFEngine.Utils.ServerConsole;
 
 namespace LoginServer.Util.Console
@@ -9,7 +10,7 @@ namespace LoginServer.Util.Console
 		
 		private static int WorldCount => LoginServer.WorldServer.Connections.Count;
 
-		private static int MaxWorldCount => LoginServer.NetConfig != null ? LoginServer.NetConfig.LoginNetConfig.MaxWorldConnections : 0;
+		private static int MaxWorldCount => BaseApplication.NetConfig != null ? BaseApplication.NetConfig.LoginNetConfig.MaxWorldConnections : 0;
 
 		private static int ConnectionCount => LoginServer.ClientServer.Connections.Count;
 

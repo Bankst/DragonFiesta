@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DFEngine.Server;
 using DFEngine.Utils.ServerConsole;
 
 namespace ZoneServer.Util.Console
@@ -15,7 +13,7 @@ namespace ZoneServer.Util.Console
 
 		private static int MaxConnection => ZoneServer.ZoneNetConfig != null ? ZoneServer.ZoneNetConfig.MaxClientConnections : 0;
 
-		private static int RemoteZoneCount => ZoneServer.NetConfig != null ? ZoneServer.NetConfig.ZoneNetworkConfigs.Length : 0;
+		private static int RemoteZoneCount => BaseApplication.NetConfig != null ? BaseApplication.NetConfig.ZoneNetworkConfigs.Length - 1 : 0;
 
 		public void Update()=> base.Update(ZoneConstString, ZoneId, PlayerCount, MaxConnection, RemoteZoneCount);
 	}

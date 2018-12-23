@@ -28,11 +28,11 @@ namespace WorldManagerServer.Handlers
 			new PROTO_NC_MISC_S2SCONNECTION_REQ(
 				NetworkConnectionType.NCT_WORLDMANAGER, // From 
 				connection.Type, // To
-				WorldManagerServer.NetConfig.WorldNetConfig.WorldID, // World ID
+				BaseApplication.NetConfig.WorldNetConfig.WorldID, // World ID
 				"ISYA", // World Name TODO: Add this to WorldConfiguration/NetworkConfiguration
 				0, // ZoneNo TODO: do this programatically? Or ignore it for Login?
-				WorldManagerServer.NetConfig.WorldNetConfig.ListenIP, // Client Listen IP
-				(ushort) WorldManagerServer.NetConfig.WorldNetConfig.ListenPort // Client Listen Port
+				BaseApplication.NetConfig.WorldNetConfig.ListenIP, // Client Listen IP
+				(ushort) BaseApplication.NetConfig.WorldNetConfig.ListenPort // Client Listen Port
 			).Send(connection);
 		}
 
