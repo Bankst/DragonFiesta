@@ -1,10 +1,11 @@
 ﻿using System;
+using DFEngine.Server;
 
 namespace DFEngine.Logging
 {
 	public sealed class GameLog : FileLog
 	{
-		protected override LogType LogTypeName => LogType.GameLog;
+		protected override string LogTypeName => "GameLog";
 
 		private GameLog(string directory) : base(directory)
 		{
@@ -31,7 +32,7 @@ namespace DFEngine.Logging
 
 		public static void Write(Exception exception, string message, params object[] args)
 		{
-			Instance.WriteException(exception, GameLogLevel.Exception, message, args);
+			Instance.WriteException(LogType.GameLog, exception, GameLogLevel.Exception, message, args);
 		}
 	}
 }

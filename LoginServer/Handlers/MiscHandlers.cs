@@ -30,14 +30,14 @@ namespace LoginServer.Handlers
 				return;
 			}
 
-			if ((NetworkConnectionType) @from != NetworkConnectionType.NCT_WORLDMANAGER) return;
-			if (ServerMain.Worlds.Exists(world => world.Connection == connection || world.Number == worldNumber))
+			if ((NetworkConnectionType) from != NetworkConnectionType.NCT_WORLDMANAGER) return;
+			if (LoginServer.Worlds.Exists(world => world.Connection == connection || world.Number == worldNumber))
 			{
 				return;
 			}
 
-			ServerMain.Worlds.Add(new World(connection, worldName, worldNumber, ip, port));
-			new PROTO_NC_MISC_S2SCONNECTION_ACK().Send(connection);
+			LoginServer.Worlds.Add(new World(connection, worldName, worldNumber, ip, port));
+			new PROTO_NC_MISC_S2SCONNECTION_ACK(0, 0).Send(connection);
 		}
 
 		internal static void NC_MISC_S2SCONNECTION_RDY(NetworkMessage message, NetworkConnection connection)

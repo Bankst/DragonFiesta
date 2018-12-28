@@ -1,10 +1,11 @@
 ﻿using System;
+using DFEngine.Server;
 
 namespace DFEngine.Logging
 {
 	public sealed class DatabaseLog : FileLog
 	{
-		protected override LogType LogTypeName => LogType.DatabaseLog;
+		protected override string LogTypeName => "DatabaseLog";
 
 		private DatabaseLog(string directory) : base(directory)
 		{
@@ -31,7 +32,7 @@ namespace DFEngine.Logging
 
 		public static void Write(Exception exception, string message, params object[] args)
 		{
-			Instance.WriteException(exception, DatabaseLogLevel.DatabaseClientError, message, args);
+			Instance.WriteException(LogType.DatabaseLog, exception, DatabaseLogLevel.DatabaseClientError, message, args);
 		}
 	}
 }

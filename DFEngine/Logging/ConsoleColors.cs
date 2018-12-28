@@ -36,7 +36,7 @@ namespace DFEngine.Logging
 			{(byte) EngineLogLevel.Debug, ConsoleColor.Magenta},
 			{(byte) EngineLogLevel.Info, ConsoleColor.DarkGreen},
 			{(byte) EngineLogLevel.Startup, ConsoleColor.Green},
-			{(byte) EngineLogLevel.Warning, ConsoleColor.Blue},
+			{(byte) EngineLogLevel.Warning, ConsoleColor.Yellow},
 			{(byte) EngineLogLevel.Exception, ConsoleColor.Red},
 		};
 

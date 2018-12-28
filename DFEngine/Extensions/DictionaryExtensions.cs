@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DFEngine
 {
@@ -48,6 +50,33 @@ namespace DFEngine
 		public static TValue GetSafe<TKey, TValue>(this Dictionary<TKey, TValue> source, TKey key)
 		{
 			return source.ContainsKey(key) ? source[key] : default(TValue);
+		}
+
+		/// <summary>
+		/// Runs a for loop on dictionary, backwards, in a thread-safe manner.
+		/// </summary>
+		/// <param name="source">The source dictionary.</param>
+		/// <param name="action">The action to perform on the item.</param>
+		public static void ForBackwards<TKey, TValue>(this Dictionary<TKey, TValue> source, Action<TKey, TValue> action)
+		{
+			lock (LockObject)
+			{
+				foreach (var item in source.Reverse())
+				{
+					action(item.Key, item.Value);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns a new dictionary filtered using the predicate provided.
+		/// </summary>
+		public static Dictionary<TKey, TValue> Filter<TKey, TValue>(this Dictionary<TKey, TValue> source, Func<KeyValuePair<TKey, TValue>, int, bool> predicate)
+		{
+			lock (LockObject)
+			{
+				return new Dictionary<TKey, TValue>(source.Where(predicate));
+			}
 		}
 	}
 }

@@ -1,12 +1,14 @@
 ﻿using System;
 
+using DFEngine.Server;
+
 namespace DFEngine.Logging
 {
-    public sealed class EngineLog : FileLog
+	public sealed class EngineLog : FileLog
     {
-        protected override LogType LogTypeName => LogType.EngineLog;
+		protected override string LogTypeName => "EngineLog";
 
-        private EngineLog(string directory) : base(directory)
+		private EngineLog(string directory) : base(directory)
         {
         }
 
@@ -24,14 +26,14 @@ namespace DFEngine.Logging
             Instance.ConsoleWriteLine(LogType.EngineLog, type, message, args);
         }
 
-        public static void Write(EngineLogLevel type, string message, params object[] args)
-        {
-            Instance.Write(LogType.EngineLog, type, message, args);
-        }
+		public static void Write(EngineLogLevel type, string message, params object[] args)
+		{
+			Instance.Write(LogType.EngineLog, type, message, args);
+		}
 
-        public static void Write(Exception exception, string message, params object[] args)
+		public static void Write(Exception exception, string message, params object[] args)
         {
-            Instance.WriteException(exception, EngineLogLevel.Exception, message, args);
+            Instance.WriteException(LogType.EngineLog, exception, EngineLogLevel.Exception, message, args);
         }
     }
 }

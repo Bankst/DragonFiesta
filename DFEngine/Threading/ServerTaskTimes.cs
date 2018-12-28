@@ -47,6 +47,7 @@ namespace DFEngine.Threading
 		SERVER_ZONE_RECONNECT = 4000,
 
 		SESSION_GAME_PING_SYNC = 2500,
+		SESSION_GAME_PING_TIMEOUT = 5000,
 		SESSION_CLOCK_GAMETIME_SYNC = 60000,
 
 		//Transfer
@@ -56,6 +57,14 @@ namespace DFEngine.Threading
 
 		MAP_GROUP_UPDATE_INTERVAL = 100,
 		MAP_NPC_UPDATE_INTERVAL = 600,
+	}
+
+	public static class ServerTaskTimesExtensions
+	{
+		public static int Milliseconds(this ServerTaskTimes time)
+		{
+			return (int) time;
+		}
 	}
 
 	//Times in Seconds

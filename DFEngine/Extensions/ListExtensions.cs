@@ -60,6 +60,13 @@ namespace DFEngine
 			}
 		}
 
+		public static int GetUpperBound<T>(this List<T> source)
+		{
+			if (source.Count <= 0)
+				return -1;
+			return source.Count - 1;
+		}
+
 		/// <summary>
 		/// Performs an action on the filtered list of items in the list.
 		/// </summary>
@@ -98,9 +105,9 @@ namespace DFEngine
 		{
 			lock (LockObject)
 			{
-				for (var i = 0; i < source.Count; i++)
+				foreach (var item in source)
 				{
-					action(source[i]);
+					action(item);
 				}
 			}
 		}
@@ -114,9 +121,9 @@ namespace DFEngine
 		{
 			lock (LockObject)
 			{
-				for (var i = source.Count - 1; i >= 0; i--)
+				foreach (var item in source.Reverse<T>())
 				{
-					action(source[i]);
+					action(item);
 				}
 			}
 		}

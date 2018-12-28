@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -44,12 +47,7 @@ namespace DFEngine
 		{
 			var r = new Regex(Regex.Escape("{*}"));
 
-			foreach (var param in parameters)
-			{
-				s = r.Replace(s, param.ToString(), 1);
-			}
-
-			return s;
+			return parameters.Aggregate(s, (current, param) => r.Replace(current, param.ToString(), 1));
 		}
 
 		public static string ToFiestaString(this string input, params Tuple<string, string>[] replacers)
@@ -66,6 +64,45 @@ namespace DFEngine
 			}
 
 			return outSring;
+		}
+
+		public static string ToMD5(this string input)
+		{
+			var hash = MD5.Create().ComputeHash(Encoding.ASCII.GetBytes(input));
+			var stringBuilder = new StringBuilder();
+			foreach (var num in hash)
+				stringBuilder.Append(num.ToString("x2"));
+			return stringBuilder.ToString();
+		}
+
+		public static byte ToByte(this string input)
+		{
+			if (input == null)
+				throw new ArgumentNullException(nameof(input));
+			if (input.Length == 0 || 2 < input.Length)
+				throw new ArgumentOutOfRangeException(nameof(input), "The hex string must be 1 or 2 characters in length.");
+			return byte.Parse(input, NumberStyles.HexNumber);
+		}
+
+		public static byte[] ToBytes(this string input)
+		{
+			var stringBuilder = new StringBuilder();
+			foreach (var ch in input.Where(CharExtensions.IsHexDigit).Select(char.ToUpper))
+				stringBuilder.Append(ch);
+			var str = stringBuilder.ToString();
+			if (str.Length % 2 == 1)
+				str += "0";
+			var numArray = new byte[str.Length / 2];
+			var index1 = 0;
+			var index2 = 0;
+			while (index1 < numArray.Length)
+			{
+				var input1 = ((int)str[index2]).ToString() + str[index2 + 1];
+				numArray[index1] = input1.ToByte();
+				++index1;
+				index2 += 2;
+			}
+			return numArray;
 		}
 	}
 }

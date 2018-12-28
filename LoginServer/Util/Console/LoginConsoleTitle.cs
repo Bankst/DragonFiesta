@@ -1,4 +1,5 @@
 ﻿using DFEngine.Config;
+using DFEngine.Server;
 using DFEngine.Utils.ServerConsole;
 
 namespace LoginServer.Util.Console
@@ -7,11 +8,11 @@ namespace LoginServer.Util.Console
 	{
 		private const string Worldstring = "DragonFiesta.LoginServer Worlds [{0}/{1}] Connections [{2}/{3}]";
 		
-		private static int WorldCount => ServerMain.WorldServer.Connections.Count;
+		private static int WorldCount => LoginServer.WorldServer.Connections.Count;
 
-		private static int MaxWorldCount => ServerMain.NetConfig != null ? ServerMain.NetConfig.LoginNetConfig.MaxWorldConnections : 0;
+		private static int MaxWorldCount => BaseApplication.NetConfig != null ? BaseApplication.NetConfig.LoginNetConfig.MaxWorldConnections : 0;
 
-		private static int ConnectionCount => ServerMain.ClientServer.Connections.Count;
+		private static int ConnectionCount => LoginServer.ClientServer.Connections.Count;
 
 		private static int MaxConnection => NetworkConfiguration.Instance != null ? NetworkConfiguration.Instance.LoginNetConfig.MaxClientConnections : 0;
 
